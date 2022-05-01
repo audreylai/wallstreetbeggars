@@ -1,4 +1,4 @@
-Collection: , stock_data
+Collection: stock_data
 ``` json
 {
   "stock_code": , [

@@ -4,4 +4,6 @@
 
 # HTTP end-points
 
-TBD
+## User account related
+
+* [/api/register](register.md) - POST create an account
