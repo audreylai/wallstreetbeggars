@@ -21,7 +21,28 @@ def add_stock_data():
 
 
 def add_stock_info():
-    pass
+    delete = col_stock_info.delete_many({})
+
+    cols = [0, 1, 2, 4]
+    df = pd.read_excel(
+        'https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=cols, skiprows=2)
+    df = df.rename(columns={'Stock Code': 'stockcode', 'Name of Securities': 'name', 'Category': 'category', 'Board Lot': 'boardlot'})
+    df = df.drop(df[(df.stockcode > 4000) & (df.stockcode < 6030)].index)
+    df = df.drop(df[(df.stockcode > 6700) & (df.stockcode < 6800)].index)
+    df = df.drop(df[df.stockcode > 10000].index)
+
+    getupdated = pd.read_excel(
+        'https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=cols)
+    getupdated = getupdated.iloc[0, 0]
+    getupdated = getupdated.split()
+    lastupdated = {"lastupdated": getupdated[3]}
+    update = col_stock_info.insert_one(lastupdated)
+    print(update)
+
+    df = df.to_dict('index')
+    df = list(df.values())
+    insertdf = col_stock_info.insert_many(df)
+    print(insertdf.inserted_ids)
 
 
 def get_stock_data(ticker, period):
