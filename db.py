@@ -108,3 +108,20 @@ def get_stock_data(ticker, period):
     ])
     res_list = [i for i in out if i[ticker] is not None][0][ticker]
     return res_list
+
+def get_ticker_data(tickers, tickerperiod):
+    try:
+        ticker = yf.download(tickers, period=tickerperiod)
+        # rsi and moving average
+        ticker['rsi'] = ta.RSI(ticker['Close'], timeperiod=14)
+        ticker['sma10'] = ta.SMA(ticker['Close'], timeperiod=10)
+        ticker['sma20'] = ta.SMA(ticker['Close'], timeperiod=20)
+        ticker['sma50'] = ta.SMA(ticker['Close'], timeperiod=50)
+        ticker['sma100'] = ta.SMA(ticker['Close'], timeperiod=100)
+        ticker['sma200'] = ta.SMA(ticker['Close'], timeperiod=200)
+        # remove break days
+        ticker = ticker[ticker['Volume'] != 0]
+        ticker = ticker.reset_index()
+    except:
+        ticker = None
+    return ticker
