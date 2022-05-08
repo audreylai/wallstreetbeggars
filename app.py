@@ -16,5 +16,9 @@ def get_data():
 def rules():
   return render_template("rules.html")
 
+@app.route("/stock-info")
+def stock_info():
+  return render_template("stock-info.html")
+
 if __name__ == "__main__":
   app.run(port="5000", debug=True)
