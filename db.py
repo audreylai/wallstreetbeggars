@@ -1,4 +1,5 @@
 from datetime import *
+from dateutil.relativedelta import relativedelta
 from bs4 import BeautifulSoup
 import pymongo
 import json
@@ -21,3 +22,29 @@ def add_stock_data():
 
 def add_stock_info():
     pass
+
+
+def get_stock_data(ticker, period):
+    ticker = ticker.upper()
+    period = int(period)
+    # startDate = date_validation(ticker, period)
+    startDate = date.today() + relativedelta(days=-period)
+    startDateTime = datetime(startDate.year, startDate.month, startDate.day)
+    aggInput = "$" + ticker
+    out = col_stock_data.aggregate([
+        {
+            "$project": {
+                ticker: {
+                    "$filter": {
+                        "input": aggInput,
+                        "as": "data",
+                        "cond": {"$and": [
+                            {"$gte": ["$$data.Date", startDateTime]}
+                        ]}
+                    }
+                }
+            }
+        }
+    ])
+    res_list = [i for i in out if i[ticker] is not None][0][ticker]
+    return res_list
