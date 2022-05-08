@@ -16,8 +16,25 @@ col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
 
-def add_stock_data():
-    pass
+def add_stock_data_one(ticker):
+    if not ticker:
+        return None
+    df = yf.download(ticker, period="6mo")
+    if not df.empty:
+        # Dem Tech Indicators
+        df["sma10"] = ta.SMA(df["Close"], timeperiod=10)
+        df["sma20"] = ta.SMA(df["Close"], timeperiod=20)
+        df["sma50"] = ta.SMA(df["Close"], timeperiod=50)
+        df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
+
+        df = df.reset_index()
+        pd.to_datetime(df["Date"])
+        df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
+        ticker_dict = df.to_dict("records")
+
+    query = { ticker.replace(".","-"): {"$exists": True} }
+    col_stock_data.delete_one(query)
+    col_stock_data.insert_one({ ticker.replace(".","-"): ticker_dict })
 
 
 def add_stock_info():
