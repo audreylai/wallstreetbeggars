@@ -16,21 +16,48 @@ col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
 
-def add_stock_data():
-    pass
+def add_stock_data_one(ticker):
+    if not ticker:
+        return None
+    df = yf.download(ticker, period="6mo")
+    if not df.empty:
+        # Dem Tech Indicators
+        df["sma10"] = ta.SMA(df["Close"], timeperiod=10)
+        df["sma20"] = ta.SMA(df["Close"], timeperiod=20)
+        df["sma50"] = ta.SMA(df["Close"], timeperiod=50)
+        df["sma100"] = ta.SMA(df["Close"], timeperiod=100)
+        df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
+
+        df = df.reset_index()
+        pd.to_datetime(df["Date"])
+        df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
+        ticker_dict = df.to_dict("records")
+
+    query = { ticker.replace(".","-"): {"$exists": True} }
+    col_stock_data.delete_one(query)
+    col_stock_data.insert_one({ ticker.replace(".","-"): ticker_dict })
 
 
 def add_stock_info():
+    # Drops records
     delete = col_stock_info.delete_many({})
 
     cols = [0, 1, 2, 4]
     df = pd.read_excel(
         'https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=cols, skiprows=2)
-    df = df.rename(columns={'Stock Code': 'stockcode', 'Name of Securities': 'name', 'Category': 'category', 'Board Lot': 'boardlot'})
-    df = df.drop(df[(df.stockcode > 4000) & (df.stockcode < 6030)].index)
-    df = df.drop(df[(df.stockcode > 6700) & (df.stockcode < 6800)].index)
-    df = df.drop(df[df.stockcode > 10000].index)
+    df = df.rename(columns={'Stock Code': 'stock_code', 'Name of Securities': 'name', 'Category': 'category', 'Board Lot': 'board_lot'})
+    df = df.drop(df[(df.stock_code > 4000) & (df.stock_code < 6030)].index)
+    df = df.drop(df[(df.stock_code > 6700) & (df.stock_code < 6800)].index)
+    df = df.drop(df[df.stock_code > 10000].index)
 
+    # Change stock code from numbers to actual tickers
+    ticker_name_list = []
+    for ticker in list(df["stock_code"]):
+        ticker_name = "0000" + str(ticker)
+        ticker_name_list.append(ticker_name[-4:] + ".HK")
+    df["stock_code"] = ticker_name_list
+
+    # Get last update date
     getupdated = pd.read_excel(
         'https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=cols)
     getupdated = getupdated.iloc[0, 0]
