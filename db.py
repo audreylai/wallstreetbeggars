@@ -19,6 +19,8 @@ col_stock_info = db["stock_info"]
 def add_stock_data_one(ticker):
     if not ticker:
         return None
+
+    # Get Ticker Data
     df = yf.download(ticker, period="6mo")
     if not df.empty:
         # Dem Tech Indicators
@@ -28,11 +30,17 @@ def add_stock_data_one(ticker):
         df["sma100"] = ta.SMA(df["Close"], timeperiod=100)
         df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
 
+        # Change "date" from index column to regular column
         df = df.reset_index()
         pd.to_datetime(df["Date"])
-        df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
-        ticker_dict = df.to_dict("records")
 
+        # Change keys to all lowercase
+        df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
+    
+    # Convert DataFrame to Dictionary for upsert
+    ticker_dict = df.to_dict("records")
+
+    # The actual upsert
     query = { ticker.replace(".","-"): {"$exists": True} }
     col_stock_data.delete_one(query)
     col_stock_data.insert_one({ ticker.replace(".","-"): ticker_dict })
@@ -73,10 +81,15 @@ def add_stock_info():
 
 
 def get_stock_data(ticker, period):
+    # Change ticker var to match DB key
     ticker = ticker.upper()
+    
+    # Calculate start date for fetching
     period = int(period)
     startDate = date.today() + relativedelta(days=-period)
     startDateTime = datetime(startDate.year, startDate.month, startDate.day)
+    
+    # Fetch and return data
     aggInput = "$" + ticker
     out = col_stock_data.aggregate([
         {
