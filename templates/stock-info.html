@@ -1,4 +1,32 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %} {% block
-  content %}
-  <div class="bg-zinc-800">stock-info</div>
+{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
+%}
+<div class="flex flex-col w-screen h-screen gap-4 p-4 px-6 py-4 overflow-y-hidden bg-gray-100 dark:bg-zinc-900">
+  <div class="pb-2 space-y-2 bg-gray-100 dark:bg-zinc-900">
+    <div class="flex justify-between">
+      <h2 class="text-2xl font-extrabold uppercase dark:text-zinc-100">Ticker</h2>
+      <form action="/stock-info" method="POST" class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 512 512">
+            <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none"
+              stroke="currentColor" stroke-miterlimit="10" stroke-width="32" />
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"
+              d="M338.29 338.29L448 448" />
+          </svg>
+        </div>
+        <input type="hidden" name="page" value="1" />
+        <input type="text" name="ticker" value="{{ticker}}"
+          class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-gray-100/50 focus:border-transparent"
+          placeholder="Search" />
+      </form>
+    </div>
+  </div>
+  <div class="flex flex-col flex-1 mb-4 space-y-4 overflow-y-auto lg:grid lg:grid-cols-3 h-max gap-x-8 lg:space-y-0">
+    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">info</div>
+    <div
+      class="flex flex-col col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+    >
+      <div class="h-96"><canvas id="myChart"></canvas></div>
+    </div>
+  </div>
+</div>
 {% endblock %}
