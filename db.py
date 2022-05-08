@@ -75,7 +75,6 @@ def add_stock_info():
 def get_stock_data(ticker, period):
     ticker = ticker.upper()
     period = int(period)
-    # startDate = date_validation(ticker, period)
     startDate = date.today() + relativedelta(days=-period)
     startDateTime = datetime(startDate.year, startDate.month, startDate.day)
     aggInput = "$" + ticker
