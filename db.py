@@ -25,6 +25,7 @@ def add_stock_data_one(ticker):
         df["sma10"] = ta.SMA(df["Close"], timeperiod=10)
         df["sma20"] = ta.SMA(df["Close"], timeperiod=20)
         df["sma50"] = ta.SMA(df["Close"], timeperiod=50)
+        df["sma100"] = ta.SMA(df["Close"], timeperiod=100)
         df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
 
         df = df.reset_index()
