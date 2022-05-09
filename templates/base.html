@@ -10,12 +10,13 @@
     <script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0"></script>
     <script src="{{url_for('static', filename='chartjs-chart-financial.js')}}"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link
       rel="stylesheet"
       type="text/css"
       href="{{url_for('static', filename='scrollbar.css')}}"
     />
-    <script>
+    <!-- <script>
       let vh = window.innerHeight * 0.01;
       console.log(vh);
       document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -30,7 +31,7 @@
       console.log(
         window.getComputedStyle(elem, null).getPropertyValue("height")
       );
-    </script>
+    </script> -->
     <style>
       .h-screen {
         height: 100vh;
