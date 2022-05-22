@@ -1,32 +1,189 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
 %}
-<div class="flex flex-col w-screen h-screen gap-4 p-4 px-6 py-4 overflow-y-hidden bg-gray-100 dark:bg-zinc-900">
-  <div class="pb-2 space-y-2 bg-gray-100 dark:bg-zinc-900">
-    <div class="flex justify-between">
-      <h2 class="text-2xl font-extrabold uppercase dark:text-zinc-100">Ticker</h2>
-      <form action="/stock-info" method="POST" class="relative">
-        <div class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 512 512">
-            <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none"
-              stroke="currentColor" stroke-miterlimit="10" stroke-width="32" />
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"
-              d="M338.29 338.29L448 448" />
-          </svg>
+<div
+  class="flex flex-col w-screen h-screen gap-4 p-4 px-6 py-4 overflow-y-hidden bg-gray-100 dark:bg-zinc-900"
+>
+  <div>
+    <div class="space-y-2 bg-gray-100 dark:bg-zinc-900">
+      <div class="flex justify-between">
+        <div>
+          <div class="flex space-x-2">
+            <h2 class="text-2xl font-extrabold uppercase dark:text-zinc-100">
+              0005.hk
+            </h2>
+            <p class="text-zinc-400 text-md self-end pb-1">HSBC Holdings plc</p>
+          </div>
         </div>
-        <input type="hidden" name="page" value="1" />
-        <input type="text" name="ticker" value="{{ticker}}"
-          class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-gray-100/50 focus:border-transparent"
-          placeholder="Search" />
-      </form>
+        <form action="/stock-info" method="POST" class="relative">
+          <div
+            class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+                fill="none"
+                stroke="currentColor"
+                stroke-miterlimit="10"
+                stroke-width="32"
+              />
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-miterlimit="10"
+                stroke-width="32"
+                d="M338.29 338.29L448 448"
+              />
+            </svg>
+          </div>
+          <input type="hidden" name="page" value="1" />
+          <input
+            type="text"
+            name="ticker"
+            value="{{ticker}}"
+            class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-gray-100/50 focus:border-transparent"
+            placeholder="Search"
+          />
+        </form>
+      </div>
+    </div>
+    <div class="flex items-center space-x-1">
+      <h2 class="font-bold text-lg dark:text-zinc-300">48.84</h2>
+      <p class="text-emerald-500 font-semibold">+1.89%</p>
     </div>
   </div>
-  <div class="flex flex-col flex-1 mb-4 space-y-4 overflow-y-auto lg:grid lg:grid-cols-3 h-max gap-x-8 lg:space-y-0">
-    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">info</div>
-    <div
-      class="flex flex-col col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-    >
-      <div class="h-96"><canvas id="myChart"></canvas></div>
+  <div
+    class="flex flex-col flex-1 mb-4 space-y-4 overflow-y-auto h-max gap-x-8 lg:space-y-0"
+  >
+    <div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+      <div><canvas id="myChart"></canvas></div>
     </div>
   </div>
 </div>
-{% endblock %}
+{% endblock %} {% block script%} {% if data %}
+<script>
+  var chart = undefined;
+  const ctx = document.getElementById('myChart').getContext('2d');
+
+  function draw_candlestick(data) {
+  	const line_chart_settings = {
+  		type: 'line',
+  		yAxisID: 'y',
+  		fill: false,
+  		borderWidth: 1,
+  		tension: 0.1,
+  		pointRadius: 0,
+  	}
+
+  	console.log(data.sma_10)
+
+  	const chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			label: 'Candlestick',
+  			type: 'candlestick',
+  			data: data.cdl,
+  			yAxisID: 'y'
+  		}, {
+  			label: 'MA10',
+  			data: data.sma_10,
+  			borderColor: 'rgb(174, 32, 18)',
+  			...line_chart_settings
+  		}, {
+  			label: 'MA20',
+  			data: data.sma_20,
+  			borderColor: 'rgb(202, 103, 2)',
+  			...line_chart_settings
+  		}, {
+  			label: 'MA50',
+  			data: data.sma_50,
+  			borderColor: 'rgb(238, 155, 0)',
+  			...line_chart_settings
+  		}, {
+  			label: 'Volume',
+  			type: 'bar',
+  			data: data.vol,
+  			backgroundColor: data.vol_color,
+  			yAxisID: 'y1'
+  		}]
+  	}
+
+  	const options = {
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Date'
+  				},
+  				type: 'timeseries',
+  				time: {
+  					unit: 'month'
+  				}
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				}
+  			},
+  			y1: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Volume (HKD)'
+  				},
+  				position: 'right',
+  				min: 0,
+  				max: data.max_vol.toPrecision(2) * 4,
+  				grid: {
+  					drawOnChartArea: false
+  				},
+  				ticks: {
+  					callback: (val) => (val.toExponential())
+  				}
+  			}
+  		},
+  		interaction: {
+  			mode: '',
+  			intersect: true
+  		},
+  		plugins: {
+  			title: {
+  				display: false
+  			}
+  		},
+  		responsive: true,
+  		maintainAspectRatio: true,
+  		// aspectRatio: 2,
+  		// stacked: false,
+  		// events: []
+  	}
+
+  	const config = {
+  		type: 'candlestick',
+  		data: chart_data,
+  		options: options
+  	}
+
+  	// destroy previous chart
+  	if (chart) {
+  		chart.destroy();
+  	}
+
+  	chart = new Chart(ctx, config);
+  }
+
+  draw_candlestick({{ data | tojson}})
+</script>
+{% endif %} {% endblock %}

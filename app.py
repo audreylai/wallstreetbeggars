@@ -63,11 +63,12 @@ def process_cdl(data):
 
 @app.route("/rules")
 def rules():
-  return render_template("rules.html")
+	return render_template("rules.html")
 
 @app.route("/stock-info")
 def stock_info():
-  return render_template("stock-info.html")
+	data = process_cdl(get_stock_data('0005-HK', 60))
+	return render_template("stock-info.html", data=data)
 
 if __name__ == "__main__":
 	app.run(port="5000", debug=True)
