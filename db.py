@@ -21,7 +21,7 @@ def add_stock_data_one(ticker):
         return None
 
     # Get Ticker Data
-    df = yf.download(ticker, period="6mo")
+    df = yf.download(ticker, period="2y")
     if not df.empty:
         # Dem Tech Indicators
         df["sma10"] = ta.SMA(df["Close"], timeperiod=10)
@@ -45,6 +45,34 @@ def add_stock_data_one(ticker):
     query = { ticker.replace(".","-"): {"$exists": True} }
     col_stock_data.delete_one(query)
     col_stock_data.insert_one({ ticker.replace(".","-"): ticker_dict })
+
+
+def add_stock_data_batch():
+    col_stock_data.drop({})
+    for a in range(1,11):
+        ticker = "%04d.HK" % a
+        df = yf.download(ticker, period="2y")
+        if not df.empty:
+            # Dem Tech Indicators
+            df["sma10"] = ta.SMA(df["Close"], timeperiod=10)
+            df["sma20"] = ta.SMA(df["Close"], timeperiod=20)
+            df["sma50"] = ta.SMA(df["Close"], timeperiod=50)
+            df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
+            df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
+        
+            
+            # df["macd"] = ta.MACD(df["Close"],fastperiod=12, slowperiod=26, signalperiod=9)
+            # print(ta.MACD(df["Close"],fastperiod=12, slowperiod=26, signalperiod=9).mean())
+            df = df.reset_index()
+            pd.to_datetime(df["Date"])
+            df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
+            # print(type(df["date"][0]))
+        ticker_dict = df.to_dict("records")
+
+        query = { ticker.replace(".","-"): {"$exists": True} }
+        # print(query)
+        col_stock_data.delete_one(query)
+        col_stock_data.insert_one({ ticker.replace(".","-"): ticker_dict })
 
 
 def add_stock_info():
