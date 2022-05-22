@@ -80,20 +80,20 @@
 </div>
 {% endblock %} {% block script%} {% if data %}
 <script>
-  var chart = undefined;
-  const ctx = document.getElementById('myChart').getContext('2d');
+	var chart = undefined;
+	const ctx = document.getElementById('myChart').getContext('2d');
 
-  function draw_candlestick(data) {
-  	const line_chart_settings = {
-  		type: 'line',
-  		yAxisID: 'y',
-  		fill: false,
-  		borderWidth: 1,
-  		tension: 0.1,
-  		pointRadius: 0,
-  	}
+	function draw_candlestick(data) {
+		const line_chart_settings = {
+			type: 'line',
+			yAxisID: 'y',
+			fill: false,
+			borderWidth: 1,
+			tension: 0.1,
+			pointRadius: 0,
+		}
 
-  	console.log(data.sma_10)
+		console.log(data)
 
   	const chart_data = {
   		labels: data.lbl,
@@ -184,20 +184,20 @@
   		// events: []
   	}
 
-  	const config = {
-  		type: 'candlestick',
-  		data: chart_data,
-  		options: options
-  	}
+		const config = {
+			type: 'candlestick',
+			data: chart_data,
+			options: options
+		}
 
-  	// destroy previous chart
-  	if (chart) {
-  		chart.destroy();
-  	}
+		// destroy previous chart
+		if (chart) {
+			chart.destroy();
+		}
 
-  	chart = new Chart(ctx, config);
-  }
+		chart = new Chart(ctx, config);
+	}
 
-  draw_candlestick({{ data | tojson}})
+	draw_candlestick({{ data | tojson}})
 </script>
 {% endif %} {% endblock %}
