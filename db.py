@@ -75,6 +75,56 @@ def add_stock_data_batch():
         col_stock_data.insert_one({ ticker.replace(".","-"): ticker_dict })
 
 
+# Web Scraping Code (etnet)
+def etnet_scraping():
+    page = requests.get("https://www.etnet.com.hk/www/eng/stocks/industry_adu.php")
+    soup = BeautifulSoup(page.content, "html.parser")
+    # Fetch the table row with the link
+    rows = list(soup.find_all("tr", attrs={"valign": "top"}))
+    url_dict = {}
+    for x in rows:
+        # Fetch the <a> with the link + industry name
+        tag = x.find("a")
+        url = "https://www.etnet.com.hk/www/eng/stocks/" + tag["href"] # Gets value of attribute :D:D:D:DD::DD::D
+        industry = tag.get_text()
+        # print(url, industry)
+        # Append pair to dictionary
+        url_dict[industry] = url
+    # print(url_dict)
+
+    scrape_list = []
+    for industry in url_dict:
+        detailPage = requests.get(url_dict[industry])
+        turtleSoup = BeautifulSoup(detailPage.content, "html.parser")
+        even_tags = list(turtleSoup.find_all("tr", attrs={"class": "evenRow"}))
+        for tag in even_tags:
+            # Get Ticker Number
+            ticker = tag.find("a").get_text()[-4:] + ".HK"
+            nominal = list(tag.find_all("td", attrs={"align": "right"}))[1].get_text()
+            turnover = list(tag.find_all("td", attrs={"align": "right"}))[3].get_text()
+            mktCap = list(tag.find_all("td", attrs={"align": "right"}))[4].get_text()
+            percentYield = list(tag.find_all("td", attrs={"align": "right"}))[5].get_text()
+            pe = list(tag.find_all("td", attrs={"align": "right"}))[6].get_text()
+            if pe == "":
+                pe = "N/A"
+            scrape_list.append([ticker,industry,nominal,turnover,mktCap,percentYield,pe])
+            
+        odd_tags = list(turtleSoup.find_all("tr", attrs={"class": "oddRow"}))
+        for tag in odd_tags:
+            # Get Ticker Number
+            ticker = tag.find("a").get_text()[-4:] + ".HK"
+            nominal = list(tag.find_all("td", attrs={"align": "right"}))[1].get_text()
+            turnover = list(tag.find_all("td", attrs={"align": "right"}))[3].get_text()
+            mktCap = list(tag.find_all("td", attrs={"align": "right"}))[4].get_text()
+            percentYield = list(tag.find_all("td", attrs={"align": "right"}))[5].get_text()
+            pe = list(tag.find_all("td", attrs={"align": "right"}))[6].get_text()
+            if pe == "":
+                pe = "N/A"
+            scrape_list.append([ticker,industry,nominal,turnover,mktCap,percentYield,pe])
+    scrape_df = pd.DataFrame(scrape_list, columns=["stock_code", "industry","nominal","turnover","mkt_cap","pc_yield","pe_ratio"])
+    scrape_df = scrape_df.sort_values("stock_code").reset_index(drop=True)
+    return(scrape_df)
+
 def add_stock_info():
     # Drops records
     delete = col_stock_info.delete_many({})
@@ -101,7 +151,11 @@ def add_stock_info():
     getupdated = getupdated.split()
     lastupdated = {"lastupdated": getupdated[3]}
     update = col_stock_info.insert_one(lastupdated)
-    print(update)
+
+    # Extra info via Web Scraping
+    # scrape_df = etnet_scraping()
+    # df = pd.merge(df, scrape_df, on="stock_code", how="left") # Merge DataFrames by comparing tickers
+    # df = df.reset_index(drop=True)
 
     df = df.to_dict('index')
     df = list(df.values())
