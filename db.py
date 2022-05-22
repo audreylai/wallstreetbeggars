@@ -29,7 +29,7 @@ def add_stock_data_one(ticker):
         df["sma50"] = ta.SMA(df["Close"], timeperiod=50)
         df["sma100"] = ta.SMA(df["Close"], timeperiod=100)
         df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
-        df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(ticker["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
+        df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
 
         # Change "date" from index column to regular column
         df = df.reset_index()
@@ -100,7 +100,7 @@ def get_stock_data(ticker, period):
                         "input": aggInput,
                         "as": "data",
                         "cond": {"$and": [
-                            {"$gte": ["$$data.Date", startDateTime]}
+                            {"$gte": ["$$data.date", startDateTime]}
                         ]}
                     }
                 }

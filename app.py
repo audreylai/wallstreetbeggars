@@ -16,9 +16,9 @@ def get_data():
 
 def process_cdl(data):
 	out = {
-		'sma_10': [],
-		'sma_20': [],
-		'sma_50': [],
+		'sma10': [],
+		'sma20': [],
+		'sma50': [],
 		'cdl': [],
 		'vol': [],
 		'vol_color': []
@@ -26,34 +26,24 @@ def process_cdl(data):
 	max_vol = 0
 	
 	for i in data:
-		if i['Volume'] > max_vol:
-			max_vol = i['Volume']
+		if i['volume'] > max_vol:
+			max_vol = i['volume']
 
 		out['cdl'].append({
-			'x': datetime.timestamp(i['Date']) * 1000,
-			'o': i['Open'],
-			'h': i['High'],
-			'l': i['Low'],
-			'c': i['Close']
-		})
-		out['sma_10'].append({
-			'x': datetime.timestamp(i['Date']) * 1000,
-			'y': i['SMA10']
-		})
-		out['sma_20'].append({
-			'x': datetime.timestamp(i['Date']) * 1000,
-			'y': i['SMA20']
-		})
-		out['sma_50'].append({
-			'x': datetime.timestamp(i['Date']) * 1000,
-			'y': i['SMA50']
-		})
-		out['vol'].append({
-			'x': datetime.timestamp(i['Date']) * 1000,
-			'y': i['Volume']
+			'x': datetime.timestamp(i['date']) * 1000,
+			'o': i['open'],
+			'h': i['high'],
+			'l': i['low'],
+			'c': i['close']
 		})
 
-		if i['Open'] > i['Close']:
+		for sma in ['sma10', 'sma20', 'sma50']:
+			out[sma].append({
+				'x': datetime.timestamp(i['date']) * 1000,
+				'y': i[sma]
+			})
+
+		if i['open'] > i['close']:
 			out['vol_color'].append('rgba(215,85,65,0.4)')
 		else:
 			out['vol_color'].append('rgba(80,160,115,0.4)')
