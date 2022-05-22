@@ -4,7 +4,6 @@ from db import *
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def home():
 	data = process_cdl(get_stock_data('0005-HK', 60))
@@ -20,7 +19,7 @@ def rules():
 
 @app.route("/stock-info")
 def stock_info():
-	data = process_cdl(get_stock_data('0005-HK', 60))
+	data = process_cdl(get_stock_data('0005-HK', 180))
 	return render_template("stock-info.html", data=data)
 
 if __name__ == "__main__":
