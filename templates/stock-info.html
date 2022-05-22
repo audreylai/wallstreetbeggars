@@ -56,11 +56,25 @@
       <p class="text-emerald-500 font-semibold">+1.89%</p>
     </div>
   </div>
-  <div
-    class="flex flex-col flex-1 mb-4 space-y-4 overflow-y-auto h-max gap-x-8 lg:space-y-0"
-  >
-    <div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-      <div><canvas id="myChart"></canvas></div>
+  <div class="flex flex-col  overflow-y-auto">
+    <div
+      class="flex-1 mb-4 space-y-4 h-full"
+    >
+      <div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800 h-full">
+        <div class="h-1/2" >
+          <canvas id="myChart"></canvas>
+        </div>
+        <div class="h-1/4" >
+          chart 2
+        </div>
+        <div class="h-1/4" >
+          chart 3
+        </div>
+      </div>
+      <div class="flex space-x-4 h-96">
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800 w-1/2">comparison</div>
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800 w-1/2">comparison</div>
+      </div>
     </div>
   </div>
 </div>
@@ -90,18 +104,18 @@
   			yAxisID: 'y'
   		}, {
   			label: 'MA10',
-  			data: data.sma_10,
-  			borderColor: 'rgb(174, 32, 18)',
+  			data: data.sma10,
+  			borderColor: 'rgb(19, 78, 74, 0.7)',
   			...line_chart_settings
   		}, {
   			label: 'MA20',
-  			data: data.sma_20,
-  			borderColor: 'rgb(202, 103, 2)',
+  			data: data.sma20,
+  			borderColor: 'rgb(15, 118, 110, 0.7)',
   			...line_chart_settings
   		}, {
   			label: 'MA50',
-  			data: data.sma_50,
-  			borderColor: 'rgb(238, 155, 0)',
+  			data: data.sma50,
+  			borderColor: 'rgb(20, 184, 166, 0.6)',
   			...line_chart_settings
   		}, {
   			label: 'Volume',
@@ -164,7 +178,7 @@
   			}
   		},
   		responsive: true,
-  		maintainAspectRatio: true,
+  		maintainAspectRatio: false,
   		// aspectRatio: 2,
   		// stacked: false,
   		// events: []

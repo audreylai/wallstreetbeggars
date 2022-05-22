@@ -254,8 +254,8 @@
   
   globalOpts$2.elements.financial = {
     color: {
-      up: 'rgba(80, 160, 115, 1)',
-      down: 'rgba(215, 85, 65, 1)',
+      up: 'rgb(34, 197, 94)',
+      down: 'rgb(239, 68, 68)',
       unchanged: 'rgba(90, 90, 90, 1)',
     }
   };
