@@ -29,6 +29,7 @@ def add_stock_data_one(ticker):
         df["sma50"] = ta.SMA(df["Close"], timeperiod=50)
         df["sma100"] = ta.SMA(df["Close"], timeperiod=100)
         df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
+        df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(ticker["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
 
         # Change "date" from index column to regular column
         df = df.reset_index()
@@ -109,7 +110,7 @@ def get_stock_data(ticker, period):
     res_list = [i for i in out if i[ticker] is not None][0][ticker]
     return res_list
 
-def get_ticker_data(tickers, tickerperiod):
+def quick_ticker_fetch(tickers, tickerperiod):
     try:
         ticker = yf.download(tickers, period=tickerperiod)
         # rsi and moving average
@@ -119,9 +120,12 @@ def get_ticker_data(tickers, tickerperiod):
         ticker['sma50'] = ta.SMA(ticker['Close'], timeperiod=50)
         ticker['sma100'] = ta.SMA(ticker['Close'], timeperiod=100)
         ticker['sma200'] = ta.SMA(ticker['Close'], timeperiod=200)
+        ticker["macd"], ticker["macd_ema"], ticker["macd_div"] = ta.MACD(ticker["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
+        
         # remove break days
         ticker = ticker[ticker['Volume'] != 0]
         ticker = ticker.reset_index()
+        ticker = ticker.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
     except:
         ticker = None
     return ticker
