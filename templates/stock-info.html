@@ -79,7 +79,7 @@
   		pointRadius: 0,
   	}
 
-  	console.log(data.sma_10)
+  	console.log(data)
 
   	const chart_data = {
   		labels: data.lbl,
@@ -90,23 +90,23 @@
   			yAxisID: 'y'
   		}, {
   			label: 'MA10',
-  			data: data.sma_10,
+  			data: data.sma10,
   			borderColor: 'rgb(174, 32, 18)',
   			...line_chart_settings
   		}, {
   			label: 'MA20',
-  			data: data.sma_20,
+  			data: data.sma20,
   			borderColor: 'rgb(202, 103, 2)',
   			...line_chart_settings
   		}, {
   			label: 'MA50',
-  			data: data.sma_50,
+  			data: data.sma50,
   			borderColor: 'rgb(238, 155, 0)',
   			...line_chart_settings
   		}, {
   			label: 'Volume',
   			type: 'bar',
-  			data: data.vol,
+  			data: data.volume,
   			backgroundColor: data.vol_color,
   			yAxisID: 'y1'
   		}]

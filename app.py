@@ -19,8 +19,10 @@ def process_cdl(data):
 		'sma10': [],
 		'sma20': [],
 		'sma50': [],
+		'macd': [],
+		'rsi': [],
 		'cdl': [],
-		'vol': [],
+		'volume': [],
 		'vol_color': []
 	}
 	max_vol = 0
@@ -37,10 +39,10 @@ def process_cdl(data):
 			'c': i['close']
 		})
 
-		for sma in ['sma10', 'sma20', 'sma50']:
-			out[sma].append({
+		for col in ['sma10', 'sma20', 'sma50', 'rsi', 'macd', 'volume']:
+			out[col].append({
 				'x': datetime.timestamp(i['date']) * 1000,
-				'y': i[sma]
+				'y': i[col]
 			})
 
 		if i['open'] > i['close']:
@@ -57,7 +59,7 @@ def rules():
 
 @app.route("/stock-info")
 def stock_info():
-	data = process_cdl(get_stock_data('0005-HK', 60))
+	data = process_cdl(get_stock_data('0005-HK', 180))
 	return render_template("stock-info.html", data=data)
 
 if __name__ == "__main__":
