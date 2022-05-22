@@ -164,6 +164,8 @@ def process_cdl(data):
 		'sma20': [],
 		'sma50': [],
 		'macd': [],
+		'macd_ema': [],
+		'macd_div': [],
 		'rsi': [],
 		'cdl': [],
 		'volume': [],
@@ -183,7 +185,7 @@ def process_cdl(data):
 			'c': i['close']
 		})
 
-		for col in ['sma10', 'sma20', 'sma50', 'rsi', 'macd', 'volume']:
+		for col in ['sma10', 'sma20', 'sma50', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume']:
 			out[col].append({
 				'x': datetime.timestamp(i['date']) * 1000,
 				'y': i[col]
