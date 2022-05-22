@@ -11,7 +11,9 @@
             <h2 class="text-2xl font-extrabold uppercase dark:text-zinc-100">
               0005.hk
             </h2>
-            <p class="text-zinc-400 text-md self-end pb-1">HSBC Holdings plc</p>
+            <p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
+              HSBC Holdings plc
+            </p>
           </div>
         </div>
         <form action="/stock-info" method="POST" class="relative">
@@ -52,295 +54,293 @@
       </div>
     </div>
     <div class="flex items-center space-x-1">
-      <h2 class="font-bold text-lg dark:text-zinc-300">48.84</h2>
-      <p class="text-emerald-500 font-semibold">+1.89%</p>
+      <h2 class="text-lg font-bold dark:text-zinc-300">48.84</h2>
+      <p class="font-semibold dark:text-emerald-500 text-emerald-600">+1.89%</p>
     </div>
   </div>
-  <div class="flex flex-col  overflow-y-auto">
-    <div
-      class="flex-1 mb-4 space-y-4 h-full"
-    >
-      <div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800 h-full">
-        <div class="h-1/2" >
+  <div class="flex flex-col overflow-y-auto">
+    <div class="flex-1 h-full mb-4 space-y-4">
+      <div
+        class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+      >
+        <div class="h-1/2">
           <canvas id="cdl_chart"></canvas>
         </div>
-        <div class="h-1/4" >
-		  <canvas id="rsi_chart"></canvas>
+        <div class="h-1/4">
+          <canvas id="rsi_chart"></canvas>
         </div>
-        <div class="h-1/4" >
-		  <canvas id="macd_chart"></canvas>
+        <div class="h-1/4">
+          <canvas id="macd_chart"></canvas>
         </div>
       </div>
       <div class="flex space-x-4 h-96">
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800 w-1/2">comparison</div>
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800 w-1/2">comparison</div>
+        <div class="w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          <canvas id="comparison1_chart"></canvas>
+        </div>
+        <div class="w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          <canvas id="comparison2_chart"></canvas>
+        </div>
       </div>
     </div>
-	<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-	  <div><canvas id="rsi_chart"></canvas></div>
-	</div>
-	<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-		<div><canvas id="macd_chart"></canvas></div>
-	  </div>
   </div>
 </div>
 {% endblock %} {% block script%} {% if data %}
 <script>
-	var cdl_chart = undefined;
-	var rsi_chart = undefined;
-	var macd_chart = undefined;
-	
-	const cdl_ctx = document.getElementById('cdl_chart').getContext('2d');
-	const rsi_ctx = document.getElementById('rsi_chart').getContext('2d');
-	const macd_ctx = document.getElementById('macd_chart').getContext('2d');
-	
-	const line_chart_settings = {
-		type: 'line',
-		yAxisID: 'y',
-		fill: false,
-		borderWidth: 1,
-		tension: 0.1,
-		pointRadius: 0,
-	}
-	
-	function draw_cdl(data) {
-		chart_data = {
-			labels: data.lbl,
-			datasets: [{
-				label: 'Candlestick',
-				type: 'candlestick',
-				data: data.cdl,
-				yAxisID: 'y'
-			}, {
-				label: 'MA10',
-				data: data.sma10,
-				borderColor: 'rgb(174, 32, 18)',
-				...line_chart_settings
-			}, {
-				label: 'MA20',
-				data: data.sma20,
-				borderColor: 'rgb(202, 103, 2)',
-				...line_chart_settings
-			}, {
-				label: 'MA50',
-				data: data.sma50,
-				borderColor: 'rgb(238, 155, 0)',
-				...line_chart_settings
-			}, {
-				label: 'Volume',
-				type: 'bar',
-				data: data.volume,
-				backgroundColor: data.vol_color,
-				yAxisID: 'y1'
-			}]
-		}
-	
-		options = {
-			legend: {
-				onClick: function (e) {
-					e.stopPropagation();
-				}
-			},
-			scales: {
-				x: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Date'
-					},
-					type: 'timeseries',
-					time: {
-						unit: 'month'
-					}
-				},
-				y: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Dollars (HKD)'
-					}
-				},
-				y1: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Volume (HKD)'
-					},
-					position: 'right',
-					min: 0,
-					max: data.max_vol.toPrecision(2) * 4,
-					grid: {
-						drawOnChartArea: false
-					},
-					ticks: {
-						callback: (val) => (val.toExponential())
-					}
-				}
-			},
-			interaction: {
-				mode: '',
-				intersect: true
-			},
-			plugins: {
-				title: {
-					display: false
-				}
-			},
-			responsive: true,
-			maintainAspectRatio: true,
-		}
-	
-		if (cdl_chart) {
-			cdl_chart.destroy();
-		}
-	
-		cdl_chart = new Chart(cdl_ctx, {
-			type: 'candlestick',
-			data: chart_data,
-			options: options
-		});
-	}
-	
-	function draw_rsi(data) {
-		chart_data = {
-			labels: data.lbl,
-			datasets: [{
-				label: 'RSI',
-				data: data.rsi,
-				borderColor: 'rgb(16, 183, 89)',
-				...line_chart_settings
-			}]
-		}
-	
-		options = {
-			legend: {
-				onClick: function (e) {
-					e.stopPropagation();
-				}
-			},
-			scales: {
-				x: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Date'
-					},
-					type: 'timeseries',
-					time: {
-						unit: 'month'
-					}
-				},
-				y: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Dollars (HKD)'
-					}
-				}
-			},
-			interaction: {
-				mode: '',
-				intersect: true
-			},
-			plugins: {
-				title: {
-					display: false
-				}
-			},
-			responsive: true,
-			maintainAspectRatio: true,
-		}
-	
-		if (rsi_chart) {
-			rsi_chart.destroy();
-		}
-	
-		rsi_chart = new Chart(rsi_ctx, {
-			type: 'line',
-			data: chart_data,
-			options: options
-		});
-	}
-	
-	function draw_macd(data) {
-		chart_data = {
-			labels: data.lbl,
-			datasets: [{
-				label: 'MACD',
-				data: data.macd,
-				borderColor: 'rgb(16, 183, 89)',
-				...line_chart_settings
-			}, {
-				label: 'EMA',
-				data: data.macd_ema,
-				borderColor: 'rgb(226, 70, 72)',
-				...line_chart_settings
-			}, {
-				label: 'Divergence',
-				type: 'bar',
-				data: data.macd_div,
-				borderColor: 'rgb(92, 90, 102)',
-			}]
-		}
-	
-		options = {
-			legend: {
-				onClick: function (e) {
-					e.stopPropagation();
-				}
-			},
-			scales: {
-				x: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Date'
-					},
-					type: 'timeseries',
-					time: {
-						unit: 'month'
-					}
-				},
-				y: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Dollars (HKD)'
-					}
-				}
-			},
-			interaction: {
-				mode: '',
-				intersect: true
-			},
-			plugins: {
-				title: {
-					display: false
-				}
-			},
-			responsive: true,
-			maintainAspectRatio: true,
-		}
-	
-		if (macd_chart) {
-			macd_chart.destroy();
-		}
-	
-		macd_chart = new Chart(macd_ctx, {
-			type: 'line',
-			data: chart_data,
-			options: options
-		});
-	}
-	
-	function draw_charts(data) {
-		console.log(data);
-	
-		draw_cdl(data);
-		draw_rsi(data);
-		draw_macd(data);
-	}
-	
-	draw_charts({{ data | tojson }})
+  var cdl_chart = undefined;
+  var rsi_chart = undefined;
+  var macd_chart = undefined;
+
+  const cdl_ctx = document.getElementById('cdl_chart').getContext('2d');
+  const rsi_ctx = document.getElementById('rsi_chart').getContext('2d');
+  const macd_ctx = document.getElementById('macd_chart').getContext('2d');
+
+  const line_chart_settings = {
+  	type: 'line',
+  	yAxisID: 'y',
+  	fill: false,
+  	borderWidth: 1,
+  	tension: 0.1,
+  	pointRadius: 0,
+  }
+
+  function draw_cdl(data) {
+  	chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			label: 'Candlestick',
+  			type: 'candlestick',
+  			data: data.cdl,
+  			yAxisID: 'y'
+  		}, {
+  			label: 'MA10',
+  			data: data.sma10,
+  			borderColor: 'rgb(174, 32, 18)',
+  			...line_chart_settings
+  		}, {
+  			label: 'MA20',
+  			data: data.sma20,
+  			borderColor: 'rgb(202, 103, 2)',
+  			...line_chart_settings
+  		}, {
+  			label: 'MA50',
+  			data: data.sma50,
+  			borderColor: 'rgb(238, 155, 0)',
+  			...line_chart_settings
+  		}, {
+  			label: 'Volume',
+  			type: 'bar',
+  			data: data.volume,
+  			backgroundColor: data.vol_color,
+  			yAxisID: 'y1'
+  		}]
+  	}
+
+  	options = {
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: false,
+  				title: {
+  					display: false,
+  					text: 'Date'
+  				},
+  				type: 'timeseries',
+  				time: {
+  					unit: 'month'
+  				}
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				}
+  			},
+  			y1: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Volume (HKD)'
+  				},
+  				position: 'right',
+  				min: 0,
+  				max: data.max_vol.toPrecision(2) * 4,
+  				grid: {
+  					drawOnChartArea: false
+  				},
+  				ticks: {
+  					callback: (val) => (val.toExponential())
+  				}
+  			}
+  		},
+  		interaction: {
+  			mode: '',
+  			intersect: true
+  		},
+  		plugins: {
+  			title: {
+  				display: false
+  			}
+  		},
+  		responsive: true,
+  		maintainAspectRatio: false,
+  	}
+
+  	if (cdl_chart) {
+  		cdl_chart.destroy();
+  	}
+
+  	cdl_chart = new Chart(cdl_ctx, {
+  		type: 'candlestick',
+  		data: chart_data,
+  		options: options
+  	});
+  }
+
+  function draw_rsi(data) {
+  	chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			label: 'RSI',
+  			data: data.rsi,
+  			borderColor: 'rgb(16, 183, 89)',
+  			...line_chart_settings
+  		}]
+  	}
+
+  	options = {
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: false,
+  				title: {
+  					display: false,
+  					text: 'Date'
+  				},
+  				type: 'timeseries',
+  				time: {
+  					unit: 'month'
+  				}
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				}
+  			}
+  		},
+  		interaction: {
+  			mode: '',
+  			intersect: true
+  		},
+  		plugins: {
+  			title: {
+  				display: false
+  			}
+  		},
+  		responsive: true,
+  		maintainAspectRatio: false,
+  	}
+
+  	if (rsi_chart) {
+  		rsi_chart.destroy();
+  	}
+
+  	rsi_chart = new Chart(rsi_ctx, {
+  		type: 'line',
+  		data: chart_data,
+  		options: options
+  	});
+  }
+
+  function draw_macd(data) {
+  	chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			label: 'MACD',
+  			data: data.macd,
+  			borderColor: 'rgb(16, 183, 89)',
+  			...line_chart_settings
+  		}, {
+  			label: 'EMA',
+  			data: data.macd_ema,
+  			borderColor: 'rgb(226, 70, 72)',
+  			...line_chart_settings
+  		}, {
+  			label: 'Divergence',
+  			type: 'bar',
+  			data: data.macd_div,
+  			borderColor: 'rgb(92, 90, 102)',
+  		}]
+  	}
+
+  	options = {
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Date'
+  				},
+  				type: 'timeseries',
+  				time: {
+  					unit: 'month'
+  				}
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				}
+  			}
+  		},
+  		interaction: {
+  			mode: '',
+  			intersect: true
+  		},
+  		plugins: {
+  			title: {
+  				display: false
+  			}
+  		},
+  		responsive: true,
+  		maintainAspectRatio: false,
+  	}
+
+  	if (macd_chart) {
+  		macd_chart.destroy();
+  	}
+
+  	macd_chart = new Chart(macd_ctx, {
+  		type: 'line',
+  		data: chart_data,
+  		options: options
+  	});
+  }
+
+  function draw_charts(data) {
+  	console.log(data);
+
+  	draw_cdl(data);
+  	draw_rsi(data);
+  	draw_macd(data);
+  }
+
+  draw_charts({{ data | tojson }})
 </script>
 {% endif %} {% endblock %}
