@@ -77,7 +77,10 @@
 				<div class="w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex justify-between">
 						<h2 class="text-2xl font-semibold dark:text-zinc-200">Stock Comparison</h2>
-						<form><input type="text" class="h-full px-2 py-1 text-sm bg-gray-200 rounded-md dark:bg-zinc-900 placeholder:text-gray-400 dark:placeholder:text-zinc-500" placeholder="Ticker..."></form></div>
+						<form onsubmit="draw_stock_cmp(data, document.getElementById('ticker-cmp-txtbox').value); return false;">
+							<input type="text" id="ticker-cmp-txtbox" class="h-full px-2 py-1 text-sm bg-gray-200 rounded-md dark:bg-zinc-900 placeholder:text-gray-400 dark:placeholder:text-zinc-500" placeholder="Ticker..." autocomplete="off">
+						</form>
+					</div>
 					<canvas id="stock-comparison-chart"></canvas>
 				</div>
 				<div class="w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
@@ -107,73 +110,102 @@
 
 	const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
 
-	function draw_stock_cmp(data) {
-		gradient = stock_cmp_ctx.createLinearGradient(0, 0, 0, 300);
-		gradient.addColorStop(0, 'rgba(255, 43, 43, 0.8)');
-		gradient.addColorStop(1, 'rgba(255, 43, 43, 0.1)');
+	async function draw_stock_cmp(data, other_ticker) {
+		await $.get('/api/close', {
+			ticker: other_ticker,
+		}, function(res) {
+			other_data = res
+		});
+
+		console.log(other_data);
+
+		gradient1 = stock_cmp_ctx.createLinearGradient(0, 0, 0, 300);
+		gradient1.addColorStop(0, 'rgba(255, 43, 43, 0.8)');
+		gradient1.addColorStop(1, 'rgba(255, 43, 43, 0.1)');
+
+		gradient2 = stock_cmp_ctx.createLinearGradient(0, 0, 0, 300);
+		gradient2.addColorStop(0, 'rgba(43, 43, 255, 0.8)');
+		gradient2.addColorStop(1, 'rgba(43, 43, 255, 0.1)');
+
+		options = {
+			tension: 0.3,
+			pointRadius: 0,
+			legend: {
+				onClick: function (e) {
+					e.stopPropagation();
+				}
+			},
+			scales: {
+				x: {
+					display: false,
+					title: {
+						display: false,
+						text: 'Date'
+					},
+					type: 'timeseries',
+					time: {
+						unit: 'month'
+					}
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					}
+				},
+				y1: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					},
+					position: 'right',
+					grid: {
+						drawOnChartArea: false
+					},
+				}
+			},
+			interaction: {
+				mode: '',
+				intersect: true
+			},
+			plugins: {
+				title: {
+					display: false
+				}
+			},
+			responsive: true,
+			maintainAspectRatio: false,
+		}
+
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				label: 'Close 1',
+				type: 'line',
+				data: data.close,
+				backgroundColor: gradient1,
+				yAxisID: 'y',
+				fill: true
+			}, {
+				label: 'Close 2',
+				type: 'line',
+				data: other_data.close,
+				backgroundColor: gradient2,
+				fill: true,
+				yAxisID: 'y1'
+			}],
+		}
+
+		if (stock_cmp_chart) {
+			stock_cmp_chart.destroy();
+		}
 
 		stock_cmp_chart = new Chart(stock_cmp_ctx, {
 			type: 'line',
-			data: {
-				labels: data.lbl,
-				datasets: [{
-					backgroundColor: gradient,
-					label: 'Close',
-					fill: true,
-					data: data.close
-				}]
-			},
-			options: {
-				tension: 0.3,
-				pointRadius: 0,
-				legend: {
-					onClick: function (e) {
-						e.stopPropagation();
-					}
-				},
-				scales: {
-					x: {
-						display: false,
-						title: {
-							display: false,
-							text: 'Date'
-						},
-						type: 'timeseries',
-						time: {
-							unit: 'month'
-						}
-					},
-					y: {
-						display: true,
-						title: {
-							display: false,
-							text: 'Dollars (HKD)'
-						}
-					},
-					y1: {
-						display: true,
-						title: {
-							display: false,
-							text: 'Dollars (HKD)'
-						},
-						position: 'right',
-						grid: {
-							drawOnChartArea: false
-						},
-					}
-				},
-				interaction: {
-					mode: '',
-					intersect: true
-				},
-				plugins: {
-					title: {
-						display: false
-					}
-				},
-				responsive: true,
-				maintainAspectRatio: false,
-			}
+			data: chart_data,
+			options: options
 		});
 	}
 
@@ -415,15 +447,18 @@
 		});
 	}
 
+	data = {{ data | tojson }}
+
 	function draw_charts(data) {
 		console.log(data);
 
 		draw_cdl(data);
 		draw_rsi(data);
 		draw_macd(data);
-		draw_stock_cmp(data);
+
+		draw_stock_cmp(data, '0001-HK');
 	}
 
-	draw_charts({{ data | tojson }})
+	draw_charts(data)
 </script>
 {% endif %} {% endblock %}
