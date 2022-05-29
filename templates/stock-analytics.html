@@ -1,0 +1,490 @@
+{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
+%}
+<div
+  class="flex flex-col w-screen h-screen gap-4 p-4 px-6 py-4 overflow-y-hidden bg-gray-100 dark:bg-zinc-900"
+>
+  <div>
+    <div class="space-y-2 bg-gray-100 dark:bg-zinc-900">
+      <div class="flex justify-between">
+        <div>
+          <div class="flex space-x-2">
+            <h2 class="text-2xl font-black uppercase dark:text-zinc-100">
+              0005.hk
+            </h2>
+            <p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
+              HSBC Holdings plc
+            </p>
+          </div>
+        </div>
+        <form action="/stock-info" method="POST" class="relative">
+          <div
+            class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+                fill="none"
+                stroke="currentColor"
+                stroke-miterlimit="10"
+                stroke-width="32"
+              />
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-miterlimit="10"
+                stroke-width="32"
+                d="M338.29 338.29L448 448"
+              />
+            </svg>
+          </div>
+          <input type="hidden" name="page" value="1" />
+          <input
+            type="text"
+            name="ticker"
+            value="{{ticker}}"
+            class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-gray-100/50 focus:border-transparent"
+            placeholder="Search"
+          />
+        </form>
+      </div>
+    </div>
+    <div class="flex items-center space-x-1">
+      <h2 class="text-lg font-bold dark:text-zinc-300">48.84</h2>
+      <p class="font-semibold dark:text-emerald-500 text-emerald-600">+1.89%</p>
+    </div>
+  </div>
+  <div class="flex flex-col overflow-y-auto">
+    <div class="flex-1 h-full mb-4 space-y-4">
+      <div
+        class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+      >
+        <div class="h-1/2">
+          <canvas id="cdl-chart"></canvas>
+        </div>
+        <div class="h-1/4">
+          <canvas id="rsi-chart"></canvas>
+        </div>
+        <div class="h-1/4">
+          <canvas id="macd-chart"></canvas>
+        </div>
+      </div>
+      <div class="flex space-x-4 h-96">
+        <div class="w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          <div class="flex justify-between">
+            <h2 class="text-2xl font-semibold dark:text-zinc-200">
+              Stock Comparison
+            </h2>
+            <form
+              onsubmit="draw_stock_cmp(data, document.getElementById('ticker-cmp-txtbox').value); return false;"
+            >
+              <input
+                type="text"
+                id="ticker-cmp-txtbox"
+                class="h-full px-2 py-1 text-sm uppercase bg-gray-200 rounded-md dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-gray-400 dark:placeholder:text-zinc-500"
+                placeholder="Ticker..."
+                autocomplete="off"
+              />
+            </form>
+          </div>
+          <canvas id="stock-comparison-chart"></canvas>
+        </div>
+        <div class="w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          <div class="flex justify-between">
+            <h2 class="text-2xl font-semibold dark:text-zinc-200">
+              Industry Comparison
+            </h2>
+            <form>
+              <input
+                type="text"
+                class="h-full px-2 py-1 text-sm uppercase bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-900 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
+                placeholder="Industry..."
+              />
+            </form>
+          </div>
+          <canvas id="industry-comparison-chart"></canvas>
+        </div>
+      </div>
+      <script
+        src="https://redditjs.com/post.js"
+        data-url="http://www.techodrom.com/etc/star-trek-edges-closer-reality-tractor-beam-moves-object-using-nothing-power-ultrasound/"
+        data-height="500"
+        data-width="650"
+        data-post-finder="mostComments"
+        data-theme="light"
+        data-show-submit="true"
+      ></script>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block script%} {% if data %}
+<script>
+  const line_chart_settings = {
+  	type: 'line',
+  	yAxisID: 'y',
+  	fill: false,
+  	borderWidth: 1,
+  	tension: 0.3,
+  	pointRadius: 0,
+  }
+
+  var stock_cmp_chart = undefined;
+
+  const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
+
+  async function draw_stock_cmp(data, other_ticker) {
+  	await $.get('/api/close', {
+  		ticker: other_ticker,
+  	}, function(res) {
+  		other_data = res
+  	});
+
+  	console.log(other_data);
+
+  	gradient1 = stock_cmp_ctx.createLinearGradient(0, 0, 0, 300);
+  	gradient1.addColorStop(0, 'rgba(255, 43, 43, 0.8)');
+  	gradient1.addColorStop(1, 'rgba(255, 43, 43, 0.1)');
+
+  	gradient2 = stock_cmp_ctx.createLinearGradient(0, 0, 0, 300);
+  	gradient2.addColorStop(0, 'rgba(43, 43, 255, 0.8)');
+  	gradient2.addColorStop(1, 'rgba(43, 43, 255, 0.1)');
+
+  	options = {
+  		tension: 0.3,
+  		pointRadius: 0,
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: false,
+  				title: {
+  					display: false,
+  					text: 'Date'
+  				},
+  				type: 'timeseries',
+  				time: {
+  					unit: 'month'
+  				}
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				}
+  			},
+  			y1: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				},
+  				position: 'right',
+  				grid: {
+  					drawOnChartArea: false
+  				},
+  			}
+  		},
+  		interaction: {
+  			mode: '',
+  			intersect: true
+  		},
+  		plugins: {
+  			title: {
+  				display: false
+  			}
+  		},
+  		responsive: true,
+  		maintainAspectRatio: false,
+  	}
+
+  	chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			label: 'Close 1',
+  			type: 'line',
+  			data: data.close,
+  			backgroundColor: gradient1,
+  			yAxisID: 'y',
+  			fill: true
+  		}, {
+  			label: 'Close 2',
+  			type: 'line',
+  			data: other_data.close,
+  			backgroundColor: gradient2,
+  			fill: true,
+  			yAxisID: 'y1'
+  		}],
+  	}
+
+  	if (stock_cmp_chart) {
+  		stock_cmp_chart.destroy();
+  	}
+
+  	stock_cmp_chart = new Chart(stock_cmp_ctx, {
+  		type: 'line',
+  		data: chart_data,
+  		options: options
+  	});
+  }
+
+  var cdl_chart = undefined;
+  var rsi_chart = undefined;
+  var macd_chart = undefined;
+
+  const cdl_ctx = document.getElementById('cdl-chart').getContext('2d');
+  const rsi_ctx = document.getElementById('rsi-chart').getContext('2d');
+  const macd_ctx = document.getElementById('macd-chart').getContext('2d');
+
+  function draw_cdl(data) {
+  	chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			label: 'Candlestick',
+  			type: 'candlestick',
+  			data: data.cdl,
+  			yAxisID: 'y'
+  		}, {
+  			label: 'MA10',
+  			data: data.sma10,
+  			borderColor: 'rgb(174, 32, 18)',
+  			...line_chart_settings
+  		}, {
+  			label: 'MA20',
+  			data: data.sma20,
+  			borderColor: 'rgb(202, 103, 2)',
+  			...line_chart_settings
+  		}, {
+  			label: 'MA50',
+  			data: data.sma50,
+  			borderColor: 'rgb(238, 155, 0)',
+  			...line_chart_settings
+  		}, {
+  			label: 'Volume',
+  			type: 'bar',
+  			data: data.volume,
+  			backgroundColor: data.vol_color,
+  			yAxisID: 'y1'
+  		}]
+  	}
+
+  	options = {
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: false,
+  				title: {
+  					display: false,
+  					text: 'Date'
+  				},
+  				type: 'timeseries',
+  				time: {
+  					unit: 'month'
+  				}
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				}
+  			},
+  			y1: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Volume (HKD)'
+  				},
+  				position: 'right',
+  				min: 0,
+  				max: data.max_vol.toPrecision(2) * 4,
+  				grid: {
+  					drawOnChartArea: false
+  				},
+  				ticks: {
+  					callback: (val) => (val.toExponential())
+  				}
+  			}
+  		},
+  		interaction: {
+  			mode: '',
+  			intersect: true
+  		},
+  		plugins: {
+  			title: {
+  				display: false
+  			}
+  		},
+  		responsive: true,
+  		maintainAspectRatio: false,
+  	}
+
+  	if (cdl_chart) {
+  		cdl_chart.destroy();
+  	}
+
+  	cdl_chart = new Chart(cdl_ctx, {
+  		type: 'candlestick',
+  		data: chart_data,
+  		options: options
+  	});
+  }
+
+  function draw_rsi(data) {
+  	chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			label: 'RSI',
+  			data: data.rsi,
+  			borderColor: 'rgb(16, 183, 89)',
+  			...line_chart_settings
+  		}]
+  	}
+
+  	options = {
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: false,
+  				title: {
+  					display: false,
+  					text: 'Date'
+  				},
+  				type: 'timeseries',
+  				time: {
+  					unit: 'month'
+  				}
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				}
+  			}
+  		},
+  		interaction: {
+  			mode: '',
+  			intersect: true
+  		},
+  		plugins: {
+  			title: {
+  				display: false
+  			}
+  		},
+  		responsive: true,
+  		maintainAspectRatio: false,
+  	}
+
+  	if (rsi_chart) {
+  		rsi_chart.destroy();
+  	}
+
+  	rsi_chart = new Chart(rsi_ctx, {
+  		type: 'line',
+  		data: chart_data,
+  		options: options
+  	});
+  }
+
+  function draw_macd(data) {
+  	chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			label: 'MACD',
+  			data: data.macd,
+  			borderColor: 'rgb(16, 183, 89)',
+  			...line_chart_settings
+  		}, {
+  			label: 'EMA',
+  			data: data.macd_ema,
+  			borderColor: 'rgb(226, 70, 72)',
+  			...line_chart_settings
+  		}, {
+  			label: 'Divergence',
+  			type: 'bar',
+  			data: data.macd_div,
+  			borderColor: 'rgb(92, 90, 102)',
+  		}]
+  	}
+
+  	options = {
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Date'
+  				},
+  				type: 'timeseries',
+  				time: {
+  					unit: 'month'
+  				}
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				}
+  			}
+  		},
+  		interaction: {
+  			mode: '',
+  			intersect: true
+  		},
+  		plugins: {
+  			title: {
+  				display: false
+  			}
+  		},
+  		responsive: true,
+  		maintainAspectRatio: false,
+  	}
+
+  	if (macd_chart) {
+  		macd_chart.destroy();
+  	}
+
+  	macd_chart = new Chart(macd_ctx, {
+  		type: 'line',
+  		data: chart_data,
+  		options: options
+  	});
+  }
+
+  data = {{ data | tojson }}
+
+  function draw_charts(data) {
+  	console.log(data);
+
+  	draw_cdl(data);
+  	draw_rsi(data);
+  	draw_macd(data);
+
+  	draw_stock_cmp(data, '0001-HK');
+  }
+
+  draw_charts(data)
+</script>
+{% endif %} {% endblock %}

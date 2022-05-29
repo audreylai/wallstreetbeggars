@@ -17,10 +17,10 @@ def get_data():
 def rules():
 	return render_template("rules.html")
 
-@app.route("/stock-info")
-def stock_info():
+@app.route("/stock-analytics")
+def stock_analytics():
 	data = process_stock_data(get_stock_data('0005-HK', 180))
-	return render_template("stock-info.html", data=data)
+	return render_template("stock-analytics.html", data=data)
 
 @app.route("/api/close", methods=['GET'])
 def api_close():
