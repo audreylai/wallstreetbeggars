@@ -205,8 +205,8 @@ def get_stock_info(ticker):
     # Returns all data (for stock list)
     if ticker == "all":
         res = {
-            "table": col_stock_info.find({}, {"_id": 0}),
-            "last_update": col_stock_info.find_one({"last_updated":{"$exists": True}})["last_updated"],
+            "table": col_stock_info.find({"lastupdated":{"$exists": False}}, {"_id": 0}, ),
+            "last_update": col_stock_info.find_one({"lastupdated":{"$exists": True}})["lastupdated"],
             "industries": col_stock_info.distinct("industry")
             }
     else:

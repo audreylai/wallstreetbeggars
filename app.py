@@ -21,7 +21,8 @@ def rules():
 def stock_list():
 	# GIVE ME DATA
 	stock_table = get_stock_info("all")
-	last_update = stock_table['last_update'].strftime("%d/%m/%Y")
+	# last_update = stock_table['last_update'].strftime("%d/%m/%Y")
+	last_update = stock_table['last_update']
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_update=last_update, industries=stock_table['industries'])
 
 @app.route("/stock-info")
