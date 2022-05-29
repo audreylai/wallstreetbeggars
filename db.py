@@ -152,8 +152,9 @@ def add_stock_info():
     getupdated = pd.read_excel(
         'https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=cols)
     getupdated = getupdated.iloc[0, 0]
-    getupdated = getupdated.split()
-    lastupdated = {"lastupdated": getupdated[3]}
+    getupdated = getupdated.split()[3]
+    getupdated = datetime.strptime(getupdated, "%d/%m/%Y")
+    lastupdated = {"lastupdated": getupdated}
     update = col_stock_info.insert_one(lastupdated)
 
     # Extra info via Web Scraping
@@ -239,12 +240,12 @@ def quick_ticker_fetch(tickers, tickerperiod):
     return ticker
 
 
-def industry_close_average(ticker,period):
-    ticker = ticker.replace("-",".")
+def industry_close_average(industry,period):
+    # ticker = ticker.replace("-",".")
     ind_ticker_list = []
     res_list = []
     final_res_list = []
-    industry = col_stock_info.find_one({"stock_code": ticker})["industry"]
+    # industry = col_stock_info.find_one({"stock_code": ticker})["industry"]
     for dict in col_stock_info.find({"industry": industry}):
         ind_ticker_list.append(dict["stock_code"].replace(".","-"))
 
