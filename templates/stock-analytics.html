@@ -148,12 +148,12 @@
 			labels: data.lbl,
 			datasets: [{
 				label: 'Close 1',
-				data: data.close,
+				data: data.close_pct,
 				borderColor: 'rgb(255, 43, 43)',
 				...line_chart_settings
 			}, {
 				label: 'Close 2',
-				data: other_data.close,
+				data: other_data.close_pct,
 				borderColor: 'rgb(43, 43, 255)',
 				...line_chart_settings
 			}]
@@ -181,18 +181,7 @@
 					display: true,
 					title: {
 						display: false,
-						text: 'Dollars (HKD)'
-					}
-				},
-				y1: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Dollars (HKD)'
-					},
-					position: 'right',
-					grid: {
-						drawOnChartArea: false
+						text: '% change'
 					}
 				}
 			},
@@ -214,7 +203,7 @@
 		}
 
 		stock_cmp_chart = new Chart(stock_cmp_ctx, {
-			type: 'candlestick',
+			type: 'line',
 			data: chart_data,
 			options: options
 		});
