@@ -163,6 +163,7 @@ def add_stock_info():
     print(insertdf.inserted_ids)
 
 
+# Functions for Fetching Data from DB
 def get_stock_data(ticker, period):
     # Change ticker var to match DB key
     ticker = ticker.upper()
@@ -191,6 +192,23 @@ def get_stock_data(ticker, period):
     ])
     res_list = [i for i in out if i[ticker] is not None][0][ticker]
     return res_list
+
+def get_stock_info(ticker):
+    ticker = ticker.replace("-",".")
+    res = []
+    # Returns all data (for stock list)
+    if ticker == "all":
+        res = {
+            "table": col_stock_info.find({}, {"_id": 0}),
+            "last_update": col_stock_info.find_one({"last_updated":{"$exists": True}})["last_updated"],
+            "industries": col_stock_info.distinct("industry")
+            }
+    else:
+        # Returns data of one ticker
+        res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
+    return res
+
+
 
 def quick_ticker_fetch(tickers, tickerperiod):
     try:
