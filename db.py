@@ -200,7 +200,7 @@ def get_stock_info(ticker):
     if ticker == "all":
         res = {
             "table": col_stock_info.find({}, {"_id": 0}),
-            "last_update": col_stock_info.find_one({"lastupdated":{"$exists": True}})["lastupdated"],
+            "last_update": col_stock_info.find_one({"last_updated":{"$exists": True}})["last_updated"],
             "industries": col_stock_info.distinct("industry")
             }
     else:
