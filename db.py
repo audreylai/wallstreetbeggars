@@ -227,7 +227,20 @@ def quick_ticker_fetch(tickers, tickerperiod):
         ticker = None
     return ticker
 
-def process_cdl(data):
+def process_close(data):
+	out = {
+		'close': [],
+	}
+	
+	for i in data:
+		out['close'].append({
+			'x': datetime.timestamp(i['date']) * 1000,
+			'y': i['close']
+		})
+
+	return out
+
+def process_stock_data(data):
 	out = {
 		'sma10': [],
 		'sma20': [],
@@ -237,6 +250,7 @@ def process_cdl(data):
 		'macd_div': [],
 		'rsi': [],
 		'cdl': [],
+		'close': [],
 		'volume': [],
 		'vol_color': []
 	}
@@ -254,7 +268,7 @@ def process_cdl(data):
 			'c': i['close']
 		})
 
-		for col in ['sma10', 'sma20', 'sma50', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume']:
+		for col in ['sma10', 'sma20', 'sma50', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume', 'close']:
 			out[col].append({
 				'x': datetime.timestamp(i['date']) * 1000,
 				'y': i[col]
