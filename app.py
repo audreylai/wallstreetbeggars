@@ -17,6 +17,11 @@ def get_data():
 def rules():
 	return render_template("rules.html")
 
+@app.route("/stock-list")
+def stock_list():
+  # GIVE ME DATA
+	return render_template("stock-list.html")
+
 @app.route("/stock-analytics")
 def stock_analytics():
 	data = process_stock_data(get_stock_data('0005-HK', 180))
