@@ -152,8 +152,9 @@ def add_stock_info():
     getupdated = pd.read_excel(
         'https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=cols)
     getupdated = getupdated.iloc[0, 0]
-    getupdated = getupdated.split()
-    lastupdated = {"lastupdated": getupdated[3]}
+    getupdated = getupdated.split()[3]
+    getupdated = datetime.strptime(getupdated, "%d/%m/%Y")
+    lastupdated = {"lastupdated": getupdated}
     update = col_stock_info.insert_one(lastupdated)
 
     # Extra info via Web Scraping
