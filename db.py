@@ -240,12 +240,12 @@ def quick_ticker_fetch(tickers, tickerperiod):
     return ticker
 
 
-def industry_close_average(ticker,period):
-    ticker = ticker.replace("-",".")
+def industry_close_average(industry,period):
+    # ticker = ticker.replace("-",".")
     ind_ticker_list = []
     res_list = []
     final_res_list = []
-    industry = col_stock_info.find_one({"stock_code": ticker})["industry"]
+    # industry = col_stock_info.find_one({"stock_code": ticker})["industry"]
     for dict in col_stock_info.find({"industry": industry}):
         ind_ticker_list.append(dict["stock_code"].replace(".","-"))
 
