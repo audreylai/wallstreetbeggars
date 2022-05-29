@@ -16,6 +16,9 @@ col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
 
+
+
+# Upserts --------------------
 def add_stock_data_one(ticker):
     if not ticker:
         return None
@@ -125,6 +128,7 @@ def etnet_scraping():
     scrape_df = scrape_df.sort_values("stock_code").reset_index(drop=True)
     return(scrape_df)
 
+
 def add_stock_info():
     # Drops records
     delete = col_stock_info.delete_many({})
@@ -163,7 +167,8 @@ def add_stock_info():
     print(insertdf.inserted_ids)
 
 
-# Functions for Fetching Data from DB
+
+# Functions for Fetching Data from DB -------------------
 def get_stock_data(ticker, period):
     # Change ticker var to match DB key
     ticker = ticker.upper()
@@ -193,6 +198,7 @@ def get_stock_data(ticker, period):
     res_list = [i for i in out if i[ticker] is not None][0][ticker]
     return res_list
 
+
 def get_stock_info(ticker):
     ticker = ticker.replace("-",".")
     res = []
@@ -210,6 +216,8 @@ def get_stock_info(ticker):
 
 
 
+
+# Not actually DB code --------------------
 def quick_ticker_fetch(tickers, tickerperiod):
     try:
         ticker = yf.download(tickers, period=tickerperiod)
@@ -230,6 +238,59 @@ def quick_ticker_fetch(tickers, tickerperiod):
         ticker = None
     return ticker
 
+
+def industry_close_average(ticker,period):
+    ticker = ticker.replace("-",".")
+    ind_ticker_list = []
+    res_list = []
+    final_res_list = []
+    industry = col_stock_info.find_one({"stock_code": ticker})["industry"]
+    for dict in col_stock_info.find({"industry": industry}):
+        ind_ticker_list.append(dict["stock_code"].replace(".","-"))
+
+    for i in ind_ticker_list:
+        try:
+            print(i)
+            startDate = date.today() + relativedelta(days=-period)
+            startDateTime = datetime(startDate.year, startDate.month, startDate.day)
+            aggInput = "$" + i
+            out = col_stock_data.aggregate([
+                {
+                    "$project": {
+                        i: {
+                            "$filter": {
+                                "input": aggInput,
+                                "as": "data",
+                                "cond": {"$and": [
+                                    {"$gte": ["$$data.date", startDateTime]}
+                                ]}
+                            }
+                        }
+                    }
+                }
+            ])
+
+            for dic in [j for j in out if j[i] is not None][0][i]:
+                res_dict = {
+                    "date": dic["date"],
+                    "close": dic["close"]
+                }
+                res_list.append(res_dict)
+
+            final_res = {
+                i: res_list
+            }
+            print(final_res)
+            final_res_list.append(final_res)
+
+        except:
+            print("Unlucky really")
+
+    return final_res_list
+
+
+
+# Lucas' processing code (idrc) --------------------
 def process_close(data):
 	out = {
 		'close_pct': [],
@@ -247,6 +308,7 @@ def process_close(data):
 		})
 
 	return out
+
 
 def process_stock_data(data):
 	out = {
