@@ -229,13 +229,18 @@ def quick_ticker_fetch(tickers, tickerperiod):
 
 def process_close(data):
 	out = {
-		'close': [],
+		'close_pct': [],
 	}
+
+	initial_close = None
 	
 	for i in data:
-		out['close'].append({
+		if initial_close is None:
+			initial_close = i['close']
+
+		out['close_pct'].append({
 			'x': datetime.timestamp(i['date']) * 1000,
-			'y': i['close']
+			'y': (i['close'] - initial_close) / initial_close
 		})
 
 	return out
@@ -251,14 +256,19 @@ def process_stock_data(data):
 		'rsi': [],
 		'cdl': [],
 		'close': [],
+		'close_pct': [],
 		'volume': [],
 		'vol_color': []
 	}
 	max_vol = 0
+	initial_close = None
 	
 	for i in data:
 		if i['volume'] > max_vol:
 			max_vol = i['volume']
+
+		if initial_close is None:
+			initial_close = i['close']
 
 		out['cdl'].append({
 			'x': datetime.timestamp(i['date']) * 1000,
@@ -273,6 +283,11 @@ def process_stock_data(data):
 				'x': datetime.timestamp(i['date']) * 1000,
 				'y': i[col]
 			})
+
+		out['close_pct'].append({
+			'x': datetime.timestamp(i['date']) * 1000,
+			'y': (i['close'] - initial_close) / initial_close
+		})
 
 		if i['open'] > i['close']:
 			out['vol_color'].append('rgba(215,85,65,0.4)')
