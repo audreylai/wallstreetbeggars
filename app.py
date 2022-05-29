@@ -21,7 +21,8 @@ def rules():
 def stock_list():
 	# GIVE ME DATA
 	stock_table = get_stock_info("all")
-	last_update = stock_table['last_update'].strftime("%d/%m/%Y")
+	# last_update = stock_table['last_update'].strftime("%d/%m/%Y")
+	last_update = stock_table['last_update']
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_update=last_update, industries=stock_table['industries'])
 
 @app.route("/stock-info")
@@ -34,10 +35,18 @@ def stock_analytics():
 	data = process_stock_data(get_stock_data('0005-HK', 180))
 	return render_template("stock-analytics.html", data=data)
 
-@app.route("/api/close", methods=['GET'])
-def api_close():
+@app.route("/api/get_stock_close_pct", methods=['GET'])
+def api_get_stock_close_pct():
 	ticker_name = request.args.get('ticker')
-	return process_close(get_stock_data(ticker_name, 180))
+	data = get_stock_data(ticker_name, 180)
+	return process_close(data)
+
+@app.route("/api/get_industry_close_pct", methods=['GET'])
+def api_get_industry_close_pct():
+	industry_name = request.args.get('industry')
+	print('AAAAAAAAAA', industry_name)
+	data = get_industry_close_pct(industry_name, 180)
+	return process_industry_avg(data)
 
 if __name__ == "__main__":
 	app.run(port="5000", debug=True)
