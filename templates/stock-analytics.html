@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="flex space-x-4 h-96">
-        <div class="w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+        <div class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
           <div class="flex justify-between">
             <h2 class="text-2xl font-semibold dark:text-zinc-200">
               Stock Comparison
@@ -91,7 +91,7 @@
               />
             </form>
           </div>
-          <canvas id="stock-comparison-chart"></canvas>
+          <div class="grow"><canvas id="stock-comparison-chart"></canvas></div>
         </div>
         <div class="w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
           <div class="flex justify-between">
@@ -133,11 +133,13 @@
   }
 
   var stock_cmp_chart = undefined;
+  var industry_cmp_chart = undefined;
 
   const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
+  const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
 
   async function draw_stock_cmp(data, other_ticker) {
-  	await $.get('/api/close', {
+  	await $.get('/api/get_stock_close_pct', {
   		ticker: other_ticker,
   	}, function(res) {
   		other_data = res
@@ -148,12 +150,12 @@
 			labels: data.lbl,
 			datasets: [{
 				label: 'Close 1',
-				data: data.close,
+				data: data.close_pct,
 				borderColor: 'rgb(255, 43, 43)',
 				...line_chart_settings
 			}, {
 				label: 'Close 2',
-				data: other_data.close,
+				data: other_data.close_pct,
 				borderColor: 'rgb(43, 43, 255)',
 				...line_chart_settings
 			}]
@@ -181,18 +183,7 @@
 					display: true,
 					title: {
 						display: false,
-						text: 'Dollars (HKD)'
-					}
-				},
-				y1: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Dollars (HKD)'
-					},
-					position: 'right',
-					grid: {
-						drawOnChartArea: false
+						text: '% change'
 					}
 				}
 			},
@@ -214,11 +205,84 @@
 		}
 
 		stock_cmp_chart = new Chart(stock_cmp_ctx, {
-			type: 'candlestick',
+			type: 'line',
 			data: chart_data,
 			options: options
 		});
 	}
+
+	async function draw_industry_cmp(data, industry) {
+		await $.get('/api/get_industry_close_pct', {
+			industry: industry,
+		}, function(res) {
+			other_data = res
+		});
+  
+		console.log(other_data);
+		  chart_data = {
+			  labels: data.lbl,
+			  datasets: [{
+				  label: 'Close 1',
+				  data: data.close_pct,
+				  borderColor: 'rgb(255, 43, 43)',
+				  ...line_chart_settings
+			  }, {
+				  label: 'Close 2',
+				  data: other_data.close_pct,
+				  borderColor: 'rgb(43, 43, 255)',
+				  ...line_chart_settings
+			  }]
+		  }
+  
+		  options = {
+			  legend: {
+				  onClick: function (e) {
+					  e.stopPropagation();
+				  }
+			  },
+			  scales: {
+				  x: {
+					  display: false,
+					  title: {
+						  display: false,
+						  text: 'Date'
+					  },
+					  type: 'timeseries',
+					  time: {
+						  unit: 'month'
+					  }
+				  },
+				  y: {
+					  display: true,
+					  title: {
+						  display: false,
+						  text: '% change'
+					  }
+				  }
+			  },
+			  interaction: {
+				  mode: '',
+				  intersect: true
+			  },
+			  plugins: {
+				  title: {
+					  display: false
+				  }
+			  },
+			  responsive: true,
+			  maintainAspectRatio: false,
+		  }
+  
+		  if (industry_cmp_chart) {
+			  industry_cmp_chart.destroy();
+		  }
+  
+		  industry_cmp_chart = new Chart(industry_cmp_ctx, {
+			  type: 'line',
+			  data: chart_data,
+			  options: options
+		  });
+	  }
 
   var cdl_chart = undefined;
   var rsi_chart = undefined;
@@ -468,6 +532,7 @@
   	draw_macd(data);
 
   	draw_stock_cmp(data, '0001-HK');
+	draw_industry_cmp(data, 'Banks');
   }
 
   draw_charts(data)
