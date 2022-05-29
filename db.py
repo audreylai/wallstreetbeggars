@@ -239,24 +239,26 @@ def quick_ticker_fetch(tickers, tickerperiod):
 	return ticker
 
 
-def get_industry_close(industry,period):
+def get_industry_close_pct(industry, period):
 	# ticker = ticker.replace("-",".")
-	ind_ticker_list = []
+	industry_ticker_list = []
 	res_list = []
 	final_res_list = []
 	# industry = col_stock_info.find_one({"stock_code": ticker})["industry"]
 	for i in col_stock_info.find({"industry": industry}):
-		ind_ticker_list.append(i["stock_code"].replace(".","-"))
+		industry_ticker_list.append(i["stock_code"].replace(".","-"))
 
-	for i in ind_ticker_list:
+	out = {}
+	for ticker in industry_ticker_list:
+		startDate = date.today() + relativedelta(days=-period)
+		startDateTime = datetime(startDate.year, startDate.month, startDate.day)
+		aggInput = "$" + ticker
+
 		try:
-			startDate = date.today() + relativedelta(days=-period)
-			startDateTime = datetime(startDate.year, startDate.month, startDate.day)
-			aggInput = "$" + i
-			out = col_stock_data.aggregate([
+			cursor = col_stock_data.aggregate([
 				{
 					"$project": {
-						i: {
+						ticker: {
 							"$filter": {
 								"input": aggInput,
 								"as": "data",
@@ -268,31 +270,37 @@ def get_industry_close(industry,period):
 					}
 				}
 			])
+		
+			initial_close = None
 
-			for dic in [j for j in out if j[i] is not None][0][i]:
-				res_dict = {
-					"date": dic["date"],
-					"close": dic["close"]
-				}
-				res_list.append(res_dict)
+			for dic in [i for i in cursor if i[ticker] is not None][0][ticker]:
+				if initial_close is None:
+					initial_close = dic["close"]
 
-			final_res = {
-				i: res_list
-			}
-			final_res_list.append(final_res)
+				if dic["date"] in out:
+					out[dic["date"]].append((dic["close"] - initial_close) / initial_close)
+				else:
+					out[dic["date"]] = [(dic["close"] - initial_close) / initial_close]
+ 
 		except:
 			pass
 
-	return final_res_list
+	return out
 
 
-
-# Lucas' processing code (idrc) --------------------
+# Lucas --------------------
 def process_industry_avg(data):
 	out = {
 		'close_pct': []
 	}
 
+	for date, close_pct in data.items():
+		out['close_pct'].append({
+			'x': datetime.timestamp(date) * 1000,
+			'y': sum(close_pct) / len(close_pct)
+		})
+
+	return out
 
 def process_close(data):
 	out = {
