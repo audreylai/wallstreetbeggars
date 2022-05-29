@@ -1,8 +1,46 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} 
 {% block content %}
-<div class="w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900">
+<div class="w-screen h-screen px-6 py-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
   <h1 class="text-3xl font-bold dark:text-zinc-100">Stock List</h1>
-  <table>
+  <h2 class="dark:text-zinc-400">Last Update: {{last_update}}</h2>
+  <table id="table" class="w-full stripe hover">
+    <thead>
+      <tr>
+        {% for k in stock_table[0] %}
+        {% if k != "_id" and k != "last_updated" %}
+        <th class="p-4 font-normal text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+          {{k}}
+        </th>
+        {% endif %}
+        {% endfor %}
+      </tr>
+
+    </thead>
+    <tbody>
+      {% for row in stock_table[:10] %}
+      <tr class="text-gray-700">
+        {% for k,v in row.items() %}
+
+        {% if k == "Board Lot" %}
+        <td class="p-4 text-right border-b-2 dark:border-zinc-700 dark:text-zinc-300">
+          <form action="/stock-info" method="POST">
+            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="ticker" value="{{row['Stock Code']}}" /> 
+            <a class="cursor-pointer" onclick="this.parentNode.submit()">{{v}}</a>
+          </form>
+        </td>
+        {% elif k != "_id" and k != "last_updated" %}
+        <td class="p-4 border-b-2 dark:border-zinc-700 dark:text-zinc-300">
+          <form action="/stock-info" method="POST">
+          <input type="hidden" name="page" value="1">
+          <input type="hidden" name="ticker" value="{{row['Stock Code']}}" /> 
+          <a class="cursor-pointer" onclick="this.parentNode.submit()">{{v}}</a>
+        </form></td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+        {% endfor %}
+    </tbody>
   </table>
 </div>
 {% endblock %}

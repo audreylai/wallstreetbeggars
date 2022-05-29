@@ -19,8 +19,15 @@ def rules():
 
 @app.route("/stock-list")
 def stock_list():
-  # GIVE ME DATA
-	return render_template("stock-list.html")
+	# GIVE ME DATA
+	stock_table = get_stock_info("all")
+	last_update = stock_table['last_update'].strftime("%d/%m/%Y")
+	return render_template("stock-list.html", stock_table=stock_table['table'], last_update=last_update, industries=stock_table['industries'])
+
+@app.route("/stock-info")
+def stock_info():
+	# GIVE ME DATA
+	return render_template("stock-info.html")
 
 @app.route("/stock-analytics")
 def stock_analytics():
