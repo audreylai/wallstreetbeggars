@@ -13,6 +13,11 @@
     <script src="{{url_for('static', filename='chartjs-chart-financial.js')}}"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <script src="{{ url_for('static', filename='theme.js') }}"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class'
+      }
+    </script>
     <link
       rel="stylesheet"
       type="text/css"
@@ -124,7 +129,7 @@
             <p class="hidden text-xs font-bold xl:flex">Home</p>
           </a>
           <a
-            href="/"
+            href="/stock-analytics"
             class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
           >
             <svg
