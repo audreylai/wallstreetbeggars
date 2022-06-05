@@ -44,9 +44,9 @@ def stock_info():
 		
 	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics)
 
-@app.route("/stock-analytics")
+@app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
-	ticker = request.args.get('ticker')
+	ticker = request.form['ticker']
 	if ticker is None:
 		ticker = '0005-HK'
 	

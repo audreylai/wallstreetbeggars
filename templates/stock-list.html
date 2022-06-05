@@ -79,8 +79,6 @@
 
   /*Add padding to bottom border */
   table.dataTable.no-footer {
-    border-bottom: 1px solid #e2e8f0;
-    /*border-b-1 border-gray-300*/
     margin-top: 0.75em;
     margin-bottom: 0.75em;
   }
@@ -110,7 +108,7 @@
   <div class="mb-2 ml-auto industry-filter">
     <select id="industryFilter" class="block px-2 py-1 text-sm bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500" name="animals">
       <option value="">
-        Select an option
+        Select an industry
       </option>
       {% for industry in industries %}
       <option value="{{industry}}">
