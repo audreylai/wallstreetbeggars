@@ -216,10 +216,14 @@ def get_stock_info(ticker):
     
     #yfinance info
     try:
-        data = yf.Ticker(ticker)
-        tickerdata = data.info
+        if "shortName" not in col_stock_info.find_one({"stock_code": ticker}):
+          data = yf.Ticker(ticker)
+          info = data.info
+          col_stock_info.update_one({"stock_code": ticker}, {"$set": info})
+        tickerdata = col_stock_info.find_one({"stock_code": ticker})
         infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
         tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
+        print(tickerinfo)
     except:
         pass
     return res | tickerinfo
