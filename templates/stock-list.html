@@ -126,7 +126,7 @@
           {% for k in stock_table[0] %} {% if k != "_id" and k != "last_updated"
           %}
           <th
-            class="p-4 font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
+            class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
           >
             {{k}}
           </th>
@@ -142,7 +142,7 @@
           >
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
-              <input type="hidden" name="ticker" value="{{row['stock_code']}}" />
+              <input type="hidden" name="ticker" value="{{row['stock_code'].replace('.', '-')}}" />
               <a class="cursor-pointer" onclick="this.parentNode.submit()"
                 >{{v}}</a
               >
@@ -152,7 +152,7 @@
           <td class="p-4 bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300">
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
-              <input type="hidden" name="ticker" value="{{row['stock_code']}}" />
+              <input type="hidden" name="ticker" value="{{row['stock_code'].replace('.', '-')}}" />
               <a class="cursor-pointer" onclick="this.parentNode.submit()"
                 >{{v}}</a
               >

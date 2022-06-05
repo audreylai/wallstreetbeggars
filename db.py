@@ -15,9 +15,6 @@ db = client["wallstreetbeggars"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
-
-
-
 # Upserts --------------------
 def add_stock_data_one(ticker):
 	if not ticker:
@@ -218,6 +215,7 @@ def get_stock_info(ticker):
 			#yfinance info
 			try:
 					if "shortName" not in col_stock_info.find_one({"stock_code": ticker}):
+						print("new")
 						data = yf.Ticker(ticker)
 						info = data.info
 						col_stock_info.update_one({"stock_code": ticker}, {"$set": info})

@@ -42,19 +42,13 @@
 			{% if stock_data['last_close_pct'] > 0 %}
 				<p class="font-semibold dark:text-emerald-500 text-emerald-600">+{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
 			{% else %}
-				<p class="font-semibold text-red-600 dark:text-emerald-500">{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
+				<p class="font-semibold text-rose-600 dark:text-rose-500">{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
 			{% endif %}
 		</div>
 	</div>
 	<div class="grid h-full grid-cols-2 gap-4 overflow-y-scroll">
 		<div class="flex flex-col col-span-1 space-y-4">
 			<div class="grid grid-cols-3 grid-rows-2 gap-6 p-6 bg-white rounded-md shadow dark:bg-zinc-800">
-				<!-- {% for i in range(6) %}
-				<div class="flex flex-col">
-					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Market Cap</h3>
-					<h2 class="text-3xl font-semibold dark:text-zinc-300">378.90B</h2>
-				</div>
-				{% endfor %} -->
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Sector</h3>
 					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["sector"] }}</h2>
