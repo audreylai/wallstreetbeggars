@@ -38,20 +38,30 @@ def stock_info():
 
 @app.route("/stock-analytics")
 def stock_analytics():
-	data = process_stock_data(get_stock_data('0005-HK', 180))
-	return render_template("stock-analytics.html", data=data)
+	ticker = request.args.get('ticker')
+	if ticker is None:
+		ticker = '0005-HK'
+	
+	stock_data = process_stock_data(get_stock_data(ticker, 180))
+	stock_data['ticker'] = ticker
+	stock_info = get_stock_info(ticker)
+
+	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info)
 
 @app.route("/api/get_stock_close_pct", methods=['GET'])
 def api_get_stock_close_pct():
 	ticker_name = request.args.get('ticker').replace(".", "-")
-	data = get_stock_data(ticker_name, 180)
-	return process_close(data)
+	data = process_close(get_stock_data(ticker_name, 180))
+	data['ticker'] = ticker_name
+	return data
 
 @app.route("/api/get_industry_close_pct", methods=['GET'])
 def api_get_industry_close_pct():
 	industry_name = request.args.get('industry')
-	data = get_industry_close_pct(industry_name, 180)
-	return process_industry_avg(data)
+	data = process_industry_avg(get_industry_close_pct(industry_name, 180))
+	data['industry'] = industry_name
+
+	return data
 
 if __name__ == "__main__":
 	app.run(port="5000", debug=True)

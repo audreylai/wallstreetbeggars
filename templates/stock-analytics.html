@@ -9,10 +9,10 @@
         <div>
           <div class="flex space-x-2">
             <h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-              0005.hk
+              {{ stock_info['stock_code'] }}
             </h2>
             <p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
-              HSBC Holdings plc
+              {{ stock_info['name'] }}
             </p>
           </div>
         </div>
@@ -80,7 +80,7 @@
               Stock Comparison
             </h2>
             <form
-              onsubmit="draw_stock_cmp(data, document.getElementById('ticker-cmp-txtbox').value); return false;"
+              onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;"
             >
               <input
                 type="text"
@@ -98,11 +98,15 @@
             <h2 class="text-2xl font-semibold dark:text-zinc-200">
               Industry Comparison
             </h2>
-            <form>
+            <form
+							onsubmit="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value); return false;"
+						>
               <input
                 type="text"
-                class="h-full px-2 py-1 text-sm uppercase bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-900 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
+								id="industry-cmp-txtbox"
+                class="h-full px-2 py-1 text-sm bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-900 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
                 placeholder="Industry..."
+								autocomplete="off"
               />
             </form>
           </div>
@@ -121,7 +125,7 @@
     </div>
   </div>
 </div>
-{% endblock %} {% block script%} {% if data %}
+{% endblock %} {% block script%} {% if stock_data %}
 <script>
   const line_chart_settings = {
   	type: 'line',
@@ -149,12 +153,12 @@
 		chart_data = {
 			labels: data.lbl,
 			datasets: [{
-				label: 'Close 1',
+				label: data.ticker,
 				data: data.close_pct,
 				borderColor: 'rgb(255, 43, 43)',
 				...line_chart_settings
 			}, {
-				label: 'Close 2',
+				label: other_data.ticker,
 				data: other_data.close_pct,
 				borderColor: 'rgb(43, 43, 255)',
 				...line_chart_settings
@@ -222,12 +226,12 @@
 		  chart_data = {
 			  labels: data.lbl,
 			  datasets: [{
-				  label: 'Close 1',
+				  label: data.ticker,
 				  data: data.close_pct,
 				  borderColor: 'rgb(255, 43, 43)',
 				  ...line_chart_settings
 			  }, {
-				  label: 'Close 2',
+				  label: other_data.industry,
 				  data: other_data.close_pct,
 				  borderColor: 'rgb(43, 43, 255)',
 				  ...line_chart_settings
@@ -522,19 +526,19 @@
   	});
   }
 
-  data = {{ data | tojson }}
+  stock_data = {{ stock_data | tojson }}
 
-  function draw_charts(data) {
-  	console.log(data);
+  function draw_charts(stock_data) {
+  	console.log(stock_data);
 
-  	draw_cdl(data);
-  	draw_rsi(data);
-  	draw_macd(data);
+  	draw_cdl(stock_data);
+  	draw_rsi(stock_data);
+  	draw_macd(stock_data);
 
-  	draw_stock_cmp(data, '0001-HK');
-	draw_industry_cmp(data, 'Banks');
+  	draw_stock_cmp(stock_data, '0001-HK');
+		draw_industry_cmp(stock_data, 'Banks');
   }
 
-  draw_charts(data)
+  draw_charts(stock_data)
 </script>
 {% endif %} {% endblock %}
