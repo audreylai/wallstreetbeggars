@@ -215,8 +215,15 @@ def get_stock_info(ticker):
         res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
     return res
 
-
-
+def stock_words_info(ticker):
+    try:
+        data = yf.Ticker(ticker)
+        tickerdata = data.info
+        infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
+        tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
+    except:
+        pass
+    return tickerinfo
 
 # Not actually DB code --------------------
 def quick_ticker_fetch(tickers, tickerperiod):
