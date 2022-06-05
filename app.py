@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request
 import datetime
+import re
 
 from matplotlib import ticker
 from db import *
 
 app = Flask(__name__)
+
+@app.template_filter('epoch_convert')
+def timectime(s):
+  return datetime.fromtimestamp(s).strftime('%d/%m/%y')
 
 @app.route("/")
 def home():
@@ -35,8 +40,9 @@ def stock_info():
 	stock_data = process_stock_data(get_stock_data(ticker, 180))
 	stock_data['ticker'] = ticker
 	stock_info = get_stock_info(ticker)
+	statistics = {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower(): stock_data[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower() : stock_info[key] for key in ["previousClose", "marketCap", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"]}
 		
-	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info)
+	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics)
 
 @app.route("/stock-analytics")
 def stock_analytics():

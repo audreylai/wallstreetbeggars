@@ -103,10 +103,22 @@
 {% block content
 %}
 <div
-  class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900"
+  class="flex flex-col w-screen h-screen px-6 py-4 overflow-hidden bg-gray-100 dark:bg-zinc-900"
 >
   <h1 class="text-3xl font-bold dark:text-zinc-100">Stock List</h1>
   <h2 class="dark:text-zinc-400">Last Update: {{last_update}}</h2>
+  <div class="mb-2 ml-auto industry-filter">
+    <select id="industryFilter" class="block px-2 py-1 text-sm bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500" name="animals">
+      <option value="">
+        Select an option
+      </option>
+      {% for industry in industries %}
+      <option value="{{industry}}">
+        {{industry}}
+      </option>
+      {% endfor %}
+  </select>
+  </div>
   <div class="overflow-y-scroll grow">
     <table id="table" class="w-full">
       <thead>
@@ -168,13 +180,13 @@
     
     var industryIndex = 0;
     $("#table th").each(function (i) {
-      if ($($(this)).html().replace(/\s/g, "") == "Industry") {
+      if ($($(this)).html().replace(/\s/g, "") == "industry") {
         industryIndex = i; return false;
       }
     });
 
     //Use the built in datatables API to filter the existing rows by the Category column
-    /* $.fn.dataTable.ext.search.push(
+    $.fn.dataTable.ext.search.push(
       function (settings, data, dataIndex) {
         var selectedItem = $('#industryFilter').val()
         var industry = data[industryIndex];
@@ -184,7 +196,7 @@
         }
         return false;
       }
-    ); */
+    );
 
     //Set the change event for the Category Filter dropdown to redraw the datatable each time
     //a user selects a new filter.

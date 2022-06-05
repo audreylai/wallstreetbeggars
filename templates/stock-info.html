@@ -89,12 +89,14 @@
 		<div class="flex flex-col col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800 dark:text-zinc-300">
 			<div class="grow"><canvas id="chart"></canvas></div>
 			<div class="grid grid-flow-row grid-cols-{{(10//-4)*-1}} gap-x-8">
-				{% for i in range(15) %}
+				{% for k, v in statistics.items()  %}
 				<div class="flex justify-between py-2 border-b dark:border-zinc-600">
-					<p class="font-semibold">{{i}}</p>
+					<p class="font-semibold">{{k}}</p>
 					<p>
-						{% if k != "Ex dividend date" %}{{"%.2f" % i}}{% else
-						%}{{i|epoch_convert}}{% endif %}
+						{% if k != "Ex dividend date" and k != "Market cap"%}{{"%.2f" % v|int}}{% elif k == "Market cap"%}
+            {{"%.2e" % v|int}}
+            {% else
+						%}{{v|epoch_convert}}{% endif %}
 					</p>
 				</div>
 				{% endfor %}

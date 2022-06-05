@@ -201,32 +201,33 @@ def get_stock_data(ticker, period):
 
 
 def get_stock_info(ticker):
-    ticker = ticker.replace("-",".")
-    res = []
-    # Returns all data (for stock list)
-    if ticker == "all":
-        res = {
-            "table": col_stock_info.find({"lastupdated":{"$exists": False}}, {"_id": 0}, ),
-            "last_update": col_stock_info.find_one({"lastupdated":{"$exists": True}})["lastupdated"],
-            "industries": col_stock_info.distinct("industry")
-            }
-    else:
-        # Returns data of one ticker
-        res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
-    
-    #yfinance info
-    try:
-        if "shortName" not in col_stock_info.find_one({"stock_code": ticker}):
-          data = yf.Ticker(ticker)
-          info = data.info
-          col_stock_info.update_one({"stock_code": ticker}, {"$set": info})
-        tickerdata = col_stock_info.find_one({"stock_code": ticker})
-        infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
-        tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
-        print(tickerinfo)
-    except:
-        pass
-    return res | tickerinfo
+		ticker = ticker.replace("-",".")
+		res = []
+		tickerinfo = {}
+		# Returns all data (for stock list)
+		if ticker == "all":
+				res = {
+						"table": col_stock_info.find({"lastupdated":{"$exists": False}}, {"_id": 0, "stock_code": 1, "name_of_securities": 1, "board_lot": 1, "industry": 1}),
+						"last_update": col_stock_info.find_one({"lastupdated":{"$exists": True}})["lastupdated"],
+						"industries": col_stock_info.distinct("industry")
+						}
+		else:
+			# Returns data of one ticker
+			res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
+		
+			#yfinance info
+			try:
+					if "shortName" not in col_stock_info.find_one({"stock_code": ticker}):
+						data = yf.Ticker(ticker)
+						info = data.info
+						col_stock_info.update_one({"stock_code": ticker}, {"$set": info})
+					tickerdata = col_stock_info.find_one({"stock_code": ticker})
+					infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
+					tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
+					print(tickerinfo)
+			except:
+					pass
+		return res | tickerinfo
 
 # Not actually DB code --------------------
 def quick_ticker_fetch(tickers, tickerperiod):
