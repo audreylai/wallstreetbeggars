@@ -122,7 +122,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for row in stock_table[:30] %}
+        {% for row in stock_table %}
         <tr class="text-gray-700">
           {% for k,v in row.items() %} {% if k == "Board Lot" %}
           <td
