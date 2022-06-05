@@ -213,9 +213,8 @@ def get_stock_info(ticker):
     else:
         # Returns data of one ticker
         res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
-    return res
-
-def stock_words_info(ticker):
+    
+    #yfinance info
     try:
         data = yf.Ticker(ticker)
         tickerdata = data.info
@@ -223,7 +222,7 @@ def stock_words_info(ticker):
         tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
     except:
         pass
-    return tickerinfo
+    return res, tickerinfo
 
 # Not actually DB code --------------------
 def quick_ticker_fetch(tickers, tickerperiod):
