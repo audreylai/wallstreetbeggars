@@ -50,7 +50,6 @@ def api_get_stock_close_pct():
 @app.route("/api/get_industry_close_pct", methods=['GET'])
 def api_get_industry_close_pct():
 	industry_name = request.args.get('industry')
-	print('AAAAAAAAAA', industry_name)
 	data = get_industry_close_pct(industry_name, 180)
 	return process_industry_avg(data)
 
