@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 import datetime
+
+from matplotlib import ticker
 from db import *
 
 app = Flask(__name__)
@@ -25,9 +27,13 @@ def stock_list():
 	last_update = stock_table['last_update']
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_update=last_update, industries=stock_table['industries'])
 
-@app.route("/stock-info")
+@app.route("/stock-info", methods=["GET", "POST"])
 def stock_info():
-	# GIVE ME DATA
+	ticker = request.form["ticker"]
+	if ticker != None:
+		ticker = get_stock_info(ticker)
+	else:
+		ticker = get_stock_info("0005-HK")
 	return render_template("stock-info.html")
 
 @app.route("/stock-analytics")
@@ -37,7 +43,7 @@ def stock_analytics():
 
 @app.route("/api/get_stock_close_pct", methods=['GET'])
 def api_get_stock_close_pct():
-	ticker_name = request.args.get('ticker')
+	ticker_name = request.args.get('ticker').replace(".", "-")
 	data = get_stock_data(ticker_name, 180)
 	return process_close(data)
 

@@ -28,7 +28,7 @@
           >
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
-              <input type="hidden" name="ticker" value="{{row['Stock Code']}}" />
+              <input type="hidden" name="ticker" value="{{row['stock_code']}}" />
               <a class="cursor-pointer" onclick="this.parentNode.submit()"
                 >{{v}}</a
               >
@@ -38,7 +38,7 @@
           <td class="p-4 border-b-2 dark:border-zinc-700 dark:text-zinc-300">
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
-              <input type="hidden" name="ticker" value="{{row['Stock Code']}}" />
+              <input type="hidden" name="ticker" value="{{row['stock_code']}}" />
               <a class="cursor-pointer" onclick="this.parentNode.submit()"
                 >{{v}}</a
               >
