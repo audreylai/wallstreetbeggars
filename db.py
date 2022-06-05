@@ -213,16 +213,16 @@ def get_stock_info(ticker):
     else:
         # Returns data of one ticker
         res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
-    
-    #yfinance info
-    try:
-        data = yf.Ticker(ticker)
-        tickerdata = data.info
-        infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
-        tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
-    except:
-        pass
-    return res, tickerinfo
+        #yfinance info
+        try:
+            data = yf.Ticker(ticker)
+            tickerdata = data.info
+            infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
+            tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
+        except:
+            pass
+        return res, tickerinfo
+    return res
 
 # Not actually DB code --------------------
 def quick_ticker_fetch(tickers, tickerperiod):

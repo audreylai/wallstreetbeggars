@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %} | WSB </title>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='tailwind/output.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
@@ -97,7 +96,7 @@
         </div>
         <div class="flex flex-row items-center justify-center w-full h-full lg:flex-col lg:w-auto">
           <a href="/"  class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:rounded-none xl:rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-zinc-100">
-            <i class="bi bi-house-door w-6 h-6 text-xl lg:mr-2"></i>
+            <i class="w-6 h-6 text-xl bi bi-house-door lg:mr-2"></i>
             <p class="hidden text-xs font-bold xl:flex">Home</p>
           </a>
           <a
