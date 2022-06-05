@@ -1,4 +1,106 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
+{% extends "base.html" %} {% block title %} Home {% endblock %}
+{% block header %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<style>
+  /*Overrides for Tailwind CSS */
+
+  /*Form fields*/
+  .dataTables_wrapper select,
+  .dataTables_length select,
+  .dataTables_wrapper .dataTables_filter input {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem; 
+    background-color: #E5E7EB; 
+    font-size: 0.875rem;
+    line-height: 1.25rem; 
+    text-transform: uppercase; 
+    border-radius: 0.375rem; 
+    border: none;
+  }
+  .dark .dataTables_wrapper select,
+  .dark .dataTables_wrapper .dataTables_filter input {
+    color: rgb(212 212 216);
+    background-color: rgb(39 39 42);
+  }
+
+  .dark .dataTables_info {
+    color: rgb(212 212 216);
+  }
+
+  .dark label {
+    color: rgb(228 228 231);
+  }
+
+  /*Pagination Buttons*/
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    font-weight: 700;
+    /*font-bold*/
+    border-radius: .25rem;
+    /*rounded*/
+    border: 1px solid transparent;
+    /*border border-transparent*/
+  }
+
+  /*Pagination Buttons - Current selected */
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    color: #fff !important;
+    /*text-white*/
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+    /*shadow*/
+    font-weight: 700;
+    /*font-bold*/
+    border-radius: .25rem;
+    /*rounded*/
+    background: #667eea !important;
+    /*bg-indigo-500*/
+    border: 1px solid transparent;
+    /*border border-transparent*/
+  }
+
+  /*Pagination Buttons - Hover */
+  .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: #fff !important;
+    /*text-white*/
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+    /*shadow*/
+    font-weight: 700;
+    /*font-bold*/
+    border-radius: .25rem;
+    /*rounded*/
+    background: #667eea !important;
+    /*bg-indigo-500*/
+    border: 1px solid transparent;
+    /*border border-transparent*/
+  }
+
+  /*Add padding to bottom border */
+  table.dataTable.no-footer {
+    border-bottom: 1px solid #e2e8f0;
+    /*border-b-1 border-gray-300*/
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  /*Change colour of responsive icon*/
+  table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before,
+  table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
+    background-color: #667eea !important;
+    /*bg-indigo-500*/
+  }
+
+  .dark .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    color: rgb(161 161 170) !important;
+  }
+  .dark .dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: rgb(212 212 216) !important;
+  }
+</style>
+{% endblock%}
+{% block content
 %}
 <div
   class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900"
@@ -6,7 +108,7 @@
   <h1 class="text-3xl font-bold dark:text-zinc-100">Stock List</h1>
   <h2 class="dark:text-zinc-400">Last Update: {{last_update}}</h2>
   <div class="overflow-y-scroll grow">
-    <table id="table" class="w-full stripe hover">
+    <table id="table" class="w-full">
       <thead>
         <tr>
           {% for k in stock_table[0] %} {% if k != "_id" and k != "last_updated"
@@ -20,11 +122,11 @@
         </tr>
       </thead>
       <tbody>
-        {% for row in stock_table[:10] %}
+        {% for row in stock_table[:30] %}
         <tr class="text-gray-700">
           {% for k,v in row.items() %} {% if k == "Board Lot" %}
           <td
-            class="p-4 text-right border-b-2 dark:border-zinc-700 dark:text-zinc-300"
+            class="p-4 text-right bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
           >
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
@@ -35,7 +137,7 @@
             </form>
           </td>
           {% elif k != "_id" and k != "last_updated" %}
-          <td class="p-4 border-b-2 dark:border-zinc-700 dark:text-zinc-300">
+          <td class="p-4 bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300">
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
               <input type="hidden" name="ticker" value="{{row['stock_code']}}" />
@@ -51,4 +153,48 @@
     </table>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function () {
+    $('#table').DataTable({
+      iDisplayLength: 25,
+      searching: true
+    });
+    var table = $('#table').DataTable();
+    $("#table.dataTables_filter").append($("#industryFilter"));
+
+    
+    var industryIndex = 0;
+    $("#table th").each(function (i) {
+      if ($($(this)).html().replace(/\s/g, "") == "Industry") {
+        industryIndex = i; return false;
+      }
+    });
+
+    //Use the built in datatables API to filter the existing rows by the Category column
+    /* $.fn.dataTable.ext.search.push(
+      function (settings, data, dataIndex) {
+        var selectedItem = $('#industryFilter').val()
+        var industry = data[industryIndex];
+
+        if (selectedItem === "" || industry.replace(/\s/g, "") == selectedItem.replace(/\s/g, "")) {
+          return true;
+        }
+        return false;
+      }
+    ); */
+
+    //Set the change event for the Category Filter dropdown to redraw the datatable each time
+    //a user selects a new filter.
+    $("#industryFilter").change(function (e) {
+      table.draw();
+    });
+
+    table.draw();
+
+  });
+
+</script>
 {% endblock %}

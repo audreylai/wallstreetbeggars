@@ -1,4 +1,11 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
+{% extends "base.html" %} {% block title %} Home {% endblock %} 
+{% block header %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0"></script>
+<script src="{{url_for('static', filename='chartjs-chart-financial.js')}}"></script>
+{% endblock %}
+{% block content
 %}
 <div class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900">
   <div class="mb-2">
