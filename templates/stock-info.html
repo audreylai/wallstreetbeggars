@@ -38,8 +38,12 @@
 			</div>
 		</div>
 		<div class="flex items-center space-x-1">
-			<h2 class="text-lg font-bold dark:text-zinc-300">48.84</h2>
-			<p class="font-semibold dark:text-emerald-500 text-emerald-600">+1.89%</p>
+			<h2 class="text-lg font-bold dark:text-zinc-300">{{ "%.2f" % stock_data['last_close'] }}</h2>
+			{% if stock_data['last_close_pct'] > 0 %}
+				<p class="font-semibold dark:text-emerald-500 text-emerald-600">+{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
+			{% else %}
+				<p class="font-semibold text-red-600 dark:text-emerald-500">{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
+			{% endif %}
 		</div>
 	</div>
 	<div class="grid h-full grid-cols-2 gap-4 overflow-y-scroll">
