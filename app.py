@@ -29,11 +29,14 @@ def stock_list():
 
 @app.route("/stock-info", methods=["GET", "POST"])
 def stock_info():
-	ticker = request.form["ticker"]
+	try:
+		ticker = request.form['ticker']
+	except:
+		ticker = None
 	if ticker != None:
-		tickerinfo = stock_words_info(ticker)
+		res, tickerinfo = get_stock_info(ticker)
 	else:
-		tickerinfo = stock_words_info("0005-HK")
+		res, tickerinfo = get_stock_info("0005.hk")
 	return render_template("stock-info.html", tickerinfo=tickerinfo)
 
 @app.route("/stock-analytics")
