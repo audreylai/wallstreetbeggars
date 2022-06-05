@@ -202,7 +202,7 @@ def get_stock_data(ticker, period):
 
 def get_stock_info(ticker):
     ticker = ticker.replace("-",".")
-    res = {}
+    res = []
     # Returns all data (for stock list)
     if ticker == "all":
         res = {
@@ -213,29 +213,7 @@ def get_stock_info(ticker):
     else:
         # Returns data of one ticker
         res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
-        #yfinance info
-        try:
-            data = yf.Ticker(ticker)
-            tickerdata = data.info
-            infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
-            tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
-        except:
-            pass
-        return res, tickerinfo
-		# res = {
-        # 	"ticker": info["stock_code"],
-        #     "name": info["name"],
-        #     "info": {
-        #         "category": info["category"],
-        #         "board_lot": info["board_lot"],
-        #         "industry": info["industry"],
-        #         "nomial": info["nomial"],
-        #         "turnover": info["turnover"],
-        #         "mkt_cap": info["mkt_cap"],
-        #         "pc_yield": info["pc_yield"],
-        #         "pe_ratio": info["pe_ratio"]
-        #     }
-        # }
+    
     #yfinance info
     try:
         data = yf.Ticker(ticker)
