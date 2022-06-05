@@ -222,7 +222,7 @@ def get_stock_info(ticker):
         tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
     except:
         pass
-    return res, tickerinfo
+    return res | tickerinfo
 
 # Not actually DB code --------------------
 def quick_ticker_fetch(tickers, tickerperiod):
@@ -341,7 +341,9 @@ def process_stock_data(data):
 		'close': [],
 		'close_pct': [],
 		'volume': [],
-		'vol_color': []
+		'vol_color': [],
+		'last_close': None,
+		'last_close_pct': None
 	}
 	max_vol = 0
 	initial_close = None
@@ -376,6 +378,9 @@ def process_stock_data(data):
 			out['vol_color'].append('rgba(215,85,65,0.4)')
 		else:
 			out['vol_color'].append('rgba(80,160,115,0.4)')
+
+	out['last_close'] = out['close'][-1]['y']
+	out['last_close_pct'] = 100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y']
 
 	out['max_vol'] = max_vol
 	return out

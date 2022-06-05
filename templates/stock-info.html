@@ -8,97 +8,176 @@
 {% block content
 %}
 <div class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900">
-  <div class="mb-2">
-    <div class="space-y-2 bg-gray-100 dark:bg-zinc-900">
-      <div class="flex justify-between">
-        <div>
-          <div class="flex space-x-2">
-            <h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-              0005.hk
-            </h2>
-            <p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
-              HSBC Holdings plc
-            </p>
-          </div>
-        </div>
-        <form action="/stock-info" method="POST" class="relative">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 512 512">
-              <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none"
-                stroke="currentColor" stroke-miterlimit="10" stroke-width="32" />
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"
-                d="M338.29 338.29L448 448" />
-            </svg>
-          </div>
-          <input type="hidden" name="page" value="1" />
-          <input type="text" name="ticker" value="{{ticker}}"
-            class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-gray-100/50 focus:border-transparent"
-            placeholder="Search" />
-        </form>
-      </div>
-    </div>
-    <div class="flex items-center space-x-1">
-      <h2 class="text-lg font-bold dark:text-zinc-300">48.84</h2>
-      <p class="font-semibold dark:text-emerald-500 text-emerald-600">+1.89%</p>
-    </div>
-  </div>
-  <div class="grid h-full grid-cols-2 gap-4 overflow-y-scroll">
-    <div class="flex flex-col col-span-1 space-y-4">
-      <div class="grid grid-cols-3 grid-rows-2 gap-6 p-6 bg-white rounded-md shadow dark:bg-zinc-800">
-        <!-- {% for i in range(6) %}
-        <div class="flex flex-col">
-          <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Market Cap</h3>
-          <h2 class="text-3xl font-semibold dark:text-zinc-300">378.90B</h2>
-        </div>
-        {% endfor %} -->
-        <div class="flex flex-col">
-          <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Sector</h3>
-          <h2 class="text-2xl font-semibold dark:text-zinc-300">{{ tickerinfo["sector"] }}</h2>
-        </div>
-        <div class="flex flex-col">
-          <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Industry</h3>
-          <h2 class="text-2xl font-semibold dark:text-zinc-300">{{ tickerinfo["industry"] }}</h2>
-        </div>
-        <div class="flex flex-col">
-          <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Country</h3>
-          <h2 class="text-2xl font-semibold dark:text-zinc-300">{{ tickerinfo["country"] }}</h2>
-        </div>
-        <div class="flex flex-col">
-          <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Currency</h3>
-          <h2 class="text-2xl font-semibold dark:text-zinc-300">{{ tickerinfo["financialCurrency"] }}</h2>
-        </div>
-        <div class="flex flex-col">
-          <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Cash Per Share</h3>
-          <h2 class="text-2xl font-semibold dark:text-zinc-300">{{ tickerinfo["totalCashPerShare"] }}</h2>
-        </div>
-        <div class="flex flex-col">
-          <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Quote Type</h3>
-          <h2 class="text-2xl font-semibold dark:text-zinc-300">{{ tickerinfo["quoteType"] }}</h2>
-        </div>
-      </div>
-      <div class="p-6 bg-white rounded-md shadow grow grow-1 dark:bg-zinc-800">
-        <h2 class="text-xl font-bold dark:text-zinc-100">
-          News
-        </h2>
-      </div>
-    </div>
-    <div class="flex flex-col col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800 dark:text-zinc-300">
-      <div class="grow">graph</div>
-      <div class="grid grid-flow-row grid-cols-{{(10//-4)*-1}} gap-x-8">
-        {% for i in range(15) %}
-        <div class="flex justify-between py-2 border-b dark:border-zinc-600">
-          <p class="font-semibold">{{i}}</p>
-          <p>
-            {% if k != "Ex dividend date" %}{{"%.2f" % i}}{% else
-            %}{{i|epoch_convert}}{% endif %}
-          </p>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
+	<div class="mb-2">
+		<div class="space-y-2 bg-gray-100 dark:bg-zinc-900">
+			<div class="flex justify-between">
+				<div>
+					<div class="flex space-x-2">
+						<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
+							{{ stock_info['stock_code'] }}
+						</h2>
+						<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
+							{{ stock_info['name'] }}
+						</p>
+					</div>
+				</div>
+				<form action="/stock-info" method="POST" class="relative">
+					<div class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none">
+						<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 512 512">
+							<path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none"
+								stroke="currentColor" stroke-miterlimit="10" stroke-width="32" />
+							<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"
+								d="M338.29 338.29L448 448" />
+						</svg>
+					</div>
+					<input type="hidden" name="page" value="1" />
+					<input type="text" name="ticker" value="{{ticker}}"
+						class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-gray-100/50 focus:border-transparent"
+						placeholder="Search" />
+				</form>
+			</div>
+		</div>
+		<div class="flex items-center space-x-1">
+			<h2 class="text-lg font-bold dark:text-zinc-300">48.84</h2>
+			<p class="font-semibold dark:text-emerald-500 text-emerald-600">+1.89%</p>
+		</div>
+	</div>
+	<div class="grid h-full grid-cols-2 gap-4 overflow-y-scroll">
+		<div class="flex flex-col col-span-1 space-y-4">
+			<div class="grid grid-cols-3 grid-rows-2 gap-6 p-6 bg-white rounded-md shadow dark:bg-zinc-800">
+				<!-- {% for i in range(6) %}
+				<div class="flex flex-col">
+					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Market Cap</h3>
+					<h2 class="text-3xl font-semibold dark:text-zinc-300">378.90B</h2>
+				</div>
+				{% endfor %} -->
+				<div class="flex flex-col">
+					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Sector</h3>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["sector"] }}</h2>
+				</div>
+				<div class="flex flex-col">
+					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Industry</h3>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["industry"] }}</h2>
+				</div>
+				<div class="flex flex-col">
+					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Country</h3>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["country"] }}</h2>
+				</div>
+				<div class="flex flex-col">
+					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Currency</h3>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["financialCurrency"] }}</h2>
+				</div>
+				<div class="flex flex-col">
+					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Cash Per Share</h3>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["totalCashPerShare"] }}</h2>
+				</div>
+				<div class="flex flex-col">
+					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Quote Type</h3>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["quoteType"] }}</h2>
+				</div>
+			</div>
+			<div class="p-6 bg-white rounded-md shadow grow grow-1 dark:bg-zinc-800">
+				<h2 class="text-xl font-bold dark:text-zinc-100">
+					News
+				</h2>
+			</div>
+		</div>
+		<div class="flex flex-col col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800 dark:text-zinc-300">
+			<div class="grow"><canvas id="chart"></canvas></div>
+			<div class="grid grid-flow-row grid-cols-{{(10//-4)*-1}} gap-x-8">
+				{% for i in range(15) %}
+				<div class="flex justify-between py-2 border-b dark:border-zinc-600">
+					<p class="font-semibold">{{i}}</p>
+					<p>
+						{% if k != "Ex dividend date" %}{{"%.2f" % i}}{% else
+						%}{{i|epoch_convert}}{% endif %}
+					</p>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 </div>
 <script>
+	const line_chart_settings = {
+		type: 'line',
+		yAxisID: 'y',
+		borderWidth: 2,
+		tension: 0.3,
+		pointRadius: 0,
+	}
 
+	var chart = undefined;
+	const ctx = document.getElementById('chart').getContext('2d');
+
+	gradient = ctx.createLinearGradient(0, 0, 0, 300);
+	gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
+	gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
+
+	function draw_chart(data) {
+		console.log(data);
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				label: data.ticker,
+				data: data.close,
+				borderColor: 'rgb(102, 126, 234)',
+				backgroundColor: gradient,
+				fill: true,
+				...line_chart_settings
+			}]
+		}
+
+		options = {
+			legend: {
+				onClick: function (e) {
+					e.stopPropagation();
+				}
+			},
+			scales: {
+				x: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Date'
+					},
+					type: 'timeseries',
+					time: {
+						unit: 'month'
+					}
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					}
+				}
+			},
+			interaction: {
+				mode: '',
+				intersect: true
+			},
+			plugins: {
+				title: {
+					display: false
+				}
+			},
+			responsive: true,
+			maintainAspectRatio: false,
+		}
+
+		if (chart) {
+			chart.destroy();
+		}
+
+		chart = new Chart(ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	draw_chart({{ stock_data | tojson }})
 </script>
 {% endblock %}

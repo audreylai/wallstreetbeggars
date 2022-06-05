@@ -29,15 +29,15 @@ def stock_list():
 
 @app.route("/stock-info", methods=["GET", "POST"])
 def stock_info():
-	try:
-		ticker = request.form['ticker']
-	except:
-		ticker = None
-	if ticker != None:
-		res, tickerinfo = get_stock_info(ticker)
-	else:
-		res, tickerinfo = get_stock_info("0005.hk")
-	return render_template("stock-info.html", tickerinfo=tickerinfo)
+	ticker = request.args.get("ticker")
+	if ticker is None:
+		ticker = '0005-HK'
+
+	stock_data = process_stock_data(get_stock_data(ticker, 180))
+	stock_data['ticker'] = ticker
+	stock_info = get_stock_info(ticker)
+		
+	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info)
 
 @app.route("/stock-analytics")
 def stock_analytics():
