@@ -202,7 +202,7 @@ def get_stock_data(ticker, period):
 
 def get_stock_info(ticker):
     ticker = ticker.replace("-",".")
-    res = {}
+    res = []
     # Returns all data (for stock list)
     if ticker == "all":
         res = {
@@ -213,38 +213,16 @@ def get_stock_info(ticker):
     else:
         # Returns data of one ticker
         res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
-        #yfinance info
-        try:
-            data = yf.Ticker(ticker)
-            tickerdata = data.info
-            infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
-            tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
-        except:
-            pass
-        return res, tickerinfo
-		# res = {
-        # 	"ticker": info["stock_code"],
-        #     "name": info["name"],
-        #     "info": {
-        #         "category": info["category"],
-        #         "board_lot": info["board_lot"],
-        #         "industry": info["industry"],
-        #         "nomial": info["nomial"],
-        #         "turnover": info["turnover"],
-        #         "mkt_cap": info["mkt_cap"],
-        #         "pc_yield": info["pc_yield"],
-        #         "pe_ratio": info["pe_ratio"]
-        #     }
-        # }
+    
     #yfinance info
-    # try:
-    #     data = yf.Ticker(ticker)
-    #     tickerdata = data.info
-    #     infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
-    #     tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
-    # except:
-    #     pass
-    return res
+    try:
+        data = yf.Ticker(ticker)
+        tickerdata = data.info
+        infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
+        tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
+    except:
+        pass
+    return res | tickerinfo
 
 # Not actually DB code --------------------
 def quick_ticker_fetch(tickers, tickerperiod):
@@ -363,7 +341,9 @@ def process_stock_data(data):
 		'close': [],
 		'close_pct': [],
 		'volume': [],
-		'vol_color': []
+		'vol_color': [],
+		'last_close': None,
+		'last_close_pct': None
 	}
 	max_vol = 0
 	initial_close = None
@@ -398,6 +378,9 @@ def process_stock_data(data):
 			out['vol_color'].append('rgba(215,85,65,0.4)')
 		else:
 			out['vol_color'].append('rgba(80,160,115,0.4)')
+
+	out['last_close'] = out['close'][-1]['y']
+	out['last_close_pct'] = 100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y']
 
 	out['max_vol'] = max_vol
 	return out
