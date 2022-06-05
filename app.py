@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.template_filter('epoch_convert')
 def timectime(s):
-  return datetime.fromtimestamp(s).strftime('%d/%m/%y')
+	return datetime.fromtimestamp(s).strftime('%d/%m/%y')
 
 @app.route("/")
 def home():
@@ -26,14 +26,16 @@ def rules():
 
 @app.route("/stock-list")
 def stock_list():
-	# GIVE ME DATA
 	stock_table = get_stock_info("all")
 	last_update = stock_table['last_update']
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_update=last_update, industries=stock_table['industries'])
 
 @app.route("/stock-info", methods=["GET", "POST"])
 def stock_info():
-	ticker = request.form["ticker"]
+	if request.method == "POST":
+		ticker = request.form["ticker"]
+	else:
+		ticker = request.args.get('ticker')
 	if ticker is None:
 		ticker = '0005-HK'
 
@@ -46,7 +48,10 @@ def stock_info():
 
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
-	ticker = request.form['ticker']
+	if request.method == "POST":
+		ticker = request.form["ticker"]
+	else:
+		ticker = request.args.get('ticker')
 	if ticker is None:
 		ticker = '0005-HK'
 	
@@ -54,7 +59,7 @@ def stock_analytics():
 	stock_data['ticker'] = ticker
 	stock_info = get_stock_info(ticker)
 
-	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info)
+	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_industries())
 
 @app.route("/api/get_stock_close_pct", methods=['GET'])
 def api_get_stock_close_pct():

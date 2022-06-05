@@ -52,7 +52,7 @@
             type="text"
             name="ticker"
             value="{{ticker}}"
-            class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-gray-100/50 focus:border-transparent"
+            class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-gray-100/50 focus:border-transparent"
             placeholder="Search"
           />
         </form>
@@ -150,7 +150,7 @@
       <div class="flex justify-center">
         <form action="/stock-analytics" method="POST">
           <input type="hidden" name="ticker" value="{{ stock_info['stock_code'].replace('.', '-') }}" />
-          <a class="text-blue-600 cursor-pointer dark:text-blue-500 dark:hover:text-blue-400 hover:text-blue-500" onclick="this.parentNode.submit()">Show more</a>
+          <a class="text-indigo-600 cursor-pointer dark:text-indigo-500 dark:hover:text-indigo-400 hover:text-indigo-500" onclick="this.parentNode.submit()">Show more</a>
         </form>
       </div>
     </div>
