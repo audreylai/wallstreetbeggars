@@ -168,52 +168,76 @@
   	pointRadius: 0,
   }
 
+	const x_scale_settings = {
+		title: {
+			display: false,
+			text: 'Date'
+		},
+		type: 'timeseries',
+		time: {
+			unit: 'month'
+		}
+	}
+
+	const misc_options = {
+		legend: {
+			onClick: function (e) {
+				e.stopPropagation();
+			}
+		},
+		interaction: {
+			mode: '',
+			intersect: true
+		},
+		plugins: {
+			title: {
+				display: false
+			}
+		},
+		responsive: true,
+		maintainAspectRatio: false
+	}
+
   var stock_cmp_chart = undefined;
   var industry_cmp_chart = undefined;
+	var cdl_chart = undefined;
+  var rsi_chart = undefined;
+  var macd_chart = undefined;
 
   const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
   const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
+	const cdl_ctx = document.getElementById('cdl-chart').getContext('2d');
+  const rsi_ctx = document.getElementById('rsi-chart').getContext('2d');
+  const macd_ctx = document.getElementById('macd-chart').getContext('2d');
 
   async function draw_stock_cmp(data, other_ticker) {
   	await $.get('/api/get_stock_close_pct', {
   		ticker: other_ticker,
   	}, function(res) {
-  		other_data = res
+  		data2 = res
   	});
 
-  	console.log(other_data);
+  	console.log(data2);
   	chart_data = {
   		labels: data.lbl,
   		datasets: [{
   			label: data.ticker,
   			data: data.close_pct,
-  			borderColor: 'rgb(255, 43, 43)',
+  			borderColor: 'rgb(234, 63, 51)',
   			...line_chart_settings
   		}, {
-  			label: other_data.ticker,
-  			data: other_data.close_pct,
-  			borderColor: 'rgb(43, 43, 255)',
+  			label: data2.ticker,
+  			data: data2.close_pct,
+  			borderColor: 'rgba(102, 126, 234)',
   			...line_chart_settings
   		}]
   	}
 
   	options = {
-  		legend: {
-  			onClick: function (e) {
-  				e.stopPropagation();
-  			}
-  		},
   		scales: {
   			x: {
   				display: true,
-  				title: {
-  					display: false,
-  					text: 'Date'
-  				},
-  				type: 'timeseries',
-  				time: {
-  					unit: 'month'
-  				}
+  				...x_scale_settings
   			},
   			y: {
   				display: true,
@@ -223,17 +247,7 @@
   				}
   			}
   		},
-  		interaction: {
-  			mode: '',
-  			intersect: true
-  		},
-  		plugins: {
-  			title: {
-  				display: false
-  			}
-  		},
-  		responsive: true,
-  		maintainAspectRatio: false,
+  		...misc_options
   	}
 
   	if (stock_cmp_chart) {
@@ -251,42 +265,30 @@
   	await $.get('/api/get_industry_close_pct', {
   		industry: industry,
   	}, function(res) {
-  		other_data = res
+  		data2 = res
   	});
 
-  	console.log(other_data);
+  	console.log(data2);
   		chart_data = {
   			labels: data.lbl,
   			datasets: [{
   				label: data.ticker,
   				data: data.close_pct,
-  				borderColor: 'rgb(255, 43, 43)',
+  				borderColor: 'rgb(234, 63, 51)',
   				...line_chart_settings
   			}, {
-  				label: other_data.industry,
-  				data: other_data.close_pct,
-  				borderColor: 'rgb(43, 43, 255)',
+  				label: data2.industry,
+  				data: data2.close_pct,
+  				borderColor: 'rgba(102, 126, 234)',
   				...line_chart_settings
   			}]
   		}
 
   		options = {
-  			legend: {
-  				onClick: function (e) {
-  					e.stopPropagation();
-  				}
-  			},
   			scales: {
   				x: {
   					display: true,
-  					title: {
-  						display: false,
-  						text: 'Date'
-  					},
-  					type: 'timeseries',
-  					time: {
-  						unit: 'month'
-  					}
+  					...x_scale_settings
   				},
   				y: {
   					display: true,
@@ -296,17 +298,7 @@
   					}
   				}
   			},
-  			interaction: {
-  				mode: '',
-  				intersect: true
-  			},
-  			plugins: {
-  				title: {
-  					display: false
-  				}
-  			},
-  			responsive: true,
-  			maintainAspectRatio: false,
+  			...misc_options
   		}
 
   		if (industry_cmp_chart) {
@@ -319,14 +311,6 @@
   			options: options
   		});
   	}
-
-  var cdl_chart = undefined;
-  var rsi_chart = undefined;
-  var macd_chart = undefined;
-
-  const cdl_ctx = document.getElementById('cdl-chart').getContext('2d');
-  const rsi_ctx = document.getElementById('rsi-chart').getContext('2d');
-  const macd_ctx = document.getElementById('macd-chart').getContext('2d');
 
   function draw_cdl(data) {
   	chart_data = {
@@ -355,28 +339,16 @@
   			label: 'Volume',
   			type: 'bar',
   			data: data.volume,
-  			backgroundColor: data.vol_color,
+  			backgroundColor: data.volume_color,
   			yAxisID: 'y1'
   		}]
   	}
 
   	options = {
-  		legend: {
-  			onClick: function (e) {
-  				e.stopPropagation();
-  			}
-  		},
   		scales: {
   			x: {
   				display: false,
-  				title: {
-  					display: false,
-  					text: 'Date'
-  				},
-  				type: 'timeseries',
-  				time: {
-  					unit: 'month'
-  				}
+  				...x_scale_settings
   			},
   			y: {
   				display: true,
@@ -393,7 +365,7 @@
   				},
   				position: 'right',
   				min: 0,
-  				max: data.max_vol.toPrecision(2) * 4,
+  				max: data.max_volume.toPrecision(2) * 4,
   				grid: {
   					drawOnChartArea: false
   				},
@@ -402,17 +374,7 @@
   				}
   			}
   		},
-  		interaction: {
-  			mode: '',
-  			intersect: true
-  		},
-  		plugins: {
-  			title: {
-  				display: false
-  			}
-  		},
-  		responsive: true,
-  		maintainAspectRatio: false,
+  		...misc_options
   	}
 
   	if (cdl_chart) {
@@ -438,22 +400,10 @@
   	}
 
   	options = {
-  		legend: {
-  			onClick: function (e) {
-  				e.stopPropagation();
-  			}
-  		},
   		scales: {
   			x: {
   				display: false,
-  				title: {
-  					display: false,
-  					text: 'Date'
-  				},
-  				type: 'timeseries',
-  				time: {
-  					unit: 'month'
-  				}
+  				...x_scale_settings
   			},
   			y: {
   				display: true,
@@ -463,17 +413,7 @@
   				}
   			}
   		},
-  		interaction: {
-  			mode: '',
-  			intersect: true
-  		},
-  		plugins: {
-  			title: {
-  				display: false
-  			}
-  		},
-  		responsive: true,
-  		maintainAspectRatio: false,
+  		...misc_options
   	}
 
   	if (rsi_chart) {
@@ -503,28 +443,17 @@
   		}, {
   			label: 'Divergence',
   			type: 'bar',
+				backgroundColor: 'rgba(112, 110, 122, 0.4)',
   			data: data.macd_div,
-  			borderColor: 'rgb(92, 90, 102)',
+  			// borderColor: 'rgb(92, 90, 102)',
   		}]
   	}
 
   	options = {
-  		legend: {
-  			onClick: function (e) {
-  				e.stopPropagation();
-  			}
-  		},
   		scales: {
   			x: {
   				display: true,
-  				title: {
-  					display: false,
-  					text: 'Date'
-  				},
-  				type: 'timeseries',
-  				time: {
-  					unit: 'month'
-  				}
+  				...x_scale_settings
   			},
   			y: {
   				display: true,
@@ -534,17 +463,7 @@
   				}
   			}
   		},
-  		interaction: {
-  			mode: '',
-  			intersect: true
-  		},
-  		plugins: {
-  			title: {
-  				display: false
-  			}
-  		},
-  		responsive: true,
-  		maintainAspectRatio: false,
+  		...misc_options
   	}
 
   	if (macd_chart) {

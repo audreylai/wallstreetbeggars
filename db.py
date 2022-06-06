@@ -206,28 +206,29 @@ def get_stock_info(ticker):
 		tickerinfo = {}
 		# Returns all data (for stock list)
 		if ticker == "all":
-				res = {
-						"table": col_stock_info.find({"lastupdated":{"$exists": False}}, {"_id": 0, "stock_code": 1, "name_of_securities": 1, "board_lot": 1, "industry": 1}),
-						"last_update": col_stock_info.find_one({"lastupdated":{"$exists": True}})["lastupdated"],
-						"industries": get_industries()
-						}
+			res = {
+				"table": col_stock_info.find({"lastupdated":{"$exists": False}}, {"_id": 0, "stock_code": 1, "name_of_securities": 1, "board_lot": 1, "industry": 1}),
+				"last_update": col_stock_info.find_one({"lastupdated":{"$exists": True}})["lastupdated"],
+				"industries": get_industries()
+			}
 		else:
 			# Returns data of one ticker
 			res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
 		
-			#yfinance info
+			# yfinance info
 			try:
-					if "shortName" not in col_stock_info.find_one({"stock_code": ticker}):
-						print("new")
-						data = yf.Ticker(ticker)
-						info = data.info
-						col_stock_info.update_one({"stock_code": ticker}, {"$set": info})
-					tickerdata = col_stock_info.find_one({"stock_code": ticker})
-					infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
-					tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
-					print(tickerinfo)
+				if "shortName" not in col_stock_info.find_one({"stock_code": ticker}):
+					print("new")
+					data = yf.Ticker(ticker)
+					info = data.info
+					col_stock_info.update_one({"stock_code": ticker}, {"$set": info})
+				tickerdata = col_stock_info.find_one({"stock_code": ticker})
+				infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
+				tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
+				print(tickerinfo)
 			except:
-					pass
+				pass
+
 		return res | tickerinfo
 
 # Not actually DB code --------------------
@@ -255,8 +256,6 @@ def quick_ticker_fetch(tickers, tickerperiod):
 def get_industry_close_pct(industry, period):
 	# ticker = ticker.replace("-",".")
 	industry_ticker_list = []
-	res_list = []
-	final_res_list = []
 	# industry = col_stock_info.find_one({"stock_code": ticker})["industry"]
 	for i in col_stock_info.find({"industry": industry}):
 		industry_ticker_list.append(i["stock_code"].replace(".","-"))
@@ -347,16 +346,21 @@ def process_stock_data(data):
 		'close': [],
 		'close_pct': [],
 		'volume': [],
-		'vol_color': [],
+		'volume_color': [],
+		'max_volume': None,
 		'last_close': None,
 		'last_close_pct': None
 	}
-	max_vol = 0
+	max_volume = 0
 	initial_close = None
 	
+	volume_up_color = 'rgba(215,85,65,0.4)'
+	volume_dn_color = 'rgba(80,160,115,0.4)'
+
+	
 	for i in data:
-		if i['volume'] > max_vol:
-			max_vol = i['volume']
+		if i['volume'] > max_volume:
+			max_volume = i['volume']
 
 		if initial_close is None:
 			initial_close = i['close']
@@ -381,12 +385,13 @@ def process_stock_data(data):
 		})
 
 		if i['open'] > i['close']:
-			out['vol_color'].append('rgba(215,85,65,0.4)')
+			out['volume_color'].append(volume_up_color)
 		else:
-			out['vol_color'].append('rgba(80,160,115,0.4)')
+			out['volume_color'].append(volume_dn_color)
 
-	out['last_close'] = out['close'][-1]['y']
+		out['last_close'] = i['close']
+
 	out['last_close_pct'] = 100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y']
 
-	out['max_vol'] = max_vol
+	out['max_volume'] = max_volume
 	return out
