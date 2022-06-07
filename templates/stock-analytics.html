@@ -159,6 +159,31 @@
 </div>
 {% endblock %} {% block script%} {% if stock_data %}
 <script>
+	function round_stock_value(num) {
+		if (num <= 0.25) {
+			return Math.round(num*1000) / 1000;
+		} else if (num <= 0.5) {
+			return Math.round(num*200) / 200;
+		} else if (num <= 10) {
+			return Math.round(num*100) / 100;
+		} else if (num <= 20) {
+			return Math.round(num*50) / 50;
+		} else if (num <= 100) {
+			return Math.round(num*20) / 20;
+		} else if (num <= 200) {
+			return Math.round(num*10) / 10;
+		} else if (num <= 500) {
+			return Math.round(num*5) / 5;
+		} else if (num <= 1000) {
+			return Math.round(num*2) / 2;
+		} else if (num <= 2000) {
+			return Math.round(num)
+		} else if (num <= 5000) {
+			return Math.round(num/2) * 2;
+		} else {
+			return Math.round(num/5) * 5;
+		}
+	}
 
 	const line_chart_settings = {
 		type: 'line',
@@ -176,7 +201,8 @@
 		},
 		type: 'timeseries',
 		time: {
-			unit: 'month'
+			unit: 'month',
+			tooltipFormat: 'DD'
 		}
 	}
 
@@ -187,8 +213,8 @@
 			 }
 		},
 		interaction: {
-			// mode: '',
-			intersect: true
+			mode: 'index',
+			intersect: false,
 		},
 		plugins: {
 			title: {
@@ -198,6 +224,33 @@
 				labels: {
 					filter: function(item, chart) {
 						return item.text.length != 0
+					}
+				}
+			},
+			tooltip: {
+				backgroundColor: "rgba(0, 0, 0, 0.5)",
+				titleColor: "rgba(255, 255, 255, 0.7)",
+				bodyColor: "rgba(255, 255, 255, 0.7)",
+				callbacks: {
+					label: function(context) {
+						// console.log(context);
+						if (context.parsed.y != null && context.dataset.label) {
+							if (['MA10', 'MA20', 'MA50'].includes(context.dataset.label)) { // MA labels
+								return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
+							} else if (context.dataset.label == 'Volume') { // Volume label
+								return "Volume: " + context.parsed.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
+							} else if (['industry-comparison-chart', 'stock-comparison-chart'].includes(context.chart.canvas.id)) {
+								return context.dataset.label + ': ' + Math.round(context.parsed.y*1000)/10 + '%'; // add % 
+							} else { // default
+								return context.dataset.label + ': ' + Math.round(context.parsed.y*1000)/1000; // default round 3dp
+							}
+						} else if (context.dataset.type == 'candlestick') {
+							return 'O: ' + round_stock_value(context.parsed.o) + 
+								' / H: ' + round_stock_value(context.parsed.h) + 
+								' / L: ' + round_stock_value(context.parsed.l) + 
+								' / C: ' + round_stock_value(context.parsed.c)
+						}
+						return ''
 					}
 				}
 			}
@@ -223,10 +276,7 @@
 				return;
 			}
 
-			chart.crosshair = {x, y,
-				draw: true
-			}
-
+			chart.crosshair = {x, y, draw: true}
 			chart.draw();
 		},
 		afterDatasetsDraw: (chart, _, opts) => {
@@ -255,8 +305,10 @@
 		}
 	}
 
+	// enable plugin globally
 	Chart.register(crosshair_plugin)
 
+	// init chart + ctx
 	var stock_cmp_chart = undefined;
 	var industry_cmp_chart = undefined;
 	var cdl_chart = undefined;
