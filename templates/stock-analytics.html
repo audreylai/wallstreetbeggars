@@ -5,168 +5,169 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0"></script>
 <script src="{{url_for('static', filename='chartjs-chart-financial.js')}}"></script>
 <style>
-  select:valid {
-    color: rgb(55 65 81);
-  }
-  .dark select:valid {
-    color: rgb(212 212 216);
-  }
+	select:valid {
+		color: rgb(55 65 81);
+	}
+	.dark select:valid {
+		color: rgb(212 212 216);
+	}
 </style>
 {% endblock %} {% block content %}
 <div
-  class="flex flex-col w-screen h-screen gap-4 px-6 py-4 overflow-y-hidden bg-gray-100 dark:bg-zinc-900"
+	class="flex flex-col w-screen h-screen gap-4 px-6 py-4 overflow-y-hidden bg-gray-100 dark:bg-zinc-900"
 >
-  <div>
-    <div class="space-y-2 bg-gray-100 dark:bg-zinc-900">
-      <div class="flex justify-between">
-        <div>
-          <div class="flex space-x-2">
-            <h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-              {{ stock_info['stock_code'] }}
-            </h2>
-            <p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
-              {{ stock_info['name'] }}
-            </p>
-          </div>
-        </div>
-        <form action="/stock-info" method="POST" class="relative">
-          <div
-            class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5"
-              viewBox="0 0 512 512"
-            >
-              <path
-                d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
-                fill="none"
-                stroke="currentColor"
-                stroke-miterlimit="10"
-                stroke-width="32"
-              />
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-miterlimit="10"
-                stroke-width="32"
-                d="M338.29 338.29L448 448"
-              />
-            </svg>
-          </div>
-          <input type="hidden" name="page" value="1" />
-          <input
-            type="text"
-            name="ticker"
-            value="{{ticker}}"
-            class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-            placeholder="Search"
-          />
-        </form>
-      </div>
-    </div>
-    <div class="flex items-center space-x-1">
-      <h2 class="text-lg font-bold dark:text-zinc-300">
-        {{ "%.2f" % stock_data['last_close'] }}
-      </h2>
-      {% if stock_data['last_close_pct'] > 0 %}
-      <p class="font-semibold dark:text-emerald-500 text-emerald-600">
-        +{{ "%.2f" % stock_data['last_close_pct'] }}%
-      </p>
-      {% else %}
-      <p class="font-semibold dark:text-rose-500 text-rose-600">
-        {{ "%.2f" % stock_data['last_close_pct'] }}%
-      </p>
-      {% endif %}
-    </div>
-  </div>
-  <div class="flex flex-col overflow-y-auto">
-    <div class="flex-1 h-full mb-4 space-y-4">
-      <div
-        class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-      >
-        <div class="h-1/2">
-          <canvas id="cdl-chart"></canvas>
-        </div>
-        <div class="h-1/4">
-          <canvas id="rsi-chart"></canvas>
-        </div>
-        <div class="h-1/4">
-          <canvas id="macd-chart"></canvas>
-        </div>
-      </div>
-      <div class="flex space-x-4 h-96">
-        <div
-          class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-        >
-          <div class="flex justify-between">
-            <h2 class="text-2xl font-semibold dark:text-zinc-200">
-              Stock Comparison
-            </h2>
-            <form
-              onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;"
-            >
-              <input
-                type="text"
-                id="ticker-cmp-txtbox"
-                class="h-full px-2 py-1 text-sm uppercase bg-gray-200 rounded-md dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-gray-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                placeholder="Ticker..."
-                autocomplete="off"
-              />
-            </form>
-          </div>
-          <div class="grow"><canvas id="stock-comparison-chart"></canvas></div>
-        </div>
-        <div
-          class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-        >
-          <div class="flex justify-between">
-            <h2 class="text-2xl font-semibold dark:text-zinc-200">
-              Industry Comparison
-            </h2>
-            <select
-              required
-              id="industry-cmp-txtbox"
-              class="h-full px-2 py-1 text-sm text-gray-400 bg-gray-200 rounded-md dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-              placeholder="Industry..."
-              onchange="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value)"
-            >
-              <option value="">Select an industry</option>
-              {% for industry in industries %}
-              {% if industry != None %}
-              <option value="{{industry}}">{{industry}}</option>
-              {% endif %}
-              {% endfor %}
-            </select>
-          </div>
-          <div class="grow">
-            <canvas id="industry-comparison-chart"></canvas>
-          </div>
-        </div>
-      </div>
-      <script
-        src="https://redditjs.com/post.js"
-        data-url="http://www.techodrom.com/etc/star-trek-edges-closer-reality-tractor-beam-moves-object-using-nothing-power-ultrasound/"
-        data-height="500"
-        data-width="650"
-        data-post-finder="mostComments"
-        data-theme="light"
-        data-show-submit="true"
-      ></script>
-    </div>
-  </div>
+	<div>
+		<div class="space-y-2 bg-gray-100 dark:bg-zinc-900">
+			<div class="flex justify-between">
+				<div>
+					<div class="flex space-x-2">
+						<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
+							{{ stock_info['stock_code'] }}
+						</h2>
+						<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
+							{{ stock_info['name'] }}
+						</p>
+					</div>
+				</div>
+				<form action="/stock-info" method="POST" class="relative">
+					<div
+						class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-5 h-5"
+							viewBox="0 0 512 512"
+						>
+							<path
+								d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+								fill="none"
+								stroke="currentColor"
+								stroke-miterlimit="10"
+								stroke-width="32"
+							/>
+							<path
+								fill="none"
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-miterlimit="10"
+								stroke-width="32"
+								d="M338.29 338.29L448 448"
+							/>
+						</svg>
+					</div>
+					<input type="hidden" name="page" value="1" />
+					<input
+						type="text"
+						name="ticker"
+						value="{{ticker}}"
+						class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+						placeholder="Search"
+					/>
+				</form>
+			</div>
+		</div>
+		<div class="flex items-center space-x-1">
+			<h2 class="text-lg font-bold dark:text-zinc-300">
+				{{ "%.2f" % stock_data['last_close'] }}
+			</h2>
+			{% if stock_data['last_close_pct'] > 0 %}
+			<p class="font-semibold dark:text-emerald-500 text-emerald-600">
+				+{{ "%.2f" % stock_data['last_close_pct'] }}%
+			</p>
+			{% else %}
+			<p class="font-semibold dark:text-rose-500 text-rose-600">
+				{{ "%.2f" % stock_data['last_close_pct'] }}%
+			</p>
+			{% endif %}
+		</div>
+	</div>
+	<div class="flex flex-col overflow-y-auto">
+		<div class="flex-1 h-full mb-4 space-y-4">
+			<div
+				class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+			>
+				<div class="h-1/2">
+					<canvas id="cdl-chart"></canvas>
+				</div>
+				<div class="h-1/4">
+					<canvas id="rsi-chart"></canvas>
+				</div>
+				<div class="h-1/4">
+					<canvas id="macd-chart"></canvas>
+				</div>
+			</div>
+			<div class="flex space-x-4 h-96">
+				<div
+					class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+				>
+					<div class="flex justify-between">
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+							Stock Comparison
+						</h2>
+						<form
+							onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;"
+						>
+							<input
+								type="text"
+								id="ticker-cmp-txtbox"
+								class="h-full px-2 py-1 text-sm uppercase bg-gray-200 rounded-md dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-gray-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+								placeholder="Ticker..."
+								autocomplete="off"
+							/>
+						</form>
+					</div>
+					<div class="grow"><canvas id="stock-comparison-chart"></canvas></div>
+				</div>
+				<div
+					class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+				>
+					<div class="flex justify-between">
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+							Industry Comparison
+						</h2>
+						<select
+							required
+							id="industry-cmp-txtbox"
+							class="h-full px-2 py-1 text-sm text-gray-400 bg-gray-200 rounded-md dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+							placeholder="Industry..."
+							onchange="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value)"
+						>
+							<option value="">Select an industry</option>
+							{% for industry in industries %}
+							{% if industry != None %}
+							<option value="{{industry}}">{{industry}}</option>
+							{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+					<div class="grow">
+						<canvas id="industry-comparison-chart"></canvas>
+					</div>
+				</div>
+			</div>
+			<script
+				src="https://redditjs.com/post.js"
+				data-url="http://www.techodrom.com/etc/star-trek-edges-closer-reality-tractor-beam-moves-object-using-nothing-power-ultrasound/"
+				data-height="500"
+				data-width="650"
+				data-post-finder="mostComments"
+				data-theme="light"
+				data-show-submit="true"
+			></script>
+		</div>
+	</div>
 </div>
 {% endblock %} {% block script%} {% if stock_data %}
 <script>
-  const line_chart_settings = {
-  	type: 'line',
-  	yAxisID: 'y',
-  	fill: false,
-  	borderWidth: 1,
-  	tension: 0.3,
-  	pointRadius: 0,
-  }
+
+	const line_chart_settings = {
+		type: 'line',
+		yAxisID: 'y',
+		fill: false,
+		borderWidth: 1,
+		tension: 0.3,
+		pointRadius: 0,
+	}
 
 	const x_scale_settings = {
 		title: {
@@ -183,314 +184,388 @@
 		legend: {
 			onClick: function (e) {
 				e.stopPropagation();
-			}
+			 }
 		},
 		interaction: {
-			mode: '',
+			// mode: '',
 			intersect: true
 		},
 		plugins: {
 			title: {
 				display: false
+			},
+			legend: {
+				labels: {
+					filter: function(item, chart) {
+						return item.text.length != 0
+					}
+				}
 			}
 		},
 		responsive: true,
 		maintainAspectRatio: false
 	}
 
-  var stock_cmp_chart = undefined;
-  var industry_cmp_chart = undefined;
+	const crosshair_plugin = {
+		id: 'crosshair',
+		afterInit: (chart) => {
+			chart.crosshair = {
+				x: 0,
+				y: 0
+			}
+		},
+		afterEvent: (chart, evt) => {
+			const {chartArea: {top, bottom, left, right}} = chart;
+			const {event: {x, y}} = evt;
+			if (x < left || x > right || y < top || y > bottom) {
+				chart.crosshair = {x, y, draw: false}
+				chart.draw();
+				return;
+			}
+
+			chart.crosshair = {x, y,
+				draw: true
+			}
+
+			chart.draw();
+		},
+		afterDatasetsDraw: (chart, _, opts) => {
+			const {ctx, chartArea: {top, bottom, left, right}} = chart;
+			const {x, y, draw} = chart.crosshair;
+
+			if (!draw) {
+				return;
+			}
+
+			ctx.lineWidth = opts.width || 2;
+			ctx.setLineDash(opts.dash || [3, 3]);
+			ctx.strokeStyle = opts.color || 'rgba(112, 110, 122, 0.6)'
+
+			ctx.save();
+			ctx.beginPath();
+			ctx.moveTo(x, bottom);
+			ctx.lineTo(x, top);
+			ctx.moveTo(left, y);
+			ctx.lineTo(right, y);
+			ctx.stroke();
+			ctx.restore();
+
+			// reset line dash
+			ctx.setLineDash([]);
+		}
+	}
+
+	Chart.register(crosshair_plugin)
+
+	var stock_cmp_chart = undefined;
+	var industry_cmp_chart = undefined;
 	var cdl_chart = undefined;
-  var rsi_chart = undefined;
-  var macd_chart = undefined;
+	var rsi_chart = undefined;
+	var macd_chart = undefined;
 
-  const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
-  const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
+	const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
+	const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
 	const cdl_ctx = document.getElementById('cdl-chart').getContext('2d');
-  const rsi_ctx = document.getElementById('rsi-chart').getContext('2d');
-  const macd_ctx = document.getElementById('macd-chart').getContext('2d');
+	const rsi_ctx = document.getElementById('rsi-chart').getContext('2d');
+	const macd_ctx = document.getElementById('macd-chart').getContext('2d');
 
-  async function draw_stock_cmp(data, other_ticker) {
-  	await $.get('/api/get_stock_close_pct', {
-  		ticker: other_ticker,
-  	}, function(res) {
-  		data2 = res
-  	});
+	async function draw_stock_cmp(data, other_ticker) {
+		await $.get('/api/get_stock_close_pct', {
+			ticker: other_ticker,
+		}, function(res) {
+			data2 = res
+		});
 
-  	console.log(data2);
-  	chart_data = {
-  		labels: data.lbl,
-  		datasets: [{
-  			label: data.ticker,
-  			data: data.close_pct,
-  			borderColor: 'rgb(234, 63, 51)',
-  			...line_chart_settings
-  		}, {
-  			label: data2.ticker,
-  			data: data2.close_pct,
-  			borderColor: 'rgba(102, 126, 234)',
-  			...line_chart_settings
-  		}]
-  	}
+		console.log(data2);
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				label: data.ticker,
+				data: data.close_pct,
+				borderColor: 'rgb(234, 63, 51)',
+				...line_chart_settings
+			}, {
+				label: data2.ticker,
+				data: data2.close_pct,
+				borderColor: 'rgba(102, 126, 234)',
+				...line_chart_settings
+			}]
+		}
 
-  	options = {
-  		scales: {
-  			x: {
-  				display: true,
-  				...x_scale_settings
-  			},
-  			y: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: '% change'
-  				}
-  			}
-  		},
-  		...misc_options
-  	}
+		options = {
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: '% change'
+					}
+				}
+			},
+			...misc_options
+		}
 
-  	if (stock_cmp_chart) {
-  		stock_cmp_chart.destroy();
-  	}
+		if (stock_cmp_chart) {
+			stock_cmp_chart.destroy();
+		}
 
-  	stock_cmp_chart = new Chart(stock_cmp_ctx, {
-  		type: 'line',
-  		data: chart_data,
-  		options: options
-  	});
-  }
+		stock_cmp_chart = new Chart(stock_cmp_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
 
-  async function draw_industry_cmp(data, industry) {
-  	await $.get('/api/get_industry_close_pct', {
-  		industry: industry,
-  	}, function(res) {
-  		data2 = res
-  	});
+	async function draw_industry_cmp(data, industry) {
+		await $.get('/api/get_industry_close_pct', {
+			industry: industry,
+		}, function(res) {
+			data2 = res
+		});
 
-  	console.log(data2);
-  		chart_data = {
-  			labels: data.lbl,
-  			datasets: [{
-  				label: data.ticker,
-  				data: data.close_pct,
-  				borderColor: 'rgb(234, 63, 51)',
-  				...line_chart_settings
-  			}, {
-  				label: data2.industry,
-  				data: data2.close_pct,
-  				borderColor: 'rgba(102, 126, 234)',
-  				...line_chart_settings
-  			}]
-  		}
+		console.log(data2);
+			chart_data = {
+				labels: data.lbl,
+				datasets: [{
+					label: data.ticker,
+					data: data.close_pct,
+					borderColor: 'rgb(234, 63, 51)',
+					...line_chart_settings
+				}, {
+					label: data2.industry,
+					data: data2.close_pct,
+					borderColor: 'rgba(102, 126, 234)',
+					...line_chart_settings
+				}]
+			}
 
-  		options = {
-  			scales: {
-  				x: {
-  					display: true,
-  					...x_scale_settings
-  				},
-  				y: {
-  					display: true,
-  					title: {
-  						display: false,
-  						text: '% change'
-  					}
-  				}
-  			},
-  			...misc_options
-  		}
+			options = {
+				scales: {
+					x: {
+						display: true,
+						...x_scale_settings
+					},
+					y: {
+						display: true,
+						title: {
+							display: false,
+							text: '% change'
+						}
+					}
+				},
+				...misc_options
+			}
 
-  		if (industry_cmp_chart) {
-  			industry_cmp_chart.destroy();
-  		}
+			if (industry_cmp_chart) {
+				industry_cmp_chart.destroy();
+			}
 
-  		industry_cmp_chart = new Chart(industry_cmp_ctx, {
-  			type: 'line',
-  			data: chart_data,
-  			options: options
-  		});
-  	}
+			industry_cmp_chart = new Chart(industry_cmp_ctx, {
+				type: 'line',
+				data: chart_data,
+				options: options
+			});
+		}
 
-  function draw_cdl(data) {
-  	chart_data = {
-  		labels: data.lbl,
-  		datasets: [{
-  			label: 'Candlestick',
-  			type: 'candlestick',
-  			data: data.cdl,
-  			yAxisID: 'y'
-  		}, {
-  			label: 'MA10',
-  			data: data.sma10,
-  			borderColor: 'rgb(174, 32, 18)',
-  			...line_chart_settings
-  		}, {
-  			label: 'MA20',
-  			data: data.sma20,
-  			borderColor: 'rgb(202, 103, 2)',
-  			...line_chart_settings
-  		}, {
-  			label: 'MA50',
-  			data: data.sma50,
-  			borderColor: 'rgb(238, 155, 0)',
-  			...line_chart_settings
-  		}, {
-  			label: 'Volume',
-  			type: 'bar',
-  			data: data.volume,
-  			backgroundColor: data.volume_color,
-  			yAxisID: 'y1'
-  		}]
-  	}
+	function draw_cdl(data) {
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				label: 'Candlestick',
+				type: 'candlestick',
+				data: data.cdl,
+				yAxisID: 'y'
+			}, {
+				label: 'MA10',
+				data: data.sma10,
+				borderColor: 'rgb(174, 32, 18)',
+				...line_chart_settings
+			}, {
+				label: 'MA20',
+				data: data.sma20,
+				borderColor: 'rgb(202, 103, 2)',
+				...line_chart_settings
+			}, {
+				label: 'MA50',
+				data: data.sma50,
+				borderColor: 'rgb(238, 155, 0)',
+				...line_chart_settings
+			}, {
+				label: 'Volume',
+				type: 'bar',
+				data: data.volume,
+				backgroundColor: data.volume_color,
+				yAxisID: 'y1'
+			}]
+		}
 
-  	options = {
-  		scales: {
-  			x: {
-  				display: false,
-  				...x_scale_settings
-  			},
-  			y: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: 'Dollars (HKD)'
-  				}
-  			},
-  			y1: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: 'Volume (HKD)'
-  				},
-  				position: 'right',
-  				min: 0,
-  				max: data.max_volume.toPrecision(2) * 4,
-  				grid: {
-  					drawOnChartArea: false
-  				},
-  				ticks: {
-  					callback: (val) => (val.toExponential())
-  				}
-  			}
-  		},
-  		...misc_options
-  	}
+		options = {
+			scales: {
+				x: {
+					display: false,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					}
+				},
+				y1: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Volume (HKD)'
+					},
+					position: 'right',
+					min: 0,
+					max: data.max_volume.toPrecision(2) * 4,
+					grid: {
+						drawOnChartArea: false
+					},
+					ticks: {
+						callback: (val) => (val.toExponential())
+					}
+				}
+			},
+			...misc_options
+		}
 
-  	if (cdl_chart) {
-  		cdl_chart.destroy();
-  	}
+		if (cdl_chart) {
+			cdl_chart.destroy();
+		}
 
-  	cdl_chart = new Chart(cdl_ctx, {
-  		type: 'candlestick',
-  		data: chart_data,
-  		options: options
-  	});
-  }
+		cdl_chart = new Chart(cdl_ctx, {
+			type: 'candlestick',
+			data: chart_data,
+			options: options
+		});
+	}
 
-  function draw_rsi(data) {
-  	chart_data = {
-  		labels: data.lbl,
-  		datasets: [{
-  			label: 'RSI',
-  			data: data.rsi,
-  			borderColor: 'rgb(16, 183, 89)',
-  			...line_chart_settings
-  		}]
-  	}
+	function draw_rsi(data) {
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				label: 'RSI',
+				data: data.rsi,
+				borderColor: 'rgb(16, 183, 89)',
+				...line_chart_settings
+			}, {
+				label: '',
+				data: [
+					{'x': data.date_start, 'y': 30},
+					{'x': data.date_end, 'y': 30}
+				],
+				borderColor: 'rgba(112, 110, 122, 0.4)',
+				...line_chart_settings
+			}, {
+				label: '',
+				data: [
+					{'x': data.date_start, 'y': 70},
+					{'x': data.date_end, 'y': 70}
+				],
+				borderColor: 'rgba(112, 110, 122, 0.4)',
+				...line_chart_settings
+			}]
+		}
 
-  	options = {
-  		scales: {
-  			x: {
-  				display: false,
-  				...x_scale_settings
-  			},
-  			y: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: 'Dollars (HKD)'
-  				}
-  			}
-  		},
-  		...misc_options
-  	}
+		options = {
+			scales: {
+				x: {
+					display: false,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					}
+				}
+			},
+			...misc_options
+		}
 
-  	if (rsi_chart) {
-  		rsi_chart.destroy();
-  	}
+		if (rsi_chart) {
+			rsi_chart.destroy();
+		}
 
-  	rsi_chart = new Chart(rsi_ctx, {
-  		type: 'line',
-  		data: chart_data,
-  		options: options
-  	});
-  }
+		rsi_chart = new Chart(rsi_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
 
-  function draw_macd(data) {
-  	chart_data = {
-  		labels: data.lbl,
-  		datasets: [{
-  			label: 'MACD',
-  			data: data.macd,
-  			borderColor: 'rgb(16, 183, 89)',
-  			...line_chart_settings
-  		}, {
-  			label: 'EMA',
-  			data: data.macd_ema,
-  			borderColor: 'rgb(226, 70, 72)',
-  			...line_chart_settings
-  		}, {
-  			label: 'Divergence',
-  			type: 'bar',
+	function draw_macd(data) {
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				label: 'MACD',
+				data: data.macd,
+				borderColor: 'rgb(16, 183, 89)',
+				...line_chart_settings
+			}, {
+				label: 'EMA',
+				data: data.macd_ema,
+				borderColor: 'rgb(226, 70, 72)',
+				...line_chart_settings
+			}, {
+				label: 'Divergence',
+				type: 'bar',
 				backgroundColor: 'rgba(112, 110, 122, 0.4)',
-  			data: data.macd_div,
-  			// borderColor: 'rgb(92, 90, 102)',
-  		}]
-  	}
+				data: data.macd_div,
+				// borderColor: 'rgb(92, 90, 102)',
+			}]
+		}
 
-  	options = {
-  		scales: {
-  			x: {
-  				display: true,
-  				...x_scale_settings
-  			},
-  			y: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: 'Dollars (HKD)'
-  				}
-  			}
-  		},
-  		...misc_options
-  	}
+		options = {
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					}
+				}
+			},
+			...misc_options
+		}
 
-  	if (macd_chart) {
-  		macd_chart.destroy();
-  	}
+		if (macd_chart) {
+			macd_chart.destroy();
+		}
 
-  	macd_chart = new Chart(macd_ctx, {
-  		type: 'line',
-  		data: chart_data,
-  		options: options
-  	});
-  }
+		macd_chart = new Chart(macd_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
 
-  stock_data = {{ stock_data | tojson }}
+	stock_data = {{ stock_data | tojson }}
 
-  function draw_charts(stock_data) {
-  	console.log(stock_data);
+	function draw_charts(stock_data) {
+		console.log(stock_data);
 
-  	draw_cdl(stock_data);
-  	draw_rsi(stock_data);
-  	draw_macd(stock_data);
+		draw_cdl(stock_data);
+		draw_rsi(stock_data);
+		draw_macd(stock_data);
 
-  	draw_stock_cmp(stock_data, '0001-HK');
-  	draw_industry_cmp(stock_data, 'Banks');
-  }
+		draw_stock_cmp(stock_data, '0001-HK');
+		draw_industry_cmp(stock_data, 'Banks');
+	}
 
-  draw_charts(stock_data)
+	draw_charts(stock_data)
 </script>
 {% endif %} 
 {% endblock %}

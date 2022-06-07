@@ -349,14 +349,15 @@ def process_stock_data(data):
 		'volume_color': [],
 		'max_volume': None,
 		'last_close': None,
-		'last_close_pct': None
+		'last_close_pct': None,
+		'date_start': None,
+		'date_end': None
 	}
 	max_volume = 0
 	initial_close = None
 	
 	volume_up_color = 'rgba(215,85,65,0.4)'
 	volume_dn_color = 'rgba(80,160,115,0.4)'
-
 	
 	for i in data:
 		if i['volume'] > max_volume:
@@ -392,6 +393,8 @@ def process_stock_data(data):
 		out['last_close'] = i['close']
 
 	out['last_close_pct'] = 100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y']
+	out['date_start'] = out['close'][0]['x']
+	out['date_end'] = out['close'][-1]['x']
 
 	out['max_volume'] = max_volume
 	return out
