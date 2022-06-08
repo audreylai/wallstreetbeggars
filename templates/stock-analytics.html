@@ -1,9 +1,10 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} {% block header
 %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0"></script>
-<script src="{{url_for('static', filename='chartjs-chart-financial.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs-chart-financial.js')}}"></script>
+<!-- <script src="{{url_for('static', filename='chartjs/chartjs-plugin-zoom.js')}}"></script> -->
+<script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
 <style>
 	select:valid {
 		color: rgb(55 65 81);
@@ -132,7 +133,7 @@
 							placeholder="Industry..."
 							onchange="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value)"
 						>
-							<option value="">Select an industry</option>
+							<option value="">Select an industry...</option>
 							{% for industry in industries %}
 							{% if industry != None %}
 							<option value="{{industry}}">{{industry}}</option>
@@ -145,7 +146,7 @@
 					</div>
 				</div>
 			</div>
-			<script
+			<!-- <script
 				src="https://redditjs.com/post.js"
 				data-url="http://www.techodrom.com/etc/star-trek-edges-closer-reality-tractor-beam-moves-object-using-nothing-power-ultrasound/"
 				data-height="500"
@@ -153,7 +154,7 @@
 				data-post-finder="mostComments"
 				data-theme="light"
 				data-show-submit="true"
-			></script>
+			></script> -->
 		</div>
 	</div>
 </div>
@@ -217,13 +218,31 @@
 			intersect: false,
 		},
 		plugins: {
+			/*zoom: {
+				zoom: {
+					wheel: {
+						enabled: true
+					},
+					pinch: {
+						enabled: true
+					},
+					mode: 'xy',
+					onZoomComplete({chart}) {
+						chart.update('none');
+					}
+				},
+				pan: {
+					enabled: true,
+					mode: 'xy'
+				}
+			},*/
 			title: {
 				display: false
 			},
 			legend: {
 				labels: {
 					filter: function(item, chart) {
-						return item.text.length != 0
+						return item.text.length != 0;
 					}
 				}
 			},
@@ -239,18 +258,18 @@
 								return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
 							} else if (context.dataset.label == 'Volume') { // Volume label
 								return "Volume: " + context.parsed.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
-							} else if (['industry-comparison-chart', 'stock-comparison-chart'].includes(context.chart.canvas.id)) {
-								return context.dataset.label + ': ' + Math.round(context.parsed.y*1000)/10 + '%'; // add % 
+							} else if (['industry-comparison-chart', 'stock-comparison-chart'].includes(context.chart.canvas.id)) { // comparison charts
+								return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(1) + '%'; // add % 
 							} else { // default
-								return context.dataset.label + ': ' + Math.round(context.parsed.y*1000)/1000; // default round 3dp
+								return context.dataset.label + ': ' + context.parsed.y.toFixed(3); // default round 3dp
 							}
 						} else if (context.dataset.type == 'candlestick') {
 							return 'O: ' + round_stock_value(context.parsed.o) + 
 								' / H: ' + round_stock_value(context.parsed.h) + 
 								' / L: ' + round_stock_value(context.parsed.l) + 
-								' / C: ' + round_stock_value(context.parsed.c)
+								' / C: ' + round_stock_value(context.parsed.c);
 						}
-						return ''
+						return '';
 					}
 				}
 			}
@@ -305,7 +324,7 @@
 		}
 	}
 
-	// enable plugin globally
+	// enable plugins globally
 	Chart.register(crosshair_plugin)
 
 	// init chart + ctx
