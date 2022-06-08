@@ -3,12 +3,12 @@ $().ready(function() {
         document.documentElement.classList.add('dark')
         localStorage.theme = 'dark';
         $("#light-icon").hide();
-        console.log('0');
+        // console.log('0');
     } else {
         document.documentElement.classList.remove('dark')
         localStorage.theme = 'light';
         $("#dark-icon").hide();
-        console.log('1');
+        // console.log('1');
     }
 
     $("#theme-toggle").click(function() {

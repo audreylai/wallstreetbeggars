@@ -82,79 +82,84 @@
 			{% endif %}
 		</div>
 	</div>
-	<div class="flex flex-col overflow-y-auto">
-		<div class="flex-1 h-full mb-4 space-y-4">
-			<div
-				class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-			>
-				<div class="h-1/2">
-					<canvas id="cdl-chart"></canvas>
+	<div class="grid grid-cols-3 overflow-y-auto">
+		<div class="flex flex-col col-span-2 overflow-y-scroll overflow-x-hidden">
+			<div class="flex-1 h-full mb-4 space-y-4">
+				<div class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="h-1/2">
+						<canvas id="cdl-chart"></canvas>
+					</div>
+					<div class="h-1/4">
+						<canvas id="rsi-chart"></canvas>
+					</div>
+					<div class="h-1/4">
+						<canvas id="macd-chart"></canvas>
+					</div>
 				</div>
-				<div class="h-1/4">
-					<canvas id="rsi-chart"></canvas>
+				<div class="flex space-x-4 h-96">
+					<div
+						class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+					>
+						<div class="flex justify-between">
+							<h2 class="text-2xl font-semibold dark:text-zinc-200">
+								Stock Comparison
+							</h2>
+							<form
+								onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;"
+							>
+								<input
+									type="text"
+									id="ticker-cmp-txtbox"
+									class="h-full px-2 py-1 text-sm uppercase bg-gray-200 rounded-md dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-gray-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+									placeholder="Ticker..."
+									autocomplete="off"
+								/>
+							</form>
+						</div>
+						<div class="grow"><canvas id="stock-comparison-chart"></canvas></div>
+					</div>
+					<div
+						class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+					>
+						<div class="flex justify-between">
+							<h2 class="text-2xl font-semibold dark:text-zinc-200">
+								Industry Comparison
+							</h2>
+							<select
+								required
+								id="industry-cmp-txtbox"
+								class="h-full px-2 py-1 text-sm text-gray-400 bg-gray-200 rounded-md dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+								placeholder="Industry..."
+								onchange="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value)"
+							>
+								<option value="">Select an industry...</option>
+								{% for industry in industries %}
+								{% if industry != None %}
+								<option value="{{industry}}">{{industry}}</option>
+								{% endif %}
+								{% endfor %}
+							</select>
+						</div>
+						<div class="grow">
+							<canvas id="industry-comparison-chart"></canvas>
+						</div>
+					</div>
 				</div>
-				<div class="h-1/4">
-					<canvas id="macd-chart"></canvas>
-				</div>
+				<!-- <script
+					src="https://redditjs.com/post.js"
+					data-url="http://www.techodrom.com/etc/star-trek-edges-closer-reality-tractor-beam-moves-object-using-nothing-power-ultrasound/"
+					data-height="500"
+					data-width="650"
+					data-post-finder="mostComments"
+					data-theme="light"
+					data-show-submit="true"
+				></script> -->
 			</div>
-			<div class="flex space-x-4 h-96">
-				<div
-					class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-				>
-					<div class="flex justify-between">
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
-							Stock Comparison
-						</h2>
-						<form
-							onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;"
-						>
-							<input
-								type="text"
-								id="ticker-cmp-txtbox"
-								class="h-full px-2 py-1 text-sm uppercase bg-gray-200 rounded-md dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-gray-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-								placeholder="Ticker..."
-								autocomplete="off"
-							/>
-						</form>
-					</div>
-					<div class="grow"><canvas id="stock-comparison-chart"></canvas></div>
-				</div>
-				<div
-					class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-				>
-					<div class="flex justify-between">
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
-							Industry Comparison
-						</h2>
-						<select
-							required
-							id="industry-cmp-txtbox"
-							class="h-full px-2 py-1 text-sm text-gray-400 bg-gray-200 rounded-md dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-							placeholder="Industry..."
-							onchange="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value)"
-						>
-							<option value="">Select an industry...</option>
-							{% for industry in industries %}
-							{% if industry != None %}
-							<option value="{{industry}}">{{industry}}</option>
-							{% endif %}
-							{% endfor %}
-						</select>
-					</div>
-					<div class="grow">
-						<canvas id="industry-comparison-chart"></canvas>
-					</div>
-				</div>
+		</div>
+		<div class="flex flex-col col-span-1">
+			<div class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800 dark:text-white">
+				stuff
 			</div>
-			<!-- <script
-				src="https://redditjs.com/post.js"
-				data-url="http://www.techodrom.com/etc/star-trek-edges-closer-reality-tractor-beam-moves-object-using-nothing-power-ultrasound/"
-				data-height="500"
-				data-width="650"
-				data-post-finder="mostComments"
-				data-theme="light"
-				data-show-submit="true"
-			></script> -->
 		</div>
 	</div>
 </div>
@@ -281,12 +286,19 @@
 	const crosshair_plugin = {
 		id: 'crosshair',
 		afterInit: (chart) => {
+			console.log(chart)
 			chart.crosshair = {
 				x: 0,
 				y: 0
 			}
 		},
 		afterEvent: (chart, evt) => {
+			if (!chart) {
+				return;
+			}
+
+			console.log(chart)
+
 			const {chartArea: {top, bottom, left, right}} = chart;
 			const {event: {x, y}} = evt;
 			if (x < left || x > right || y < top || y > bottom) {
@@ -299,6 +311,10 @@
 			chart.draw();
 		},
 		afterDatasetsDraw: (chart, _, opts) => {
+			if (!chart.crosshair) {
+				return;
+			}
+
 			const {ctx, chartArea: {top, bottom, left, right}} = chart;
 			const {x, y, draw} = chart.crosshair;
 
