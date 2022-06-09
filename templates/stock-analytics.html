@@ -157,8 +157,18 @@
 			</div>
 		</div>
 		<div class="flex flex-col col-span-1">
-			<div class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800 dark:text-white">
-				stuff
+			<div class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+				<div class="inline-flex rounded-md shadow-sm" role="group">
+					<button onclick="update_period(90);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-l-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						90
+					</button>
+					<button onclick="update_period(180);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						180
+					</button>
+					<button onclick="update_period(360);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-r-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						360
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -257,7 +267,6 @@
 				bodyColor: "rgba(255, 255, 255, 0.7)",
 				callbacks: {
 					label: function(context) {
-						// console.log(context);
 						if (context.parsed.y != null && context.dataset.label) {
 							if (['MA10', 'MA20', 'MA50'].includes(context.dataset.label)) { // MA labels
 								return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
@@ -286,19 +295,12 @@
 	const crosshair_plugin = {
 		id: 'crosshair',
 		afterInit: (chart) => {
-			console.log(chart)
 			chart.crosshair = {
 				x: 0,
 				y: 0
 			}
 		},
 		afterEvent: (chart, evt) => {
-			if (!chart) {
-				return;
-			}
-
-			console.log(chart)
-
 			const {chartArea: {top, bottom, left, right}} = chart;
 			const {event: {x, y}} = evt;
 			if (x < left || x > right || y < top || y > bottom) {
@@ -343,6 +345,9 @@
 	// enable plugins globally
 	Chart.register(crosshair_plugin)
 
+	// prevent period updating when it is the same
+	var current_period = {{ stock_data['period'] }}
+
 	// init chart + ctx
 	var stock_cmp_chart = undefined;
 	var industry_cmp_chart = undefined;
@@ -356,9 +361,10 @@
 	const rsi_ctx = document.getElementById('rsi-chart').getContext('2d');
 	const macd_ctx = document.getElementById('macd-chart').getContext('2d');
 
-	async function draw_stock_cmp(data, other_ticker) {
+	async function draw_stock_cmp(data, other_ticker, period) {
 		await $.get('/api/get_stock_close_pct', {
 			ticker: other_ticker,
+			period: period
 		}, function(res) {
 			data2 = res
 		});
@@ -396,8 +402,9 @@
 			...misc_options
 		}
 
-		if (stock_cmp_chart) {
+		if (stock_cmp_chart != null) {
 			stock_cmp_chart.destroy();
+			console.log(stock_cmp_chart)
 		}
 
 		stock_cmp_chart = new Chart(stock_cmp_ctx, {
@@ -407,9 +414,10 @@
 		});
 	}
 
-	async function draw_industry_cmp(data, industry) {
+	async function draw_industry_cmp(data, industry, period) {
 		await $.get('/api/get_industry_close_pct', {
 			industry: industry,
+			period: period
 		}, function(res) {
 			data2 = res
 		});
@@ -447,7 +455,7 @@
 				...misc_options
 			}
 
-			if (industry_cmp_chart) {
+			if (industry_cmp_chart != null) {
 				industry_cmp_chart.destroy();
 			}
 
@@ -578,7 +586,7 @@
 			...misc_options
 		}
 
-		if (rsi_chart) {
+		if (rsi_chart != null) {
 			rsi_chart.destroy();
 		}
 
@@ -628,7 +636,7 @@
 			...misc_options
 		}
 
-		if (macd_chart) {
+		if (macd_chart != null) {
 			macd_chart.destroy();
 		}
 
@@ -639,7 +647,7 @@
 		});
 	}
 
-	stock_data = {{ stock_data | tojson }}
+	var stock_data = {{ stock_data | tojson }}
 
 	function draw_charts(stock_data) {
 		console.log(stock_data);
@@ -648,11 +656,27 @@
 		draw_rsi(stock_data);
 		draw_macd(stock_data);
 
-		draw_stock_cmp(stock_data, '0001-HK');
-		draw_industry_cmp(stock_data, 'Banks');
+		draw_stock_cmp(stock_data, '0001-HK', stock_data.period);
+		draw_industry_cmp(stock_data, 'Banks', stock_data.period);
 	}
 
-	draw_charts(stock_data)
+	async function update_period(period) {
+		if (period == current_period) {
+			return;
+		}
+		current_period = period
+		
+		ticker = "{{ stock_info['stock_code'] }}";
+		await $.get('/api/get_stock_data', {
+			ticker: ticker,
+			period: period
+		}, function(res) {
+			stock_data = res;
+			draw_charts(stock_data);
+		});
+	}
+
+	draw_charts(stock_data);
 </script>
 {% endif %} 
-{% endblock %}
+{% endblock %}	

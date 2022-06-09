@@ -28,6 +28,7 @@
       href="{{url_for('static', filename='scrollbar.css')}}"
     />
     <script>
+		/*
       let vh = window.innerHeight * 0.01;
       console.log(vh);
       document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -38,10 +39,6 @@
         document.documentElement.style.setProperty("--vh", `${vh}px`);
       });
 
-      var elem = document.querySelector("#hoe");
-      console.log(
-        window.getComputedStyle(elem, null).getPropertyValue("height")
-      );
       Chart.plugins.register({
         afterDatasetsDraw: function (chart) {
           if (chart.tooltip._active && chart.tooltip._active.length) {
@@ -63,6 +60,7 @@
           }
         },
       });
+	  */
     </script>
     <style>
       .h-screen {

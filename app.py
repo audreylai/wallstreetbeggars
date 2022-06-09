@@ -33,7 +33,7 @@ def stock_list():
 @app.route("/stock-info", methods=["GET", "POST"])
 def stock_info():
 	if request.method == "POST":
-		ticker = request.form["ticker"]
+		ticker = request.form.get("ticker")
 	else:
 		ticker = request.args.get('ticker')
 	if ticker is None:
@@ -48,32 +48,73 @@ def stock_info():
 
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
-	if request.method == "POST":
-		ticker = request.form["ticker"]
-	else:
-		ticker = request.args.get('ticker')
+	try:
+		if request.method == "POST":
+			ticker = request.form.get("ticker")
+			period = request.form.get("period", type=int)
+		else:
+			ticker = request.args.get('ticker')
+			period = request.args.get("period", type=int)
+		
+		if period is None:
+			period = 180 # default half year
+	except:
+		return '400 bad request', 400 # need a proper error page for this
+
 	if ticker is None:
-		ticker = '0005-HK'
+		ticker = '0005-HK' # default HSBC
 	
-	stock_data = process_stock_data(get_stock_data(ticker, 180))
+	stock_data = process_stock_data(get_stock_data(ticker, period))
 	stock_data['ticker'] = ticker
+	stock_data['period'] = period
 	stock_info = get_stock_info(ticker)
 
 	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_industries())
 
+@app.route("/api/get_stock_data", methods=['GET'])
+def api_get_stock_data():
+	try:
+		ticker = request.args.get('ticker').replace(".", "-")
+		period = request.args.get('period', type=int)
+		if period is None:
+			raise Exception
+	except:
+		return {}, 400
+
+	data = process_stock_data(get_stock_data(ticker, period))
+	data['ticker'] = ticker
+	data['period'] = period
+	return data
+
+
 @app.route("/api/get_stock_close_pct", methods=['GET'])
 def api_get_stock_close_pct():
-	ticker_name = request.args.get('ticker').replace(".", "-")
-	data = process_close(get_stock_data(ticker_name, 180))
-	data['ticker'] = ticker_name
+	try:
+		ticker = request.args.get('ticker').replace(".", "-")
+		period = request.args.get('period', type=int)
+		if period is None:
+			raise Exception
+	except:
+		return {}, 400
+
+	data = process_close(get_stock_data(ticker, period))
+	data['ticker'] = ticker
+	data['period'] = period
 	return data
 
 @app.route("/api/get_industry_close_pct", methods=['GET'])
 def api_get_industry_close_pct():
-	industry_name = request.args.get('industry')
-	data = process_industry_avg(get_industry_close_pct(industry_name, 180))
-	data['industry'] = industry_name
-
+	try:
+		industry = request.args.get('industry')
+		period = request.args.get('period', type=int)
+		if period is None:
+			raise Exception
+	except:
+		return {}, 400
+	
+	data = process_industry_avg(get_industry_close_pct(industry, period))
+	data['industry'] = industry
+	data['period'] = period
 	return data
 
 if __name__ == "__main__":
