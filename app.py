@@ -24,11 +24,13 @@ def get_data():
 def rules():
 	return render_template("rules.html")
 
+
 @app.route("/stock-list")
 def stock_list():
 	stock_table = get_stock_info("all")
 	last_update = stock_table['last_update']
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_update=last_update, industries=stock_table['industries'])
+
 
 @app.route("/stock-info", methods=["GET", "POST"])
 def stock_info():
@@ -39,12 +41,14 @@ def stock_info():
 	if ticker is None:
 		ticker = '0005-HK'
 
+	print(ticker)
 	stock_data = process_stock_data(get_stock_data(ticker, 180))
 	stock_data['ticker'] = ticker
 	stock_info = get_stock_info(ticker)
 	statistics = {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower(): stock_data[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower() : stock_info[key] for key in ["previousClose", "marketCap", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"] if key in stock_info}
 		
 	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics)
+
 
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
@@ -70,6 +74,7 @@ def stock_analytics():
 	stock_info = get_stock_info(ticker)
 
 	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_industries())
+
 
 @app.route("/api/get_stock_data", methods=['GET'])
 def api_get_stock_data():
@@ -101,6 +106,7 @@ def api_get_stock_close_pct():
 	data['ticker'] = ticker
 	data['period'] = period
 	return data
+
 
 @app.route("/api/get_industry_close_pct", methods=['GET'])
 def api_get_industry_close_pct():
