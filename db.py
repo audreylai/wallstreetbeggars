@@ -198,14 +198,14 @@ def get_stock_data(ticker, period):
 
 
 def get_industries():
-  return col_stock_info.distinct("industry")
+	return col_stock_info.distinct("industry")
 
 def get_stock_info(ticker):
 	ticker = ticker.upper().replace("-",".")
 	res = []
 	tickerinfo = {}
 	# Returns all data (for stock list)
-	if ticker == "all":
+	if ticker == "ALL":
 		res = {
 			"table": col_stock_info.find({"lastupdated":{"$exists": False}}, {"_id": 0, "stock_code": 1, "name_of_securities": 1, "board_lot": 1, "industry": 1}),
 			"last_update": col_stock_info.find_one({"lastupdated":{"$exists": True}})["lastupdated"],
@@ -228,7 +228,6 @@ def get_stock_info(ticker):
 			print(tickerinfo)
 		except:
 			pass
-
 	return res | tickerinfo
 
 # Not actually DB code --------------------
