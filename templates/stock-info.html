@@ -99,6 +99,12 @@
 				</div>
 				{% endfor %}
 			</div>
+      <div class="flex justify-center">
+        <form action="/stock-analytics" method="POST">
+          <input type="hidden" name="ticker" value="{{ stock_info['stock_code'].replace('.', '-') }}" />
+          <a class="text-blue-600 cursor-pointer dark:text-blue-500 dark:hover:text-blue-400 hover:text-blue-500" onclick="this.parentNode.submit()">Show more</a>
+        </form>
+      </div>
 		</div>
 	</div>
 </div>

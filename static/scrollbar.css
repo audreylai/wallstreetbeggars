@@ -1,5 +1,5 @@
 /* Works on Chrome, Edge, and Safari */
-::-webkit-scrollbar {
+/*::-webkit-scrollbar {
   width: 8px;
 }
 
@@ -10,4 +10,4 @@
 ::-webkit-scrollbar-thumb {
   background-color: #cbd5e1;
   border-radius: 8px;
-}
+}*/
