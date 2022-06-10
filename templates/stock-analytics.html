@@ -158,15 +158,43 @@
 		</div>
 		<div class="flex flex-col col-span-1">
 			<div class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<div class="inline-flex rounded-md shadow-sm" role="group">
-					<button onclick="update_period(90);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-l-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
-						90
+				<div class="inline-flex rounded-md shadow-sm my-1" role="group">
+					<button type="button" class="disabled py-2 px-4 text-sm font-medium text-gray-900 bg-zinc-300 rounded-l-md border border-gray-200">
+						Daily
 					</button>
-					<button onclick="update_period(180);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
-						180
+					<button onclick="update_period(90, 1);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white border-t border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						3m
 					</button>
-					<button onclick="update_period(360);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-r-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
-						360
+					<button onclick="update_period(180, 1);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white border-t border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						6m
+					</button>
+					<button onclick="update_period(360, 1);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-r-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						1y
+					</button>
+				</div>
+				<div class="inline-flex rounded-md shadow-sm my-1" role="group">
+					<button type="button" class="disabled py-2 px-4 text-sm font-medium text-gray-900 bg-zinc-300 rounded-l-md border border-gray-200">
+						Weekly
+					</button>
+					<button onclick="update_period(360, 7);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white border-t border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						1y
+					</button>
+					<button onclick="update_period(360*3, 7);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white border-t border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						3y
+					</button>
+					<button onclick="update_period(360*5, 7);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-r-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						5y
+					</button>
+				</div>
+				<div class="inline-flex rounded-md shadow-sm my-1" role="group">
+					<button type="button" class="disabled py-2 px-4 text-sm font-medium text-gray-900 bg-zinc-300 rounded-l-md border border-gray-200">
+						Monthly
+					</button>
+					<button onclick="update_period(360*5, 30);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white border-t border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						5y
+					</button>
+					<button onclick="update_period(360*10, 30);" type="button" class="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-r-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+						10y
 					</button>
 				</div>
 			</div>
@@ -346,7 +374,8 @@
 	Chart.register(crosshair_plugin)
 
 	// prevent period updating when it is the same
-	var current_period = {{ stock_data['period'] }}
+	var current_period = undefined;
+	var current_interval = undefined;
 
 	// init chart + ctx
 	var stock_cmp_chart = undefined;
@@ -361,10 +390,14 @@
 	const rsi_ctx = document.getElementById('rsi-chart').getContext('2d');
 	const macd_ctx = document.getElementById('macd-chart').getContext('2d');
 
-	async function draw_stock_cmp(data, other_ticker, period) {
+	async function draw_stock_cmp(data, other_ticker) {
+		period = data.period
+		interval = data.interval
+
 		await $.get('/api/get_stock_close_pct', {
 			ticker: other_ticker,
-			period: period
+			period: period,
+			interval: interval
 		}, function(res) {
 			data2 = res
 		});
@@ -414,10 +447,14 @@
 		});
 	}
 
-	async function draw_industry_cmp(data, industry, period) {
+	async function draw_industry_cmp(data, industry) {
+		period = data.period
+		interval = data.interval
+
 		await $.get('/api/get_industry_close_pct', {
 			industry: industry,
-			period: period
+			period: period,
+			interval: interval
 		}, function(res) {
 			data2 = res
 		});
@@ -651,25 +688,29 @@
 
 	function draw_charts(stock_data) {
 		console.log(stock_data);
+		current_period = stock_data.period
+		current_interval = stock_data.interval
 
 		draw_cdl(stock_data);
 		draw_rsi(stock_data);
 		draw_macd(stock_data);
 
-		draw_stock_cmp(stock_data, '0001-HK', stock_data.period);
-		draw_industry_cmp(stock_data, 'Banks', stock_data.period);
+		draw_stock_cmp(stock_data, '0001-HK');
+		draw_industry_cmp(stock_data, 'Banks');
 	}
 
-	async function update_period(period) {
-		if (period == current_period) {
+	async function update_period(period, interval) {
+		if (period == current_period && interval == current_interval) {
 			return;
 		}
-		current_period = period
+		current_period = period;
+		current_interval = interval;
 		
 		ticker = "{{ stock_info['stock_code'] }}";
 		await $.get('/api/get_stock_data', {
 			ticker: ticker,
-			period: period
+			period: period,
+			interval: interval
 		}, function(res) {
 			stock_data = res;
 			draw_charts(stock_data);

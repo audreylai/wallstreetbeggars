@@ -301,12 +301,17 @@ def get_industry_close_pct(industry, period):
 
 
 # Lucas --------------------
-def process_industry_avg(data):
+def process_industry_avg(data, interval):
 	out = {
 		'close_pct': []
 	}
 
+	c = -1
 	for date, close_pct in data.items():
+		c += 1
+		if c % interval != 0:
+			continue
+
 		out['close_pct'].append({
 			'x': datetime.timestamp(date) * 1000,
 			'y': sum(close_pct) / len(close_pct)
@@ -314,26 +319,8 @@ def process_industry_avg(data):
 
 	return out
 
-def process_close(data):
-	out = {
-		'close_pct': [],
-	}
 
-	initial_close = None
-	
-	for i in data:
-		if initial_close is None:
-			initial_close = i['close']
-
-		out['close_pct'].append({
-			'x': datetime.timestamp(i['date']) * 1000,
-			'y': (i['close'] - initial_close) / initial_close
-		})
-
-	return out
-
-
-def process_stock_data(data):
+def process_stock_data(data, interval, include=[]):
 	out = {
 		'sma10': [],
 		'sma20': [],
@@ -359,7 +346,10 @@ def process_stock_data(data):
 	volume_up_color = 'rgba(215,85,65,0.4)'
 	volume_dn_color = 'rgba(80,160,115,0.4)'
 	
-	for i in data:
+	for c, i in enumerate(data):
+		if c % interval != 0:
+			continue
+
 		if i['volume'] > max_volume:
 			max_volume = i['volume']
 
@@ -397,4 +387,13 @@ def process_stock_data(data):
 	out['date_end'] = out['close'][-1]['x']
 
 	out['max_volume'] = max_volume
+
+	if len(include) != 0:
+		out2 = out.copy()
+		for k in out:
+			if k not in include:
+				del out2[k]
+		print(out2)
+		return out2
+
 	return out
