@@ -22,7 +22,8 @@ def add_stock_data_one(ticker):
 		return
 	
 	# format columns
-	df = df.reset_index()
+	df.reset_index(inplace=True)
+
 	df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
 	pd.to_datetime(df.date)
 
@@ -33,6 +34,8 @@ def add_stock_data_one(ticker):
 	# rsi + macd
 	df["rsi"] = ta.RSI(df.close, timeperiod=14)
 	df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df.close, fastperiod=12, slowperiod=26, signalperiod=9)
+
+	df.dropna(inplace=True)
 
 	# convert df to dict for upsert
 	out = df.to_dict("records")
@@ -47,6 +50,7 @@ def add_stock_data_batch():
 	col_stock_data.drop({})
 	for i in range(1, 100):
 		ticker = "%04d.HK" % i
+		print(ticker)
 		add_stock_data_one(ticker)
 
 

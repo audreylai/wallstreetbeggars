@@ -40,7 +40,6 @@ def stock_info():
 	if ticker is None:
 		ticker = '0005-HK'
 
-	print(ticker)
 	stock_data = process_stock_data(get_stock_data(ticker, 180), 1)
 	stock_data['ticker'] = ticker
 	stock_info = get_stock_info(ticker)
@@ -64,10 +63,7 @@ def stock_analytics():
 		period = 180 if period is None else period
 		interval = 1 if interval is None else interval
 	except:
-		return '400 bad request', 400 # need a proper error page for this
-
-	if ticker is None:
-		ticker = '0005-HK' # default HSBC
+		ticker, period, interval = '0005-HK', 180, 1 # default
 	
 	stock_data = process_stock_data(get_stock_data(ticker, period), interval)
 	stock_data['ticker'], stock_data['period'], stock_data['interval'] = ticker, period, interval

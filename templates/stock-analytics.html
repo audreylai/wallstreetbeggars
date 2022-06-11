@@ -735,7 +735,7 @@
   	}, function(res) {
   		stock_data = res;
   		draw_charts(stock_data);
-  	});
+  	}).catch(error => console.log(error));
   }
 
 
