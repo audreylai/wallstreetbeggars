@@ -63,7 +63,6 @@ def stock_analytics():
 
 		period = 180 if period is None else period
 		interval = 1 if interval is None else interval
-
 	except:
 		return '400 bad request', 400 # need a proper error page for this
 

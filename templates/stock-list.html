@@ -1,16 +1,6 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} {% block header
 %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"
-/>
-<script
-  type="text/javascript"
-  charset="utf8"
-  src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"
-></script>
 <style>
   /*Overrides for Tailwind CSS */
 
@@ -132,7 +122,13 @@
           <th
             class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
           >
-            {{k}}
+            <div class="flex">
+              {{k}}
+              <div>
+                <ion-icon name="caret-up-outline" class="w-4" id="up-sort"></ion-icon>
+                <ion-icon name="caret-down-outline" class="w-4" id="down-sort"></ion-icon>
+              </div>
+            </div>
           </th>
           {% endif %} {% endfor %}
         </tr>
@@ -140,9 +136,9 @@
       <tbody>
         {% for row in stock_table %}
         <tr class="text-gray-700">
-          {% for k,v in row.items() %} {% if k == "Board Lot" %}
+          {% for k,v in row.items() %} {% if k == "board_lot" %}
           <td
-            class="p-4 text-right bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
+            class="px-2 py-2 text-right bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
           >
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
@@ -158,7 +154,7 @@
           </td>
           {% elif k != "_id" and k != "last_updated" %}
           <td
-            class="p-4 bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
+            class="px-2 py-2 bg-gray-100 border-b-2 p dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
           >
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
@@ -181,43 +177,5 @@
 </div>
 {% endblock %} {% block script %}
 <script>
-  $(document).ready(function () {
-    $("#table").DataTable({
-      iDisplayLength: 25,
-      searching: true,
-    });
-    var table = $("#table").DataTable();
-    $("#table.dataTables_filter").append($("#industryFilter"));
-
-    var industryIndex = 0;
-    $("#table th").each(function (i) {
-      if ($($(this)).html().replace(/\s/g, "") == "industry") {
-        industryIndex = i;
-        return false;
-      }
-    });
-
-    //Use the built in datatables API to filter the existing rows by the Category column
-    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-      var selectedItem = $("#industryFilter").val();
-      var industry = data[industryIndex];
-
-      if (
-        selectedItem === "" ||
-        industry.replace(/\s/g, "") == selectedItem.replace(/\s/g, "")
-      ) {
-        return true;
-      }
-      return false;
-    });
-
-    //Set the change event for the Category Filter dropdown to redraw the datatable each time
-    //a user selects a new filter.
-    $("#industryFilter").change(function (e) {
-      table.draw();
-    });
-
-    table.draw();
-  });
 </script>
 {% endblock %}

@@ -18,7 +18,7 @@
     {% block header %}{% endblock %}
     <script src="{{ url_for('static', filename='theme.js') }}"></script>
     <script>
-     /* tailwind.config = {
+      /* tailwind.config = {
         darkMode: "media",
       }; */
     </script>
@@ -28,7 +28,7 @@
       href="{{url_for('static', filename='scrollbar.css')}}"
     />
     <script>
-		/*
+      /*
       let vh = window.innerHeight * 0.01;
       console.log(vh);
       document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -75,7 +75,7 @@
       <div
         id="sidebar"
         class="flex flex-row items-center justify-center h-16 px-4 bg-white border-t border-r dark:bg-zinc-900 lg:flex-col lg:w-16 xl:w-64 lg:h-screen lg:p-4 shrink-0 lg:border-t-0 lg:px-0 dark:border-zinc-800"
-        >
+      >
         <div class="items-center hidden space-x-2 lg:flex">
           <img
             src="https://media-exp1.licdn.com/dms/image/C4D03AQEgVaStUAjN1w/profile-displayphoto-shrink_200_200/0/1516623558070?e=1660176000&v=beta&t=xr19Gixqmdfg8QxzOop_9aZNgCWnnKPOcx4EFcHKfrs"
@@ -87,240 +87,54 @@
           >
             Jackei
           </p>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="hidden w-4 text-gray-500 xl:flex"
-            viewBox="0 0 512 512"
-          >
-            <path
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="48"
-              d="M112 184l144 144 144-144"
-            />
-          </svg>
+          <ion-icon name="chevron-down-outline" class="hidden w-4 text-gray-500 xl:flex"></ion-icon>
         </div>
         <div
-          class="flex flex-row items-center justify-center flex-1 w-full h-full xl:w-auto lg:flex-col" 
+          class="flex flex-row items-center justify-center flex-1 w-full h-full xl:w-auto lg:flex-col"
         >
           <a
             href="/"
             class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:rounded-none xl:rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-zinc-100"
           >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 lg:mr-2" viewBox="0 0 512 512"><title>Home</title><path d="M80 212v236a16 16 0 0016 16h96V328a24 24 0 0124-24h80a24 24 0 0124 24v136h96a16 16 0 0016-16V212" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><path d="M480 256L266.89 52c-5-5.28-16.69-5.34-21.78 0L32 256M400 179V64h-48v69" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
+            <ion-icon name="home-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
             <p class="hidden text-xs font-bold xl:flex">Home</p>
           </a>
           <a
             href="/stock-analytics"
             class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
+            <ion-icon
+              name="analytics-outline"
               class="w-6 h-6 lg:mr-2"
-              viewBox="0 0 512 512"
-            >
-              <title>Pie Chart</title>
-              <path
-                d="M256.05 80.65Q263.94 80 272 80c106 0 192 86 192 192s-86 192-192 192A192.09 192.09 0 0189.12 330.65"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-miterlimit="10"
-                stroke-width="32"
-              />
-              <path
-                d="M256 48C141.12 48 48 141.12 48 256a207.29 207.29 0 0018.09 85L256 256z"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-            </svg>
+            ></ion-icon>
             <p class="hidden text-xs font-bold xl:flex">Analytics</p>
           </a>
           <a
             href="/stock-list"
             class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 lg:mr-2"
-              viewBox="0 0 512 512"
-            >
-              <path
-                d="M32 32v432a16 16 0 0016 16h432"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-              <rect
-                x="96"
-                y="224"
-                width="80"
-                height="192"
-                rx="20"
-                ry="20"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-              <rect
-                x="240"
-                y="176"
-                width="80"
-                height="240"
-                rx="20"
-                ry="20"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-              <rect
-                x="383.64"
-                y="112"
-                width="80"
-                height="304"
-                rx="20"
-                ry="20"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-            </svg>
+            <ion-icon name="list-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
             <p class="hidden text-xs font-bold xl:flex">Stock List</p>
           </a>
           <a
             href="/"
             class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 lg:mr-2"
-              viewBox="0 0 512 512"
-            >
-              <path
-                d="M368 415.86V72a24.07 24.07 0 00-24-24H72a24.07 24.07 0 00-24 24v352a40.12 40.12 0 0040 40h328"
-                fill="none"
-                stroke="currentColor"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-              <path
-                d="M416 464h0a48 48 0 01-48-48V128h72a24 24 0 0124 24v264a48 48 0 01-48 48z"
-                fill="none"
-                stroke="currentColor"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-                d="M240 128h64M240 192h64M112 256h192M112 320h192M112 384h192"
-              />
-              <path
-                fill="currentColor"
-                d="M176 208h-64a16 16 0 01-16-16v-64a16 16 0 0116-16h64a16 16 0 0116 16v64a16 16 0 01-16 16z"
-              />
-            </svg>
+            <ion-icon name="newspaper-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
             <p class="hidden text-xs font-bold xl:flex">Watchlist</p>
           </a>
           <a
             href="/"
             class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 lg:mr-2"
-              viewBox="0 0 512 512"
-            >
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-linejoin="round"
-                stroke-width="32"
-                d="M160 336V48l32 16 32-16 31.94 16 32.37-16L320 64l31.79-16 31.93 16L416 48l32.01 16L480 48v224"
-              />
-              <path
-                d="M480 272v112a80 80 0 01-80 80h0a80 80 0 01-80-80v-48H48a15.86 15.86 0 00-16 16c0 64 6.74 112 80 112h288"
-                fill="none"
-                stroke="currentColor"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-                d="M224 144h192M288 224h128"
-              />
-            </svg>
+            <ion-icon name="receipt-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
             <p class="hidden text-xs font-bold xl:flex">Transactions</p>
           </a>
           <a
             href="/"
             class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6 lg:mr-2"
-              viewBox="0 0 512 512"
-            >
-              <title>Options</title>
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-                d="M368 128h80M64 128h240M368 384h80M64 384h240M208 256h240M64 256h80"
-              />
-              <circle
-                cx="336"
-                cy="128"
-                r="32"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-              <circle
-                cx="176"
-                cy="256"
-                r="32"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-              <circle
-                cx="336"
-                cy="384"
-                r="32"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-            </svg>
+            <ion-icon name="options-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
             <p class="hidden text-xs font-bold xl:flex">Options</p>
           </a>
         </div>
@@ -329,73 +143,39 @@
             id="theme-toggle"
             class="items-center hidden w-full h-12 px-4 text-gray-700 rounded-lg lg:flex dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
           >
-            <svg
+            <ion-icon
               id="dark-icon"
-              xmlns="http://www.w3.org/2000/svg"
               class="w-6 h-6"
-              viewBox="0 0 512 512"
-            >
-              <title>Moon</title>
-              <path
-                d="M160 136c0-30.62 4.51-61.61 16-88C99.57 81.27 48 159.32 48 248c0 119.29 96.71 216 216 216 88.68 0 166.73-51.57 200-128-26.39 11.49-57.38 16-88 16-119.29 0-216-96.71-216-216z"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-            </svg>
-            <svg
+              name="moon-outline"
+            ></ion-icon>
+            <ion-icon
               id="light-icon"
-              xmlns="http://www.w3.org/2000/svg"
               class="w-6 h-6"
-              viewBox="0 0 512 512"
-            >
-              <title>Sunny</title>
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-miterlimit="10"
-                stroke-width="32"
-                d="M256 48v48M256 416v48M403.08 108.92l-33.94 33.94M142.86 369.14l-33.94 33.94M464 256h-48M96 256H48M403.08 403.08l-33.94-33.94M142.86 142.86l-33.94-33.94"
-              />
-              <circle
-                cx="256"
-                cy="256"
-                r="80"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-miterlimit="10"
-                stroke-width="32"
-              />
-            </svg>
+              name="sunny-outline"
+            ></ion-icon>
           </button>
           <a
             href="/"
             class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
+            <ion-icon
+              name="settings-outline"
               class="w-6 h-6 lg:mr-2"
-              viewBox="0 0 512 512"
-            >
-              <path
-                d="M262.29 192.31a64 64 0 1057.4 57.4 64.13 64.13 0 00-57.4-57.4zM416.39 256a154.34 154.34 0 01-1.53 20.79l45.21 35.46a10.81 10.81 0 012.45 13.75l-42.77 74a10.81 10.81 0 01-13.14 4.59l-44.9-18.08a16.11 16.11 0 00-15.17 1.75A164.48 164.48 0 01325 400.8a15.94 15.94 0 00-8.82 12.14l-6.73 47.89a11.08 11.08 0 01-10.68 9.17h-85.54a11.11 11.11 0 01-10.69-8.87l-6.72-47.82a16.07 16.07 0 00-9-12.22 155.3 155.3 0 01-21.46-12.57 16 16 0 00-15.11-1.71l-44.89 18.07a10.81 10.81 0 01-13.14-4.58l-42.77-74a10.8 10.8 0 012.45-13.75l38.21-30a16.05 16.05 0 006-14.08c-.36-4.17-.58-8.33-.58-12.5s.21-8.27.58-12.35a16 16 0 00-6.07-13.94l-38.19-30A10.81 10.81 0 0149.48 186l42.77-74a10.81 10.81 0 0113.14-4.59l44.9 18.08a16.11 16.11 0 0015.17-1.75A164.48 164.48 0 01187 111.2a15.94 15.94 0 008.82-12.14l6.73-47.89A11.08 11.08 0 01213.23 42h85.54a11.11 11.11 0 0110.69 8.87l6.72 47.82a16.07 16.07 0 009 12.22 155.3 155.3 0 0121.46 12.57 16 16 0 0015.11 1.71l44.89-18.07a10.81 10.81 0 0113.14 4.58l42.77 74a10.8 10.8 0 01-2.45 13.75l-38.21 30a16.05 16.05 0 00-6.05 14.08c.33 4.14.55 8.3.55 12.47z"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-            </svg>
+            ></ion-icon>
             <p class="hidden text-xs font-bold xl:flex">Settings</p>
           </a>
         </div>
       </div>
       {% block content %}{% endblock %}
     </div>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
   </body>
   {% block script %}{% endblock %}
 </html>
