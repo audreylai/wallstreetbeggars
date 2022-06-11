@@ -1,0 +1,2805 @@
+[{
+  "_id": {
+    "$oid": "62a43587cfadcbbfb356a616"
+  },
+  "last_updated": {
+    "$date": {
+      "$numberLong": "1655078400000"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a617"
+  },
+  "ticker": "0001-HK",
+  "name": "CKH HOLDINGS",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Conglomerates",
+  "nominal": "53.400",
+  "turnover": "343.745M",
+  "mkt_cap": "204.761B",
+  "pct_yield": "4.981",
+  "pe_ratio": "6.138",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.ckh.com.hk",
+  "industry_y": "Conglomerates",
+  "current_price": 53.4,
+  "total_cash": {
+    "$numberLong": "153194004480"
+  },
+  "total_debt": {
+    "$numberLong": "412741009408"
+  },
+  "total_revenue": {
+    "$numberLong": "280846991360"
+  },
+  "total_cash_per_share": 39.95,
+  "financial_currency": "HKD",
+  "short_name": "CKH HOLDINGS",
+  "long_name": "CK Hutchison Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/ckh.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a618"
+  },
+  "ticker": "0002-HK",
+  "name": "CLP HOLDINGS",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Utilities",
+  "nominal": "75.750",
+  "turnover": "404.993M",
+  "mkt_cap": "191.379B",
+  "pct_yield": "4.092",
+  "pe_ratio": "22.545",
+  "sector": "Utilities",
+  "country": "Hong Kong",
+  "website": "https://www.clpgroup.com",
+  "industry_y": "Utilities—Regulated Electric",
+  "current_price": 75.75,
+  "total_cash": {
+    "$numberLong": "11653000192"
+  },
+  "total_debt": {
+    "$numberLong": "61348999168"
+  },
+  "total_revenue": {
+    "$numberLong": "83958996992"
+  },
+  "total_cash_per_share": 4.612,
+  "financial_currency": "HKD",
+  "short_name": "CLP HOLDINGS",
+  "long_name": "CLP Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/clpgroup.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a619"
+  },
+  "ticker": "0003-HK",
+  "name": "HK & CHINA GAS",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Utilities",
+  "nominal": "8.590",
+  "turnover": "155.277M",
+  "mkt_cap": "160.288B",
+  "pct_yield": "4.075",
+  "pe_ratio": "31.933",
+  "sector": "Utilities",
+  "country": "Hong Kong",
+  "website": "https://www.towngas.com",
+  "industry_y": "Utilities—Regulated Gas",
+  "current_price": 8.59,
+  "total_cash": {
+    "$numberLong": "10636999680"
+  },
+  "total_debt": {
+    "$numberLong": "56513601536"
+  },
+  "total_revenue": {
+    "$numberLong": "53563699200"
+  },
+  "total_cash_per_share": 0.57,
+  "financial_currency": "HKD",
+  "short_name": "HK & CHINA GAS",
+  "long_name": "The Hong Kong and China Gas Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/towngas.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a61a"
+  },
+  "ticker": "0004-HK",
+  "name": "WHARF HOLDINGS",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "24.750",
+  "turnover": "16.150M",
+  "mkt_cap": "75.637B",
+  "pct_yield": "1.616",
+  "pe_ratio": "12.564",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.wharfholdings.com",
+  "industry_y": "Real Estate—Development",
+  "current_price": 24.75,
+  "total_cash": {
+    "$numberLong": "23559000064"
+  },
+  "total_debt": {
+    "$numberLong": "36814000128"
+  },
+  "total_revenue": {
+    "$numberLong": "22378000384"
+  },
+  "total_cash_per_share": 7.709,
+  "financial_currency": "HKD",
+  "short_name": "WHARF HOLDINGS",
+  "long_name": "Wharf (Holdings) Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/wharfholdings.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a61b"
+  },
+  "ticker": "0005-HK",
+  "name": "HSBC HOLDINGS",
+  "category": "Equity",
+  "board_lot": 400,
+  "industry_x": "Banks",
+  "nominal": "49.950",
+  "turnover": "1.154B",
+  "mkt_cap": "1,020.143B",
+  "pct_yield": "3.904",
+  "pe_ratio": "10.264",
+  "sector": "Financial Services",
+  "country": "United Kingdom",
+  "website": "https://www.hsbc.com",
+  "industry_y": "Banks—Diversified",
+  "current_price": 49.95,
+  "total_cash": {
+    "$numberLong": "1087012995072"
+  },
+  "total_debt": {
+    "$numberLong": "597181005824"
+  },
+  "total_revenue": {
+    "$numberLong": "48881000448"
+  },
+  "total_cash_per_share": 54.286,
+  "financial_currency": "USD",
+  "short_name": "HSBC HOLDINGS",
+  "long_name": "HSBC Holdings plc",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hsbc.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a61c"
+  },
+  "ticker": "0006-HK",
+  "name": "POWER ASSETS",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Utilities",
+  "nominal": "50.400",
+  "turnover": "159.652M",
+  "mkt_cap": "107.567B",
+  "pct_yield": "5.595",
+  "pe_ratio": "17.500",
+  "sector": "Utilities",
+  "country": "Hong Kong",
+  "website": "https://www.powerassets.com",
+  "industry_y": "Utilities—Independent Power Producers",
+  "current_price": 50.4,
+  "total_cash": {
+    "$numberLong": "4611999744"
+  },
+  "total_debt": {
+    "$numberLong": "3438000128"
+  },
+  "total_revenue": 1628999936,
+  "total_cash_per_share": 2.161,
+  "financial_currency": "HKD",
+  "short_name": "POWER ASSETS",
+  "long_name": "Power Assets Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/powerassets.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a61d"
+  },
+  "ticker": "0007-HK",
+  "name": "WISDOM WEALTH",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Diversified Metals & Minerals",
+  "nominal": "0.142",
+  "turnover": "552,306",
+  "mkt_cap": "824.208M",
+  "pct_yield": "0.000",
+  "pe_ratio": "2.119",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://WWRI007.com",
+  "industry_y": "Electronics & Computer Distribution",
+  "current_price": 0.142,
+  "total_cash": 31859000,
+  "total_debt": 427383008,
+  "total_revenue": 522404000,
+  "total_cash_per_share": 0.008,
+  "financial_currency": "HKD",
+  "short_name": "WISDOM WEALTH",
+  "long_name": "Wisdom Wealth Resources Investment Holding Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/WWRI007.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a61e"
+  },
+  "ticker": "0008-HK",
+  "name": "PCCW",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Telecommunication Services",
+  "nominal": "4.210",
+  "turnover": "17.169M",
+  "mkt_cap": "32.584B",
+  "pct_yield": "8.801",
+  "pe_ratio": "31.278",
+  "sector": "Communication Services",
+  "country": "Hong Kong",
+  "website": "https://www.pccw.com",
+  "industry_y": "Telecom Services",
+  "current_price": 4.21,
+  "total_cash": {
+    "$numberLong": "5475999744"
+  },
+  "total_debt": {
+    "$numberLong": "49344000000"
+  },
+  "total_revenue": {
+    "$numberLong": "38654001152"
+  },
+  "total_cash_per_share": 0.709,
+  "financial_currency": "HKD",
+  "short_name": "PCCW",
+  "long_name": "PCCW Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/pccw.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a61f"
+  },
+  "ticker": "0009-HK",
+  "name": "KEYNE LTD",
+  "category": "Equity",
+  "board_lot": 6000,
+  "industry_x": "Properties",
+  "nominal": "0.036",
+  "turnover": "5,832",
+  "mkt_cap": "128.476M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.keyneltd.com",
+  "industry_y": "Real Estate—Development",
+  "current_price": 0.036,
+  "total_cash": 12437000,
+  "total_debt": 1764706944,
+  "total_revenue": 20376000,
+  "total_cash_per_share": 0.003,
+  "financial_currency": "HKD",
+  "short_name": "KEYNE LTD",
+  "long_name": "Keyne Ltd",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/keyneltd.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a620"
+  },
+  "ticker": "0010-HK",
+  "name": "HANG LUNG GROUP",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "14.840",
+  "turnover": "8.886M",
+  "mkt_cap": "20.206B",
+  "pct_yield": "5.795",
+  "pe_ratio": "7.811",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.hanglung.com",
+  "industry_y": "Real Estate—Diversified",
+  "current_price": 14.84,
+  "total_cash": {
+    "$numberLong": "9016000512"
+  },
+  "total_debt": {
+    "$numberLong": "46219001856"
+  },
+  "total_revenue": {
+    "$numberLong": "10904999936"
+  },
+  "total_cash_per_share": 6.622,
+  "financial_currency": "HKD",
+  "short_name": "HANG LUNG GROUP",
+  "long_name": "Hang Lung Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hanglung.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a621"
+  },
+  "ticker": "0011-HK",
+  "name": "HANG SENG BANK",
+  "category": "Equity",
+  "board_lot": 100,
+  "industry_x": "Banks",
+  "nominal": "135.600",
+  "turnover": "221.128M",
+  "mkt_cap": "259.246B",
+  "pct_yield": "3.466",
+  "pe_ratio": "19.567",
+  "sector": "Financial Services",
+  "country": "Hong Kong",
+  "website": "https://www.hangseng.com",
+  "industry_y": "Banks—Regional",
+  "current_price": 135.6,
+  "total_cash": {
+    "$numberLong": "193331003392"
+  },
+  "total_debt": {
+    "$numberLong": "58212999168"
+  },
+  "total_revenue": {
+    "$numberLong": "30563000320"
+  },
+  "total_cash_per_share": 101.123,
+  "financial_currency": "HKD",
+  "short_name": "HANG SENG BANK",
+  "long_name": "Hang Seng Bank Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hangseng.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a622"
+  },
+  "ticker": "0012-HK",
+  "name": "HENDERSON LAND",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "30.150",
+  "turnover": "134.336M",
+  "mkt_cap": "145.968B",
+  "pct_yield": "5.970",
+  "pe_ratio": "11.044",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.hld.com",
+  "industry_y": "Real Estate—Diversified",
+  "current_price": 30.15,
+  "total_cash": {
+    "$numberLong": "11335000064"
+  },
+  "total_debt": {
+    "$numberLong": "159481004032"
+  },
+  "total_revenue": {
+    "$numberLong": "23527000064"
+  },
+  "total_cash_per_share": 2.341,
+  "financial_currency": "HKD",
+  "short_name": "HENDERSON LAND",
+  "long_name": "Henderson Land Development Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hld.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a623"
+  },
+  "ticker": "0013-HK",
+  "name": "HUTCHMED",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Health Care",
+  "nominal": "17.780",
+  "turnover": "94.270M",
+  "mkt_cap": "15.371B",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Healthcare",
+  "country": "Hong Kong",
+  "website": "https://www.hutch-med.com",
+  "industry_y": "Drug Manufacturers—Specialty & Generic",
+  "current_price": 17.78,
+  "total_cash": 1014460992,
+  "total_debt": 38983000,
+  "total_revenue": 356128000,
+  "total_cash_per_share": 1.185,
+  "financial_currency": "USD",
+  "short_name": "HUTCHMED",
+  "long_name": "HUTCHMED (China) Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hutch-med.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a624"
+  },
+  "ticker": "0014-HK",
+  "name": "HYSAN DEV",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "23.650",
+  "turnover": "16.045M",
+  "mkt_cap": "24.366B",
+  "pct_yield": "6.089",
+  "pe_ratio": "17.782",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.hysan.com.hk",
+  "industry_y": "Real Estate Services",
+  "current_price": 23.65,
+  "total_cash": {
+    "$numberLong": "6537999872"
+  },
+  "total_debt": {
+    "$numberLong": "26580000768"
+  },
+  "total_revenue": {
+    "$numberLong": "3891000064"
+  },
+  "total_cash_per_share": 6.321,
+  "financial_currency": "HKD",
+  "short_name": "HYSAN DEV",
+  "long_name": "Hysan Development Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hysan.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a625"
+  },
+  "ticker": "0016-HK",
+  "name": "SHK PPT",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Properties",
+  "nominal": "96.000",
+  "turnover": "320.874M",
+  "mkt_cap": "278.187B",
+  "pct_yield": "5.156",
+  "pe_ratio": "10.424",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.shkp.com",
+  "industry_y": "Real Estate—Development",
+  "current_price": 96,
+  "total_cash": {
+    "$numberLong": "18737999872"
+  },
+  "total_debt": {
+    "$numberLong": "123611996160"
+  },
+  "total_revenue": {
+    "$numberLong": "79345000448"
+  },
+  "total_cash_per_share": 6.466,
+  "financial_currency": "HKD",
+  "short_name": "SHK PPT",
+  "long_name": "Sun Hung Kai Properties Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/shkp.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a626"
+  },
+  "ticker": "0017-HK",
+  "name": "NEW WORLD DEV",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "29.950",
+  "turnover": "92.707M",
+  "mkt_cap": "75.373B",
+  "pct_yield": "6.878",
+  "pe_ratio": "65.109",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.nwd.com.hk",
+  "industry_y": "Real Estate—Diversified",
+  "current_price": 29.95,
+  "total_cash": {
+    "$numberLong": "57119600640"
+  },
+  "total_debt": {
+    "$numberLong": "189930897408"
+  },
+  "total_revenue": {
+    "$numberLong": "68228698112"
+  },
+  "total_cash_per_share": 22.697,
+  "financial_currency": "HKD",
+  "short_name": "NEW WORLD DEV",
+  "long_name": "New World Development Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/nwd.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a627"
+  },
+  "ticker": "0018-HK",
+  "name": "ORIENTAL E H",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Media",
+  "nominal": "0.670",
+  "turnover": "17,680",
+  "mkt_cap": "1.607B",
+  "pct_yield": "14.925",
+  "pe_ratio": "7.605",
+  "sector": "Communication Services",
+  "country": "Hong Kong",
+  "website": "https://oeh.on.cc",
+  "industry_y": "Publishing",
+  "current_price": 0.67,
+  "total_cash": 605278016,
+  "total_debt": 7962000,
+  "total_revenue": 762593024,
+  "total_cash_per_share": 0.252,
+  "financial_currency": "HKD",
+  "short_name": "ORIENTAL E H",
+  "long_name": "Oriental Enterprise Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/oeh.on.cc"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a628"
+  },
+  "ticker": "0019-HK",
+  "name": "SWIRE PACIFIC A",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Conglomerates",
+  "nominal": "48.600",
+  "turnover": "67.712M",
+  "mkt_cap": "43.993B",
+  "pct_yield": "5.350",
+  "pe_ratio": "21.600",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.swirepacific.com",
+  "industry_y": "Conglomerates",
+  "current_price": 48.6,
+  "total_cash": {
+    "$numberLong": "22894000128"
+  },
+  "total_debt": {
+    "$numberLong": "68252999680"
+  },
+  "total_revenue": {
+    "$numberLong": "90802003968"
+  },
+  "total_cash_per_share": 15.247,
+  "financial_currency": "HKD",
+  "short_name": "SWIRE PACIFIC A",
+  "long_name": "Swire Pacific Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/swirepacific.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a629"
+  },
+  "ticker": "0020-HK",
+  "name": "SENSETIME-W",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Software & Services",
+  "nominal": "5.660",
+  "turnover": "116.065M",
+  "mkt_cap": "189.652B",
+  "pct_yield": "",
+  "pe_ratio": "N/A",
+  "sector": "Technology",
+  "country": "China",
+  "website": "https://www.sensetime.com",
+  "industry_y": "Software—Application",
+  "current_price": 5.66,
+  "total_cash": {
+    "$numberLong": "21792845824"
+  },
+  "total_debt": 1712418944,
+  "total_revenue": {
+    "$numberLong": "4700262912"
+  },
+  "total_cash_per_share": 0.655,
+  "financial_currency": "CNY",
+  "short_name": "SENSETIME-W",
+  "long_name": "SenseTime Group Inc.",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/sensetime.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a62a"
+  },
+  "ticker": "0021-HK",
+  "name": "GREAT CHI PPT",
+  "category": "Equity",
+  "board_lot": 5000,
+  "industry_x": "Properties",
+  "nominal": "0.134",
+  "turnover": "34,000",
+  "mkt_cap": "532.681M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.greatchinaproperties.com",
+  "industry_y": "Real Estate Services",
+  "current_price": 0.134,
+  "total_cash": 22271000,
+  "total_debt": 1389000,
+  "total_revenue": 10018000,
+  "total_cash_per_share": 0.006,
+  "financial_currency": "HKD",
+  "short_name": "GREAT CHI PPT",
+  "long_name": "Great China Properties Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/greatchinaproperties.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a62b"
+  },
+  "ticker": "0022-HK",
+  "name": "MEXAN",
+  "category": "Equity",
+  "board_lot": 40000,
+  "industry_x": "Hotels & Restaurants & Leisure",
+  "nominal": "0.098",
+  "turnover": "0.000",
+  "mkt_cap": "192.706M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.mexanhk.com",
+  "industry_y": "Lodging",
+  "current_price": 0.098,
+  "total_cash": 14168000,
+  "total_debt": 56696000,
+  "total_revenue": 31129000,
+  "total_cash_per_share": 0.007,
+  "financial_currency": "HKD",
+  "short_name": "MEXAN",
+  "long_name": "Mexan Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/mexanhk.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a62c"
+  },
+  "ticker": "0023-HK",
+  "name": "BANK OF E ASIA",
+  "category": "Equity",
+  "board_lot": 200,
+  "industry_x": "Banks",
+  "nominal": "11.360",
+  "turnover": "11.386M",
+  "mkt_cap": "30.542B",
+  "pct_yield": "6.162",
+  "pe_ratio": "7.425",
+  "sector": "Financial Services",
+  "country": "Hong Kong",
+  "website": "https://www.hkbea.com",
+  "industry_y": "Banks—Regional",
+  "current_price": 11.36,
+  "total_cash": {
+    "$numberLong": "128880001024"
+  },
+  "total_debt": {
+    "$numberLong": "18268999680"
+  },
+  "total_revenue": {
+    "$numberLong": "15822999552"
+  },
+  "total_cash_per_share": 44.092,
+  "financial_currency": "HKD",
+  "short_name": "BANK OF E ASIA",
+  "long_name": "The Bank of East Asia, Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hkbea.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a62d"
+  },
+  "ticker": "0025-HK",
+  "name": "CHEVALIER INT'L",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Conglomerates",
+  "nominal": "9.100",
+  "turnover": "837,200",
+  "mkt_cap": "2.748B",
+  "pct_yield": "5.934",
+  "pe_ratio": "4.293",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.chevalier.com",
+  "industry_y": "Conglomerates",
+  "current_price": 9.1,
+  "total_cash": {
+    "$numberLong": "3457634048"
+  },
+  "total_debt": {
+    "$numberLong": "4180023040"
+  },
+  "total_revenue": {
+    "$numberLong": "8346850816"
+  },
+  "total_cash_per_share": 11.452,
+  "financial_currency": "HKD",
+  "short_name": "CHEVALIER INT'L",
+  "long_name": "Chevalier International Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/chevalier.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a62e"
+  },
+  "ticker": "0026-HK",
+  "name": "CHINA MOTOR BUS",
+  "category": "Equity",
+  "board_lot": 200,
+  "industry_x": "Properties",
+  "nominal": "89.150",
+  "turnover": "0.000",
+  "mkt_cap": "4.039B",
+  "pct_yield": "3.590",
+  "pe_ratio": "N/A",
+  "sector": null,
+  "country": null,
+  "website": null,
+  "industry_y": null,
+  "current_price": null,
+  "total_cash": null,
+  "total_debt": null,
+  "total_revenue": null,
+  "total_cash_per_share": null,
+  "financial_currency": null,
+  "short_name": null,
+  "long_name": null,
+  "exchange_timezone_name": null,
+  "quote_type": null,
+  "logo_url": null
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a62f"
+  },
+  "ticker": "0027-HK",
+  "name": "GALAXY ENT",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Hotels & Restaurants & Leisure",
+  "nominal": "43.600",
+  "turnover": "696.167M",
+  "mkt_cap": "190.078B",
+  "pct_yield": "0.688",
+  "pe_ratio": "142.951",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.galaxyentertainment.com",
+  "industry_y": "Resorts & Casinos",
+  "current_price": 43.6,
+  "total_cash": {
+    "$numberLong": "21145600000"
+  },
+  "total_debt": {
+    "$numberLong": "6966943744"
+  },
+  "total_revenue": {
+    "$numberLong": "19750361088"
+  },
+  "total_cash_per_share": 4.852,
+  "financial_currency": "HKD",
+  "short_name": "GALAXY ENT",
+  "long_name": "Galaxy Entertainment Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/galaxyentertainment.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a630"
+  },
+  "ticker": "0028-HK",
+  "name": "TIAN AN",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "3.930",
+  "turnover": "15,990",
+  "mkt_cap": "5.762B",
+  "pct_yield": "5.089",
+  "pe_ratio": "4.094",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.tiananchina.com",
+  "industry_y": "Real Estate—Development",
+  "current_price": 3.93,
+  "total_cash": {
+    "$numberLong": "4451599872"
+  },
+  "total_debt": {
+    "$numberLong": "8373541888"
+  },
+  "total_revenue": {
+    "$numberLong": "2574680064"
+  },
+  "total_cash_per_share": 3.036,
+  "financial_currency": "HKD",
+  "short_name": "TIAN AN",
+  "long_name": "Tian An China Investments Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/tiananchina.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a631"
+  },
+  "ticker": "0029-HK",
+  "name": "DYNAMIC HOLD",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Properties",
+  "nominal": "9.400",
+  "turnover": "225,600",
+  "mkt_cap": "2.234B",
+  "pct_yield": "0.160",
+  "pe_ratio": "N/A",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.dynamic.hk",
+  "industry_y": "Real Estate Services",
+  "current_price": 9.4,
+  "total_cash": 239660992,
+  "total_debt": 98408000,
+  "total_revenue": 76646000,
+  "total_cash_per_share": 1.008,
+  "financial_currency": "HKD",
+  "short_name": "DYNAMIC HOLD",
+  "long_name": "Dynamic Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/dynamic.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a632"
+  },
+  "ticker": "0030-HK",
+  "name": "BAN LOONG HOLD",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Food & Beverages",
+  "nominal": "0.250",
+  "turnover": "295,038",
+  "mkt_cap": "1.700B",
+  "pct_yield": "0.000",
+  "pe_ratio": "125.000",
+  "sector": "Financial Services",
+  "country": "Hong Kong",
+  "website": "https://www.0030hk.com",
+  "industry_y": "Capital Markets",
+  "current_price": 0.25,
+  "total_cash": 185091984,
+  "total_debt": 507197312,
+  "total_revenue": 1059867264,
+  "total_cash_per_share": 0.029,
+  "financial_currency": "HKD",
+  "short_name": "BAN LOONG HOLD",
+  "long_name": "Ban Loong Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/0030hk.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a633"
+  },
+  "ticker": "0031-HK",
+  "name": "CHINA AEROSPACE",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Industrials",
+  "nominal": "0.500",
+  "turnover": "463,981",
+  "mkt_cap": "1.543B",
+  "pct_yield": "4.000",
+  "pe_ratio": "4.460",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://www.casil-group.com",
+  "industry_y": "Electronic Components",
+  "current_price": 0.5,
+  "total_cash": 1862993024,
+  "total_debt": 1674502016,
+  "total_revenue": {
+    "$numberLong": "4745367040"
+  },
+  "total_cash_per_share": 0.604,
+  "financial_currency": "HKD",
+  "short_name": "CHINA AEROSPACE",
+  "long_name": "China Aerospace International Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/casil-group.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a634"
+  },
+  "ticker": "0032-HK",
+  "name": "CROSS-HAR(HOLD)",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Commercial & Professional Services",
+  "nominal": "10.900",
+  "turnover": "114,940",
+  "mkt_cap": "4.062B",
+  "pct_yield": "3.853",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Defensive",
+  "country": "Hong Kong",
+  "website": "https://www.crossharbour.com.hk",
+  "industry_y": "Education & Training Services",
+  "current_price": 10.9,
+  "total_cash": {
+    "$numberLong": "4167798016"
+  },
+  "total_debt": 97670000,
+  "total_revenue": -909000,
+  "total_cash_per_share": 11.183,
+  "financial_currency": "HKD",
+  "short_name": "CROSS-HAR(HOLD)",
+  "long_name": "The Cross-Harbour (Holdings) Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/crossharbour.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a635"
+  },
+  "ticker": "0033-HK",
+  "name": "AMBER HILL FIN",
+  "category": "Equity",
+  "board_lot": 6000,
+  "industry_x": "Household & Personal Products",
+  "nominal": "1.840",
+  "turnover": "730.800",
+  "mkt_cap": "988.531M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Financial Services",
+  "country": "Hong Kong",
+  "website": "https://www.ahfh.com.hk",
+  "industry_y": "Asset Management",
+  "current_price": 1.84,
+  "total_cash": 1391646976,
+  "total_debt": 1279719040,
+  "total_revenue": 394936768,
+  "total_cash_per_share": 2.59,
+  "financial_currency": "HKD",
+  "short_name": "AMBER HILL FIN",
+  "long_name": "Amber Hill Financial Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/ahfh.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a636"
+  },
+  "ticker": "0034-HK",
+  "name": "KOWLOON DEV",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "10.380",
+  "turnover": "1.541M",
+  "mkt_cap": "12.213B",
+  "pct_yield": "7.900",
+  "pe_ratio": "5.521",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.kdc.com.hk",
+  "industry_y": "Real Estate—Development",
+  "current_price": 10.38,
+  "total_cash": 1110032000,
+  "total_debt": {
+    "$numberLong": "15949596672"
+  },
+  "total_revenue": 2050387968,
+  "total_cash_per_share": 0.943,
+  "financial_currency": "HKD",
+  "short_name": "KOWLOON DEV",
+  "long_name": "Kowloon Development Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/kdc.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a637"
+  },
+  "ticker": "0035-HK",
+  "name": "FE CONSORT INTL",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "2.440",
+  "turnover": "2.228M",
+  "mkt_cap": "5.904B",
+  "pct_yield": "7.787",
+  "pe_ratio": "10.655",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.fecil.com.hk",
+  "industry_y": "Real Estate—Development",
+  "current_price": 2.44,
+  "total_cash": {
+    "$numberLong": "8413706240"
+  },
+  "total_debt": {
+    "$numberLong": "29100183552"
+  },
+  "total_revenue": {
+    "$numberLong": "5953041920"
+  },
+  "total_cash_per_share": 3.513,
+  "financial_currency": "HKD",
+  "short_name": "FE CONSORT INTL",
+  "long_name": "Far East Consortium International Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/fecil.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a638"
+  },
+  "ticker": "0036-HK",
+  "name": "FE HLDGS INTL",
+  "category": "Equity",
+  "board_lot": 3000,
+  "industry_x": "Properties",
+  "nominal": "0.120",
+  "turnover": "15,906",
+  "mkt_cap": "130.694M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.0036.com.hk",
+  "industry_y": "Apparel Manufacturing",
+  "current_price": 0.12,
+  "total_cash": 28405000,
+  "total_debt": 619278016,
+  "total_revenue": 24825000,
+  "total_cash_per_share": 0.026,
+  "financial_currency": "HKD",
+  "short_name": "FE HLDGS INTL",
+  "long_name": "Far East Holdings International Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/0036.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a639"
+  },
+  "ticker": "0037-HK",
+  "name": "FE HOTELS",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Properties",
+  "nominal": "0.890",
+  "turnover": "1.161M",
+  "mkt_cap": "666.192M",
+  "pct_yield": "0.000",
+  "pe_ratio": "68.992",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.tricor.com.hk/webservice/00037",
+  "industry_y": "Real Estate Services",
+  "current_price": 0.89,
+  "total_cash": 50077888,
+  "total_debt": 40688664,
+  "total_revenue": 52574784,
+  "total_cash_per_share": 0.068,
+  "financial_currency": "HKD",
+  "short_name": "FE HOTELS",
+  "long_name": "Far East Hotels and Entertainment Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/tricor.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a63a"
+  },
+  "ticker": "0038-HK",
+  "name": "FIRST TRACTOR",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Industrials",
+  "nominal": "3.690",
+  "turnover": "3.460M",
+  "mkt_cap": "1.446B",
+  "pct_yield": "3.900",
+  "pe_ratio": "7.973",
+  "sector": "Industrials",
+  "country": "China",
+  "website": "https://www.first-tractor.com.cn",
+  "industry_y": "Farm & Heavy Construction Machinery",
+  "current_price": 3.69,
+  "total_cash": {
+    "$numberLong": "4857638400"
+  },
+  "total_debt": 563194944,
+  "total_revenue": {
+    "$numberLong": "10333641728"
+  },
+  "total_cash_per_share": 4.323,
+  "financial_currency": "CNY",
+  "short_name": "FIRST TRACTOR",
+  "long_name": "First Tractor Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/first-tractor.com.cn"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a63b"
+  },
+  "ticker": "0039-HK",
+  "name": "CH BEIDAHUANG",
+  "category": "Equity",
+  "board_lot": 8000,
+  "industry_x": "Food & Beverages",
+  "nominal": "0.071",
+  "turnover": "1.312M",
+  "mkt_cap": "441.984M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Defensive",
+  "country": "Hong Kong",
+  "website": "https://chinabeidahuang.com",
+  "industry_y": "Grocery Stores",
+  "current_price": 0.071,
+  "total_cash": 27433000,
+  "total_debt": 1239504000,
+  "total_revenue": 928785024,
+  "total_cash_per_share": 0.004,
+  "financial_currency": "HKD",
+  "short_name": "CH BEIDAHUANG",
+  "long_name": "China Beidahuang Industry Group Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/chinabeidahuang.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a63c"
+  },
+  "ticker": "0040-HK",
+  "name": "GOLD PEAK",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Household Appliances & Electronics",
+  "nominal": "0.630",
+  "turnover": "414,180",
+  "mkt_cap": "576.749M",
+  "pct_yield": "0.000",
+  "pe_ratio": "4.083",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://www.goldpeak.com",
+  "industry_y": "Electronic Components",
+  "current_price": 0.63,
+  "total_cash": 978668032,
+  "total_debt": {
+    "$numberLong": "4030920960"
+  },
+  "total_revenue": {
+    "$numberLong": "7159429120"
+  },
+  "total_cash_per_share": 1.247,
+  "financial_currency": "HKD",
+  "short_name": "GOLD PEAK",
+  "long_name": "Gold Peak Technology Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/goldpeak.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a63d"
+  },
+  "ticker": "0041-HK",
+  "name": "GREAT EAGLE H",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "17.380",
+  "turnover": "1.189M",
+  "mkt_cap": "12.705B",
+  "pct_yield": "7.653",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.greateagle.com.hk",
+  "industry_y": "Lodging",
+  "current_price": 17.38,
+  "total_cash": {
+    "$numberLong": "7096121856"
+  },
+  "total_debt": {
+    "$numberLong": "33421637632"
+  },
+  "total_revenue": {
+    "$numberLong": "7830429184"
+  },
+  "total_cash_per_share": 9.707,
+  "financial_currency": "HKD",
+  "short_name": "GREAT EAGLE H",
+  "long_name": "Great Eagle Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/greateagle.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a63e"
+  },
+  "ticker": "0042-HK",
+  "name": "NE ELECTRIC",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Industrials",
+  "nominal": "0.260",
+  "turnover": "7,800",
+  "mkt_cap": "67.067M",
+  "pct_yield": "0.000",
+  "pe_ratio": "10.958",
+  "sector": "Consumer Cyclical",
+  "country": "China",
+  "website": "https://nee.wsfg.hk",
+  "industry_y": "Lodging",
+  "current_price": 0.26,
+  "total_cash": 13602160,
+  "total_debt": 29861900,
+  "total_revenue": 81390712,
+  "total_cash_per_share": 0.016,
+  "financial_currency": "CNY",
+  "short_name": "NE ELECTRIC",
+  "long_name": "Northeast Electric Development Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/nee.wsfg.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a63f"
+  },
+  "ticker": "0045-HK",
+  "name": "HK&S HOTELS",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Hotels & Restaurants & Leisure",
+  "nominal": "7.710",
+  "turnover": "3.113M",
+  "mkt_cap": "12.717B",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.hshgroup.com",
+  "industry_y": "Lodging",
+  "current_price": 7.71,
+  "total_cash": 479000000,
+  "total_debt": {
+    "$numberLong": "16487999488"
+  },
+  "total_revenue": {
+    "$numberLong": "3460999936"
+  },
+  "total_cash_per_share": 0.29,
+  "financial_currency": "HKD",
+  "short_name": "HK&S HOTELS",
+  "long_name": "The Hongkong and Shanghai Hotels, Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hshgroup.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a640"
+  },
+  "ticker": "0046-HK",
+  "name": "COMPUTER & TECH",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Software & Services",
+  "nominal": "2.510",
+  "turnover": "125,500",
+  "mkt_cap": "626.216M",
+  "pct_yield": "6.773",
+  "pe_ratio": "11.535",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://www.ctil.com",
+  "industry_y": "Information Technology Services",
+  "current_price": 2.51,
+  "total_cash": 298396992,
+  "total_debt": 18248000,
+  "total_revenue": 265504000,
+  "total_cash_per_share": 1.207,
+  "financial_currency": "HKD",
+  "short_name": "COMPUTER & TECH",
+  "long_name": "Computer And Technologies Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/ctil.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a641"
+  },
+  "ticker": "0048-HK",
+  "name": "C AUTO INT DECO",
+  "category": "Equity",
+  "board_lot": 10000,
+  "industry_x": "Automobiles",
+  "nominal": "0.600",
+  "turnover": "0.000",
+  "mkt_cap": "105.069M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.hklistco.com/48",
+  "industry_y": "Textile Manufacturing",
+  "current_price": 0.6,
+  "total_cash": 62688000,
+  "total_debt": 34908000,
+  "total_revenue": 181700992,
+  "total_cash_per_share": 0.375,
+  "financial_currency": "CNY",
+  "short_name": "C AUTO INT DECO",
+  "long_name": "China Automotive Interior Decoration Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hklistco.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a642"
+  },
+  "ticker": "0050-HK",
+  "name": "HK FERRY (HOLD)",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "7.030",
+  "turnover": "385,500",
+  "mkt_cap": "2.505B",
+  "pct_yield": "17.781",
+  "pe_ratio": "21.303",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.hkf.com",
+  "industry_y": "Real Estate—Diversified",
+  "current_price": 7.03,
+  "total_cash": 1683031040,
+  "total_debt": 4174000,
+  "total_revenue": 244196992,
+  "total_cash_per_share": 4.724,
+  "financial_currency": "HKD",
+  "short_name": "HK FERRY (HOLD)",
+  "long_name": "Hong Kong Ferry (Holdings) Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hkf.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a643"
+  },
+  "ticker": "0051-HK",
+  "name": "HARBOUR CENTRE",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "7.000",
+  "turnover": "14,000",
+  "mkt_cap": "4.961B",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.harbourcentre.com.hk",
+  "industry_y": "Real Estate—Development",
+  "current_price": 7,
+  "total_cash": 1088999936,
+  "total_debt": 1450000000,
+  "total_revenue": {
+    "$numberLong": "4483999744"
+  },
+  "total_cash_per_share": 1.536,
+  "financial_currency": "HKD",
+  "short_name": "HARBOUR CENTRE",
+  "long_name": "Harbour Centre Development Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/harbourcentre.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a644"
+  },
+  "ticker": "0052-HK",
+  "name": "FAIRWOOD HOLD",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Hotels & Restaurants & Leisure",
+  "nominal": "13.980",
+  "turnover": "462,200",
+  "mkt_cap": "1.811B",
+  "pct_yield": "6.080",
+  "pe_ratio": "11.789",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.fairwoodholdings.com.hk",
+  "industry_y": "Restaurants",
+  "current_price": 13.98,
+  "total_cash": 735633984,
+  "total_debt": 1108606976,
+  "total_revenue": {
+    "$numberLong": "2858087936"
+  },
+  "total_cash_per_share": 5.678,
+  "financial_currency": "HKD",
+  "short_name": "FAIRWOOD HOLD",
+  "long_name": "Fairwood Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/fairwoodholdings.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a645"
+  },
+  "ticker": "0053-HK",
+  "name": "GUOCO GROUP",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "81.200",
+  "turnover": "0.000",
+  "mkt_cap": "26.719B",
+  "pct_yield": "2.463",
+  "pe_ratio": "10.450",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.guoco.com",
+  "industry_y": "Conglomerates",
+  "current_price": 81.2,
+  "total_cash": {
+    "$numberLong": "2975789056"
+  },
+  "total_debt": {
+    "$numberLong": "6388227072"
+  },
+  "total_revenue": 1673165952,
+  "total_cash_per_share": 9.044,
+  "financial_currency": "USD",
+  "short_name": "GUOCO GROUP",
+  "long_name": "Guoco Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/guoco.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a646"
+  },
+  "ticker": "0055-HK",
+  "name": "NEWAY GROUP",
+  "category": "Equity",
+  "board_lot": 10000,
+  "industry_x": "Industrials",
+  "nominal": "0.375",
+  "turnover": "0.000",
+  "mkt_cap": "95.115M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.newaygroup.com.hk",
+  "industry_y": "Specialty Business Services",
+  "current_price": 0.375,
+  "total_cash": 173701072,
+  "total_debt": 142247888,
+  "total_revenue": 623576704,
+  "total_cash_per_share": 0.685,
+  "financial_currency": "HKD",
+  "short_name": "NEWAY GROUP",
+  "long_name": "Neway Group Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/newaygroup.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a647"
+  },
+  "ticker": "0057-HK",
+  "name": "CHEN HSONG HOLD",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Industrials",
+  "nominal": "2.380",
+  "turnover": "547,880",
+  "mkt_cap": "1.501B",
+  "pct_yield": "7.017",
+  "pe_ratio": "7.391",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://chenhsong.com",
+  "industry_y": "Specialty Industrial Machinery",
+  "current_price": 2.38,
+  "total_cash": 956585984,
+  "total_debt": 24696000,
+  "total_revenue": {
+    "$numberLong": "2887563008"
+  },
+  "total_cash_per_share": 1.517,
+  "financial_currency": "HKD",
+  "short_name": "CHEN HSONG HOLD",
+  "long_name": "Chen Hsong Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/chenhsong.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a648"
+  },
+  "ticker": "0058-HK",
+  "name": "SUNWAY INT'L",
+  "category": "Equity",
+  "board_lot": 20000,
+  "industry_x": "Construction",
+  "nominal": "0.160",
+  "turnover": "0.000",
+  "mkt_cap": "28.736M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Basic Materials",
+  "country": "Hong Kong",
+  "website": "https://www.hk0058.com",
+  "industry_y": "Building Materials",
+  "current_price": 0.16,
+  "total_cash": 9460000,
+  "total_debt": 43526000,
+  "total_revenue": 515907008,
+  "total_cash_per_share": 0.053,
+  "financial_currency": "HKD",
+  "short_name": "SUNWAY INT'L",
+  "long_name": "Sunway International Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hk0058.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a649"
+  },
+  "ticker": "0059-HK",
+  "name": "SKYFAME REALTY",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Properties",
+  "nominal": "0.085",
+  "turnover": "9.788M",
+  "mkt_cap": "717.938M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Real Estate",
+  "country": "China",
+  "website": "https://www.skyfame.com.cn",
+  "industry_y": "Real Estate—Development",
+  "current_price": 0.085,
+  "total_cash": 1557997952,
+  "total_debt": {
+    "$numberLong": "11665668096"
+  },
+  "total_revenue": {
+    "$numberLong": "7662876160"
+  },
+  "total_cash_per_share": 0.184,
+  "financial_currency": "CNY",
+  "short_name": "SKYFAME REALTY",
+  "long_name": "Skyfame Realty (Holdings) Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/skyfame.com.cn"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a64a"
+  },
+  "ticker": "0060-HK",
+  "name": "HK FOOD INV",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Food & Beverages",
+  "nominal": "0.540",
+  "turnover": "0.000",
+  "mkt_cap": "140.176M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Defensive",
+  "country": "Hong Kong",
+  "website": "https://www.hongkongfoodinvestment.com.hk",
+  "industry_y": "Food Distribution",
+  "current_price": 0.54,
+  "total_cash": 143510000,
+  "total_debt": 52147000,
+  "total_revenue": 160598000,
+  "total_cash_per_share": 0.553,
+  "financial_currency": "HKD",
+  "short_name": "HK FOOD INV",
+  "long_name": "Hong Kong Food Investment Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hongkongfoodinvestment.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a64b"
+  },
+  "ticker": "0061-HK",
+  "name": "GREEN LEADER",
+  "category": "Equity",
+  "board_lot": 20000,
+  "industry_x": "Coal",
+  "nominal": "0.110",
+  "turnover": "247,752",
+  "mkt_cap": "57.889M",
+  "pct_yield": "0.000",
+  "pe_ratio": "0.220",
+  "sector": "Basic Materials",
+  "country": "Hong Kong",
+  "website": "https://www.greenleader.hk",
+  "industry_y": "Coking Coal",
+  "current_price": 0.11,
+  "total_cash": 146140992,
+  "total_debt": {
+    "$numberLong": "5014077952"
+  },
+  "total_revenue": 1612857984,
+  "total_cash_per_share": 0.278,
+  "financial_currency": "HKD",
+  "short_name": "GREEN LEADER",
+  "long_name": "Green Leader Holdings Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/greenleader.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a64c"
+  },
+  "ticker": "0062-HK",
+  "name": "TRANSPORT INT'L",
+  "category": "Equity",
+  "board_lot": 400,
+  "industry_x": "Transportation",
+  "nominal": "12.160",
+  "turnover": "6.834M",
+  "mkt_cap": "5.660B",
+  "pct_yield": "4.112",
+  "pe_ratio": "22.943",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.tih.hk",
+  "industry_y": "Railroads",
+  "current_price": 12.16,
+  "total_cash": 1583756032,
+  "total_debt": {
+    "$numberLong": "3139367936"
+  },
+  "total_revenue": {
+    "$numberLong": "7202008064"
+  },
+  "total_cash_per_share": 3.402,
+  "financial_currency": "HKD",
+  "short_name": "TRANSPORT INT'L",
+  "long_name": "Transport International Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/tih.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a64d"
+  },
+  "ticker": "0063-HK",
+  "name": "CHI ASIA VALLEY",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "0.079",
+  "turnover": "160.000",
+  "mkt_cap": "222.709M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.00063.cn",
+  "industry_y": "Real Estate Services",
+  "current_price": 0.079,
+  "total_cash": 5991000,
+  "total_debt": 230998000,
+  "total_revenue": 37810000,
+  "total_cash_per_share": 0.002,
+  "financial_currency": "HKD",
+  "short_name": "CHI ASIA VALLEY",
+  "long_name": "China Asia Valley Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/00063.cn"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a64e"
+  },
+  "ticker": "0064-HK",
+  "name": "GET NICE",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Other Financials",
+  "nominal": "0.158",
+  "turnover": "72,847",
+  "mkt_cap": "1.527B",
+  "pct_yield": "6.329",
+  "pe_ratio": "8.061",
+  "sector": "Financial Services",
+  "country": "Hong Kong",
+  "website": "https://www.getnice.com.hk",
+  "industry_y": "Capital Markets",
+  "current_price": 0.158,
+  "total_cash": {
+    "$numberLong": "2150548992"
+  },
+  "total_debt": 98549000,
+  "total_revenue": 490064000,
+  "total_cash_per_share": 0.223,
+  "financial_currency": "HKD",
+  "short_name": "GET NICE",
+  "long_name": "Get Nice Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/getnice.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a64f"
+  },
+  "ticker": "0065-HK",
+  "name": "GRAND OCEAN AR",
+  "category": "Equity",
+  "board_lot": 4000,
+  "industry_x": "Coal",
+  "nominal": "0.182",
+  "turnover": "0.000",
+  "mkt_cap": "273.633M",
+  "pct_yield": "0.000",
+  "pe_ratio": "18.958",
+  "sector": "Energy",
+  "country": "Hong Kong",
+  "website": "https://grandocean65.com",
+  "industry_y": "Thermal Coal",
+  "current_price": 0.182,
+  "total_cash": 92996000,
+  "total_debt": 596000,
+  "total_revenue": 183016000,
+  "total_cash_per_share": 0.062,
+  "financial_currency": "HKD",
+  "short_name": "GRAND OCEAN AR",
+  "long_name": "Grand Ocean Advanced Resources Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/grandocean65.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a650"
+  },
+  "ticker": "0066-HK",
+  "name": "MTR CORPORATION",
+  "category": "Equity",
+  "board_lot": 500,
+  "industry_x": "Transportation",
+  "nominal": "41.700",
+  "turnover": "112.655M",
+  "mkt_cap": "258.267B",
+  "pct_yield": "3.046",
+  "pe_ratio": "26.903",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.mtr.com.hk",
+  "industry_y": "Railroads",
+  "current_price": 41.7,
+  "total_cash": {
+    "$numberLong": "10853999616"
+  },
+  "total_debt": {
+    "$numberLong": "43898998784"
+  },
+  "total_revenue": {
+    "$numberLong": "47202000896"
+  },
+  "total_cash_per_share": 1.752,
+  "financial_currency": "HKD",
+  "short_name": "MTR CORPORATION",
+  "long_name": "MTR Corporation Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/mtr.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a651"
+  },
+  "ticker": "0068-HK",
+  "name": "LEE HING",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Other Financials",
+  "nominal": "0.520",
+  "turnover": "0.000",
+  "mkt_cap": "76.326M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": null,
+  "country": null,
+  "website": null,
+  "industry_y": null,
+  "current_price": null,
+  "total_cash": null,
+  "total_debt": null,
+  "total_revenue": null,
+  "total_cash_per_share": null,
+  "financial_currency": null,
+  "short_name": null,
+  "long_name": null,
+  "exchange_timezone_name": null,
+  "quote_type": null,
+  "logo_url": null
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a652"
+  },
+  "ticker": "0069-HK",
+  "name": "SHANGRI-LA ASIA",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Hotels & Restaurants & Leisure",
+  "nominal": "6.220",
+  "turnover": "1.328M",
+  "mkt_cap": "22.302B",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.shangri-la.com",
+  "industry_y": "Lodging",
+  "current_price": 6.22,
+  "total_cash": 802116992,
+  "total_debt": {
+    "$numberLong": "6293420032"
+  },
+  "total_revenue": 1241048960,
+  "total_cash_per_share": 0.225,
+  "financial_currency": "USD",
+  "short_name": "SHANGRI-LA ASIA",
+  "long_name": "Shangri-La Asia Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/shangri-la.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a653"
+  },
+  "ticker": "0070-HK",
+  "name": "RICH GOLDMAN",
+  "category": "Equity",
+  "board_lot": 10000,
+  "industry_x": "Hotels & Restaurants & Leisure",
+  "nominal": "0.056",
+  "turnover": "0.000",
+  "mkt_cap": "108.574M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.richgoldman.com.hk",
+  "industry_y": "Resorts & Casinos",
+  "current_price": 0.056,
+  "total_cash": 186712992,
+  "total_debt": 0,
+  "total_revenue": 59003000,
+  "total_cash_per_share": 0.096,
+  "financial_currency": "HKD",
+  "short_name": "RICH GOLDMAN",
+  "long_name": "Rich Goldman Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/richgoldman.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a654"
+  },
+  "ticker": "0071-HK",
+  "name": "MIRAMAR HOTEL",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Hotels & Restaurants & Leisure",
+  "nominal": "14.420",
+  "turnover": "1.723M",
+  "mkt_cap": "9.964B",
+  "pct_yield": "3.190",
+  "pe_ratio": "30.042",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.miramar-group.com",
+  "industry_y": "Conglomerates",
+  "current_price": 14.42,
+  "total_cash": {
+    "$numberLong": "5310251008"
+  },
+  "total_debt": 86414000,
+  "total_revenue": 1247025024,
+  "total_cash_per_share": 7.685,
+  "financial_currency": "HKD",
+  "short_name": "MIRAMAR HOTEL",
+  "long_name": "Miramar Hotel and Investment Company, Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/miramar-group.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a655"
+  },
+  "ticker": "0072-HK",
+  "name": "META MEDIA",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Media",
+  "nominal": "0.350",
+  "turnover": "80,250",
+  "mkt_cap": "153.423M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Communication Services",
+  "country": "Hong Kong",
+  "website": "https://www.modernmedia.com.cn",
+  "industry_y": "Advertising Agencies",
+  "current_price": 0.35,
+  "total_cash": 48007000,
+  "total_debt": 210362000,
+  "total_revenue": 424196000,
+  "total_cash_per_share": 0.111,
+  "financial_currency": "CNY",
+  "short_name": "META MEDIA",
+  "long_name": "Meta Media Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/modernmedia.com.cn"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a656"
+  },
+  "ticker": "0073-HK",
+  "name": "ASIAN CITRUS",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Agricultural Products",
+  "nominal": "0.100",
+  "turnover": "82,642",
+  "mkt_cap": "249.964M",
+  "pct_yield": "0.000",
+  "pe_ratio": "28.379",
+  "sector": "Consumer Defensive",
+  "country": "Hong Kong",
+  "website": "https://www.asian-citrus.com",
+  "industry_y": "Farm Products",
+  "current_price": 0.1,
+  "total_cash": 63118000,
+  "total_debt": 0,
+  "total_revenue": 173110000,
+  "total_cash_per_share": 0.025,
+  "financial_currency": "CNY",
+  "short_name": "ASIAN CITRUS",
+  "long_name": "Asian Citrus Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/asian-citrus.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a657"
+  },
+  "ticker": "0075-HK",
+  "name": "Y.T. REALTY",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Properties",
+  "nominal": "1.360",
+  "turnover": "46,197",
+  "mkt_cap": "1.087B",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.ytrealtygroup.com.hk",
+  "industry_y": "Real Estate—Development",
+  "current_price": 1.36,
+  "total_cash": 1675438976,
+  "total_debt": {
+    "$numberLong": "2866169088"
+  },
+  "total_revenue": 1224263040,
+  "total_cash_per_share": 2.095,
+  "financial_currency": "HKD",
+  "short_name": "Y.T. REALTY",
+  "long_name": "Y. T. Realty Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/ytrealtygroup.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a658"
+  },
+  "ticker": "0076-HK",
+  "name": "ELATE HOLDINGS",
+  "category": "Equity",
+  "board_lot": 4000,
+  "industry_x": "Industrials",
+  "nominal": "0.033",
+  "turnover": "33,000",
+  "mkt_cap": "231.219M",
+  "pct_yield": "0.000",
+  "pe_ratio": "6.006",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://www.elate.hk",
+  "industry_y": "Electronic Components",
+  "current_price": 0.033,
+  "total_cash": 18542000,
+  "total_debt": 507000,
+  "total_revenue": 101259000,
+  "total_cash_per_share": 0.003,
+  "financial_currency": "USD",
+  "short_name": "ELATE HOLDINGS",
+  "long_name": "Elate Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/elate.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a659"
+  },
+  "ticker": "0077-HK",
+  "name": "AMS TRANSPORT",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Transportation",
+  "nominal": "0.680",
+  "turnover": "0.000",
+  "mkt_cap": "184.901M",
+  "pct_yield": "10.294",
+  "pe_ratio": "8.468",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.amspt.com",
+  "industry_y": "Railroads",
+  "current_price": 0.68,
+  "total_cash": 39447000,
+  "total_debt": 265568992,
+  "total_revenue": 337264000,
+  "total_cash_per_share": 0.145,
+  "financial_currency": "HKD",
+  "short_name": "AMS TRANSPORT",
+  "long_name": "AMS Public Transport Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/amspt.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a65a"
+  },
+  "ticker": "0078-HK",
+  "name": "REGAL INT'L",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Hotels & Restaurants & Leisure",
+  "nominal": "3.190",
+  "turnover": "38,559",
+  "mkt_cap": "2.867B",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.regal.com.hk",
+  "industry_y": "Lodging",
+  "current_price": 3.19,
+  "total_cash": {
+    "$numberLong": "3083800064"
+  },
+  "total_debt": {
+    "$numberLong": "15245299712"
+  },
+  "total_revenue": 1016700032,
+  "total_cash_per_share": 3.431,
+  "financial_currency": "HKD",
+  "short_name": "REGAL INT'L",
+  "long_name": "Regal Hotels International Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/regal.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a65b"
+  },
+  "ticker": "0079-HK",
+  "name": "CENTURY LEGEND",
+  "category": "Equity",
+  "board_lot": 4000,
+  "industry_x": "Commercial & Professional Services",
+  "nominal": "0.122",
+  "turnover": "5,996",
+  "mkt_cap": "39.781M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.clh.com.hk",
+  "industry_y": "Personal Services",
+  "current_price": 0.122,
+  "total_cash": 98041000,
+  "total_debt": 226598000,
+  "total_revenue": 36492000,
+  "total_cash_per_share": 0.301,
+  "financial_currency": "HKD",
+  "short_name": "CENTURY LEGEND",
+  "long_name": "Century Legend (Holdings) Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/clh.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a65c"
+  },
+  "ticker": "0080-HK",
+  "name": "CNEWECON FUND",
+  "category": "Equity",
+  "board_lot": 10000,
+  "industry_x": "Other Financials",
+  "nominal": "0.180",
+  "turnover": "10,790",
+  "mkt_cap": "233.338M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Financial Services",
+  "country": "Hong Kong",
+  "website": "https://www.chinaneweconomyfund.com",
+  "industry_y": "Asset Management",
+  "current_price": 0.18,
+  "total_cash": 111631816,
+  "total_debt": 924560,
+  "total_revenue": 2547989,
+  "total_cash_per_share": 0.129,
+  "financial_currency": "HKD",
+  "short_name": "CNEWECON FUND",
+  "long_name": "China New Economy Fund Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/chinaneweconomyfund.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a65d"
+  },
+  "ticker": "0081-HK",
+  "name": "CH OVS G OCEANS",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "4.140",
+  "turnover": "9.077M",
+  "mkt_cap": "14.173B",
+  "pct_yield": "9.179",
+  "pe_ratio": "2.390",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.cogogl.com.hk",
+  "industry_y": "Real Estate—Diversified",
+  "current_price": 4.14,
+  "total_cash": {
+    "$numberLong": "19876022272"
+  },
+  "total_debt": {
+    "$numberLong": "48293699584"
+  },
+  "total_revenue": {
+    "$numberLong": "53830471680"
+  },
+  "total_cash_per_share": 5.806,
+  "financial_currency": "CNY",
+  "short_name": "CH OVS G OCEANS",
+  "long_name": "China Overseas Grand Oceans Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/cogogl.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a65e"
+  },
+  "ticker": "0082-HK",
+  "name": "CRAZY SPORTS",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Software & Services",
+  "nominal": "0.315",
+  "turnover": "1.429M",
+  "mkt_cap": "1.426B",
+  "pct_yield": "0.000",
+  "pe_ratio": "9.078",
+  "sector": "Consumer Cyclical",
+  "country": "China",
+  "website": "https://ir.crazysports.com",
+  "industry_y": "Gambling",
+  "current_price": 0.315,
+  "total_cash": 92074000,
+  "total_debt": 19066000,
+  "total_revenue": 511217984,
+  "total_cash_per_share": 0.02,
+  "financial_currency": "HKD",
+  "short_name": "CRAZY SPORTS",
+  "long_name": "Crazy Sports Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/ir.crazysports.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a65f"
+  },
+  "ticker": "0083-HK",
+  "name": "SINO LAND",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Properties",
+  "nominal": "11.120",
+  "turnover": "44.440M",
+  "mkt_cap": "85.826B",
+  "pct_yield": "7.554",
+  "pe_ratio": "8.361",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.sino.com",
+  "industry_y": "Real Estate—Development",
+  "current_price": 11.12,
+  "total_cash": {
+    "$numberLong": "42045104128"
+  },
+  "total_debt": {
+    "$numberLong": "6017111552"
+  },
+  "total_revenue": {
+    "$numberLong": "31339950080"
+  },
+  "total_cash_per_share": 5.521,
+  "financial_currency": "HKD",
+  "short_name": "SINO LAND",
+  "long_name": "Sino Land Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/sino.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a660"
+  },
+  "ticker": "0084-HK",
+  "name": "STELUX HOLDINGS",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Jewellery & Watches",
+  "nominal": "0.063",
+  "turnover": "0.000",
+  "mkt_cap": "65.928M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.stelux.com",
+  "industry_y": "Luxury Goods",
+  "current_price": 0.063,
+  "total_cash": 168024000,
+  "total_debt": 626588992,
+  "total_revenue": 697374976,
+  "total_cash_per_share": 0.161,
+  "financial_currency": "HKD",
+  "short_name": "STELUX HOLDINGS",
+  "long_name": "Stelux Holdings International Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/stelux.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a661"
+  },
+  "ticker": "0085-HK",
+  "name": "CE HUADA TECH",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Semiconductors",
+  "nominal": "0.790",
+  "turnover": "2.676M",
+  "mkt_cap": "1.604B",
+  "pct_yield": "2.405",
+  "pe_ratio": "12.783",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://www.cecht.com.cn",
+  "industry_y": "Semiconductors",
+  "current_price": 0.79,
+  "total_cash": 1005824000,
+  "total_debt": 731571008,
+  "total_revenue": 1681654016,
+  "total_cash_per_share": 0.496,
+  "financial_currency": "HKD",
+  "short_name": "CE HUADA TECH",
+  "long_name": "China Electronics Huada Technology Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/cecht.com.cn"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a662"
+  },
+  "ticker": "0086-HK",
+  "name": "SUN HUNG KAI CO",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Other Financials",
+  "nominal": "3.620",
+  "turnover": "2.485M",
+  "mkt_cap": "7.141B",
+  "pct_yield": "8.287",
+  "pe_ratio": "2.537",
+  "sector": "Financial Services",
+  "country": "Hong Kong",
+  "website": "https://www.shkco.com",
+  "industry_y": "Capital Markets",
+  "current_price": 3.62,
+  "total_cash": {
+    "$numberLong": "12710400000"
+  },
+  "total_debt": {
+    "$numberLong": "18900299776"
+  },
+  "total_revenue": {
+    "$numberLong": "3002700032"
+  },
+  "total_cash_per_share": 6.441,
+  "financial_currency": "HKD",
+  "short_name": "SUN HUNG KAI CO",
+  "long_name": "Sun Hung Kai & Co. Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/shkco.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a663"
+  },
+  "ticker": "0087-HK",
+  "name": "SWIRE PACIFIC B",
+  "category": "Equity",
+  "board_lot": 2500,
+  "industry_x": "Conglomerates",
+  "nominal": "8.010",
+  "turnover": "1.582M",
+  "mkt_cap": "23.885B",
+  "pct_yield": "6.492",
+  "pe_ratio": "17.800",
+  "sector": "Industrials",
+  "country": "Hong Kong",
+  "website": "https://www.swirepacific.com",
+  "industry_y": "Conglomerates",
+  "current_price": 8.01,
+  "total_cash": {
+    "$numberLong": "22894000128"
+  },
+  "total_debt": {
+    "$numberLong": "68252999680"
+  },
+  "total_revenue": {
+    "$numberLong": "90802003968"
+  },
+  "total_cash_per_share": 15.247,
+  "financial_currency": "HKD",
+  "short_name": "SWIRE PACIFIC B",
+  "long_name": "Swire Pacific Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/swirepacific.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a664"
+  },
+  "ticker": "0088-HK",
+  "name": "TAI CHEUNG HOLD",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "4.550",
+  "turnover": "4,550",
+  "mkt_cap": "2.810B",
+  "pct_yield": "5.275",
+  "pe_ratio": "N/A",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.taicheung.com",
+  "industry_y": "Real Estate—Development",
+  "current_price": 4.55,
+  "total_cash": 1992300032,
+  "total_debt": 138100000,
+  "total_revenue": 147100000,
+  "total_cash_per_share": 3.226,
+  "financial_currency": "HKD",
+  "short_name": "TAI CHEUNG HOLD",
+  "long_name": "Tai Cheung Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/taicheung.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a665"
+  },
+  "ticker": "0089-HK",
+  "name": "TAI SANG LAND",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Properties",
+  "nominal": "4.090",
+  "turnover": "0.000",
+  "mkt_cap": "1.177B",
+  "pct_yield": "5.379",
+  "pe_ratio": "1.859",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.tsld.com",
+  "industry_y": "Real Estate Services",
+  "current_price": 4.09,
+  "total_cash": 112184000,
+  "total_debt": {
+    "$numberLong": "2511480064"
+  },
+  "total_revenue": 407024000,
+  "total_cash_per_share": 0.39,
+  "financial_currency": "HKD",
+  "short_name": "TAI SANG LAND",
+  "long_name": "Tai Sang Land Development Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/tsld.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a666"
+  },
+  "ticker": "0090-HK",
+  "name": "PUXING ENERGY",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Utilities",
+  "nominal": "0.630",
+  "turnover": "0.000",
+  "mkt_cap": "288.918M",
+  "pct_yield": "8.889",
+  "pe_ratio": "2.373",
+  "sector": "Utilities",
+  "country": "China",
+  "website": "https://www.pxcleanenergy.com",
+  "industry_y": "Utilities—Renewable",
+  "current_price": 0.63,
+  "total_cash": 76087000,
+  "total_debt": 810902016,
+  "total_revenue": 601572992,
+  "total_cash_per_share": 0.166,
+  "financial_currency": "CNY",
+  "short_name": "PUXING ENERGY",
+  "long_name": "Puxing Energy Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/pxcleanenergy.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a667"
+  },
+  "ticker": "0091-HK",
+  "name": "GOLDEN CEN INTL",
+  "category": "Equity",
+  "board_lot": 10000,
+  "industry_x": "Oil & Gas",
+  "nominal": "0.179",
+  "turnover": "0.000",
+  "mkt_cap": "797.301M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://www.gci.com.hk",
+  "industry_y": "Electronics & Computer Distribution",
+  "current_price": 0.179,
+  "total_cash": 113105000,
+  "total_debt": 224583008,
+  "total_revenue": 36931000,
+  "total_cash_per_share": 0.025,
+  "financial_currency": "HKD",
+  "short_name": "GOLDEN CEN INTL",
+  "long_name": "Golden Century International Holdings Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/gci.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a668"
+  },
+  "ticker": "0092-HK",
+  "name": "CHAMPION TECH",
+  "category": "Equity",
+  "board_lot": 24000,
+  "industry_x": "Oil & Gas",
+  "nominal": "0.077",
+  "turnover": "0.000",
+  "mkt_cap": "210.620M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://www.champion.hk",
+  "industry_y": "Information Technology Services",
+  "current_price": 0.077,
+  "total_cash": 53236000,
+  "total_debt": 966000,
+  "total_revenue": 202414000,
+  "total_cash_per_share": 0.019,
+  "financial_currency": "HKD",
+  "short_name": "CHAMPION TECH",
+  "long_name": "Champion Technology Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/champion.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a669"
+  },
+  "ticker": "0093-HK",
+  "name": "TERMBRAY IND",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Properties",
+  "nominal": "0.206",
+  "turnover": "0.000",
+  "mkt_cap": "549.534M",
+  "pct_yield": "0.000",
+  "pe_ratio": "25.750",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.termbray.com.hk",
+  "industry_y": "Real Estate Services",
+  "current_price": 0.206,
+  "total_cash": 185034000,
+  "total_debt": 1364000,
+  "total_revenue": 112435000,
+  "total_cash_per_share": 0.069,
+  "financial_currency": "HKD",
+  "short_name": "TERMBRAY IND",
+  "long_name": "Termbray Industries International (Holdings) Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/termbray.com.hk"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a66a"
+  },
+  "ticker": "0094-HK",
+  "name": "GREENHEART GP",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Paper & Forest Products",
+  "nominal": "0.095",
+  "turnover": "0.000",
+  "mkt_cap": "176.224M",
+  "pct_yield": "0.000",
+  "pe_ratio": "N/A",
+  "sector": "Basic Materials",
+  "country": "Hong Kong",
+  "website": "https://www.greenheartgroup.com",
+  "industry_y": "Lumber & Wood Production",
+  "current_price": 0.095,
+  "total_cash": 92916000,
+  "total_debt": 390775008,
+  "total_revenue": 320520992,
+  "total_cash_per_share": 0.05,
+  "financial_currency": "HKD",
+  "short_name": "GREENHEART GP",
+  "long_name": "Greenheart Group Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/greenheartgroup.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a66b"
+  },
+  "ticker": "0095-HK",
+  "name": "LVGEM CHINA",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Properties",
+  "nominal": "1.100",
+  "turnover": "40.193M",
+  "mkt_cap": "5.607B",
+  "pct_yield": "0.000",
+  "pe_ratio": "4.142",
+  "sector": "Real Estate",
+  "country": "Hong Kong",
+  "website": "https://www.lvgem-china.com",
+  "industry_y": "Real Estate—Development",
+  "current_price": 1.1,
+  "total_cash": {
+    "$numberLong": "3907047936"
+  },
+  "total_debt": {
+    "$numberLong": "31352178688"
+  },
+  "total_revenue": {
+    "$numberLong": "4378016768"
+  },
+  "total_cash_per_share": 0.766,
+  "financial_currency": "CNY",
+  "short_name": "LVGEM CHINA",
+  "long_name": "LVGEM (China) Real Estate Investment Company Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/lvgem-china.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a66c"
+  },
+  "ticker": "0096-HK",
+  "name": "YUSEI",
+  "category": "Equity",
+  "board_lot": 2000,
+  "industry_x": "Industrials",
+  "nominal": "0.690",
+  "turnover": "0.000",
+  "mkt_cap": "439.219M",
+  "pct_yield": "2.203",
+  "pe_ratio": "7.252",
+  "sector": "Consumer Cyclical",
+  "country": "China",
+  "website": "https://www.yusei.cn",
+  "industry_y": "Auto Parts",
+  "current_price": 0.69,
+  "total_cash": 43293000,
+  "total_debt": 400265984,
+  "total_revenue": 1462235008,
+  "total_cash_per_share": 0.068,
+  "financial_currency": "CNY",
+  "short_name": "YUSEI",
+  "long_name": "Yusei Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/yusei.cn"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a66d"
+  },
+  "ticker": "0097-HK",
+  "name": "HENDERSON INV",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Retailers",
+  "nominal": "0.350",
+  "turnover": "166,355",
+  "mkt_cap": "1.067B",
+  "pct_yield": "5.714",
+  "pe_ratio": "31.818",
+  "sector": "Consumer Cyclical",
+  "country": "Hong Kong",
+  "website": "https://www.hilhk.com",
+  "industry_y": "Department Stores",
+  "current_price": 0.35,
+  "total_cash": 390000000,
+  "total_debt": 502000000,
+  "total_revenue": 1770000000,
+  "total_cash_per_share": 0.128,
+  "financial_currency": "HKD",
+  "short_name": "HENDERSON INV",
+  "long_name": "Henderson Investment Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/hilhk.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a66e"
+  },
+  "ticker": "0098-HK",
+  "name": "XINGFA ALUM",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "Diversified Metals & Minerals",
+  "nominal": "9.700",
+  "turnover": "9,700",
+  "mkt_cap": "4.074B",
+  "pct_yield": "8.247",
+  "pe_ratio": "3.895",
+  "sector": "Basic Materials",
+  "country": "China",
+  "website": "https://www.xingfa.com",
+  "industry_y": "Aluminum",
+  "current_price": 9.7,
+  "total_cash": 1643133056,
+  "total_debt": 1758811008,
+  "total_revenue": {
+    "$numberLong": "15432899584"
+  },
+  "total_cash_per_share": 3.917,
+  "financial_currency": "CNY",
+  "short_name": "XINGFA ALUM",
+  "long_name": "Xingfa Aluminium Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/xingfa.com"
+},{
+  "_id": {
+    "$oid": "62a43a49cfadcbbfb356a66f"
+  },
+  "ticker": "0099-HK",
+  "name": "WONG'S INT'L",
+  "category": "Equity",
+  "board_lot": 1000,
+  "industry_x": "IT Hardware",
+  "nominal": "2.040",
+  "turnover": "4,080",
+  "mkt_cap": "976.107M",
+  "pct_yield": "1.961",
+  "pe_ratio": "10.737",
+  "sector": "Technology",
+  "country": "Hong Kong",
+  "website": "https://www.wih.com.hk",
+  "industry_y": "Consumer Electronics",
+  "current_price": 2.04,
+  "total_cash": 1278627968,
+  "total_debt": 2122834048,
+  "total_revenue": {
+    "$numberLong": "3256729088"
+  },
+  "total_cash_per_share": 2.672,
+  "financial_currency": "HKD",
+  "short_name": "WONG'S INT'L",
+  "long_name": "Wong's International Holdings Limited",
+  "exchange_timezone_name": "Asia/Hong_Kong",
+  "quote_type": "EQUITY",
+  "logo_url": "https://logo.clearbit.com/wih.com.hk"
+}]

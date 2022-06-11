@@ -23,7 +23,7 @@
         <div>
           <div class="flex space-x-2">
             <h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-              {{ stock_info['stock_code'] }}
+              {{ stock_info['ticker'] }}
             </h2>
             <p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
               {{ stock_info['name'] }}
@@ -324,7 +324,7 @@
   		legend: {
   			labels: {
   				filter: function(item, chart) {
-  					return item.text.length != 0;
+            return item.text.length != 0;
   				}
   			}
   		},
@@ -417,11 +417,11 @@
   var current_interval = undefined;
 
   // init chart + ctx
-  var stock_cmp_chart = null;
-  var industry_cmp_chart = null;
-  var cdl_chart = null;
-  var rsi_chart = null;
-  var macd_chart = null;
+  var stock_cmp_chart = undefined;
+  var industry_cmp_chart = undefined;
+  var cdl_chart = undefined;
+  var rsi_chart = undefined;
+  var macd_chart = undefined;
 
   const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
   const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
@@ -433,6 +433,8 @@
   	period = data.period
   	interval = data.interval
 
+    let data2 = undefined;
+
   	await $.get('/api/get_stock_close_pct', {
   		ticker: other_ticker.toUpperCase(),
   		period: period,
@@ -441,7 +443,6 @@
   		data2 = res
   	});
 
-  	console.log(data2);
   	chart_data = {
   		labels: data.lbl,
   		datasets: [{
@@ -474,9 +475,8 @@
   		...misc_options
   	}
 
-  	if (stock_cmp_chart != null) {
+  	if (stock_cmp_chart) {
   		stock_cmp_chart.destroy();
-  		console.log(stock_cmp_chart)
   	}
 
   	stock_cmp_chart = new Chart(stock_cmp_ctx, {
@@ -490,6 +490,8 @@
   	period = data.period
   	interval = data.interval
 
+    let data2 = undefined;
+
   	await $.get('/api/get_industry_close_pct', {
   		industry: industry,
   		period: period,
@@ -498,7 +500,6 @@
   		data2 = res
   	});
 
-  	console.log(data2);
   		chart_data = {
   			labels: data.lbl,
   			datasets: [{
@@ -531,7 +532,7 @@
   			...misc_options
   		}
 
-  		if (industry_cmp_chart != null) {
+  		if (industry_cmp_chart) {
   			industry_cmp_chart.destroy();
   		}
 
@@ -662,7 +663,7 @@
   		...misc_options
   	}
 
-  	if (rsi_chart != null) {
+  	if (rsi_chart) {
   		rsi_chart.destroy();
   	}
 
@@ -712,7 +713,7 @@
   		...misc_options
   	}
 
-  	if (macd_chart != null) {
+  	if (macd_chart) {
   		macd_chart.destroy();
   	}
 
@@ -726,7 +727,6 @@
   var stock_data = {{ stock_data | tojson }}
 
   function draw_charts(stock_data) {
-  	console.log(stock_data);
   	current_period = stock_data.period
   	current_interval = stock_data.interval
 
@@ -745,7 +745,7 @@
   	current_period = period;
   	current_interval = interval;
 
-  	ticker = "{{ stock_info['stock_code'] }}";
+  	ticker = "{{ stock_info['ticker'] }}";
   	await $.get('/api/get_stock_data', {
   		ticker: ticker,
   		period: period,
@@ -756,6 +756,8 @@
   	});
   }
 
+
+  
   draw_charts(stock_data);
 </script>
 {% endif %} {% endblock %}

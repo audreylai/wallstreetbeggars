@@ -26,17 +26,17 @@ def rules():
 
 @app.route("/stock-list")
 def stock_list():
-	stock_table = get_stock_info("all")
-	last_update = stock_table['last_update']
-	return render_template("stock-list.html", stock_table=stock_table['table'], last_update=last_update, industries=stock_table['industries'])
+	stock_table = get_stock_info("ALL")
+	last_updated = stock_table['last_updated']
+	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'])
 
 
 @app.route("/stock-info", methods=["GET", "POST"])
 def stock_info():
 	if request.method == "POST":
-		ticker = request.form.get("ticker")
+		ticker = request.form.get("ticker").upper().replace(".", "-")
 	else:
-		ticker = request.args.get('ticker')
+		ticker = request.args.get('ticker').upper().replace(".", "-")
 	if ticker is None:
 		ticker = '0005-HK'
 
@@ -53,11 +53,11 @@ def stock_info():
 def stock_analytics():
 	try:
 		if request.method == "POST":
-			ticker = request.form.get("ticker")
+			ticker = request.form.get("ticker").upper().replace(".", "-")
 			period = request.form.get("period", type=int)
 			interval = request.form.get("interval", type=int)
 		else:
-			ticker = request.args.get('ticker')
+			ticker = request.args.get('ticker').upper().replace(".", "-")
 			period = request.args.get("period", type=int)
 			interval = request.args.get("interval", type=int)
 
@@ -80,7 +80,7 @@ def stock_analytics():
 @app.route("/api/get_stock_data", methods=['GET'])
 def api_get_stock_data():
 	try:
-		ticker = request.args.get('ticker').replace(".", "-")
+		ticker = request.args.get('ticker').upper().replace(".", "-")
 		period = request.args.get('period', type=int)
 		interval = request.args.get('interval', type=int)
 		if period is None or interval is None:
@@ -96,7 +96,7 @@ def api_get_stock_data():
 @app.route("/api/get_stock_close_pct", methods=['GET'])
 def api_get_stock_close_pct():
 	try:
-		ticker = request.args.get('ticker').replace(".", "-")
+		ticker = request.args.get('ticker').upper().replace(".", "-")
 		period = request.args.get('period', type=int)
 		interval = request.args.get('interval', type=int)
 		if period is None or interval is None:

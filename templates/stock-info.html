@@ -14,7 +14,7 @@
 				<div>
 					<div class="flex space-x-2">
 						<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-							{{ stock_info['stock_code'] }}
+							{{ stock_info['ticker'] }}
 						</h2>
 						<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
 							{{ stock_info['name'] }}
@@ -61,7 +61,8 @@
 				</div>
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Industry</h3>
-					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["industry"] }}</h2>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["industry_x"] }}</h2>
+					<p class="text-md font-semibold dark:text-zinc-400">{{ stock_info["industry_y"] }}</p>
 				</div>
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Country</h3>
@@ -69,15 +70,15 @@
 				</div>
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Currency</h3>
-					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["financialCurrency"] }}</h2>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["financial_currency"] }}</h2>
 				</div>
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Cash Per Share</h3>
-					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["totalCashPerShare"] }}</h2>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["total_cash_per_share"] }}</h2>
 				</div>
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Quote Type</h3>
-					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["quoteType"] }}</h2>
+					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["quote_type"] }}</h2>
 				</div>
 			</div>
 			<div class="p-6 bg-white rounded-md shadow grow grow-1 dark:bg-zinc-800">
@@ -101,7 +102,7 @@
 			</div>
       <div class="flex justify-center">
         <form action="/stock-analytics" method="POST">
-          <input type="hidden" name="ticker" value="{{ stock_info['stock_code'].replace('.', '-') }}" />
+          <input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
           <a class="text-blue-600 cursor-pointer dark:text-blue-500 dark:hover:text-blue-400 hover:text-blue-500" onclick="this.parentNode.submit()">Show more</a>
         </form>
       </div>

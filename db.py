@@ -17,62 +17,37 @@ col_stock_info = db["stock_info"]
 
 # Upserts --------------------
 def add_stock_data_one(ticker):
-	if not ticker:
-		return None
-
-	# Get Ticker Data
-	df = yf.download(ticker, period="2y")
-	if not df.empty:
-		# Dem Tech Indicators
-		df["sma10"] = ta.SMA(df["Close"], timeperiod=10)
-		df["sma20"] = ta.SMA(df["Close"], timeperiod=20)
-		df["sma50"] = ta.SMA(df["Close"], timeperiod=50)
-		df["sma100"] = ta.SMA(df["Close"], timeperiod=100)
-		df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
-		df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
-
-		# Change "date" from index column to regular column
-		df = df.reset_index()
-		pd.to_datetime(df["Date"])
-
-		# Change keys to all lowercase
-		df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
+	df = yf.download(ticker, period="10y", progress=False)
+	if df.empty:
+		return
 	
-	# Convert DataFrame to Dictionary for upsert
-	ticker_dict = df.to_dict("records")
+	# format columns
+	df = df.reset_index()
+	df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
+	pd.to_datetime(df.date)
 
-	# The actual upsert
-	query = { ticker.replace(".","-"): {"$exists": True} }
+	# moving averages
+	for period in [10, 20, 50, 100, 250]:
+		df["sma" + str(period)] = ta.SMA(df.close, timeperiod=period)
+
+	# rsi + macd
+	df["rsi"] = ta.RSI(df.close, timeperiod=14)
+	df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df.close, fastperiod=12, slowperiod=26, signalperiod=9)
+
+	# convert df to dict for upsert
+	out = df.to_dict("records")
+
+	# upsert
+	query = {ticker.replace(".","-"): {"$exists": True}}
 	col_stock_data.delete_one(query)
-	col_stock_data.insert_one({ ticker.replace(".","-"): ticker_dict })
+	col_stock_data.insert_one({ticker.replace(".","-"): out})
 
 
 def add_stock_data_batch():
 	col_stock_data.drop({})
-	for a in range(1,11):
-		ticker = "%04d.HK" % a
-		df = yf.download(ticker, period="2y")
-		if not df.empty:
-			# Dem Tech Indicators
-			df["sma10"] = ta.SMA(df["Close"], timeperiod=10)
-			df["sma20"] = ta.SMA(df["Close"], timeperiod=20)
-			df["sma50"] = ta.SMA(df["Close"], timeperiod=50)
-			df["rsi"] = ta.RSI(df["Close"], timeperiod=14)
-			df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
-		
-			
-			# df["macd"] = ta.MACD(df["Close"],fastperiod=12, slowperiod=26, signalperiod=9)
-			# print(ta.MACD(df["Close"],fastperiod=12, slowperiod=26, signalperiod=9).mean())
-			df = df.reset_index()
-			pd.to_datetime(df["Date"])
-			df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
-			# print(type(df["date"][0]))
-		ticker_dict = df.to_dict("records")
-
-		query = { ticker.replace(".","-"): {"$exists": True} }
-		# print(query)
-		col_stock_data.delete_one(query)
-		col_stock_data.insert_one({ ticker.replace(".","-"): ticker_dict })
+	for i in range(1, 100):
+		ticker = "%04d.HK" % i
+		add_stock_data_one(ticker)
 
 
 # Web Scraping Code (etnet)
@@ -82,88 +57,76 @@ def etnet_scraping():
 	# Fetch the table row with the link
 	rows = list(soup.find_all("tr", attrs={"valign": "top"}))
 	url_dict = {}
-	for x in rows:
+	for row in rows:
 		# Fetch the <a> with the link + industry name
-		tag = x.find("a")
-		url = "https://www.etnet.com.hk/www/eng/stocks/" + tag["href"] # Gets value of attribute :D:D:D:DD::DD::D
+		tag = row.find("a")
+		url = "https://www.etnet.com.hk/www/eng/stocks/" + tag["href"] # Gets value of attribute
 		industry = tag.get_text()
-		# print(url, industry)
-		# Append pair to dictionary
 		url_dict[industry] = url
-	# print(url_dict)
 
 	scrape_list = []
 	for industry in url_dict:
-		detailPage = requests.get(url_dict[industry])
-		turtleSoup = BeautifulSoup(detailPage.content, "html.parser")
-		even_tags = list(turtleSoup.find_all("tr", attrs={"class": "evenRow"}))
-		for tag in even_tags:
-			# Get Ticker Number
-			ticker = tag.find("a").get_text()[-4:] + ".HK"
-			nominal = list(tag.find_all("td", attrs={"align": "right"}))[1].get_text()
-			turnover = list(tag.find_all("td", attrs={"align": "right"}))[3].get_text()
-			mktCap = list(tag.find_all("td", attrs={"align": "right"}))[4].get_text()
-			percentYield = list(tag.find_all("td", attrs={"align": "right"}))[5].get_text()
-			pe = list(tag.find_all("td", attrs={"align": "right"}))[6].get_text()
-			if pe == "":
-				pe = "N/A"
-			scrape_list.append([ticker,industry,nominal,turnover,mktCap,percentYield,pe])
-			
-		odd_tags = list(turtleSoup.find_all("tr", attrs={"class": "oddRow"}))
-		for tag in odd_tags:
-			# Get Ticker Number
-			ticker = tag.find("a").get_text()[-4:] + ".HK"
-			nominal = list(tag.find_all("td", attrs={"align": "right"}))[1].get_text()
-			turnover = list(tag.find_all("td", attrs={"align": "right"}))[3].get_text()
-			mktCap = list(tag.find_all("td", attrs={"align": "right"}))[4].get_text()
-			percentYield = list(tag.find_all("td", attrs={"align": "right"}))[5].get_text()
-			pe = list(tag.find_all("td", attrs={"align": "right"}))[6].get_text()
-			if pe == "":
-				pe = "N/A"
-			scrape_list.append([ticker,industry,nominal,turnover,mktCap,percentYield,pe])
-	scrape_df = pd.DataFrame(scrape_list, columns=["stock_code", "industry","nominal","turnover","mkt_cap","pc_yield","pe_ratio"])
-	scrape_df = scrape_df.sort_values("stock_code").reset_index(drop=True)
-	return(scrape_df)
+		detail_page = requests.get(url_dict[industry])
+		turtle_soup = BeautifulSoup(detail_page.content, "html.parser")
+		
+		# combine rows
+		even_rows = list(turtle_soup.find_all("tr", attrs={"class": "evenRow"}))
+		odd_rows = list(turtle_soup.find_all("tr", attrs={"class": "oddRow"}))
+		rows = even_rows + odd_rows
+
+		for row in rows:
+			ticker = row.find("a").get_text()[-4:] + "-HK"
+			res = []
+			row_data = list(row.find_all("td", attrs={"align": "right"}))
+			for col in [1, 3, 4, 5, 6]: # nominal, turnover, mkt_cap, pct_yield, pe_ratio
+				res.append(row_data[col].get_text())
+				if col == 6 and res[-1] == '': # pe_ratio
+					res[-1] = 'N/A'
+
+			scrape_list.append([ticker, industry, *res])
+
+	df = pd.DataFrame(scrape_list, columns=["ticker", "industry", "nominal", "turnover", "mkt_cap", "pct_yield", "pe_ratio"])
+	df = df.sort_values("ticker").reset_index(drop=True)
+	return df
 
 
-def add_stock_info():
-	# Drops records
-	delete = col_stock_info.delete_many({})
+def add_stock_info_batch():
+	# drop existing data
+	col_stock_info.delete_many({})
+	df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
 
-	cols = [0, 1, 2, 4]
-	df = pd.read_excel(
-		'https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=cols, skiprows=2)
-	df = df.rename(columns={'Stock Code': 'stock_code', 'Name of Securities': 'name', 'Category': 'category', 'Board Lot': 'board_lot'})
-	df = df.drop(df[(df.stock_code > 4000) & (df.stock_code < 6030)].index)
-	df = df.drop(df[(df.stock_code > 6700) & (df.stock_code < 6800)].index)
-	df = df.drop(df[df.stock_code > 10000].index)
+	# last update date
+	last_updated = datetime.strptime(df.iloc[0, 0].split()[3], "%d/%m/%Y")
+	col_stock_info.insert_one({"last_updated": last_updated})
 
-	# Change stock code from numbers to actual tickers
-	ticker_name_list = []
-	for ticker in list(df["stock_code"]):
-		ticker_name = "0000" + str(ticker)
-		ticker_name_list.append(ticker_name[-4:] + ".HK")
-	df["stock_code"] = ticker_name_list
+	# preprocessing
+	df = df.iloc[2:] # remove first 2 unrelated rows
+	df.columns.values[:4] = ['ticker', 'name', 'category', 'board_lot']
+	df[['ticker', 'board_lot']] = df[['ticker', 'board_lot']].apply(pd.to_numeric)
 
-	# Get last update date
-	getupdated = pd.read_excel(
-		'https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=cols)
-	getupdated = getupdated.iloc[0, 0]
-	getupdated = getupdated.split()[3]
-	getupdated = datetime.strptime(getupdated, "%d/%m/%Y")
-	lastupdated = {"lastupdated": getupdated}
-	update = col_stock_info.insert_one(lastupdated)
+	# drop unrelated rows
+	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
+	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
+	# df = df.drop(df[df.ticker > 10000].index)
+	df = df.drop(df[df.ticker > 100].index)
+	
+	# convert ticker format
+	ticker_list = []
+	for ticker in df.ticker:
+		ticker_list.append(f"0000{str(ticker)}"[-4:] + "-HK")
+	df.ticker = ticker_list
 
-	# Extra info via Web Scraping
-	# scrape_df = etnet_scraping()
-	# df = pd.merge(df, scrape_df, on="stock_code", how="left") # Merge DataFrames by comparing tickers
-	# df = df.reset_index(drop=True)
+	# etnet web scraping
+	scrape_df = etnet_scraping()
+	df = pd.merge(df, scrape_df, on="ticker", how="left") # merge dfs by comparing tickers
+	df = df.reset_index(drop=True)
 
-	df = df.to_dict('index')
-	df = list(df.values())
-	insertdf = col_stock_info.insert_many(df)
-	print(insertdf.inserted_ids)
-
+	# yfinance info
+	yfinance_df = yfinance_info(ticker_list)
+	df = pd.merge(df, yfinance_df, on="ticker", how="left") # merge dfs by comparing tickers
+	df = df.reset_index(drop=True)
+	
+	col_stock_info.insert_many(list(df.to_dict('index').values()))
 
 
 # Functions for Fetching Data from DB -------------------
@@ -198,66 +161,59 @@ def get_stock_data(ticker, period):
 
 
 def get_industries():
-	return col_stock_info.distinct("industry")
+	return col_stock_info.distinct("industry_x")
+
+def yfinance_info(ticker_list):
+	def convert_name(name):
+		out = ''
+		for char in name:
+			if char.isupper():
+				out += f'_{char.lower()}'
+			else:
+				out += char
+		return out
+
+	attrs = [
+		'sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash',
+		'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency',
+		'shortName', 'longName', 'exchangeTimezoneName', 'quoteType', 'logo_url'
+	]
+	df = pd.DataFrame(columns=[convert_name(i) for i in attrs], index=ticker_list)
+	df.index.name = 'ticker'
+
+	for ticker in ticker_list:
+		print(ticker)
+		res = []
+		try:
+			info = yf.Ticker(ticker.replace('-', '.')).info
+			for attr in attrs:
+				res.append(info[attr])
+
+			df.loc[ticker] = res
+		except:
+			pass
+
+	df.reset_index(inplace=True)
+	return df
+
 
 def get_stock_info(ticker):
-	ticker = ticker.upper().replace("-",".")
-	res = []
-	tickerinfo = {}
-	# Returns all data (for stock list)
 	if ticker == "ALL":
-		res = {
-			"table": col_stock_info.find({"lastupdated":{"$exists": False}}, {"_id": 0, "stock_code": 1, "name_of_securities": 1, "board_lot": 1, "industry": 1}),
-			"last_update": col_stock_info.find_one({"lastupdated":{"$exists": True}})["lastupdated"],
+		return {
+			"table": col_stock_info.find({"last_updated": {"$exists": False}}, {"_id": 0, "ticker": 1, "name": 1, "board_lot": 1, "industry": 1}),
+			"last_updated": col_stock_info.find_one({"last_updated": {"$exists": True}})["last_updated"],
 			"industries": get_industries()
 		}
 	else:
-		# Returns data of one ticker
-		res = col_stock_info.find_one({"stock_code": ticker}, {"_id": 0})
-	
-		# yfinance info
-		try:
-			if "shortName" not in col_stock_info.find_one({"stock_code": ticker}):
-				print("new")
-				data = yf.Ticker(ticker)
-				info = data.info
-				col_stock_info.update_one({"stock_code": ticker}, {"$set": info})
-			tickerdata = col_stock_info.find_one({"stock_code": ticker})
-			infolist = ['sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash', 'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency', 'shortName', 'longName', 'exchangeTimeZoneName', 'quoteType', 'logo_url']
-			tickerinfo = dict((k, tickerdata[k]) for k in infolist if k in tickerdata)
-			print(tickerinfo)
-		except:
-			pass
-	return res | tickerinfo
+		return col_stock_info.find_one({"ticker": ticker}, {"_id": 0})
 
 # Not actually DB code --------------------
-def quick_ticker_fetch(tickers, tickerperiod):
-	try:
-		ticker = yf.download(tickers, period=tickerperiod)
-		# rsi and moving average
-		ticker['rsi'] = ta.RSI(ticker['Close'], timeperiod=14)
-		ticker['sma10'] = ta.SMA(ticker['Close'], timeperiod=10)
-		ticker['sma20'] = ta.SMA(ticker['Close'], timeperiod=20)
-		ticker['sma50'] = ta.SMA(ticker['Close'], timeperiod=50)
-		ticker['sma100'] = ta.SMA(ticker['Close'], timeperiod=100)
-		ticker['sma200'] = ta.SMA(ticker['Close'], timeperiod=200)
-		ticker["macd"], ticker["macd_ema"], ticker["macd_div"] = ta.MACD(ticker["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
-		
-		# remove break days
-		ticker = ticker[ticker['Volume'] != 0]
-		ticker = ticker.reset_index()
-		ticker = ticker.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
-	except:
-		ticker = None
-	return ticker
-
-
 def get_industry_close_pct(industry, period):
 	# ticker = ticker.replace("-",".")
 	industry_ticker_list = []
-	# industry = col_stock_info.find_one({"stock_code": ticker})["industry"]
-	for i in col_stock_info.find({"industry": industry}):
-		industry_ticker_list.append(i["stock_code"].replace(".","-"))
+	# industry = col_stock_info.find_one({"ticker": ticker})["industry"]
+	for i in col_stock_info.find({"industry_x": industry}):
+		industry_ticker_list.append(i["ticker"].replace(".","-"))
 
 	out = {}
 	for ticker in industry_ticker_list:
@@ -298,8 +254,6 @@ def get_industry_close_pct(industry, period):
 
 	return out
 
-
-# Lucas --------------------
 def process_industry_avg(data, interval):
 	out = {
 		'close_pct': []
@@ -388,11 +342,6 @@ def process_stock_data(data, interval, include=[]):
 	out['max_volume'] = max_volume
 
 	if len(include) != 0:
-		out2 = out.copy()
-		for k in out:
-			if k not in include:
-				del out2[k]
-		print(out2)
-		return out2
+		return dict(filter(lambda k: k[0] in include, out.items()))
 
 	return out
