@@ -174,9 +174,9 @@
       </div>
     </div>
   </div>
-  <div class="flex px-6 mb-4 space-x-4 h-96">
+  <div class="grid grid-cols-3 px-6 mb-4 space-x-4 h-96">
     <div
-      class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+      class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800"
     >
       <div class="flex flex-col justify-between space-y-2">
         <h2 class="text-2xl font-semibold dark:text-zinc-200">
@@ -199,7 +199,7 @@
       </div>
     </div>
     <div
-      class="flex flex-col w-1/2 p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+      class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800"
     >
       <div class="flex flex-col justify-between space-y-2">
         <h2 class="text-2xl font-semibold dark:text-zinc-200">
@@ -220,6 +220,28 @@
       </div>
       <div class="grow">
         <canvas id="industry-comparison-chart"></canvas>
+      </div>
+    </div>
+	<div
+      class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800"
+    >
+      <div class="flex flex-col justify-between space-y-2">
+        <h2 class="text-2xl font-semibold dark:text-zinc-200">
+          Index Comparison
+        </h2>
+        <select
+          required
+          id="industry-cmp-txtbox"
+          class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+          placeholder="Industry..."
+          onchange=""
+        >
+          <option value="">Select an index...</option>
+          
+        </select>
+      </div>
+      <div class="grow">
+        <canvas id=""></canvas>
       </div>
     </div>
   </div>
@@ -270,7 +292,13 @@
     time: {
       unit: 'month',
       tooltipFormat: 'DD'
-    }
+    },
+		ticks: {
+			autoSkip: true,
+			autoSkipPadding: 80,
+			maxRotation: 0,
+			minRotation: 0
+		}
   }
 
   const misc_options = {
@@ -538,27 +566,27 @@
       }, {
         label: 'MA10',
         data: data.sma10,
-        borderColor: 'rgb(174, 32, 18)',
+        borderColor: 'rgb(212, 77, 69)',
         ...line_chart_settings
       }, {
         label: 'MA20',
         data: data.sma20,
-        borderColor: 'rgb(202, 103, 2)',
+        borderColor: 'rgb(182, 93, 2)',
         ...line_chart_settings
       }, {
         label: 'MA50',
         data: data.sma50,
-        borderColor: 'rgb(238, 155, 0)',
+        borderColor: 'rgb(214, 140, 0)',
         ...line_chart_settings
       }, {
         label: 'MA100',
         data: data.sma100,
-        borderColor: 'rgb(217, 197, 33)',
+        borderColor: 'rgb(195, 177, 30)',
         ...line_chart_settings
       }, {
         label: 'MA250',
         data: data.sma250,
-        borderColor: 'rgb(176, 228, 85)',
+        borderColor: 'rgb(140, 187, 59)',
         ...line_chart_settings
       }, {
         label: 'Volume',
