@@ -38,11 +38,12 @@ def stock_list():
 @app.route("/update-active", methods=["POST"])
 def update_active():
 	# write update db logic
-	if request.form.get("ticker"):
-		return request.form.get("ticker")
+	print(request.form.get("check"), request.form.getlist("tickers[]"))
+	if request.form.get("check") == "true":
+		update_active_tickers("test", request.form.getlist("tickers[]"))
 	else:
-		print(request.form.getlist("tickers[]"))
-		return {"tickers": request.form.getlist("tickers[]")}
+		delete_active_tickers("test", request.form.getlist("tickers[]"))
+	return {"tickers": request.form.getlist("tickers[]")}
 
 @app.route("/stock-info", methods=["POST"])
 def stock_info():

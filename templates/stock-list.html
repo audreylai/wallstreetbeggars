@@ -160,7 +160,7 @@
 							type="checkbox"
 							name="active"
 							value="{{row['ticker']}}"
-							onchange="update_active(this.value)"
+							onchange="update_active(this)"
 						/>
           </td>
           {% for k,v in row.items() %} {% if k == "board_lot" %}
@@ -209,15 +209,13 @@
       "checked",
       $(this).prop("checked")
     );
-		console.log()
-		$.post("/update-active",{"tickers": $('input[type="checkbox"]').filter(":checked:not(#allcb)").map(function(){return $(this).val()}).toArray()}, function (data) {console.log(data)})
+		$.post("/update-active",{"tickers": $('input[type="checkbox"]').filter(":not(#allcb)").map(function(){return $(this).val()}).toArray(), "check": this.checked}, function (data) {console.log(data)})
+
   });
 
-  function update_active(ticker) {
-		console.log(ticker)
-    $.post("/update-active",{"ticker": ticker}, function (data) {
-			console.log(data)
-		});
-  }
+	function update_active(evt){
+		$.post("/update-active",{"tickers": [evt.value], "check": evt.checked}, function (data) {console.log(data)})
+
+	}
 </script>
 {% endblock %}

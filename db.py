@@ -12,6 +12,7 @@ import requests
 # MongoDB Connection
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
+col_users = db["users"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
@@ -351,3 +352,16 @@ def process_stock_data(data, interval, include=[], precision=4):
 		return dict(filter(lambda k: k[0] in include, out.items()))
 
 	return out
+
+def update_active_tickers(username, tickers):
+	col_users.update_one({"username":username}, {'$addToSet': {
+		'active': {"$each": tickers}
+		}
+	})
+
+def delete_active_tickers(username, tickers):
+	print(tickers)
+	col_users.update_one({"username":username}, {'$pull': {
+		'active': {"$in": tickers}
+		}
+	})
