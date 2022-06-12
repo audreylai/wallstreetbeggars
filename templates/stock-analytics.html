@@ -322,9 +322,9 @@
   						} else if (context.dataset.label == 'Volume') { // Volume label
   							return "Volume: " + context.parsed.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
   						} else if (['industry-comparison-chart', 'stock-comparison-chart'].includes(context.chart.canvas.id)) { // comparison charts
-  							return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(1) + '%'; // add %
+  							return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(2) + '%'; // add %, round 2dp
   						} else { // default
-  							return context.dataset.label + ': ' + context.parsed.y.toFixed(3); // default round 3dp
+  							return context.dataset.label + ': ' + context.parsed.y.toFixed(4); // default round 4dp
   						}
   					} else if (context.dataset.type == 'candlestick') {
   						return 'O: ' + round_stock_value(context.parsed.o) +
@@ -738,8 +738,6 @@
   	}).catch(error => console.log(error));
   }
 
-
-  
   draw_charts(stock_data);
 </script>
 {% endif %} {% endblock %}

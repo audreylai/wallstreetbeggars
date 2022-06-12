@@ -17,7 +17,7 @@ col_stock_info = db["stock_info"]
 
 # Upserts --------------------
 def add_stock_data_one(ticker):
-	df = yf.download(ticker, period="10y", progress=False)
+	df = yf.download(ticker.replace('-', '.'), period="10y", progress=False)
 	if df.empty:
 		return
 	
@@ -41,15 +41,15 @@ def add_stock_data_one(ticker):
 	out = df.to_dict("records")
 
 	# upsert
-	query = {ticker.replace(".","-"): {"$exists": True}}
-	col_stock_data.delete_one(query)
-	col_stock_data.insert_one({ticker.replace(".","-"): out})
+	# query = {ticker.replace(".","-"): {"$exists": True}}
+	# col_stock_data.delete_one(query)
+	col_stock_data.insert_one({ticker: out})
 
 
 def add_stock_data_batch():
 	col_stock_data.drop({})
 	for i in range(1, 100):
-		ticker = "%04d.HK" % i
+		ticker = "%04d-HK" % i
 		print(ticker)
 		add_stock_data_one(ticker)
 
@@ -135,9 +135,6 @@ def add_stock_info_batch():
 
 # Functions for Fetching Data from DB -------------------
 def get_stock_data(ticker, period):
-	# Change ticker var to match DB key
-	ticker = ticker.upper().replace(".","-")
-	
 	# Calculate start date for fetching
 	period = int(period)
 	startDate = date.today() + relativedelta(days=-period)
@@ -189,7 +186,7 @@ def yfinance_info(ticker_list):
 		print(ticker)
 		res = []
 		try:
-			info = yf.Ticker(ticker.replace('-', '.')).info
+			info = yf.Ticker(ticker.replace('-', '.')).info # yfinance takes . in ticker format
 			for attr in attrs:
 				res.append(info[attr])
 
@@ -213,11 +210,9 @@ def get_stock_info(ticker):
 
 # Not actually DB code --------------------
 def get_industry_close_pct(industry, period):
-	# ticker = ticker.replace("-",".")
 	industry_ticker_list = []
-	# industry = col_stock_info.find_one({"ticker": ticker})["industry"]
 	for i in col_stock_info.find({"industry_x": industry}):
-		industry_ticker_list.append(i["ticker"].replace(".","-"))
+		industry_ticker_list.append(i["ticker"])
 
 	out = {}
 	for ticker in industry_ticker_list:
@@ -277,7 +272,7 @@ def process_industry_avg(data, interval):
 	return out
 
 
-def process_stock_data(data, interval, include=[]):
+def process_stock_data(data, interval, include=[], precision=4):
 	out = {
 		'sma10': [],
 		'sma20': [],
@@ -324,12 +319,12 @@ def process_stock_data(data, interval, include=[]):
 		for col in ['sma10', 'sma20', 'sma50', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume', 'close']:
 			out[col].append({
 				'x': datetime.timestamp(i['date']) * 1000,
-				'y': i[col]
+				'y': round(i[col], precision)
 			})
 
 		out['close_pct'].append({
 			'x': datetime.timestamp(i['date']) * 1000,
-			'y': (i['close'] - initial_close) / initial_close
+			'y': round((i['close'] - initial_close) / initial_close, precision)
 		})
 
 		if i['open'] > i['close']:
@@ -337,9 +332,9 @@ def process_stock_data(data, interval, include=[]):
 		else:
 			out['volume_color'].append(volume_dn_color)
 
-		out['last_close'] = i['close']
+		out['last_close'] = round(i['close'], precision)
 
-	out['last_close_pct'] = 100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y']
+	out['last_close_pct'] = round(100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y'], precision)
 	out['date_start'] = out['close'][0]['x']
 	out['date_end'] = out['close'][-1]['x']
 

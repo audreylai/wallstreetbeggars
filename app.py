@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import datetime
 import re
+import json
 
 from db import *
 
@@ -33,11 +34,12 @@ def stock_list():
 
 @app.route("/stock-info", methods=["GET", "POST"])
 def stock_info():
-	if request.method == "POST":
-		ticker = request.form.get("ticker").upper().replace(".", "-")
-	else:
-		ticker = request.args.get('ticker').upper().replace(".", "-")
-	if ticker is None:
+	try:
+		if request.method == "POST":
+			ticker = request.form.get("ticker").upper().replace(".", "-")
+		else:
+			ticker = request.args.get('ticker').upper().replace(".", "-")
+	except:
 		ticker = '0005-HK'
 
 	stock_data = process_stock_data(get_stock_data(ticker, 180), 1)
@@ -50,20 +52,18 @@ def stock_info():
 
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
-	try:
-		if request.method == "POST":
-			ticker = request.form.get("ticker").upper().replace(".", "-")
-			period = request.form.get("period", type=int)
-			interval = request.form.get("interval", type=int)
-		else:
-			ticker = request.args.get('ticker').upper().replace(".", "-")
-			period = request.args.get("period", type=int)
-			interval = request.args.get("interval", type=int)
+	if request.method == "POST":
+		ticker = request.form.get("ticker", type=str)
+		period = request.form.get("period", type=int)
+		interval = request.form.get("interval", type=int)
+	else:
+		ticker = request.args.get('ticker', type=str)
+		period = request.args.get("period", type=int)
+		interval = request.args.get("interval", type=int)
 
-		period = 180 if period is None else period
-		interval = 1 if interval is None else interval
-	except:
-		ticker, period, interval = '0005-HK', 180, 1 # default
+	if ticker is None: ticker = '0005-HK'
+	if period is None or period <= 0: period = 180
+	if interval is None or interval <= 0: interval = 1
 	
 	stock_data = process_stock_data(get_stock_data(ticker, period), interval)
 	stock_data['ticker'], stock_data['period'], stock_data['interval'] = ticker, period, interval
@@ -76,25 +76,25 @@ def stock_analytics():
 def api_get_stock_data():
 	try:
 		ticker = request.args.get('ticker').upper().replace(".", "-")
-		period = request.args.get('period', type=int)
-		interval = request.args.get('interval', type=int)
-		if period is None or interval is None:
+		period = int(request.args.get("period"))
+		interval = int(request.args.get("interval"))
+		if period < 0 or interval < 0:
 			raise Exception
 	except:
 		return {}, 400
 
 	data = process_stock_data(get_stock_data(ticker, period), interval)
 	data['ticker'], data['period'], data['interval'] = ticker, period, interval
-	return data
+	return json.dumps(data)
 
 
 @app.route("/api/get_stock_close_pct", methods=['GET'])
 def api_get_stock_close_pct():
 	try:
 		ticker = request.args.get('ticker').upper().replace(".", "-")
-		period = request.args.get('period', type=int)
-		interval = request.args.get('interval', type=int)
-		if period is None or interval is None:
+		period = int(request.args.get("period"))
+		interval = int(request.args.get("interval"))
+		if period < 0 or interval < 0:
 			raise Exception
 	except:
 		return {}, 400
@@ -108,9 +108,9 @@ def api_get_stock_close_pct():
 def api_get_industry_close_pct():
 	try:
 		industry = request.args.get('industry')
-		period = request.args.get('period', type=int)
-		interval = request.args.get('interval', type=int)
-		if period is None or interval is None:
+		period = int(request.args.get("period"))
+		interval = int(request.args.get("interval"))
+		if period < 0 or interval < 0:
 			raise Exception
 	except:
 		return {}, 400
