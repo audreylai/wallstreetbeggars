@@ -49,15 +49,17 @@
         </div>
       </div>
       <div class="flex items-center space-x-1">
-        <h2 class="text-lg font-bold dark:text-zinc-300">
+        <h2 class="text-lg font-bold mr-2 dark:text-zinc-300">
           {{ "%.2f" % stock_data['last_close'] }}
         </h2>
         {% if stock_data['last_close_pct'] > 0 %}
         <p class="font-semibold dark:text-emerald-500 text-emerald-600">
+          <ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
           +{{ "%.2f" % (stock_data['last_close']*stock_data['last_close_pct']/100) }} (+{{ "%.2f" % stock_data['last_close_pct'] }}%)
         </p>
         {% else %}
         <p class="font-semibold dark:text-rose-500 text-rose-600">
+          <ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
           {{ "%.2f" % (stock_data['last_close']*stock_data['last_close_pct']/100) }} ({{ "%.2f" % stock_data['last_close_pct'] }}%)
         </p>
         {% endif %}
@@ -87,82 +89,82 @@
           <div
             class="flex flex-col w-full h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
           >
-            <div class="inline-flex my-1 rounded-md shadow-sm w-fit" role="group">
+            <div class="inline-flex my-1 rounded-md shadow-sm w-full" role="group">
               <button
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
               >
                 Daily
               </button>
-              <button
+              <bu-full
                 onclick="update_period(90, 1);"
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-500 dark:focus:ring-indigo-500 dark:focus:text-white"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-500 dark:focus:ring-indigo-500 dark:focus:text-white"
               >
                 3m
-              </button>
+              </bu-full>
               <button
                 onclick="update_period(180, 1);"
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
               >
                 6m
               </button>
               <button
                 onclick="update_period(360, 1);"
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
               >
                 1y
               </button>
             </div>
-            <div class="inline-flex my-1 rounded-md shadow-sm w-fit" role="group">
+            <div class="inline-flex my-1 rounded-md shadow-sm w-full" role="group">
               <button
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
               >
                 Weekly
               </button>
               <button
                 onclick="update_period(360, 7);"
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
               >
                 1y
               </button>
               <button
                 onclick="update_period(360*3, 7);"
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
               >
                 3y
               </button>
               <button
                 onclick="update_period(360*5, 7);"
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
               >
                 5y
               </button>
             </div>
-            <div class="inline-flex my-1 rounded-md shadow-sm w-fit" role="group">
+            <div class="inline-flex my-1 rounded-md shadow-sm w-full" role="group">
               <button
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
+                class="px-4 py-2 text-sm text-center w-1/4 font-medium bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
               >
                 Monthly
               </button>
               <button
                 onclick="update_period(360*5, 30);"
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
+                class="px-4 py-2 text-sm text-center w-1/2 font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
               >
                 5y
               </button>
               <button
                 onclick="update_period(360*10, 30);"
                 type="button"
-                class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
+                class="px-4 py-2 text-sm text-center w-1/2 font-medium bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
               >
                 10y
               </button>

@@ -40,9 +40,13 @@
 		<div class="flex items-center space-x-1">
 			<h2 class="text-lg font-bold dark:text-zinc-300">{{ "%.2f" % stock_data['last_close'] }}</h2>
 			{% if stock_data['last_close_pct'] > 0 %}
-				<p class="font-semibold dark:text-emerald-500 text-emerald-600">+{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
+				<p class="font-semibold dark:text-emerald-500 text-emerald-600">
+					<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
+					+{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
 			{% else %}
-				<p class="font-semibold text-red-600 dark:text-red-500">{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
+				<p class="font-semibold text-red-600 dark:text-red-500">
+					<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
+					{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
 			{% endif %}
 		</div>
 	</div>
