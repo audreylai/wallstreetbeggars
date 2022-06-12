@@ -317,7 +317,7 @@
         callbacks: {
           label: function(context) {
             if (context.parsed.y != null && context.dataset.label) {
-              if (['MA10', 'MA20', 'MA50'].includes(context.dataset.label)) { // MA labels
+              if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
                 return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
               } else if (context.dataset.label == 'Volume') { // Volume label
                 return "Volume: " + context.parsed.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
@@ -547,6 +547,16 @@
         label: 'MA50',
         data: data.sma50,
         borderColor: 'rgb(238, 155, 0)',
+        ...line_chart_settings
+      }, {
+        label: 'MA100',
+        data: data.sma100,
+        borderColor: 'rgb(217, 197, 33)',
+        ...line_chart_settings
+      }, {
+        label: 'MA250',
+        data: data.sma250,
+        borderColor: 'rgb(176, 228, 85)',
         ...line_chart_settings
       }, {
         label: 'Volume',

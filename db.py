@@ -277,6 +277,8 @@ def process_stock_data(data, interval, include=[], precision=4):
 		'sma10': [],
 		'sma20': [],
 		'sma50': [],
+		'sma100': [],
+		'sma250': [],
 		'macd': [],
 		'macd_ema': [],
 		'macd_div': [],
@@ -316,7 +318,7 @@ def process_stock_data(data, interval, include=[], precision=4):
 			'c': i['close']
 		})
 
-		for col in ['sma10', 'sma20', 'sma50', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume', 'close']:
+		for col in ['sma10', 'sma20', 'sma50', 'sma100', 'sma250', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume', 'close']:
 			out[col].append({
 				'x': datetime.timestamp(i['date']) * 1000,
 				'y': round(i[col], precision)
