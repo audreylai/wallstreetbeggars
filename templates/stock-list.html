@@ -1,100 +1,6 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} {% block header
 %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<style>
-  /*Overrides for Tailwind CSS */
-
-  /*Form fields*/
-  .dataTables_wrapper select,
-  .dataTables_length select,
-  .dataTables_wrapper .dataTables_filter input {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    background-color: #e5e7eb;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    text-transform: uppercase;
-    border-radius: 0.375rem;
-    border: none;
-  }
-  .dark .dataTables_wrapper select,
-  .dark .dataTables_wrapper .dataTables_filter input {
-    color: rgb(212 212 216);
-    background-color: rgb(39 39 42);
-  }
-
-  .dark .dataTables_info {
-    color: rgb(212 212 216);
-  }
-
-  .dark label {
-    color: rgb(228 228 231);
-  }
-
-  /*Pagination Buttons*/
-  .dataTables_wrapper .dataTables_paginate .paginate_button {
-    font-weight: 700;
-    /*font-bold*/
-    border-radius: 0.25rem;
-    /*rounded*/
-    border: 1px solid transparent;
-    /*border border-transparent*/
-  }
-
-  /*Pagination Buttons - Current selected */
-  .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    color: #fff !important;
-    /*text-white*/
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    /*shadow*/
-    font-weight: 700;
-    /*font-bold*/
-    border-radius: 0.25rem;
-    /*rounded*/
-    background: #667eea !important;
-    /*bg-indigo-500*/
-    border: 1px solid transparent;
-    /*border border-transparent*/
-  }
-
-  /*Pagination Buttons - Hover */
-  .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    color: #fff !important;
-    /*text-white*/
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    /*shadow*/
-    font-weight: 700;
-    /*font-bold*/
-    border-radius: 0.25rem;
-    /*rounded*/
-    background: #667eea !important;
-    /*bg-indigo-500*/
-    border: 1px solid transparent;
-    /*border border-transparent*/
-  }
-
-  /*Add padding to bottom border */
-  table.dataTable.no-footer {
-    margin-top: 0.75em;
-    margin-bottom: 0.75em;
-  }
-
-  /*Change colour of responsive icon*/
-  table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before,
-  table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
-    background-color: #667eea !important;
-    /*bg-indigo-500*/
-  }
-
-  .dark .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-    color: rgb(161 161 170) !important;
-  }
-  .dark .dataTables_wrapper .dataTables_paginate .paginate_button {
-    color: rgb(212 212 216) !important;
-  }
-</style>
 {% endblock%} {% block content %}
 <div
   class="flex flex-col w-screen h-screen px-6 py-4 overflow-hidden bg-gray-100 dark:bg-zinc-900"
@@ -116,7 +22,7 @@
   <div class="overflow-y-scroll grow">
     <table id="table" class="w-full">
       <thead>
-        <tr class="sticky top-0 bg-zinc-900">
+        <tr class="sticky top-0 bg-gray-100 dark:bg-zinc-900">
           <th
             class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
           >
@@ -124,6 +30,7 @@
               id="allcb"
               type="checkbox"
               name="active"
+              class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
             />
           </th>
           {% for k in stock_table[0] %} {% if k != "_id" and k != "last_updated"
@@ -151,24 +58,18 @@
         </tr>
       </thead>
       <tbody>
-        {% for row in stock_table %}
+        {% for row in stock_table[:20] %}
         <tr class="text-gray-700">
           <td
-            class="w-6 px-2 py-2 text-center bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
+            class="w-6 px-2 py-2 text-center bg-gray-100 border-b dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
           >
-						<input
-							type="checkbox"
-							name="active"
-							value="{{row['ticker']}}"
-							onchange="update_active(this)"
-							{% if (row['ticker'] in active_tickers) %}
-								checked
-							{% endif %}
-						/>
+            <input type="checkbox" name="active" value="{{row['ticker']}}"
+            onchange="update_active(this)" {% if (row['ticker'] in
+            active_tickers) %} checked {% endif %} class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"/>
           </td>
           {% for k,v in row.items() %} {% if k == "board_lot" %}
           <td
-            class="px-2 py-2 text-right bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
+            class="px-2 py-2 text-right bg-gray-100 border-b dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
           >
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
@@ -184,7 +85,7 @@
           </td>
           {% elif k != "_id" and k != "last_updated" %}
           <td
-            class="px-2 py-2 bg-gray-100 border-b-2 p dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
+            class="px-2 py-2 bg-gray-100 border-b p dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
           >
             <form action="/stock-info" method="POST">
               <input type="hidden" name="page" value="1" />
@@ -203,26 +104,91 @@
         {% endfor %}
       </tbody>
     </table>
+    <div
+      class="flex flex-col items-center px-3 py-3 xs:flex-row xs:justify-between"
+    >
+      <div class="flex items-center">
+        <button
+          type="button"
+          class="w-full p-4 text-base text-gray-600 bg-white border rounded-l-xl hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700"
+        >
+          <svg
+            width="9"
+            fill="currentColor"
+            height="8"
+            class=""
+            viewBox="0 0 1792 1792"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1427 301l-531 531 531 531q19 19 19 45t-19 45l-166 166q-19 19-45 19t-45-19l-742-742q-19-19-19-45t19-45l742-742q19-19 45-19t45 19l166 166q19 19 19 45t-19 45z"
+            ></path>
+          </svg>
+        </button>
+				{% for i in range(1, (stock_table|list|length // 20)+1) %}
+        <button
+          type="button"
+          class="w-full px-4 py-2 text-base text-gray-600 bg-white border-t border-b border-r dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 hover:bg-gray-100 dark:border-zinc-700"
+        >
+          {{i}}
+        </button>
+				{% endfor %}
+        <button
+          type="button"
+          class="w-full p-4 text-base text-gray-600 bg-white border-t border-b border-r rounded-r-xl hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700"
+        >
+          <svg
+            width="9"
+            fill="currentColor"
+            height="8"
+            class=""
+            viewBox="0 0 1792 1792"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1363 877l-742 742q-19 19-45 19t-45-19l-166-166q-19-19-19-45t19-45l531-531-531-531q-19-19-19-45t19-45l166-166q19-19 45-19t45 19l742 742q19 19 19 45t-19 45z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %} {% block script %}
 <script>
-	
-
   $("#allcb").change(function () {
     $('tbody tr td input[type="checkbox"]').prop(
       "checked",
       $(this).prop("checked")
     );
-		$.post("/update-active",{"tickers": $('input[type="checkbox"]').filter(":not(#allcb)").map(function(){return $(this).val()}).toArray(), "check": this.checked}, function (data) {console.log(data)})
-
+    $.post(
+      "/update-active",
+      {
+        tickers: $('input[type="checkbox"]')
+          .filter(":not(#allcb)")
+          .map(function () {
+            return $(this).val();
+          })
+          .toArray(),
+        check: this.checked,
+      },
+      function (data) {
+        console.log(data);
+      }
+    );
   });
 
-	function update_active(evt){
-		if (!evt.checked){
-			$("#allcb").prop("checked", false);
-		}
-		$.post("/update-active",{"tickers": [evt.value], "check": evt.checked}, function (data) {console.log(data)})
-	}
+  function update_active(evt) {
+    if (!evt.checked) {
+      $("#allcb").prop("checked", false);
+    }
+    $.post(
+      "/update-active",
+      { tickers: [evt.value], check: evt.checked },
+      function (data) {
+        console.log(data);
+      }
+    );
+  }
 </script>
 {% endblock %}
