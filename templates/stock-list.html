@@ -161,6 +161,9 @@
 							name="active"
 							value="{{row['ticker']}}"
 							onchange="update_active(this)"
+							{% if (row['ticker'] in active_tickers) %}
+								checked
+							{% endif %}
 						/>
           </td>
           {% for k,v in row.items() %} {% if k == "board_lot" %}
@@ -204,6 +207,8 @@
 </div>
 {% endblock %} {% block script %}
 <script>
+	
+
   $("#allcb").change(function () {
     $('tbody tr td input[type="checkbox"]').prop(
       "checked",
@@ -214,8 +219,10 @@
   });
 
 	function update_active(evt){
+		if (!evt.checked){
+			$("#allcb").prop("checked", false);
+		}
 		$.post("/update-active",{"tickers": [evt.value], "check": evt.checked}, function (data) {console.log(data)})
-
 	}
 </script>
 {% endblock %}

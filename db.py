@@ -365,3 +365,6 @@ def delete_active_tickers(username, tickers):
 		'active': {"$in": tickers}
 		}
 	})
+
+def get_active_tickers(username):
+	return col_users.find_one({"username":username}, {"active":1})

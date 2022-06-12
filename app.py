@@ -32,8 +32,9 @@ def rules():
 @app.route("/stock-list")
 def stock_list():
 	stock_table = get_stock_info("ALL")
+	active_tickers = get_active_tickers("test")['active']
 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
-	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'])
+	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers)
 
 @app.route("/update-active", methods=["POST"])
 def update_active():
