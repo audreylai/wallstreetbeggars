@@ -24,11 +24,10 @@ def get_data():
 def rules():
 	return render_template("rules.html")
 
-
 @app.route("/stock-list")
 def stock_list():
 	stock_table = get_stock_info("ALL")
-	last_updated = stock_table['last_updated']
+	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'])
 
 
@@ -53,11 +52,11 @@ def stock_info():
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
 	if request.method == "POST":
-		ticker = request.form.get("ticker", type=str)
+		ticker = request.form.get("ticker", type=str).upper().replace(".", "-")
 		period = request.form.get("period", type=int)
 		interval = request.form.get("interval", type=int)
 	else:
-		ticker = request.args.get('ticker', type=str)
+		ticker = request.args.get('ticker', type=str).upper().replace(".", "-")
 		period = request.args.get("period", type=int)
 		interval = request.args.get("interval", type=int)
 

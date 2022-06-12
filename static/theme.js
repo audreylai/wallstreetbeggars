@@ -10,7 +10,7 @@ $().ready(function() {
         $("#dark-icon").hide();
         // console.log('1');
     }
-
+	
     $("#theme-toggle").click(function() {
         if (localStorage.theme == 'dark') {
             document.documentElement.classList.remove('dark')
