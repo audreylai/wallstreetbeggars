@@ -117,7 +117,15 @@
     <table id="table" class="w-full">
       <thead>
         <tr class="sticky top-0 bg-zinc-900">
-					<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"><input id="allcb" type="checkbox" name="active" onclick="update_all()"></th>
+          <th
+            class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
+          >
+            <input
+              id="allcb"
+              type="checkbox"
+              name="active"
+            />
+          </th>
           {% for k in stock_table[0] %} {% if k != "_id" and k != "last_updated"
           %}
           <th
@@ -126,8 +134,16 @@
             <div class="flex">
               {{k}}
               <div>
-                <ion-icon name="caret-up-outline" class="w-4" id="up-sort"></ion-icon>
-                <ion-icon name="caret-down-outline" class="w-4" id="down-sort"></ion-icon>
+                <ion-icon
+                  name="caret-up-outline"
+                  class="w-4"
+                  id="up-sort"
+                ></ion-icon>
+                <ion-icon
+                  name="caret-down-outline"
+                  class="w-4"
+                  id="down-sort"
+                ></ion-icon>
               </div>
             </div>
           </th>
@@ -137,9 +153,16 @@
       <tbody>
         {% for row in stock_table %}
         <tr class="text-gray-700">
-					<td
+          <td
             class="w-6 px-2 py-2 text-center bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
-          ><input type="checkbox" name="active" value="{{row['ticker']}}" onchange="update_active(this)"></td>
+          >
+						<input
+							type="checkbox"
+							name="active"
+							value="{{row['ticker']}}"
+							onchange="update_active(this.value)"
+						/>
+          </td>
           {% for k,v in row.items() %} {% if k == "board_lot" %}
           <td
             class="px-2 py-2 text-right bg-gray-100 border-b-2 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
@@ -181,16 +204,20 @@
 </div>
 {% endblock %} {% block script %}
 <script>
-	$('#allcb').change(function () {
-    $('tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
-	});
+  $("#allcb").change(function () {
+    $('tbody tr td input[type="checkbox"]').prop(
+      "checked",
+      $(this).prop("checked")
+    );
+		console.log()
+		$.post("/update-active",{"tickers": $('input[type="checkbox"]').filter(":checked:not(#allcb)").map(function(){return $(this).val()}).toArray()}, function (data) {console.log(data)})
+  });
 
-	function update_active(ticker) {
-		console.log(ticker.value)
-	}
-
-	function update_all(){
-		console.log($('input[type="checkbox"]').filter(':checked'))
-	}
+  function update_active(ticker) {
+		console.log(ticker)
+    $.post("/update-active",{"ticker": ticker}, function (data) {
+			console.log(data)
+		});
+  }
 </script>
 {% endblock %}

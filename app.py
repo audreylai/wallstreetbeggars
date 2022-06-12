@@ -30,8 +30,16 @@ def stock_list():
 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'])
 
+@app.route("/update-active", methods=["POST"])
+def update_active():
+	# write update db logic
+	if request.form.get("ticker"):
+		return request.form.get("ticker")
+	else:
+		print(request.form.getlist("tickers[]"))
+		return {"tickers": request.form.getlist("tickers[]")}
 
-@app.route("/stock-info", methods=["GET", "POST"])
+@app.route("/stock-info", methods=["POST"])
 def stock_info():
 	try:
 		if request.method == "POST":
