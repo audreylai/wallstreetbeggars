@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import datetime
 import re
 import json
+from math import ceil
 
 from db import *
 
@@ -29,17 +30,34 @@ def rules():
 	return render_template("rules.html")
 
 
-@app.route("/stock-list")
-def stock_list():
+# @app.route("/stock-list")
+# def stock_list():
+# 	stock_table = get_stock_info("ALL")
+# 	active_tickers = get_active_tickers("test")['active']
+# 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
+# 	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers)
+
+
+@app.route("/stock-list", methods=["GET", "POST"])
+def stock_list_page():
+	if request.method == "POST":
+		page = request.form.get("page", type=int)
+	else:
+		page = request.args.get("page", type=int)
+	if page is None: page = 1
+
 	stock_table = get_stock_info("ALL")
+
+	rows_per_page = 20
+	num_of_pages = ceil(len(stock_table["table"]) / rows_per_page)
+
+	page = max(1, min(page, num_of_pages))
+	stock_table["table"] = stock_table["table"][rows_per_page*(page-1):min(rows_per_page*page+1, len(stock_table["table"]))]	
+
 	active_tickers = get_active_tickers("test")['active']
 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
-	return render_template("stock-list.html", stock_table=list(stock_table['table']), last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers)
+	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers)
 
-@app.route("/stock-list", methods=["POST"])
-def stock_list_page():
-	page = request.form.get('page')
-	return "Hello"
 
 @app.route("/update-active", methods=["POST"])
 def update_active():
