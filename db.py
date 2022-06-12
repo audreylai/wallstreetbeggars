@@ -41,8 +41,8 @@ def add_stock_data_one(ticker):
 	out = df.to_dict("records")
 
 	# upsert
-	# query = {ticker.replace(".","-"): {"$exists": True}}
-	# col_stock_data.delete_one(query)
+	query = {ticker: {"$exists": True}}
+	col_stock_data.delete_one(query)
 	col_stock_data.insert_one({ticker: out})
 
 
@@ -53,6 +53,11 @@ def add_stock_data_batch():
 		print(ticker)
 		add_stock_data_one(ticker)
 
+def add_hsi_data():
+    hsilist = ["^HSI", "^HSCE", "^HSCC", "^HSIL"]
+    for i in hsilist:
+        print(i)
+        add_stock_data_one(i)
 
 # Web Scraping Code (etnet)
 def etnet_scraping():
