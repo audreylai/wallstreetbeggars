@@ -205,7 +205,7 @@ def yfinance_info(ticker_list):
 def get_stock_info(ticker):
 	if ticker == "ALL":
 		return {
-			"table": list(col_stock_info.find({"last_updated": {"$exists": False}}, {"_id": 0, "ticker": 1, "name": 1, "board_lot": 1, "industry": 1})),
+			"table": list(col_stock_info.find({"last_updated": {"$exists": False}}, {"_id": 0, "ticker": 1, "name": 1, "board_lot": 1, "industry_x": 1, "mkt_cap":1})),
 			"last_updated": col_stock_info.find_one({"last_updated": {"$exists": True}})["last_updated"],
 			"industries": get_industries()
 		}

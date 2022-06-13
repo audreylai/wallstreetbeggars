@@ -67,7 +67,7 @@
             onchange="update_active(this)" {% if (row['ticker'] in
             active_tickers) %} checked {% endif %} class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"/>
           </td>
-          {% for k,v in row.items() %} {% if k == "board_lot" %}
+          {% for k,v in row.items() %}{% if k == "board_lot" %}
           <td
             class="px-2 py-2 text-right bg-gray-100 border-b dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
           >
@@ -108,48 +108,59 @@
       class="flex flex-col items-center px-3 py-3 xs:flex-row xs:justify-between"
     >
       <div class="flex items-center">
-        <button
-          type="button"
-          class="w-full p-4 text-base text-gray-600 bg-white border rounded-l-xl hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700"
-        >
-          <svg
-            width="9"
-            fill="currentColor"
-            height="8"
-            class=""
-            viewBox="0 0 1792 1792"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1427 301l-531 531 531 531q19 19 19 45t-19 45l-166 166q-19 19-45 19t-45-19l-742-742q-19-19-19-45t19-45l742-742q19-19 45-19t45 19l166 166q19 19 19 45t-19 45z"
-            ></path>
-          </svg>
-        </button>
-				{% for i in range(1, (stock_table|list|length // 20)+1) %}
-        <button
-          type="button"
-          class="w-full px-4 py-2 text-base text-gray-600 bg-white border-t border-b border-r dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 hover:bg-gray-100 dark:border-zinc-700"
-        >
-          {{i}}
-        </button>
+				<form action="/stock-list" method="POST">
+					<input type="text" name="page" id="page" value="{{page-1}}" hidden>
+        	<button
+	          type="submit"
+						{% if (page - 1)|int < 1 %} disabled {% endif %}
+	          class="w-full p-4 text-base text-gray-600 bg-white border rounded-l-xl hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700 dark:disabled:text-zinc-500 disabled:cursor-not-allowed"
+	        >
+	          <svg
+	            width="9"
+	            fill="currentColor"
+	            height="8"
+	            class=""
+	            viewBox="0 0 1792 1792"
+	            xmlns="http://www.w3.org/2000/svg"
+	          >
+	            <path
+	              d="M1427 301l-531 531 531 531q19 19 19 45t-19 45l-166 166q-19 19-45 19t-45-19l-742-742q-19-19-19-45t19-45l742-742q19-19 45-19t45 19l166 166q19 19 19 45t-19 45z"
+	            ></path>
+	          </svg>
+	        </button>
+        </form>
+				{% for i in range(1, num_of_pages+1) %}
+        <form action="/stock-list" method="POST">
+					<input type="text" name="page" id="page" value="{{i}}" hidden>
+        	<button
+	          type="submit"
+	          class="w-full px-4 py-2 text-base bg-white border-t border-b border-r dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 hover:bg-gray-100 dark:border-zinc-700 {% if page == i %}text-indigo-500{%else%}text-gray-600{% endif %}"
+	        >
+	          {{i}}
+	        </button>
+        </form>
 				{% endfor %}
-        <button
-          type="button"
-          class="w-full p-4 text-base text-gray-600 bg-white border-t border-b border-r rounded-r-xl hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700"
-        >
-          <svg
-            width="9"
-            fill="currentColor"
-            height="8"
-            class=""
-            viewBox="0 0 1792 1792"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1363 877l-742 742q-19 19-45 19t-45-19l-166-166q-19-19-19-45t19-45l531-531-531-531q-19-19-19-45t19-45l166-166q19-19 45-19t45 19l742 742q19 19 19 45t-19 45z"
-            ></path>
-          </svg>
-        </button>
+        <form action="/stock-list" method="POST">
+					<input type="text" name="page" id="page" value="{{page+1}}" hidden>
+        	<button
+	          type="submit"
+						{% if (page+1)|int > num_of_pages %} disabled {% endif %}
+	          class="w-full p-4 text-base text-gray-600 bg-white border-t border-b border-r rounded-r-xl hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700 dark:disabled:text-zinc-500 disabled:cursor-not-allowed"
+	        >
+	          <svg
+	            width="9"
+	            fill="currentColor"
+	            height="8"
+	            class=""
+	            viewBox="0 0 1792 1792"
+	            xmlns="http://www.w3.org/2000/svg"
+	          >
+	            <path
+	              d="M1363 877l-742 742q-19 19-45 19t-45-19l-166-166q-19-19-19-45t19-45l531-531-531-531q-19-19-19-45t19-45l166-166q19-19 45-19t45 19l742 742q19 19 19 45t-19 45z"
+	            ></path>
+	          </svg>
+	        </button>
+        </form>
       </div>
     </div>
   </div>
