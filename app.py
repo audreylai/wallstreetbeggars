@@ -113,7 +113,7 @@ def stock_analytics():
 	stock_data['ticker'], stock_data['period'], stock_data['interval'] = ticker, period, interval
 	stock_info = get_stock_info(ticker)
 
-	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_industries())
+	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_all_industries(), indexes=get_all_tickers(ticker_type='index'))
 
 
 @app.route("/api/get_stock_data", methods=['GET'])

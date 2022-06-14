@@ -17,11 +17,11 @@ col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
 # Upserts --------------------
-def add_stock_data_one(ticker, type=None):
-	df = yf.download(ticker.replace('-', '.'), period="10y", progress=False)
+def add_stock_data_one(ticker, ticker_type=None):
+	df = yf.download(ticker.replace('-', '.'), period="max", progress=False)
 	if df.empty:
 		return
-	
+
 	# format columns
 	df.reset_index(inplace=True)
 
@@ -38,13 +38,16 @@ def add_stock_data_one(ticker, type=None):
 
 	df.dropna(inplace=True)
 
-	# convert df to dict for upsert
+	# convert df to dict
 	out = df.to_dict("records")
 
 	# upsert
-	query = {ticker: {"$exists": True}}
-	col_stock_data.delete_one(query)
-	col_stock_data.insert_one({ticker: out})
+	col_stock_data.delete_one({'ticker': ticker})
+	col_stock_data.insert_one({
+		'ticker': ticker,
+		'data': out,
+		'type': ticker_type
+	})
 
 
 def add_stock_data_batch():
@@ -52,11 +55,11 @@ def add_stock_data_batch():
 	for i in range(1, 100):
 		ticker = "%04d-HK" % i
 		print(ticker)
-		add_stock_data_one(ticker, type='stock')
+		add_stock_data_one(ticker, ticker_type="stock")
 
-	for i in ["^HSI", "^HSCE", "^HSCC", "^HSIL"]:
+	for i in ["^HSI", "^HSCE", "^HSCC"]:
 		print(i)
-		add_stock_data_one(i, type='index')
+		add_stock_data_one(i, ticker_type="index")
 
 # Web Scraping Code (etnet)
 def etnet_scraping():
@@ -140,32 +143,38 @@ def add_stock_info_batch():
 # Functions for Fetching Data from DB -------------------
 def get_stock_data(ticker, period):
 	# Calculate start date for fetching
-	period = int(period)
-	startDate = date.today() + relativedelta(days=-period)
-	startDateTime = datetime(startDate.year, startDate.month, startDate.day)
+	start_date = date.today() + relativedelta(days=-period)
+	start_datetime = datetime(start_date.year, start_date.month, start_date.day)
 	
 	# Fetch and return data
-	aggInput = "$" + ticker
-	out = col_stock_data.aggregate([
+	cursor = col_stock_data.aggregate([
+		{
+			"$match": {"ticker": ticker}
+		},
 		{
 			"$project": {
-				ticker: {
+				"data": {
 					"$filter": {
-						"input": aggInput,
+						"input": "$data",
 						"as": "data",
 						"cond": {"$and": [
-							{"$gte": ["$$data.date", startDateTime]}
+							{"$gte": ["$$data.date", start_datetime]}
 						]}
 					}
 				}
 			}
 		}
 	])
-	res_list = [i for i in out if i[ticker] is not None][0][ticker]
-	return res_list
+	out = [i for i in cursor if i['data'] is not None][0]['data']
+	return out
 
+def get_all_tickers(ticker_type=None):
+	if ticker_type is None:
+		return col_stock_data.distinct("ticker")
+	else:
+		return col_stock_data.distinct("ticker", {"type": ticker_type})
 
-def get_industries():
+def get_all_industries():
 	return col_stock_info.distinct("industry_x")
 
 def yfinance_info(ticker_list):
@@ -207,50 +216,52 @@ def get_stock_info(ticker):
 		return {
 			"table": list(col_stock_info.find({"last_updated": {"$exists": False}}, {"_id": 0, "ticker": 1, "name": 1, "board_lot": 1, "industry_x": 1, "mkt_cap":1})),
 			"last_updated": col_stock_info.find_one({"last_updated": {"$exists": True}})["last_updated"],
-			"industries": get_industries()
+			"industries": get_all_industries()
 		}
 	else:
 		return col_stock_info.find_one({"ticker": ticker}, {"_id": 0})
 
 # Not actually DB code --------------------
 def get_industry_close_pct(industry, period):
-	industry_ticker_list = []
+	ticker_list = []
 	for i in col_stock_info.find({"industry_x": industry}):
-		industry_ticker_list.append(i["ticker"])
+		ticker_list.append(i["ticker"])
 
 	out = {}
-	for ticker in industry_ticker_list:
-		startDate = date.today() + relativedelta(days=-period)
-		startDateTime = datetime(startDate.year, startDate.month, startDate.day)
-		aggInput = "$" + ticker
+	print(ticker_list)
+	for ticker in ticker_list:
+		start_date = date.today() + relativedelta(days=-period)
+		start_datetime = datetime(start_date.year, start_date.month, start_date.day)
 
 		try:
 			cursor = col_stock_data.aggregate([
 				{
+					"$match": {"ticker": ticker}
+				},
+				{
 					"$project": {
-						ticker: {
+						"data": {
 							"$filter": {
-								"input": aggInput,
+								"input": "$data",
 								"as": "data",
 								"cond": {"$and": [
-									{"$gte": ["$$data.date", startDateTime]}
+									{"$gte": ["$$data.date", start_datetime]}
 								]}
 							}
 						}
 					}
 				}
 			])
-		
+			res = [i for i in cursor if i["data"] is not None][0]["data"]
 			initial_close = None
-
-			for dic in [i for i in cursor if i[ticker] is not None][0][ticker]:
+			for i in res:
 				if initial_close is None:
-					initial_close = dic["close"]
+					initial_close = i["close"]
 
-				if dic["date"] in out:
-					out[dic["date"]].append((dic["close"] - initial_close) / initial_close)
+				if i["date"] in out:
+					out[i["date"]].append((i["close"] - initial_close) / initial_close)
 				else:
-					out[dic["date"]] = [(dic["close"] - initial_close) / initial_close]
+					out[i["date"]] = [(i["close"] - initial_close) / initial_close]
  
 		except:
 			pass
@@ -365,4 +376,4 @@ def delete_active_tickers(username, tickers):
 	})
 
 def get_active_tickers(username):
-	return col_users.find_one({"username":username}, {"active":1})
+	return col_users.find_one({"username": username}, {"active": 1})

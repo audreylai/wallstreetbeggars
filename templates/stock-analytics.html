@@ -231,13 +231,15 @@
 				</h2>
 				<select
 					required
-					id="industry-cmp-txtbox"
+					id="index-cmp-txtbox"
 					class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
 					placeholder="Industry..."
-					onchange=""
+					onchange="draw_index_cmp(stock_data, document.getElementById('index-cmp-txtbox').value)"
 				>
-					<option value="">Select an index...</option>
-					
+					<option value="">Select an industry...</option>
+					{% for index in indexes %} {% if index != None %}
+					<option value="{{index}}">{{index}}</option>
+					{% endif %} {% endfor %}
 				</select>
 			</div>
 			<div class="grow">
@@ -428,6 +430,11 @@
 	var current_period = undefined;
 	var current_interval = undefined;
 
+	// update cmp charts accordingly when period updates
+	var current_cmp_ticker = '0001-HK'
+	var current_cmp_industry = 'Banks'
+	var current_cmp_index = '^HSI'
+
 	// init chart + ctx
 	var stock_cmp_chart = undefined;
 	var industry_cmp_chart = undefined;
@@ -446,6 +453,7 @@
 	async function draw_stock_cmp(data, other_ticker) {
 		period = data.period;
 		interval = data.interval;
+		current_cmp_ticker = other_ticker;
 
 		let data2 = undefined;
 
@@ -503,6 +511,7 @@
 	async function draw_industry_cmp(data, industry) {
 		period = data.period;
 		interval = data.interval;
+		current_cmp_industry = industry;
 
 		let data2 = undefined;
 
@@ -560,6 +569,7 @@
 	async function draw_index_cmp(data, index) {
 		period = data.period;
 		interval = data.interval;
+		current_cmp_index = index;
 
 		let data2 = undefined;
 
@@ -570,6 +580,8 @@
 		}, function(res) {
 			data2 = res;
 		});
+
+		console.log(data2)
 
 		chart_data = {
 			labels: data.lbl,
@@ -808,7 +820,7 @@
 	var stock_data = {{ stock_data | tojson }};
 
 	function draw_charts(stock_data) {
-	console.log(stock_data);
+		console.log(stock_data);
 		current_period = stock_data.period
 		current_interval = stock_data.interval
 
@@ -816,9 +828,9 @@
 		draw_rsi(stock_data);
 		draw_macd(stock_data);
 
-		draw_stock_cmp(stock_data, '0001-HK');
-		draw_industry_cmp(stock_data, 'Banks');
-		draw_index_cmp(stock_data, '^HSI');
+		draw_stock_cmp(stock_data, current_cmp_ticker);
+		draw_industry_cmp(stock_data, current_cmp_industry);
+		draw_index_cmp(stock_data, current_cmp_index);
 	}
 
 	async function update_period(period, interval) {
