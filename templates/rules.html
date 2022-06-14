@@ -47,21 +47,23 @@
 	              />
               </div>
             </td>
-            <td class="p-4 border-b-2 dark:border-zinc-500">a</td>
-            <td class="p-4 border-b-2 dark:border-zinc-500">b</td>
-						<td class="p-4 border-b-2 dark:border-zinc-500">c</td>
+            <td class="p-4 border-b-2 dark:border-zinc-500 var1">a</td>
+            <td class="p-4 border-b-2 dark:border-zinc-500 op">b</td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 var2">c</td>
             <td class="p-4 border-b-2 dark:border-zinc-500">
               <div class="flex items-center justify-end space-x-2">
 								<button
 	                type="button"
 	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+									onclick="edit_row($(this));"
 	              >
 								<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 	              </button>
               	<button
 	                type="button"
 	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-	              >
+									onclick="delete_row($(this));"
+								>
 								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
 	              </button>
               </div>
@@ -75,31 +77,23 @@
 			<table class="w-full">
         <thead>
           <tr>
-            <th
-              class="p-4 font-normal text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap"
-            >
+            <th class="p-4 font-normal text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap">
               <input
                 type="checkbox"
                 name="checked"
                 class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
               />
             </th>
-            <th
-              class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
-            >
+            <th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
               Var 1
             </th>
-            <th
-						class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
-            >
+            <th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
               Operator
             </th>
-            <th
-						class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
-            >Var 2</th>
-						<th
-						class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
-						></th>
+            <th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+							Var 2
+						</th>
+						<th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"></th>
           </tr>
         </thead>
         <tbody>
@@ -123,13 +117,13 @@
 	                type="button"
 	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 	              >
-								<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+									<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 	              </button>
               	<button
 	                type="button"
 	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 	              >
-								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+									<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
 	              </button>
               </div>
             </td>
@@ -143,22 +137,19 @@
     <div class="flex p-4 space-x-2">
       <select
         class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-        name="animals"
       >
-        <option value="dog">MA10</option>
+        <option value="MA10">MA10</option>
       </select>
       <select
-			class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			name="animals"
+				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
-        <option value="">≤</option>
-        <option value="dog">≥</option>
+        <option value="≤">≤</option>
+        <option value="≥">≥</option>
       </select>
       <select
-			class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			name="animals"
+				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
-        <option value="dog">MA10</option>
+        <option value="MA10">MA10</option>
       </select>
       <button
         type="button"
@@ -170,22 +161,19 @@
     <div class="flex p-4 space-x-2">
       <select
         class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-        name="animals"
       >
-        <option value="dog">MA10</option>
+        <option value="MA10">MA10</option>
       </select>
       <select
-			class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			name="animals"
+				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
-        <option value="">≤</option>
-        <option value="dog">≥</option>
+        <option value="≤">≤</option>
+        <option value="≥">≥</option>
       </select>
       <select
-			class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			name="animals"
+				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
-        <option value="dog">MA10</option>
+        <option value="MA10">MA10</option>
       </select>
       <button
         type="button"
@@ -196,4 +184,51 @@
     </div>
   </div>
 </div>
+<script>
+	function delete_row(btn) {
+		btn.parents('tr').remove();
+	}
+
+	function edit_row(btn) {
+		var1 = btn.parents('tr').find('.var1')
+		var2 = btn.parents('tr').find('.var2')
+		op = btn.parents('tr').find('.op')
+
+		if (btn.hasClass('editing')) {
+			btn.removeClass('editing');
+
+			var1_text = var1.find('select').val();
+			var2_text = var2.find('select').val();
+			op_text = op.find('select').val();
+			
+			var1.empty().text(var1_text);
+			var2.empty().text(var2_text);
+			op.empty().text(op_text);
+
+		} else {
+			btn.addClass('editing');
+
+			dropdown_var = $(`
+				<select
+					class="block px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+				>
+					<option>MA10</option>
+				</select>`
+			);
+
+			dropdown_op = $(`
+				<select
+					class="block px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+				>
+					<option>≤</option>
+					<option>≥</option>
+				</select>`
+			);
+
+			var1.empty().append(dropdown_var.clone());
+			var2.empty().append(dropdown_var.clone());
+			op.empty().append(dropdown_op);
+		}
+	}
+</script>
 {% endblock %}
