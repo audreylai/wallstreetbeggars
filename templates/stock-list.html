@@ -39,19 +39,15 @@
             class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
           >
             <div class="flex">
-              {{k}}
-              <div>
-                <ion-icon
-                  name="caret-up-outline"
-                  class="w-4"
-                  id="up-sort"
-                ></ion-icon>
-                <ion-icon
-                  name="caret-down-outline"
-                  class="w-4"
-                  id="down-sort"
-                ></ion-icon>
-              </div>
+              <p class=".column">{{k}}</p>
+							<ion-icon
+								name="caret-up-outline"
+								class="w-4 ascending"
+							></ion-icon>
+							<ion-icon
+								name="caret-down-outline"
+								class="w-4 descending"
+							></ion-icon>
             </div>
           </th>
           {% endif %} {% endfor %}
@@ -134,7 +130,7 @@
 					<input type="text" name="page" id="page" value="{{i}}" hidden>
         	<button
 	          type="submit"
-	          class="w-full px-4 py-2 text-base bg-white border-t border-b border-r dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 hover:bg-gray-100 dark:border-zinc-700 {% if page == i %}text-indigo-500{%else%}text-gray-600{% endif %}"
+	          class="w-full px-4 py-2 text-base bg-white border-t border-b border-r dark:bg-zinc-900 dark:hover:bg-zinc-800 hover:bg-gray-100 dark:border-zinc-700 {% if page == i %}text-indigo-500 dark:text-indigo-400{%else%}text-gray-600 dark:text-zinc-300{% endif %}"
 	        >
 	          {{i}}
 	        </button>

@@ -1,6 +1,199 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %} 
-{% block content %}
-<div class="w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900">
-  rules page
+{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
+%}
+<div
+  class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900"
+>
+  <div class="grid grid-cols-2 gap-x-4">
+    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<table class="w-full">
+        <thead>
+          <tr>
+            <th
+              class="p-4 font-normal text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+            >
+              <input
+                type="checkbox"
+                name="checked"
+                class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
+              />
+            </th>
+            <th
+              class="p-4 font-semibold text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+            >
+              Var 1
+            </th>
+            <th
+              class="p-4 font-semibold text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+            >
+              Operator
+            </th>
+            <th
+              class="p-4 font-semibold text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+            >Var 2</th>
+						<th
+						class="p-4 font-semibold text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+					></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in range(6) %}
+          <tr class="text-center text-gray-700">
+            <td class="p-4 border-b-2 dark:border-dark-5">
+              <div class="flex justify-center">
+              	<input
+	                type="checkbox"
+	                name="checked"
+	                class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
+	              />
+              </div>
+            </td>
+            <td class="p-4 border-b-2 dark:border-dark-5">a</td>
+            <td class="p-4 border-b-2 dark:border-dark-5">b</td>
+						<td class="p-4 border-b-2 dark:border-dark-5">c</td>
+            <td class="p-4 border-b-2 dark:border-dark-5">
+              <div class="flex items-center justify-end space-x-2">
+								<button
+	                type="button"
+	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+	              >
+								<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+	              </button>
+              	<button
+	                type="button"
+	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+	              >
+								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+	              </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+      <table class="w-full">
+        <thead>
+          <tr>
+            <th
+              class="p-4 font-normal text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+            >
+              <input
+                type="checkbox"
+                name="checked"
+                class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
+              />
+            </th>
+            <th
+              class="p-4 font-normal text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+            >
+              a
+            </th>
+            <th
+              class="p-4 font-normal text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+            >
+              b
+            </th>
+            <th
+              class="p-4 font-normal text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+            >c</th>
+						<th
+						class="p-4 font-normal text-gray-900 border-b-2 dark:border-dark-5 whitespace-nowrap"
+					></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in range(6) %}
+          <tr class="text-center text-gray-700">
+            <td class="p-4 border-b-2 dark:border-dark-5">
+              <div class="flex justify-center">
+              	<input
+	                type="checkbox"
+	                name="checked"
+	                class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
+	              />
+              </div>
+            </td>
+            <td class="p-4 border-b-2 dark:border-dark-5">a</td>
+            <td class="p-4 border-b-2 dark:border-dark-5">b</td>
+						<td class="p-4 border-b-2 dark:border-dark-5">c</td>
+            <td class="p-4 border-b-2 dark:border-dark-5">
+              <div class="flex items-center justify-end space-x-2">
+								<button
+	                type="button"
+	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+	              >
+								<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+	              </button>
+              	<button
+	                type="button"
+	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+	              >
+								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+	              </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="flex p-4 space-x-2">
+      <select
+        class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+        name="animals"
+      >
+        <option value="dog">MA10</option>
+      </select>
+      <select
+        class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+        name="animals"
+      >
+        <option value="">≤</option>
+        <option value="dog">≥</option>
+      </select>
+      <select
+        class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+        name="animals"
+      >
+        <option value="dog">MA10</option>
+      </select>
+      <button
+        type="button"
+        class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+      >
+        Add
+      </button>
+    </div>
+    <div class="flex p-4 space-x-2">
+      <select
+        class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+        name="animals"
+      >
+        <option value="dog">MA10</option>
+      </select>
+      <select
+        class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+        name="animals"
+      >
+        <option value="">≤</option>
+        <option value="dog">≥</option>
+      </select>
+      <select
+        class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+        name="animals"
+      >
+        <option value="dog">MA10</option>
+      </select>
+      <button
+        type="button"
+        class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+      >
+        Add
+      </button>
+    </div>
+  </div>
 </div>
 {% endblock %}
