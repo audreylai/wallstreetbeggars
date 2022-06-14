@@ -19,7 +19,7 @@
               <input
                 type="checkbox"
                 name="checked"
-                class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
+                class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none allcb form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
               />
             </th>
             <th
@@ -86,7 +86,7 @@
               <input
                 type="checkbox"
                 name="checked"
-                class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
+                class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none allcb form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
               />
             </th>
             <th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
@@ -207,6 +207,12 @@
   </div>
 </div>
 <script>
+	$(".allcb").change(function () {
+    $($(this).parents()[3]).find("tbody tr td input[type='checkbox']").prop(
+      "checked",
+      $(this).prop("checked")
+    );
+  });
 	function delete_row(btn) {
 		btn.parents('tr').remove();
 	}
