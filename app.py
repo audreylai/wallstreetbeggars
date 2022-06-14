@@ -70,7 +70,7 @@ def update_active():
 	return {"tickers": request.form.getlist("tickers[]")}
 
 
-@app.route("/stock-info", methods=["POST"])
+@app.route("/stock-info", methods=["POST", "GET"])
 def stock_info():
 	if request.method == "POST":
 		ticker = request.form.get("ticker", type=str)

@@ -38,15 +38,19 @@
 			</div>
 		</div>
 		<div class="flex items-center space-x-1">
-			<h2 class="text-lg font-bold dark:text-zinc-300">{{ "%.2f" % stock_data['last_close'] }}</h2>
+			<h2 class="text-lg font-bold mr-2 dark:text-zinc-300">
+				{{ "%.2f" % stock_data['last_close'] }}
+			</h2>
 			{% if stock_data['last_close_pct'] > 0 %}
-				<p class="font-semibold dark:text-emerald-500 text-emerald-600">
-					<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
-					+{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
+			<p class="font-semibold dark:text-emerald-500 text-emerald-600">
+				<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
+				+{{ "%.2f" % (stock_data['last_close']*stock_data['last_close_pct']/100) }} (+{{ "%.2f" % stock_data['last_close_pct'] }}%)
+			</p>
 			{% else %}
-				<p class="font-semibold text-red-600 dark:text-red-500">
-					<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
-					{{ "%.2f" % stock_data['last_close_pct'] }}%</p>
+			<p class="font-semibold dark:text-rose-500 text-rose-600">
+				<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
+				{{ "%.2f" % (stock_data['last_close']*stock_data['last_close_pct']/100) }} ({{ "%.2f" % stock_data['last_close_pct'] }}%)
+			</p>
 			{% endif %}
 		</div>
 	</div>
@@ -122,6 +126,59 @@
   	pointRadius: 0,
   }
 
+	const crosshair_plugin = {
+		id: 'crosshair',
+		afterInit: (chart) => {
+			chart.crosshair = {
+				x: 0,
+				y: 0
+			}
+		},
+		afterEvent: (chart, evt) => {
+			const {chartArea: {top, bottom, left, right}} = chart;
+			const {event: {x, y}} = evt;
+			if (x < left || x > right || y < top || y > bottom) {
+				chart.crosshair = {x, y, draw: false}
+				chart.draw();
+				return;
+			}
+
+			chart.crosshair = {x, y, draw: true}
+			chart.draw();
+		},
+		afterDatasetsDraw: (chart, _, opts) => {
+			if (!chart.crosshair) {
+				return;
+			}
+
+			const {ctx, chartArea: {top, bottom, left, right}} = chart;
+			const {x, y, draw} = chart.crosshair;
+
+			if (!draw) {
+				return;
+			}
+
+			ctx.lineWidth = opts.width || 2;
+			ctx.setLineDash(opts.dash || [3, 3]);
+			ctx.strokeStyle = opts.color || 'rgba(112, 110, 122, 0.6)'
+
+			ctx.save();
+			ctx.beginPath();
+			ctx.moveTo(x, bottom);
+			ctx.lineTo(x, top);
+			ctx.moveTo(left, y);
+			ctx.lineTo(right, y);
+			ctx.stroke();
+			ctx.restore();
+
+			// reset line dash
+			ctx.setLineDash([]);
+		}
+	}
+
+	// enable plugins globally
+	Chart.register(crosshair_plugin)
+
   var chart = undefined;
   const ctx = document.getElementById('chart').getContext('2d');
 
@@ -158,8 +215,15 @@
   				},
   				type: 'timeseries',
   				time: {
-  					unit: 'month'
-  				}
+  					unit: 'month',
+						tooltipFormat: 'DD'
+  				},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 80,
+						maxRotation: 0,
+						minRotation: 0
+					}
   			},
   			y: {
   				display: true,
@@ -170,13 +234,16 @@
   			}
   		},
   		interaction: {
-  			mode: '',
-  			intersect: true
+  			mode: 'index',
+  			intersect: false
   		},
   		plugins: {
   			title: {
   				display: false
-  			}
+  			},
+				legend: {
+					display: false
+				},
   		},
   		responsive: true,
   		maintainAspectRatio: false,
