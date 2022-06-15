@@ -108,9 +108,9 @@
 	              />
               </div>
             </td>
-            <td class="p-4 border-b-2 dark:border-zinc-500">a</td>
-            <td class="p-4 border-b-2 dark:border-zinc-500">b</td>
-						<td class="p-4 border-b-2 dark:border-zinc-500">c</td>
+            <td class="p-4 border-b-2 dark:border-zinc-500 var1">a</td>
+            <td class="p-4 border-b-2 dark:border-zinc-500 op">b</td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 var2">c</td>
             <td class="p-4 border-b-2 dark:border-zinc-500">
               <div class="flex items-center justify-end space-x-2">
 								<button
@@ -190,13 +190,15 @@
   </div>
 </div>
 <script>
-	const options = ["ma10", "ma20", "ma50", "ma100", "ma150", "rsi"]
-	$(".allcb").change(function () {
-    $($(this).parents()[3]).find("tbody tr td input[type='checkbox']").prop(
+	const options = ["ma10", "ma20", "ma50", "ma100", "ma250", "rsi"]
+	
+	$(".allcb").change(function() {
+    $(this).parents('table').find("input[type='checkbox']").prop(
       "checked",
       $(this).prop("checked")
     );
   });
+
 	function delete_row(btn) {
 		btn.parents('tr').remove();
 	}
@@ -248,7 +250,7 @@
 		for (i in options) {
 			let option = options[i];
 			if (option.includes(e.target.value.toLowerCase())) {
-					let li = $(`
+				let li = $(`
 					<li id="listbox-item-0" role="option" class="relative py-2 pl-3 text-gray-900 cursor-default select-none hover:bg-indigo-500 hover:text-white pr-9">
 						<div class="flex items-center">
 								<span class="block ml-3 font-normal truncate">
@@ -261,6 +263,7 @@
 				console.log(option)
 			}
 		}
+
 		$("#autocomplete").empty()
 		for (j in finalOptions) {
 			$("#autocomplete").append(finalOptions[j])
