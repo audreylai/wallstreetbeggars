@@ -1,10 +1,5 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
 %}
-<style>
-	input::-webkit-calendar-picker-indicator {
-		opacity: 0;
-	}
-</style>
 <div
   class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900"
 >
@@ -121,14 +116,16 @@
 								<button
 	                type="button"
 	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+									onclick="edit_row($(this));"
 	              >
-									<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+								<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 	              </button>
               	<button
 	                type="button"
 	                class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-	              >
-									<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+									onclick="delete_row($(this));"
+								>
+								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
 	              </button>
               </div>
             </td>
@@ -164,25 +161,11 @@
       </button>
     </div>
     <div class="flex p-4 space-x-2">
-			<div class="w-2/6">
-				<input list="term1" class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+			<div class="relative w-2/6">
+				<input id="term1" class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
 				/>
-				<div class="absolute z-10 mt-1 bg-white rounded-md shadow-lg w-fit">
-					<ul tabindex="-1" class="py-1 overflow-auto text-base rounded-md max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-							<li id="listbox-item-0" role="option" class="relative py-2 pl-3 text-gray-900 cursor-default select-none hover:bg-indigo-500 hover:text-white pr-9">
-									<div class="flex items-center">
-											<span class="block ml-3 font-normal truncate">
-													MA10
-											</span>
-									</div>
-							</li>
-							<li id="listbox-item-1" role="option" class="relative py-2 pl-3 text-gray-900 cursor-default select-none hover:bg-indigo-500 hover:text-white pr-9">
-									<div class="flex items-center">
-											<span class="block ml-3 font-normal truncate">
-													MA20
-											</span>
-									</div>
-							</li>
+				<div class="absolute z-10 mt-1 overflow-y-auto bg-white rounded-md shadow-lg w-fit">
+					<ul tabindex="-1" id="autocomplete" class="py-1 overflow-auto text-base rounded-md max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
 					</ul>
 				</div>
 			</div>
@@ -207,6 +190,7 @@
   </div>
 </div>
 <script>
+	const options = ["ma10", "ma20", "ma50", "ma100", "ma150", "rsi"]
 	$(".allcb").change(function () {
     $($(this).parents()[3]).find("tbody tr td input[type='checkbox']").prop(
       "checked",
@@ -258,5 +242,29 @@
 			op.empty().append(dropdown_op);
 		}
 	}
+
+	$("#term1").on('input',function(e){
+		let finalOptions = []
+		for (i in options) {
+			let option = options[i];
+			if (option.includes(e.target.value.toLowerCase())) {
+					let li = $(`
+					<li id="listbox-item-0" role="option" class="relative py-2 pl-3 text-gray-900 cursor-default select-none hover:bg-indigo-500 hover:text-white pr-9">
+						<div class="flex items-center">
+								<span class="block ml-3 font-normal truncate">
+									${option.toUpperCase()}
+								</span>
+						</div>
+				</li>
+				`)
+				finalOptions.push(li)
+				console.log(option)
+			}
+		}
+		$("#autocomplete").empty()
+		for (j in finalOptions) {
+			$("#autocomplete").append(finalOptions[j])
+		}
+	 });
 </script>
 {% endblock %}
