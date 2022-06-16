@@ -1,10 +1,16 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
+{% extends "base.html" %} {% block title %} Home {% endblock %} {% block header %}
+<style>select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}</style>{% endblock %}{% block content
 %}
 <div
   class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900"
 >
   <div class="grid grid-cols-2 gap-x-4">
-    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+    <div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 			<table class="w-full">
         <thead>
           <tr>
@@ -18,20 +24,20 @@
               />
             </th>
             <th
-              class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
+              class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
             >
-              Var 1
+              <p class="mx-8">Var 1</p>
             </th>
             <th
-						class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
+						class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
             >
-              Operator
+              <p class="mx-8">Operator</p>
             </th>
             <th
-						class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
-            >Var 2</th>
+						class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
+            ><p class="mx-8">Var 2</p></th>
 						<th
-						class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
+						class="font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"
 						></th>
           </tr>
         </thead>
@@ -108,9 +114,9 @@
 	              />
               </div>
             </td>
-            <td class="p-4 border-b-2 dark:border-zinc-500 var1">a</td>
-            <td class="p-4 border-b-2 dark:border-zinc-500 op">b</td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 var2">c</td>
+            <td class="p-4 border-b-2 dark:border-zinc-500 var1"><p>a</p></td>
+            <td class="p-4 border-b-2 dark:border-zinc-500 op"><p>b</p></td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 var2"><p>c</p></td>
             <td class="p-4 border-b-2 dark:border-zinc-500">
               <div class="flex items-center justify-end space-x-2">
 								<button
@@ -138,18 +144,18 @@
   <div class="grid grid-cols-2">
     <div class="flex p-4 space-x-2">
       <select
-        class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+        class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
         <option value="MA10">MA10</option>
       </select>
       <select
-				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
         <option value="≤">≤</option>
         <option value="≥">≥</option>
       </select>
       <select
-				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
         <option value="MA10">MA10</option>
       </select>
@@ -162,7 +168,7 @@
     </div>
     <div class="flex p-4 space-x-2">
 			<div class="relative w-2/6">
-				<input id="term1" class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+				<input id="term1" class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
 				/>
 				<div class="absolute z-10 mt-1 overflow-y-auto bg-white rounded-md shadow-lg w-fit">
 					<ul tabindex="-1" id="autocomplete" class="py-1 overflow-auto text-base rounded-md max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
@@ -170,13 +176,13 @@
 				</div>
 			</div>
       <select
-				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
         <option value="≤">≤</option>
         <option value="≥">≥</option>
       </select>
       <select
-				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
       >
         <option value="MA10">MA10</option>
       </select>
@@ -224,7 +230,7 @@
 
 			dropdown_var = $(`
 				<select
-					class="block px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+					class="self-center px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300"
 				>
 					<option>MA10</option>
 				</select>`
@@ -232,7 +238,7 @@
 
 			dropdown_op = $(`
 				<select
-					class="block px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
+					class="self-center px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300"
 				>
 					<option>≤</option>
 					<option>≥</option>
