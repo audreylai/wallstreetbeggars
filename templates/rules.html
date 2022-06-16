@@ -206,7 +206,9 @@
 	});
 
 	function delete_row(btn) {
-		btn.parents('tr').remove();
+		btn.parents('tr').fadeOut(300, function() {
+			$(this).remove();
+		})
 	}
 
 	function edit_row(btn, enable_editing) {
