@@ -37,7 +37,7 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody col="1">
 					{% for i in range(6) %}
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
 						<td class="p-4 border-b-2 dark:border-zinc-500">
@@ -105,7 +105,7 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody col="2">
 					{% for i in range(6) %}
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
 						<td class="p-4 border-b-2 dark:border-zinc-500">
@@ -165,7 +165,8 @@
 				<option value="MA10">MA10</option>
 			</select>
 			<button type="button"
-				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2">
+				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+				onclick="add_row($(this), 1);">
 				Add
 			</button>
 		</div>
@@ -189,7 +190,8 @@
 				<option value="MA10">MA10</option>
 			</select>
 			<button type="button"
-				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2">
+				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+				onclick="add_row($(this), 2);">
 				Add
 			</button>
 		</div>
@@ -260,6 +262,56 @@
 		}
 	}
 
+	function add_row(btn, col) {
+		selects = btn.parent().find('select');
+
+		row = $(`
+			<tr class="text-center text-gray-700 dark:text-zinc-200">
+				<td class="p-4 border-b-2 dark:border-zinc-500">
+					<div class="flex justify-center">
+						<input type="checkbox" name="checked"
+							class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
+					</div>
+				</td>
+				<td class="p-4 border-b-2 dark:border-zinc-500 var1">
+					<p></p>
+				</td>
+				<td class="p-4 border-b-2 dark:border-zinc-500 op">
+					<p></p>
+				</td>
+				<td class="p-4 border-b-2 dark:border-zinc-500 var2">
+					<p></p>
+				</td>
+				<td class="p-4 border-b-2 dark:border-zinc-500">
+					<div class="flex items-center justify-end">
+						<button type="button"
+							class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+							onclick="edit_row($(this), true);">
+							<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+
+							<button type="button"
+								class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+								onclick="edit_row($(this), false);">
+								<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
+
+							</button>
+							<button type="button"
+								class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+								onclick="delete_row($(this));">
+								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+							</button>
+					</div>
+				</td>
+			</tr>
+		`);
+
+		row.find('.var1 p').text(selects.eq(0).val());
+		row.find('.op p').text(selects.eq(1).val());
+		row.find('.var2 p').text(selects.eq(2).val());
+
+		$('tbody[col='+ col +']').append(row);
+	}
+
 	$("#term1").on('input', function (e) {
 		let finalOptions = []
 		for (i in options) {
@@ -275,7 +327,7 @@
 				</li>
 				`)
 				finalOptions.push(li)
-				console.log(option)
+				// console.log(option)
 			}
 		}
 
