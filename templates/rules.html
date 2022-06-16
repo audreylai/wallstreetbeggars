@@ -225,29 +225,21 @@
 		var2_div = row.find('.var2');
 		op_div = row.find('.op');
 
-		btn.addClass('hidden'); // hide current btn
-		// enable other btn
-		if (enable_editing) {
-			row.find('.confirm-btn').removeClass('hidden');
-		} else {
-			row.find('.edit-btn').removeClass('hidden');
-		}
+		row.find('.confirm-btn').toggleClass('hidden');
+		row.find('.edit-btn').toggleClass('hidden');
 
 		if (enable_editing) {
-			var1_txt = var1_div.find('select').val();
-			var2_txt = var2_div.find('select').val();
-			op_txt = op_div.find('select').val();
-			
-			var1_div.empty().text(var1_txt);
-			var2_div.empty().text(var2_txt);
-			op_div.empty().text(op_txt);
-
-		} else {
 			dropdown_var = $(`
 				<select
 					class="self-center px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300"
 				>
 					<option>MA10</option>
+					<option>MA20</option>
+					<option>MA50</option>
+					<option>MA100</option>
+					<option>MA250</option>
+					<option>RSI</option>
+					<option>MACD</option>
 				</select>`
 			);
 
@@ -262,7 +254,16 @@
 
 			var1_div.empty().append(dropdown_var.clone());
 			var2_div.empty().append(dropdown_var.clone());
-			op_div.empty().append(dropdown_op);
+			op_div.empty().append(dropdown_op.clone());		
+
+		} else {
+			var1_txt = var1_div.find('select').val();
+			var2_txt = var2_div.find('select').val();
+			op_txt = op_div.find('select').val();
+			
+			var1_div.empty().append($('<p></p>').text(var1_txt));
+			var2_div.empty().append($('<p></p>').text(var2_txt));
+			op_div.empty().append($('<p></p>').text(op_txt));
 		}
 	}
 
