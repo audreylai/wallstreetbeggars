@@ -1,37 +1,40 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} {% block header %}
-<style>select {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	text-indent: 1px;
-	text-overflow: '';
-}</style>{% endblock %}{% block content
+<style>
+	select {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		text-indent: 1px;
+		text-overflow: '';
+	}
+</style>
+{% endblock %}{% block content
 %}
-<div
-	class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900"
->
+<div class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900">
 	<div class="grid grid-cols-2 gap-x-4">
 		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 			<table class="w-full">
 				<thead>
 					<tr>
 						<th class="p-4 font-normal text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap">
-							<input
-								type="checkbox"
-								name="checked"
-								class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none allcb form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
-							/>
+							<input type="checkbox" name="checked"
+								class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none allcb form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
 						</th>
-						<th class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+						<th
+							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
 							<p class="mx-7">Var 1</p>
 						</th>
-						<th class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+						<th
+							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
 							<p class="mx-7">Operator</p>
 
 						</th>
-						<th class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+						<th
+							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
 							<p class="mx-7">Var 2</p>
 						</th>
-						<th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"></th>
+						<th
+							class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -39,40 +42,37 @@
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
 						<td class="p-4 border-b-2 dark:border-zinc-500">
 							<div class="flex justify-center">
-								<input
-									type="checkbox"
-									name="checked"
-									class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
-								/>
+								<input type="checkbox" name="checked"
+									class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
 							</div>
 						</td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 var1"><p>a</p></td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 op"><p>b</p></td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 var2"><p>c</p></td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 var1">
+							<p>a</p>
+						</td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 op">
+							<p>b</p>
+						</td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 var2">
+							<p>c</p>
+						</td>
 						<td class="p-4 border-b-2 dark:border-zinc-500">
 							<div class="flex items-center justify-end">
-								<button
-									type="button"
+								<button type="button"
 									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="edit_row($(this), true);"
-								>
-								<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+									onclick="edit_row($(this), true);">
+									<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 
-								<button
-									type="button"
-									class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="edit_row($(this), false);"
-								>
-								<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-								
-								</button>
-								<button
-									type="button"
-									class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="delete_row($(this));"
-								>
-								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-								</button>
+									<button type="button"
+										class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+										onclick="edit_row($(this), false);">
+										<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
+
+									</button>
+									<button type="button"
+										class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+										onclick="delete_row($(this));">
+										<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+									</button>
 							</div>
 						</td>
 					</tr>
@@ -85,22 +85,24 @@
 				<thead>
 					<tr>
 						<th class="p-4 font-normal text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap">
-							<input
-								type="checkbox"
-								name="checked"
-								class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none allcb form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
-							/>
+							<input type="checkbox" name="checked"
+								class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none allcb form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
 						</th>
-						<th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-							Var 1
+						<th
+							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+							<p class="mx-7">Var 1</p>
 						</th>
-						<th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-							Operator
+						<th
+							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+							<p class="mx-7">Operator</p>
 						</th>
-						<th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-							Var 2
+						<th
+							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+							<p class="mx-7">Var 2</p>
 						</th>
-						<th class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100"></th>
+						<th
+							class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -108,40 +110,37 @@
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
 						<td class="p-4 border-b-2 dark:border-zinc-500">
 							<div class="flex justify-center">
-								<input
-									type="checkbox"
-									name="checked"
-									class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
-								/>
+								<input type="checkbox" name="checked"
+									class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
 							</div>
 						</td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 var1"><p>a</p></td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 op"><p>b</p></td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 var2"><p>c</p></td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 var1">
+							<p>a</p>
+						</td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 op">
+							<p>b</p>
+						</td>
+						<td class="p-4 border-b-2 dark:border-zinc-500 var2">
+							<p>c</p>
+						</td>
 						<td class="p-4 border-b-2 dark:border-zinc-500">
 							<div class="flex items-center justify-end">
-								<button
-									type="button"
+								<button type="button"
 									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="edit_row($(this), true);"
-								>
-								<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+									onclick="edit_row($(this), true);">
+									<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 
-								<button
-									type="button"
-									class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="edit_row($(this), false);"
-								>
-								<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-								
-								</button>
-								<button
-									type="button"
-									class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="delete_row($(this));"
-								>
-								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-								</button>
+									<button type="button"
+										class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+										onclick="edit_row($(this), false);">
+										<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
+
+									</button>
+									<button type="button"
+										class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+										onclick="delete_row($(this));">
+										<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+									</button>
 							</div>
 						</td>
 					</tr>
@@ -153,52 +152,44 @@
 	<div class="grid grid-cols-2">
 		<div class="flex p-4 space-x-2">
 			<select
-				class="block w-2/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			>
+				class="block w-2/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
 				<option value="MA10">MA10</option>
 			</select>
 			<select
-				class="block w-1/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			>
+				class="block w-1/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
 				<option value="≤">≤</option>
 				<option value="≥">≥</option>
 			</select>
 			<select
-				class="block w-2/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			>
+				class="block w-2/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
 				<option value="MA10">MA10</option>
 			</select>
-			<button
-				type="button"
-				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-			>
+			<button type="button"
+				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2">
 				Add
 			</button>
 		</div>
 		<div class="flex p-4 space-x-2">
 			<div class="relative w-2/6">
-				<input id="term1" class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-				/>
+				<input id="term1"
+					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
 				<div class="absolute z-10 mt-1 overflow-y-auto bg-white rounded-md shadow-lg w-fit">
-					<ul tabindex="-1" id="autocomplete" class="py-1 overflow-auto text-base rounded-md max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+					<ul tabindex="-1" id="autocomplete"
+						class="py-1 overflow-auto text-base rounded-md max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
 					</ul>
 				</div>
 			</div>
 			<select
-				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			>
+				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
 				<option value="≤">≤</option>
 				<option value="≥">≥</option>
 			</select>
 			<select
-				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300"
-			>
+				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
 				<option value="MA10">MA10</option>
 			</select>
-			<button
-				type="button"
-				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-			>
+			<button type="button"
+				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2">
 				Add
 			</button>
 		</div>
@@ -206,8 +197,8 @@
 </div>
 <script>
 	const options = ["ma10", "ma20", "ma50", "ma100", "ma250", "rsi"]
-	
-	$(".allcb").change(function() {
+
+	$(".allcb").change(function () {
 		$(this).parents('table').find("input[type='checkbox']").prop(
 			"checked",
 			$(this).prop("checked")
@@ -237,7 +228,7 @@
 			var1_txt = var1_div.find('select').val();
 			var2_txt = var2_div.find('select').val();
 			op_txt = op_div.find('select').val();
-			
+
 			var1_div.empty().text(var1_txt);
 			var2_div.empty().text(var2_txt);
 			op_div.empty().text(op_txt);
@@ -266,7 +257,7 @@
 		}
 	}
 
-	$("#term1").on('input',function(e){
+	$("#term1").on('input', function (e) {
 		let finalOptions = []
 		for (i in options) {
 			let option = options[i];
@@ -289,6 +280,6 @@
 		for (j in finalOptions) {
 			$("#autocomplete").append(finalOptions[j])
 		}
-	 });
+	});
 </script>
 {% endblock %}
