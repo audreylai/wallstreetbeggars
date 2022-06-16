@@ -9,7 +9,7 @@
 </style>
 {% endblock %}{% block content
 %}
-<div class="flex flex-col w-screen h-screen px-6 py-4 bg-gray-100 dark:bg-zinc-900">
+<div class="flex flex-col w-screen h-screen px-6 py-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
 	<div class="grid grid-cols-2 gap-x-4">
 		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 			<table class="w-full">
@@ -38,7 +38,7 @@
 					</tr>
 				</thead>
 				<tbody col="1">
-					{% for i in range(6) %}
+					{% for i in range(10) %}
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
 						<td class="p-4 border-b-2 dark:border-zinc-500">
 							<div class="flex justify-center">
@@ -106,7 +106,7 @@
 					</tr>
 				</thead>
 				<tbody col="2">
-					{% for i in range(6) %}
+					{% for i in range(10) %}
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
 						<td class="p-4 border-b-2 dark:border-zinc-500">
 							<div class="flex justify-center">
@@ -173,12 +173,10 @@
 		<div class="flex p-4 space-x-2">
 			<div class="relative w-2/6 group">
 				<input id="term1"
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm peer w focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<div class="absolute z-10 hidden mt-1 overflow-y-auto bg-white rounded-md shadow-lg w-fit peer-focus:block">
-					<ul tabindex="-1" id="autocomplete"
-						class="py-1 overflow-auto text-base rounded-md max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-					</ul>
-				</div>
+					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+				<ul tabindex="0" id="autocomplete"
+					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+				</ul>
 			</div>
 			<select
 				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
@@ -312,28 +310,35 @@
 		$('tbody[col='+ col +']').append(row);
 	}
 
+	function suggestion_onlick(evt) {
+		$("#term1").val($(evt).children()[0].innerHTML)
+	}
+
 	$("#term1").on('input', function (e) {
 		let finalOptions = []
 		for (i in options) {
 			let option = options[i];
 			if (option.includes(e.target.value.toLowerCase())) {
 				let li = $(`
-					<li id="listbox-item-0" role="option" class="relative py-2 pl-3 text-gray-900 cursor-default select-none hover:bg-indigo-500 hover:text-white pr-9">
-						<div class="flex items-center">
-								<span class="block ml-3 font-normal truncate">
-									${option.toUpperCase()}
-								</span>
-						</div>
+					<li tabindex="-1" id="listbox-item-0" role="option" class="relative py-2 pl-3 text-gray-900 cursor-default select-none hover:cursor-pointer hover:bg-indigo-500 hover:text-white pr-9"
+					onclick='suggestion_onlick(this)'
+					>
+						
+						<span class="block ml-3 font-normal truncate">${option.toUpperCase()}</span>
 				</li>
 				`)
 				finalOptions.push(li)
 				// console.log(option)
 			}
 		}
-
 		$("#autocomplete").empty()
 		for (j in finalOptions) {
 			$("#autocomplete").append(finalOptions[j])
+		}
+		let element = document.getElementById('autocomplete');
+		console.log(window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight)
+		if (window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight){
+			$("#autocomplete").addClass("bottom-12")
 		}
 	});
 </script>
