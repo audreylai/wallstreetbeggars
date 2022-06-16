@@ -171,10 +171,10 @@
 			</button>
 		</div>
 		<div class="flex p-4 space-x-2">
-			<div class="relative w-2/6">
+			<div class="relative w-2/6 group">
 				<input id="term1"
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<div class="absolute z-10 mt-1 overflow-y-auto bg-white rounded-md shadow-lg w-fit">
+					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm peer w focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+				<div class="absolute z-10 hidden mt-1 overflow-y-auto bg-white rounded-md shadow-lg w-fit peer-focus:block">
 					<ul tabindex="-1" id="autocomplete"
 						class="py-1 overflow-auto text-base rounded-md max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
 					</ul>

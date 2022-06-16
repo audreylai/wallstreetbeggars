@@ -836,6 +836,10 @@ video {
   flex-grow: 1;
 }
 
+.table-auto {
+  table-layout: auto;
+}
+
 .cursor-default {
   cursor: default;
 }
@@ -1042,6 +1046,15 @@ video {
 .rounded-r-xl {
   border-top-right-radius: 0.75rem;
   border-bottom-right-radius: 0.75rem;
+}
+
+.rounded-l-full {
+  border-top-left-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+}
+
+.rounded-bl-full {
+  border-bottom-left-radius: 9999px;
 }
 
 .border {
@@ -1669,6 +1682,14 @@ video {
 
 .disabled\:cursor-not-allowed:disabled {
   cursor: not-allowed;
+}
+
+.group:focus .group-focus\:block {
+  display: block;
+}
+
+.peer:focus ~ .peer-focus\:block {
+  display: block;
 }
 
 .dark .dark\:border-zinc-800 {
