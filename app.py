@@ -67,7 +67,7 @@ def stock_list_page():
 
 	active_tickers = get_active_tickers("test")['active']
 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
-	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page)
+	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, sort_col=sort_col, sort_dir=sort_dir)
 
 
 @app.route("/update-active", methods=["POST"])
