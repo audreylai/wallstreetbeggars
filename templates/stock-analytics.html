@@ -195,7 +195,7 @@
 				</form>
 			</div>
 			<div class="grow">
-				<canvas id="stock-comparison-chart"></canvas>
+				<canvas id="stock-comparison-chart" class="comparison-chart"></canvas>
 			</div>
 		</div>
 		<div
@@ -219,7 +219,7 @@
 				</select>
 			</div>
 			<div class="grow">
-				<canvas id="industry-comparison-chart"></canvas>
+				<canvas id="industry-comparison-chart" class="comparison-chart"></canvas>
 			</div>
 		</div>
 	<div
@@ -243,7 +243,7 @@
 				</select>
 			</div>
 			<div class="grow">
-				<canvas id="index-comparison-chart"></canvas>
+				<canvas id="index-comparison-chart" class="comparison-chart"></canvas>
 			</div>
 		</div>
 	</div>
@@ -353,7 +353,7 @@
 								return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
 							} else if (context.dataset.label == 'Volume') { // Volume label
 								return "Volume: " + context.parsed.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
-							} else if (['industry-comparison-chart', 'stock-comparison-chart', 'index-comparison-chart'].includes(context.chart.canvas.id)) { // comparison charts
+							} else if ($(context.chart.ctx.canvas).hasClass('comparison_chart')) { // comparison charts
 								return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(2) + '%'; // add %, round 2dp
 							} else { // default
 								return context.dataset.label + ': ' + context.parsed.y.toFixed(3); // default round 3dp
@@ -436,15 +436,13 @@
 				return;
 			}
 
-			console.log(chart)
-
 			ctx.font = '12px Arial';
 			ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
 
 			x_val = new Date(chart.scales.x.getValueForPixel(x)).toISOString().slice(0, 10);
 			y_val = chart.scales.y.getValueForPixel(y);
 
-			if (['industry-comparison-chart', 'stock-comparison-chart', 'index-comparison-chart'].includes(chart.canvas.id)) {
+			if ($(chart.ctx.canvas).hasClass('comparison_chart')) {
 				y_val = (y_val * 100).toFixed(2) + '%';
 			} else {
 				y_val = y_val.toFixed(3)
@@ -614,7 +612,6 @@
 			data2 = res;
 		});
 
-		console.log(data2)
 
 		chart_data = {
 			labels: data.lbl,
