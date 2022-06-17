@@ -9,7 +9,7 @@
 	<h2 class="dark:text-zinc-400">Last Update: {{ last_updated }}</h2>
 	<div class="mb-2 ml-auto industry-filter">
 		<select
-			id="industry-filter"
+			id="industryFilter"
 			class="block px-2 py-1 text-sm bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
 			name="industry"
 		>
@@ -75,8 +75,7 @@
 						onchange="update_active(this)" {% if (row['ticker'] in
 						active_tickers) %} checked {% endif %} class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"/>
 					</td>
-					{% for k,v in row.items() %}
-					{% if k == "board_lot" %}
+					{% for k,v in row.items() %}{% if k == "board_lot" %}
 					<td
 						class="px-2 py-2 text-right bg-gray-100 border-b dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
 					>
@@ -94,24 +93,6 @@
 							>
 						</form>
 					</td>
-					{% elif k == "mkt_cap" %}
-					<td
-						class="px-2 py-2 bg-gray-100 border-b p dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
-					>
-						<form action="{{ url_for('stock_list_page') }}" method="POST">
-							<input type="hidden" name="page" value="1" />
-							<input type="hidden" name="sort_col" value="{{ sort_col }}" />
-							<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
-							<input
-								type="hidden"
-								name="ticker"
-								value="{{ row['ticker'].replace('.', '-') }}"
-							/>
-							<a class="cursor-pointer" onclick="this.parentNode.submit()"
-								>{{v | mkt_cap_convert}}</a
-							>
-						</form>
-					</td>
 					{% elif k != "_id" and k != "last_updated" %}
 					<td
 						class="px-2 py-2 bg-gray-100 border-b p dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
@@ -123,7 +104,7 @@
 							<input
 								type="hidden"
 								name="ticker"
-								value="{{ row['ticker'].replace('.', '-') }}"
+								value="{{row['ticker'].replace('.', '-')}}"
 							/>
 							<a class="cursor-pointer" onclick="this.parentNode.submit()"
 								>{{v}}</a
