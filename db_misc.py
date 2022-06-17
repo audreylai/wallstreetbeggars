@@ -29,6 +29,16 @@ def add_stock_data_batch():
 
 # Web Scraping Code (etnet)
 def etnet_scraping():
+	def mkt_cap_to_int(mkt_cap):
+		mkt_cap = mkt_cap.replace(',', '')
+		try:
+			unit_map = {'K': 10**3, 'M': 10**6, 'B': 10**9}
+			num = mkt_cap[:-1]
+			unit = mkt_cap[-1]
+			return int(float(num) * unit_map.get(unit))
+		except:
+			return float('nan')
+
 	page = requests.get("https://www.etnet.com.hk/www/eng/stocks/industry_adu.php")
 	soup = BeautifulSoup(page.content, "html.parser")
 	# Fetch the table row with the link
@@ -56,9 +66,13 @@ def etnet_scraping():
 			res = []
 			row_data = list(row.find_all("td", attrs={"align": "right"}))
 			for col in [1, 3, 4, 5, 6]: # nominal, turnover, mkt_cap, pct_yield, pe_ratio
-				res.append(row_data[col].get_text())
-				if col == 6 and res[-1] == '': # pe_ratio
-					res[-1] = 'N/A'
+				data = row_data[col].get_text()
+				if col == 6 and data == '':
+					res.append('N/A')
+				elif col == 4:
+					res.append(mkt_cap_to_int(data))
+				else:
+					res.append(data)
 
 			scrape_list.append([ticker, industry, *res])
 
@@ -85,7 +99,7 @@ def add_stock_info_batch():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker > 100].index)
+	df = df.drop(df[df.ticker > 10].index)
 	
 	# convert ticker format
 	ticker_list = []

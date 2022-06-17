@@ -103,7 +103,7 @@
 					<p class="font-semibold">{{i}}</p>
 					<p>
 						{% if k != "Ex dividend date" %}{{"%.2f" % i}}{% else
-						%}{{i|epoch_convert}}{% endif %}
+						%}{{ i | epoch_convert }}{% endif %}
 					</p>
 				</div>
 				{% endfor %}

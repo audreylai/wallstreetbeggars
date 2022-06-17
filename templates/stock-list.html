@@ -33,8 +33,7 @@
 							class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none"
 						/>
 					</th>
-					{% for k in stock_table[0] %} {% if k != "_id" and k != "last_updated"
-					%}
+					{% for k in stock_table[0] %}{% if k != "_id" and k != "last_updated"%}
 					<th
 						class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
 					>
@@ -88,11 +87,26 @@
 								name="ticker"
 								value="{{ row['ticker'].replace('.', '-') }}"
 							/>
-							<a class="cursor-pointer" onclick="this.parentNode.submit()"
-								>{{v}}</a
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ v }}</a
 							>
 						</form>
 					</td>
+					{% elif k == "mkt_cap" %}
+					<td
+						class="px-2 py-2 bg-gray-100 border-b p dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
+					>
+						<form action="{{ url_for('stock_list_page') }}" method="POST">
+							<input type="hidden" name="page" value="1" />
+							<input type="hidden" name="sort_col" value="{{ sort_col }}" />
+							<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
+							<input
+								type="hidden"
+								name="ticker"
+								value="{{row['ticker'].replace('.', '-')}}"
+							/>
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ v | mkt_cap_convert }}</a
+							>
+						</form>
 					{% elif k != "_id" and k != "last_updated" %}
 					<td
 						class="px-2 py-2 bg-gray-100 border-b p dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-300"
@@ -106,9 +120,7 @@
 								name="ticker"
 								value="{{row['ticker'].replace('.', '-')}}"
 							/>
-							<a class="cursor-pointer" onclick="this.parentNode.submit()"
-								>{{v}}</a
-							>
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ v }}</a>
 						</form>
 					</td>
 					{% endif %} {% endfor %}
