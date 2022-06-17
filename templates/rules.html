@@ -106,7 +106,7 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody col="1">
+				<tbody col="2">
 					{% for i in range(10) %}
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
 						<td class="p-4 border-b-2 dark:border-zinc-500">
@@ -199,7 +199,7 @@
 			</div>
 			<button type="button"
 				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-				onclick="add_row($(this), 1);">
+				onclick="add_row($(this), 2);">
 				Add
 			</button>
 		</div>
@@ -313,9 +313,9 @@
 			</tr>
 		`);
 
-		row.find('.var1 p').text(selects.eq(0).val());
-		row.find('.op p').text(selects.eq(1).val());
-		row.find('.var2 p').text(selects.eq(2).val());
+		row.find('.var1 p').text($(btn).parent().find(".term-input").eq(0).val())
+		row.find('.op p').text(selects.eq(0).val());
+		row.find('.var2 p').text($(btn).parent().find(".term-input").eq(1).val());
 
 		$('tbody[col='+ col +']').append(row);
 	}
