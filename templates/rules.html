@@ -95,6 +95,7 @@
 						<th
 							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
 							<p class="mx-7">Operator</p>
+
 						</th>
 						<th
 							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
@@ -105,7 +106,7 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody col="2">
+				<tbody col="1">
 					{% for i in range(10) %}
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
 						<td class="p-4 border-b-2 dark:border-zinc-500">
@@ -128,20 +129,19 @@
 								<button type="button"
 									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 									onclick="edit_row($(this), true);">
-								<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
-								</button>
+									<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 
-								<button type="button"
-									class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="edit_row($(this), false);">
-								<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-								</button>
+									<button type="button"
+										class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+										onclick="edit_row($(this), false);">
+										<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
 
-								<button type="button"
-									class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="delete_row($(this));">
-								<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-								</button>
+									</button>
+									<button type="button"
+										class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+										onclick="delete_row($(this));">
+										<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+									</button>
 							</div>
 						</td>
 					</tr>
@@ -152,19 +152,25 @@
 	</div>
 	<div class="grid grid-cols-2">
 		<div class="flex p-4 space-x-2">
-			<select
-				class="block w-2/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
-				<option value="MA10">MA10</option>
-			</select>
+			<div class="relative w-2/6 group autocomplete-wrapper">
+				<input
+					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+				<ul tabindex="0"
+					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+				</ul>
+			</div>
 			<select
 				class="block w-1/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
 				<option value="≤">≤</option>
 				<option value="≥">≥</option>
 			</select>
-			<select
-				class="block w-2/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
-				<option value="MA10">MA10</option>
-			</select>
+			<div class="relative w-2/6 group autocomplete-wrapper">
+				<input
+					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+				<ul tabindex="0"
+					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+				</ul>
+			</div>
 			<button type="button"
 				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 				onclick="add_row($(this), 1);">
@@ -172,25 +178,28 @@
 			</button>
 		</div>
 		<div class="flex p-4 space-x-2">
-			<div class="relative w-2/6 group">
-				<input id="term1"
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0" id="autocomplete"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+			<div class="relative w-2/6 group autocomplete-wrapper">
+				<input
+					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+				<ul tabindex="0"
+					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
 				</ul>
 			</div>
 			<select
-				class="block w-1/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
+				class="block w-1/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
 				<option value="≤">≤</option>
 				<option value="≥">≥</option>
 			</select>
-			<select
-				class="block w-2/6 px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
-				<option value="MA10">MA10</option>
-			</select>
+			<div class="relative w-2/6 group autocomplete-wrapper">
+				<input
+					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+				<ul tabindex="0"
+					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+				</ul>
+			</div>
 			<button type="button"
 				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-				onclick="add_row($(this), 2);">
+				onclick="add_row($(this), 1);">
 				Add
 			</button>
 		</div>
@@ -312,10 +321,10 @@
 	}
 
 	function suggestion_onlick(evt) {
-		$("#term1").val($(evt).children()[0].innerHTML)
+		$(evt).parents().closest(".autocomplete-wrapper").children().closest("input").val($(evt).children()[0].innerHTML)
 	}
 
-	$("#term1").on('input', function (e) {
+	$(".term-input").on('input', function (e) {
 		let finalOptions = []
 		for (i in options) {
 			let option = options[i];
@@ -332,14 +341,14 @@
 				// console.log(option)
 			}
 		}
-		$("#autocomplete").empty()
+		$(this).parent().find(".autocomplete").empty()
 		for (j in finalOptions) {
-			$("#autocomplete").append(finalOptions[j])
+			$(this).parent().find(".autocomplete").append(finalOptions[j])
 		}
-		let element = document.getElementById('autocomplete');
+		let element = $(this).parent().find(".autocomplete")[0];
 		console.log(window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight)
 		if (window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight){
-			$("#autocomplete").addClass("bottom-12")
+			$(this).parent().find(".autocomplete").addClass("bottom-12")
 		}
 	});
 </script>
