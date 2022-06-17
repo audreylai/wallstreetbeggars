@@ -102,8 +102,7 @@
 				<div class="flex justify-between py-2 border-b dark:border-zinc-600">
 					<p class="font-semibold">{{i}}</p>
 					<p>
-						{% if k != "Ex dividend date" %}{{"%.2f" % i}}{% else
-						%}{{i|epoch_convert}}{% endif %}
+						{% if k != "Ex dividend date" %}{{ "%.2f" % i }}{% else %}{{ i | epoch_convert }}{% endif %}
 					</p>
 				</div>
 				{% endfor %}

@@ -14,6 +14,16 @@ from db import *
 def timectime(s):
 	return datetime.fromtimestamp(s).strftime('%d/%m/%y')
 
+@app.template_filter('mkt_cap_convert')
+def mkt_cap_to_str(mkt_cap):
+    if mkt_cap < 10**3:
+        return "%.1f" % (mkt_cap)
+    elif mkt_cap < 10**6:
+        return "%.1f" % (mkt_cap / 10**3) + 'K'
+    elif mkt_cap < 10**9:
+        return "%.1f" % (mkt_cap / 10**6) + 'M'
+    else:
+        return "%.1f" % (mkt_cap / 10**9) + 'B'
 
 @app.route("/")
 def home():
