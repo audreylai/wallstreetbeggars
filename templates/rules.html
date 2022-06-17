@@ -46,9 +46,11 @@
 									class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
 							</div>
 						</td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-							<p>a</p>
-						</td>
+						<div class="relative w-full group autocomplete-wrapper">
+							<td class="p-4 border-b-2 dark:border-zinc-500 var1">
+								<p>a</p>
+							</td>
+						</<div class="relative w-full group autocomplete-wrapper">
 						<td class="p-4 border-b-2 dark:border-zinc-500 op">
 							<p>b</p>
 						</td>
@@ -233,17 +235,13 @@
 
 		if (enable_editing) {
 			dropdown_var = $(`
-				<select
-					class="self-center px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300"
-				>
-					<option>MA10</option>
-					<option>MA20</option>
-					<option>MA50</option>
-					<option>MA100</option>
-					<option>MA250</option>
-					<option>RSI</option>
-					<option>MACD</option>
-				</select>`
+			<div class="relative w-full group autocomplete-wrapper">
+				<input
+					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+				<ul tabindex="0"
+					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+				</ul>
+			</div>`
 			);
 
 			dropdown_op = $(`
@@ -260,8 +258,8 @@
 			op_div.empty().append(dropdown_op.clone());	
 
 		} else {
-			var1_txt = var1_div.find('select').val();
-			var2_txt = var2_div.find('select').val();
+			var1_txt = var1_div.find('input').val();
+			var2_txt = var2_div.find('input').val();
 			op_txt = op_div.find('select').val();
 
 			var1_div.empty().text(var1_txt);
@@ -324,7 +322,7 @@
 		$(evt).parents().closest(".autocomplete-wrapper").children().closest("input").val($(evt).children()[0].innerHTML)
 	}
 
-	$(".term-input").on('input', function (e) {
+	$(document).on('input',".term-input", function (e) {
 		let finalOptions = []
 		for (i in options) {
 			let option = options[i];
