@@ -353,7 +353,7 @@
 								return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
 							} else if (context.dataset.label == 'Volume') { // Volume label
 								return "Volume: " + context.parsed.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
-							} else if (['industry-comparison-chart', 'stock-comparison-chart'].includes(context.chart.canvas.id)) { // comparison charts
+							} else if (['industry-comparison-chart', 'stock-comparison-chart', 'index-comparison-chart'].includes(context.chart.canvas.id)) { // comparison charts
 								return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(2) + '%'; // add %, round 2dp
 							} else { // default
 								return context.dataset.label + ': ' + context.parsed.y.toFixed(3); // default round 3dp
@@ -384,13 +384,7 @@
 		afterEvent: (chart, evt) => {
 			const {chartArea: {top, bottom, left, right}} = chart;
 			const {event: {x, y}} = evt;
-			if (x < left || x > right || y < top || y > bottom) {
-				chart.crosshair = {x, y, draw: false}
-				chart.draw();
-				return;
-			}
-
-			chart.crosshair = {x, y, draw: true}
+			chart.crosshair = {x, y, draw: !(x < left || x > right || y < top || y > bottom)}
 			chart.draw();
 		},
 		afterDatasetsDraw: (chart, _, opts) => {
@@ -423,8 +417,47 @@
 		}
 	}
 
+	const cursorpos_plugin = {
+		id: 'cursorpos',
+		afterEvent: (chart, evt) => {
+			const {chartArea: {top, bottom, left, right}} = chart;
+			const {event: {x, y}} = evt;
+			chart.cursorpos = {x, y, draw: !(x < left || x > right || y < top || y > bottom)}
+			chart.draw();
+		},
+		afterDatasetsDraw: (chart, _, opts) => {
+			if (!chart.cursorpos) {
+				return;
+			}
+
+			const {ctx, chartArea: {top, bottom, left, right}} = chart;
+			const {x, y, draw} = chart.cursorpos;
+			if (!draw) {
+				return;
+			}
+
+			console.log(chart)
+
+			ctx.font = '12px Arial';
+			ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+
+			x_val = new Date(chart.scales.x.getValueForPixel(x)).toISOString().slice(0, 10);
+			y_val = chart.scales.y.getValueForPixel(y);
+
+			if (['industry-comparison-chart', 'stock-comparison-chart', 'index-comparison-chart'].includes(chart.canvas.id)) {
+				y_val = (y_val * 100).toFixed(2) + '%';
+			} else {
+				y_val = y_val.toFixed(3)
+			}
+
+			ctx.fillText('x: ' + x_val, left+5, top+10);
+			ctx.fillText('y: ' + y_val, left+5, top+25);
+		}
+	}
+
 	// enable plugins globally
 	Chart.register(crosshair_plugin)
+	Chart.register(cursorpos_plugin)
 
 	// prevent period updating when it is the same
 	var current_period = undefined;
