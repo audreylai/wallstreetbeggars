@@ -99,7 +99,7 @@ def add_stock_info_batch():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker > 10].index)
+	df = df.drop(df[df.ticker > 100].index)
 	
 	# convert ticker format
 	ticker_list = []
@@ -118,6 +118,7 @@ def add_stock_info_batch():
 	df = df.reset_index(drop=True)
 	
 	col_stock_info.insert_many(list(df.to_dict('index').values()))
+
 
 def add_stock_data_one(ticker, ticker_type=None):
 	df = yf.download(ticker.replace('-', '.'), period="max", progress=False)
@@ -161,6 +162,8 @@ def yfinance_info(ticker_list):
 				out += char
 		return out
 
+	ticker_list = list(map(lambda x: x.replace('-', '.'), ticker_list)) # yfinance takes . in ticker format
+
 	attrs = [
 		'sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash',
 		'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency',
@@ -169,15 +172,16 @@ def yfinance_info(ticker_list):
 	df = pd.DataFrame(columns=[convert_name(i) for i in attrs], index=ticker_list)
 	df.index.name = 'ticker'
 
-	for ticker in ticker_list:
-		print(ticker)
+	tickers = yf.Tickers(' '.join(ticker_list))
+
+	for ticker_name in ticker_list:
+		print(ticker_name)
 		res = []
+		info = tickers.tickers[ticker_name].info
 		try:
-			info = yf.Ticker(ticker.replace('-', '.')).info # yfinance takes . in ticker format
 			for attr in attrs:
 				res.append(info[attr])
-
-			df.loc[ticker] = res
+			df.loc[ticker_name] = res
 		except:
 			pass
 
