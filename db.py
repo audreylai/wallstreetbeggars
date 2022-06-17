@@ -224,3 +224,23 @@ def delete_active_tickers(username, tickers):
 
 def get_active_tickers(username):
 	return col_users.find_one({"username": username}, {"active": 1})
+
+def add_rule(username, rule_type, rule):
+	if rule_type == "buy":
+		col_users.update_one({"username": username}, {'$addToSet': {
+		'buy': rule
+		}})
+	else:
+		col_users.update_one({"username": username}, {'$addToSet': {
+		'sell': rule
+		}})
+
+def delete_rule(username, rule_type, rule):
+	if rule_type == "buy":
+		col_users.update_one({"username": username}, {'$pull': {
+		'buy': rule
+		}})
+	else:
+		col_users.update_one({"username": username}, {'$pull': {
+		'sell': rule
+		}})
