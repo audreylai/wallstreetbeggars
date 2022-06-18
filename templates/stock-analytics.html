@@ -169,6 +169,9 @@
 								10y
 							</button>
 						</div>
+						<div class="dark:text-white">
+							datepicker
+						</div>
 					</div>
 				</div>
 			</div>
@@ -338,7 +341,11 @@
 			legend: {
 				labels: {
 					filter: function(item, chart) {
-						return item.text.length != 0;
+						if (item.text) {
+							return item.text.length != 0;
+						} else {
+							return false;
+						}
 					}
 				}
 			},
@@ -458,8 +465,8 @@
 	Chart.register(cursorpos_plugin)
 
 	// prevent period updating when it is the same
-	var current_period = undefined;
-	var current_interval = undefined;
+	var current_period = 180;
+	var current_interval = 1;
 
 	// update cmp charts accordingly when period updates
 	var current_cmp_ticker = '0001-HK'
@@ -493,7 +500,7 @@
 			period: period,
 			interval: interval
 		}, function(res) {
-			data2 = res;
+			data2 = JSON.parse(res);
 		});
 
 		chart_data = {
@@ -551,7 +558,7 @@
 			period: period,
 			interval: interval
 		}, function(res) {
-			data2 = res;
+			data2 = JSON.parse(res);
 		});
 
 		chart_data = {
@@ -609,7 +616,7 @@
 			period: period,
 			interval: interval
 		}, function(res) {
-			data2 = res;
+			data2 = JSON.parse(res);
 		});
 
 
@@ -750,7 +757,7 @@
 				data: data.rsi,
 				borderColor: 'rgb(16, 183, 89)',
 				...line_chart_settings
-			}, {
+			}/*, {
 				label: '',
 				data: [
 					{'x': data.date_start, 'y': 30},
@@ -766,7 +773,7 @@
 				],
 				borderColor: 'rgba(112, 110, 122, 0.4)',
 				...line_chart_settings
-			}]
+			}*/]
 		};
 
 		options = {
@@ -851,8 +858,6 @@
 
 	function draw_charts(stock_data) {
 		console.log(stock_data);
-		current_period = stock_data.period
-		current_interval = stock_data.interval
 
 		draw_cdl(stock_data);
 		draw_rsi(stock_data);

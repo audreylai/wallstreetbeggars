@@ -1,33 +1,33 @@
 [{
   "_id": {
-    "$oid": "62abf31b84b1d7c2a40dd2e9"
+    "$oid": "62adc51446afe9d06653ee7d"
   },
   "last_updated": {
     "$date": {
-      "$numberLong": "1655424000000"
+      "$numberLong": "1655683200000"
     }
   }
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2ea"
+    "$oid": "62adc59246afe9d06653ee7e"
   },
   "ticker": "0001-HK",
   "name": "CKH HOLDINGS",
   "category": "Equity",
   "board_lot": 500,
   "industry_x": "Conglomerates",
-  "nominal": "52.150",
-  "turnover": "38.250M",
+  "nominal": 51.7,
+  "turnover": 321693000,
   "mkt_cap": {
-    "$numberLong": "199968000000"
+    "$numberLong": "198243000000"
   },
-  "pct_yield": "5.101",
-  "pe_ratio": "5.994",
+  "pct_yield": 5.145,
+  "pe_ratio": 5.943,
   "sector": "Industrials",
   "country": "Hong Kong",
   "website": "https://www.ckh.com.hk",
   "industry_y": "Conglomerates",
-  "current_price": 52.2,
+  "current_price": 51.7,
   "total_cash": {
     "$numberLong": "153194004480"
   },
@@ -46,25 +46,25 @@
   "logo_url": "https://logo.clearbit.com/ckh.com.hk"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2eb"
+    "$oid": "62adc59246afe9d06653ee7f"
   },
   "ticker": "0002-HK",
   "name": "CLP HOLDINGS",
   "category": "Equity",
   "board_lot": 500,
   "industry_x": "Utilities",
-  "nominal": "73.250",
-  "turnover": "92.986M",
+  "nominal": 72.85,
+  "turnover": 395673000,
   "mkt_cap": {
-    "$numberLong": "185063000000"
+    "$numberLong": "184052000000"
   },
-  "pct_yield": "4.232",
-  "pe_ratio": "21.801",
+  "pct_yield": 4.255,
+  "pe_ratio": 21.682,
   "sector": "Utilities",
   "country": "Hong Kong",
   "website": "https://www.clpgroup.com",
   "industry_y": "Utilities—Regulated Electric",
-  "current_price": 73.25,
+  "current_price": 72.85,
   "total_cash": {
     "$numberLong": "11653000192"
   },
@@ -83,20 +83,20 @@
   "logo_url": "https://logo.clearbit.com/clpgroup.com"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2ec"
+    "$oid": "62adc59246afe9d06653ee80"
   },
   "ticker": "0003-HK",
   "name": "HK & CHINA GAS",
   "category": "Equity",
   "board_lot": 1000,
   "industry_x": "Utilities",
-  "nominal": "8.250",
-  "turnover": "34.523M",
+  "nominal": 8.25,
+  "turnover": 235385000,
   "mkt_cap": {
     "$numberLong": "153944000000"
   },
-  "pct_yield": "4.242",
-  "pe_ratio": "30.669",
+  "pct_yield": 4.242,
+  "pe_ratio": 30.669,
   "sector": "Utilities",
   "country": "Hong Kong",
   "website": "https://www.towngas.com",
@@ -120,25 +120,25 @@
   "logo_url": "https://logo.clearbit.com/towngas.com"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2ed"
+    "$oid": "62adc59246afe9d06653ee81"
   },
   "ticker": "0004-HK",
   "name": "WHARF HOLDINGS",
   "category": "Equity",
   "board_lot": 1000,
   "industry_x": "Properties",
-  "nominal": "25.150",
-  "turnover": "8.667M",
+  "nominal": 25.7,
+  "turnover": 426913000,
   "mkt_cap": {
-    "$numberLong": "76859000000"
+    "$numberLong": "78540000000"
   },
-  "pct_yield": "1.591",
-  "pe_ratio": "12.767",
+  "pct_yield": 1.556,
+  "pe_ratio": 13.046,
   "sector": "Real Estate",
   "country": "Hong Kong",
   "website": "https://www.wharfholdings.com",
   "industry_y": "Real Estate—Development",
-  "current_price": 25.15,
+  "current_price": 25.7,
   "total_cash": {
     "$numberLong": "23559000064"
   },
@@ -157,25 +157,25 @@
   "logo_url": "https://logo.clearbit.com/wharfholdings.com"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2ee"
+    "$oid": "62adc59246afe9d06653ee82"
   },
   "ticker": "0005-HK",
   "name": "HSBC HOLDINGS",
   "category": "Equity",
   "board_lot": 400,
   "industry_x": "Banks",
-  "nominal": "49.800",
-  "turnover": "303.850M",
+  "nominal": 49.65,
+  "turnover": 1044000000,
   "mkt_cap": {
-    "$numberLong": "1016380000000"
+    "$numberLong": "1013319000000"
   },
-  "pct_yield": "3.916",
-  "pe_ratio": "10.232",
+  "pct_yield": 3.928,
+  "pe_ratio": 10.202,
   "sector": "Financial Services",
   "country": "United Kingdom",
   "website": "https://www.hsbc.com",
   "industry_y": "Banks—Diversified",
-  "current_price": 49.85,
+  "current_price": 49.65,
   "total_cash": {
     "$numberLong": "1087012995072"
   },
@@ -194,25 +194,25 @@
   "logo_url": "https://logo.clearbit.com/hsbc.com"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2ef"
+    "$oid": "62adc59246afe9d06653ee83"
   },
   "ticker": "0006-HK",
   "name": "POWER ASSETS",
   "category": "Equity",
   "board_lot": 500,
   "industry_x": "Utilities",
-  "nominal": "49.500",
-  "turnover": "27.161M",
+  "nominal": 48.9,
+  "turnover": 265285000,
   "mkt_cap": {
-    "$numberLong": "105646000000"
+    "$numberLong": "104365000000"
   },
-  "pct_yield": "5.697",
-  "pe_ratio": "17.188",
+  "pct_yield": 5.767,
+  "pe_ratio": 16.979,
   "sector": "Utilities",
   "country": "Hong Kong",
   "website": "https://www.powerassets.com",
   "industry_y": "Utilities—Independent Power Producers",
-  "current_price": 49.45,
+  "current_price": 48.9,
   "total_cash": {
     "$numberLong": "4611999744"
   },
@@ -229,23 +229,23 @@
   "logo_url": "https://logo.clearbit.com/powerassets.com"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2f0"
+    "$oid": "62adc59246afe9d06653ee84"
   },
   "ticker": "0007-HK",
   "name": "WISDOM WEALTH",
   "category": "Equity",
   "board_lot": 2000,
   "industry_x": "Diversified Metals & Minerals",
-  "nominal": "0.134",
-  "turnover": "35,934",
-  "mkt_cap": 777774000,
-  "pct_yield": "0.000",
-  "pe_ratio": "2.000",
+  "nominal": 0.133,
+  "turnover": 149670,
+  "mkt_cap": 771969000,
+  "pct_yield": 0,
+  "pe_ratio": 1.985,
   "sector": "Technology",
   "country": "Hong Kong",
   "website": "https://WWRI007.com",
   "industry_y": "Electronics & Computer Distribution",
-  "current_price": 0.134,
+  "current_price": 0.133,
   "total_cash": 31859000,
   "total_debt": 427383008,
   "total_revenue": 522404000,
@@ -258,25 +258,25 @@
   "logo_url": "https://logo.clearbit.com/WWRI007.com"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2f1"
+    "$oid": "62adc59246afe9d06653ee85"
   },
   "ticker": "0008-HK",
   "name": "PCCW",
   "category": "Equity",
   "board_lot": 1000,
   "industry_x": "Telecommunication Services",
-  "nominal": "4.150",
-  "turnover": "7.452M",
+  "nominal": 4.09,
+  "turnover": 61311000,
   "mkt_cap": {
-    "$numberLong": "32119000000"
+    "$numberLong": "31655000000"
   },
-  "pct_yield": "8.928",
-  "pe_ratio": "30.832",
+  "pct_yield": 9.059,
+  "pe_ratio": 30.386,
   "sector": "Communication Services",
   "country": "Hong Kong",
   "website": "https://www.pccw.com",
   "industry_y": "Telecom Services",
-  "current_price": 4.13,
+  "current_price": 4.09,
   "total_cash": {
     "$numberLong": "5475999744"
   },
@@ -295,23 +295,23 @@
   "logo_url": "https://logo.clearbit.com/pccw.com"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2f2"
+    "$oid": "62adc59246afe9d06653ee86"
   },
   "ticker": "0009-HK",
   "name": "KEYNE LTD",
   "category": "Equity",
   "board_lot": 6000,
   "industry_x": "Properties",
-  "nominal": "0.037",
-  "turnover": "222.000",
-  "mkt_cap": 132044999,
-  "pct_yield": "0.000",
-  "pe_ratio": "N/A",
+  "nominal": 0.033,
+  "turnover": 1626,
+  "mkt_cap": 117770000,
+  "pct_yield": 0,
+  "pe_ratio": null,
   "sector": "Real Estate",
   "country": "Hong Kong",
   "website": "https://www.keyneltd.com",
   "industry_y": "Real Estate—Development",
-  "current_price": 0.032,
+  "current_price": 0.033,
   "total_cash": 12437000,
   "total_debt": 1764706944,
   "total_revenue": 20376000,
@@ -324,25 +324,25 @@
   "logo_url": "https://logo.clearbit.com/keyneltd.com"
 },{
   "_id": {
-    "$oid": "62abf38d84b1d7c2a40dd2f3"
+    "$oid": "62adc59246afe9d06653ee87"
   },
   "ticker": "0010-HK",
   "name": "HANG LUNG GROUP",
   "category": "Equity",
   "board_lot": 1000,
   "industry_x": "Properties",
-  "nominal": "14.420",
-  "turnover": "1.881M",
+  "nominal": 14.3,
+  "turnover": 13699000,
   "mkt_cap": {
-    "$numberLong": "19635000000"
+    "$numberLong": "19471000000"
   },
-  "pct_yield": "5.964",
-  "pe_ratio": "7.590",
+  "pct_yield": 6.014,
+  "pe_ratio": 7.526,
   "sector": "Real Estate",
   "country": "Hong Kong",
   "website": "https://www.hanglung.com",
   "industry_y": "Real Estate—Diversified",
-  "current_price": 14.44,
+  "current_price": 14.3,
   "total_cash": {
     "$numberLong": "9016000512"
   },

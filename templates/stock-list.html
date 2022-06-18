@@ -15,7 +15,7 @@
 				name="filter_industry"
 				onchange="this.form.submit();"
 			>
-				<option value="" {% if filter_industry == "" %} selected {% endif %}>Select an industry</option>
+				<option value="" {% if filter_industry == "" %} selected {% endif %}>All industries</option>
 				{% for industry in industries %}
 				<option value="{{industry}}" {% if filter_industry == industry %} selected {% endif %}>{{industry}}</option>
 				{% endfor %}
@@ -103,7 +103,7 @@
 								name="ticker"
 								value="{{row['ticker'].replace('.', '-')}}"
 							/>
-							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ v | mkt_cap_convert }}</a
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ v | suffix }}</a
 							>
 						</form>
 					{% elif k != "_id" and k != "last_updated" %}
