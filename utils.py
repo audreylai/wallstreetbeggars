@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta
 
+
 def get_datetime_from_period(period):
 	end_datetime = datetime.now()
 	start_datetime = end_datetime - timedelta(days=period)
 	return start_datetime, end_datetime
 
 
+# Prossessing functions
 def process_industry_avg(data, interval=1):
 	out = {
 		'close_pct': []

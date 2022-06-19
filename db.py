@@ -15,6 +15,7 @@ def ticker_exists(ticker):
 	return len(res) != 0
 
 
+# Fetches
 def get_stock_data(ticker, period=None, start_datetime=None, end_datetime=None):
 	if period:
 		start_datetime, end_datetime = get_datetime_from_period(period)
@@ -119,11 +120,14 @@ def get_industry_close_pct(industry, period=None, start_datetime=None, end_datet
 	return out
 
 
+
+# User
 def update_active_tickers(username, tickers):
 	col_users.update_one({"username":username}, {'$addToSet': {
 		'active': {"$each": tickers}
 		}
 	})
+
 
 def delete_active_tickers(username, tickers):
 	print(tickers)
@@ -132,25 +136,34 @@ def delete_active_tickers(username, tickers):
 		}
 	})
 
+
 def get_active_tickers(username):
 	return col_users.find_one({"username": username}, {"active": 1})
 
+
 def add_rule(username, rule_type, rule):
-	if rule_type == "buy":
-		col_users.update_one({"username": username}, {'$addToSet': {
-		'buy': rule
-		}})
-	else:
-		col_users.update_one({"username": username}, {'$addToSet': {
-		'sell': rule
-		}})
+	col_users.update_one({"username": username}, {'$addToSet': {
+		rule_type: rule
+	}})
+
 
 def delete_rule(username, rule_type, rule):
-	if rule_type == "buy":
-		col_users.update_one({"username": username}, {'$pull': {
-		'buy': rule
-		}})
-	else:
-		col_users.update_one({"username": username}, {'$pull': {
-		'sell': rule
-		}})
+	col_users.update_one({"username": username}, {'$pull': {
+		rule_type: rule
+	}})
+
+
+def edit_rules(username, rule_type, rule, action):
+	res = list(col_users.find({"username": username}, {"_id": 0}))
+	# Gets list of rules from buy/sell
+	rule_list = res[0][rule_type]
+	# Edit rule list
+	if action == "add":
+		rule_list.append(rule)
+	elif action == "delete":
+		rule_list.remove(rule)
+		
+	data = {
+		rule_type: rule_list
+	}
+	col_users.update_one({"username": username}, {"$set": data}, upsert=False)

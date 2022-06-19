@@ -16,6 +16,8 @@ col_users = db["users"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
+
+
 def add_stock_data_batch():
 	col_stock_data.drop({})
 	for i in range(1, 100):
@@ -26,6 +28,7 @@ def add_stock_data_batch():
 	for i in ["^HSI", "^HSCE", "^HSCC"]:
 		print(i)
 		add_stock_data_one(i, ticker_type="index")
+
 
 # Web Scraping Code (etnet)
 def etnet_scraping():
@@ -150,6 +153,7 @@ def add_stock_data_one(ticker, ticker_type=None):
 		'data': out,
 		'type': ticker_type
 	})
+
 
 def yfinance_info(ticker_list):
 	def convert_name(name):
