@@ -130,6 +130,9 @@ def add_stock_data_one(ticker, ticker_type=None):
 	# moving averages
 	for period in [10, 20, 50, 100, 250]:
 		df["sma" + str(period)] = ta.SMA(df.close, timeperiod=period)
+	
+	# volume moving average
+	df["vol_sma20"] = ta.SMA(df.volume, timeperiod=20)
 
 	# rsi + macd
 	df["rsi"] = ta.RSI(df.close, timeperiod=14)
