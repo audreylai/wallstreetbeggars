@@ -20,10 +20,13 @@ def home():
 def get_data():
 	return render_template("home.html")
 
-
 @app.route("/rules")
 def rules():
-	return render_template("rule-edits.html")
+	return render_template("rules.html")
+
+@app.route("/rules/edit")
+def rules_edit():
+	return render_template("rules-edit.html")
 
 
 @app.route("/stock-list", methods=["GET", "POST"])

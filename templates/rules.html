@@ -1,0 +1,201 @@
+{% extends "base.html" %} {% block title %} Edit Rules {% endblock %} {% block
+header %}
+<script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs-chart-financial.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>
+{% endblock %}{% block content%}
+<div
+  class="flex flex-col w-screen h-screen px-6 py-4 space-y-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900"
+>
+  <div class="grid h-full grid-cols-2 gap-x-4">
+		<div><canvas id="buy-index-chart"></canvas></div>
+    <div><canvas id="sell-index-chart"></canvas></div>
+  </div>
+  <div class="grid grid-cols-2 gap-x-4">
+    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800"><table class="w-full">
+			<thead>
+				<tr class="sticky top-0 bg-white dark:bg-zinc-800">
+					<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Rule</th>
+					<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for i in range(7) %}
+				<tr class="even:bg-white odd:bg-gray-100 dark:even:bg-zinc-800 dark:odd:bg-zinc-900">
+					<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">MA10 ≤ MA20</td>
+					<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"d>SELL</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table></div>
+    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800"><table class="w-full">
+			<thead>
+				<tr class="sticky top-0 bg-white dark:bg-zinc-800">
+					<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Rule</th>
+					<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for i in range(6) %}
+				<tr class="even:bg-white odd:bg-gray-100 dark:even:bg-zinc-800 dark:odd:bg-zinc-900">
+					<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">MA10 ≤ MA20</td>
+					<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"d>SELL</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table></div>
+  </div>
+</div>
+{% endblock %} {% block script %}
+<script>
+	var sell_chart = undefined;
+	const sell_ctx = document.getElementById('sell-index-chart').getContext('2d');	
+	const buy_ctx = document.getElementById('buy-index-chart').getContext('2d');	
+
+  function draw_sell(sell) {
+    chart_data = {
+      labels: [],
+      datasets: [
+        {
+          data: [sell, 100 - sell],
+          backgroundColor: ["rgb(244 63 94)", "rgb(34 34 39)"],
+          hoverBackgroundColor: ["rgb(79 70 229)", "rgb(34 34 39)"],
+          hoverOffset: 4,
+          borderWidth: 0,
+        },
+      ],
+    };
+
+    options = {
+      plugins: {
+        crosshair: false,
+        cursorpos: false,
+      },
+      events: [],
+      ...misc_options,
+    };
+
+    sell_chart = new Chart(sell_ctx, {
+      type: "doughnut",
+      data: chart_data,
+      options: options,
+      plugins: [
+        {
+          id: "doughnut_text",
+          beforeDraw: function (chart, a, b) {
+            var width = chart.width,
+              height = chart.height,
+              ctx = chart.ctx;
+
+            ctx.restore();
+            var fontSellze = (height / 114).toFixed(2);
+            ctx.font = "bolder " + fontSellze + "em sans-serif";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "rgb(244 244 245)";
+
+            var index = sell + "%",
+              indexX = Math.round((width - ctx.measureText(index).width) / 2),
+              indexY = height / 2.1;
+
+            ctx.fillText(index, indexX, indexY);
+
+            fontSellze = (height / 180).toFixed(2);
+            ctx.font = "bold " + fontSellze + "em sans-serif";
+            ctx.fillStyle = "rgb(244 63 94)";
+
+            var action = "SELL",
+              actionX = Math.round((width - ctx.measureText(action).width) / 2),
+              actionY = height / 1.7;
+
+            ctx.fillText(action, actionX, actionY);
+
+            fontSellze = (height / 200).toFixed(2);
+            ctx.font = fontSellze + "em sans-serif";
+            ctx.fillStyle = "rgb(212 212 216)";
+
+            ctx.save();
+          },
+        },
+      ],
+    });
+  }
+
+	function draw_buy(buy) {
+    chart_data = {
+      labels: [],
+      datasets: [
+        {
+          data: [buy, 100 - buy],
+          backgroundColor: ["rgb(16 185 129)", "rgb(34 34 39)"],
+          hoverBackgroundColor: ["rgb(79 70 229)", "rgb(34 34 39)"],
+          hoverOffset: 4,
+          borderWidth: 0,
+        },
+      ],
+    };
+
+    options = {
+      plugins: {
+        crosshair: false,
+        cursorpos: false,
+      },
+      events: [],
+      ...misc_options,
+    };
+
+    buy_chart = new Chart(buy_ctx, {
+      type: "doughnut",
+      data: chart_data,
+      options: options,
+      plugins: [
+        {
+          id: "doughnut_text",
+          beforeDraw: function (chart, a, b) {
+            var width = chart.width,
+              height = chart.height,
+              ctx = chart.ctx;
+
+            ctx.restore();
+            var fontSize = (height / 114).toFixed(2);
+            ctx.font = "bolder " + fontSize + "em sans-serif";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "rgb(244 244 245)";
+
+            var index = buy + "%",
+              indexX = Math.round((width - ctx.measureText(index).width) / 2),
+              indexY = height / 2.1;
+
+            ctx.fillText(index, indexX, indexY);
+
+            fontSize = (height / 180).toFixed(2);
+            ctx.font = "bold " + fontSize + "em sans-serif";
+            ctx.fillStyle = "rgb(16 185 129)";
+
+            var action = "BUY",
+              actionX = Math.round((width - ctx.measureText(action).width) / 2),
+              actionY = height / 1.7;
+
+            ctx.fillText(action, actionX, actionY);
+
+            fontSize = (height / 200).toFixed(2);
+            ctx.font = fontSize + "em sans-serif";
+            ctx.fillStyle = "rgb(212 212 216)";
+
+            ctx.save();
+          },
+        },
+      ],
+    });
+  }
+
+	
+	function draw_charts() {
+		draw_buy(60)
+		draw_sell(30)
+	}
+
+	draw_charts()
+</script>
+{% endblock %}
