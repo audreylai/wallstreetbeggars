@@ -95,7 +95,7 @@ def add_stock_info_batch():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker > 10].index)
+	df = df.drop(df[df.ticker > 100].index)
 	
 	# convert ticker format
 	ticker_list = []

@@ -10,6 +10,11 @@ col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
 
+def ticker_exists(ticker):
+	res = list(col_stock_data.find({"ticker": ticker}, {"_id": 1})) # only return _id for performance
+	return len(res) != 0
+
+
 def get_stock_data(ticker, period=None, start_datetime=None, end_datetime=None):
 	if period:
 		start_datetime, end_datetime = get_datetime_from_period(period)
@@ -35,6 +40,7 @@ def get_stock_data(ticker, period=None, start_datetime=None, end_datetime=None):
 	])
 	out = [i for i in cursor if i['data'] is not None][0]['data']
 	return out
+
 
 def get_all_tickers(ticker_type=None):
 	if ticker_type is None:

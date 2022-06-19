@@ -14,6 +14,9 @@ def api_get_stock_data():
 	period = request.args.get("period", type=int)
 	interval = request.args.get("interval", type=int, default=1)
 
+	if not ticker_exists(ticker):
+		return {}, 400
+
 	if period:
 		raw = get_stock_data(ticker, period=period)
 		start_datetime, end_datetime = get_datetime_from_period(period)
@@ -37,6 +40,9 @@ def api_get_stock_close_pct():
 	end_epoch = request.args.get("end_epoch", type=int)
 	period = request.args.get("period", type=int)
 	interval = request.args.get("interval", type=int, default=1)
+
+	if not ticker_exists(ticker):
+		return {}, 400
 
 	if period:
 		raw = get_stock_data(ticker, period=period)

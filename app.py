@@ -51,6 +51,7 @@ def stock_list_page():
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir)
 
 
+# this should be an api
 @app.route("/update-active", methods=["POST"])
 def update_active():
 	# todo: write update db logic
@@ -80,6 +81,9 @@ def stock_info():
 def stock_analytics():
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
 	start_datetime, end_datetime = get_datetime_from_period(180)
+
+	if not ticker_exists(ticker):
+		return 'not found', 404 # proper error page later
 	
 	stock_data = process_stock_data(get_stock_data(ticker, period=180))
 	stock_data['ticker'], stock_data['period'], stock_data['interval'] = ticker, 180, 1
