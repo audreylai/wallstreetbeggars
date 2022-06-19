@@ -87,13 +87,24 @@ def stock_analytics():
 
 	if not ticker_exists(ticker):
 		return 'not found', 404 # proper error page later
+
+	last_stock_data = get_last_stock_data('0005-HK')
+	parsed_buy_rules, parsed_sell_rules = parse_rules(["MA10 ≤ MA20", "MA20 ≤ MA50", "RSI ≤ 30"], ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"])
+	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
 	
 	stock_data = process_stock_data(get_stock_data(ticker, period=180))
 	stock_data['ticker'], stock_data['period'], stock_data['interval'] = ticker, 180, 1
 	stock_data['start_date'], stock_data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())
 	stock_info = get_stock_info(ticker)
 
-	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_all_industries(), indexes=get_all_tickers(ticker_type='index'))
+	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_all_industries(), indexes=get_all_tickers(ticker_type='index'),
+		rules={
+			"hit_buy_rules": hit_buy_rules,
+			"hit_sell_rules": hit_sell_rules,
+			"miss_buy_rules": miss_buy_rules,
+			"miss_sell_rules": miss_sell_rules
+		}
+	)
 
 # apis
 app.register_blueprint(api.bp)

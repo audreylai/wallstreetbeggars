@@ -196,10 +196,12 @@ const cursorpos_plugin = {
 
 		if ($(chart.ctx.canvas).hasClass('comparison-chart')) {
 			y_val = (y_val * 100).toFixed(2) + '%';
+		} else if ($(chart.ctx.canvas).attr('id') == 'volume-chart') {
+			y_val = Math.round(y_val / 10**4) * 10**4;
+			y_val = y_val.toExponential();
 		} else {
 			y_val = y_val.toFixed(3)
 		}
-
 		ctx.fillText('x: ' + x_val, left+5, top+10);
 		ctx.fillText('y: ' + y_val, left+5, top+25);
 	}

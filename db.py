@@ -15,7 +15,25 @@ def ticker_exists(ticker):
 	return len(res) != 0
 
 
-# Fetches
+def get_last_stock_data(ticker):
+	cursor = col_stock_data.aggregate([
+		{
+			"$match": {"ticker": ticker}
+		},
+		{
+			"$unwind": "$data"
+		},
+		{
+			"$sort": {"data.date": pymongo.DESCENDING}
+		},
+		{
+			"$limit": 1
+		}
+	])
+	out = [i for i in cursor][0]['data']
+	return out
+
+
 def get_stock_data(ticker, period=None, start_datetime=None, end_datetime=None):
 	if period:
 		start_datetime, end_datetime = get_datetime_from_period(period)
@@ -39,7 +57,7 @@ def get_stock_data(ticker, period=None, start_datetime=None, end_datetime=None):
 			}
 		}
 	])
-	out = [i for i in cursor if i['data'] is not None][0]['data']
+	out = [i for i in cursor][0]['data']
 	return out
 
 
