@@ -20,9 +20,27 @@ def home():
 def get_data():
 	return render_template("home.html")
 
-@app.route("/rules")
+@app.route("/rules", methods=["GET", "POST"])
 def rules():
-	return render_template("rules.html")
+	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
+	if not ticker_exists(ticker):
+		return 'not found', 404
+
+	last_stock_data = get_last_stock_data('0005-HK')
+	parsed_buy_rules, parsed_sell_rules = parse_rules(["MA10 ≤ MA20", "MA20 ≤ MA50", "RSI ≤ 30"], ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"])
+	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
+	
+	stock_info = get_stock_info(ticker)
+
+	stock_data = get_stock_data(ticker)
+	stock_data = process_stock_data(get_stock_data(ticker, period=180))
+
+	return render_template("rules.html", stock_info=stock_info, stock_data=stock_data,rules={
+			"hit_buy_rules": hit_buy_rules,
+			"hit_sell_rules": hit_sell_rules,
+			"miss_buy_rules": miss_buy_rules,
+			"miss_sell_rules": miss_sell_rules
+		})
 
 @app.route("/rules/edit")
 def rules_edit():
@@ -57,7 +75,6 @@ def stock_list_page():
 # this should be an api
 @app.route("/update-active", methods=["POST"])
 def update_active():
-	# todo: write update db logic
 	print(request.form.get("check"), request.form.getlist("tickers[]"))
 	if request.form.get("check") == "true":
 		update_active_tickers("test", request.form.getlist("tickers[]"))
@@ -88,7 +105,7 @@ def stock_analytics():
 	if not ticker_exists(ticker):
 		return 'not found', 404 # proper error page later
 
-	last_stock_data = get_last_stock_data('0005-HK')
+	last_stock_data = get_last_stock_data(ticker)
 	parsed_buy_rules, parsed_sell_rules = parse_rules(["MA10 ≤ MA20", "MA20 ≤ MA50", "RSI ≤ 30"], ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"])
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
 	
