@@ -709,7 +709,7 @@
   	};
 
   	if (vol_chart) {
-  		macd_chart.destroy();
+  		vol_chart.destroy();
   	}
 
   	vol_chart = new Chart(vol_ctx, {
@@ -805,7 +805,7 @@
 		draw_stock_cmp(stock_data, current_cmp_ticker);
 		draw_industry_cmp(stock_data, current_cmp_industry);
 		draw_index_cmp(stock_data, current_cmp_index);
-		draw_si(30)
+		// draw_si(30)
 	}
 
 	async function update_period(period, interval) {
