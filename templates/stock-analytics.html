@@ -209,6 +209,19 @@
 									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">Miss</td>
 								</tr>
 								{% endfor %}
+								{% elif rules["hit_buy_rules"]|length < rules["hit_sell_rules"]|length %}
+								{% for rule in rules['hit_sell_rules']%}
+								<tr class="bg-white dark:bg-zinc-800">
+									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
+									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500">Hit</td>
+								</tr>
+								{% endfor %}
+								{% for rule in rules['miss_sell_rules']%}
+								<tr class="bg-white dark:bg-zinc-800">
+									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
+									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">Miss</td>
+								</tr>
+								{% endfor %}
 								{% endif %}
 							</tbody>
 						</table>
