@@ -183,7 +183,6 @@
 								10y
 							</button>
 						</div>
-						<div class="dark:text-white">datepicker</div>
 					</div>
 					<div
 						class="flex flex-col w-full h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
@@ -193,19 +192,26 @@
 							<thead>
 								<tr class="sticky top-0 bg-white dark:bg-zinc-800">
 									<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Rule</th>
-									<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Action</th>
+									<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Hit/Miss</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr class="even:bg-white odd:bg-gray-100 dark:even:bg-zinc-800 dark:odd:bg-zinc-900">
-									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">MA10 ≤ MA20</td>
-									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"d>BUY</td>
+								{% if rules["hit_buy_rules"]|length > rules["hit_sell_rules"]|length %}
+								{% for rule in rules['hit_buy_rules']%}
+								<tr class="bg-white dark:bg-zinc-800">
+									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
+									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500">Hit</td>
 								</tr>
+								{% endfor %}
+								{% for rule in rules['hit_buy_rules']%}
+								<tr class="bg-white dark:bg-zinc-800">
+									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
+									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">Miss</td>
+								</tr>
+								{% endfor %}
+								{% endif %}
 							</tbody>
 						</table>
-						<div class="dark:text-white">
-							{{ rules }}
-						</div>
 					</div>
 				</div>
 			</div>
@@ -719,83 +725,148 @@
   	});
   }
 
-	function draw_si(si) {
-		chart_data = {
-			labels: [
-			],
-			datasets: [{
-				data: [si, 100-si],
-				backgroundColor: [
-					'rgb(244 63 94)',
-					'rgb(34 34 39)',
-				],
-				hoverBackgroundColor: [
-					"rgb(79 70 229)",
-					"rgb(34 34 39)"
-				],
-				hoverOffset: 4,
-				borderWidth: 0,
-			}]
-		}
+	function draw_sell(sell) {
+    chart_data = {
+      labels: [],
+      datasets: [
+        {
+          data: [sell, 100 - sell],
+          backgroundColor: ["rgb(244 63 94)", "rgb(34 34 39)"],
+          hoverBackgroundColor: ["rgb(79 70 229)", "rgb(34 34 39)"],
+          hoverOffset: 4,
+          borderWidth: 0,
+        },
+      ],
+    };
 
-		options = {
-			plugins: {
-				crosshair: false,
-				cursorpos: false,
-			},
-			events: [],
-			...misc_options
-		}
+    options = {
+      plugins: {
+        crosshair: false,
+        cursorpos: false,
+      },
+      events: [],
+      ...misc_options,
+    };
 
-		si_chart = new Chart(si_ctx, {
-			type: 'doughnut',
-			data: chart_data,
-			options: options,
-			plugins: [{
-				id: 'doughnut_text',
-				beforeDraw: function(chart, a, b) {
-					var width = chart.width,
-						height = chart.height,
-						ctx = chart.ctx;
+    sell_chart = new Chart(si_ctx, {
+      type: "doughnut",
+      data: chart_data,
+      options: options,
+      plugins: [
+        {
+          id: "doughnut_text",
+          beforeDraw: function (chart, a, b) {
+            var width = chart.width,
+              height = chart.height,
+              ctx = chart.ctx;
 
-					ctx.restore();
-					var fontSize = (height / 114).toFixed(2);
-					ctx.font = "bolder " + fontSize + "em sans-serif";
-					ctx.textBaseline = "middle";
-					ctx.fillStyle = "rgb(244 244 245)";
+            ctx.restore();
+            var fontSellze = (height / 114).toFixed(2);
+            ctx.font = "bolder " + fontSellze + "em sans-serif";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "rgb(244 244 245)";
 
+            var index = Math.round(sell) + "%",
+              indexX = Math.round((width - ctx.measureText(index).width) / 2),
+              indexY = height / 2.1;
 
-					var index = si+'%',
-					indexX = Math.round((width - ctx.measureText(index).width) / 2),
-					indexY = height / 2.1;
+            ctx.fillText(index, indexX, indexY);
 
-					ctx.fillText(index, indexX, indexY);
+            fontSellze = (height / 180).toFixed(2);
+            ctx.font = "bold " + fontSellze + "em sans-serif";
+            ctx.fillStyle = "rgb(244 63 94)";
 
-					fontSize = (height / 180).toFixed(2);
-					ctx.font = "bold " + fontSize + "em sans-serif";
-					ctx.fillStyle = "rgb(244 63 94)";
+            var action = "SELL",
+              actionX = Math.round((width - ctx.measureText(action).width) / 2),
+              actionY = height / 1.7;
 
-					var action = "SELL",
-					actionX = Math.round((width - ctx.measureText(action).width) / 2),
-					actionY = height / 1.7;
+            ctx.fillText(action, actionX, actionY);
 
-					ctx.fillText(action, actionX, actionY);
+            fontSellze = (height / 200).toFixed(2);
+            ctx.font = fontSellze + "em sans-serif";
+            ctx.fillStyle = "rgb(212 212 216)";
 
-					fontSize = (height / 200).toFixed(2);
-					ctx.font = fontSize + "em sans-serif";
-					ctx.fillStyle = "rgb(212 212 216)";
+            ctx.save();
+          },
+        },
+      ],
+    });
+  }
 
-					ctx.save();
+	function draw_buy(buy) {
+    chart_data = {
+      labels: [],
+      datasets: [
+        {
+          data: [buy, 100 - buy],
+          backgroundColor: ["rgb(16 185 129)", "rgb(34 34 39)"],
+          hoverBackgroundColor: ["rgb(79 70 229)", "rgb(34 34 39)"],
+          hoverOffset: 4,
+          borderWidth: 0,
+        },
+      ],
+    };
 
-				}
-			}]
-		});
-	}
+    options = {
+      plugins: {
+        crosshair: false,
+        cursorpos: false,
+      },
+      events: [],
+      ...misc_options,
+    };
+
+    buy_chart = new Chart(si_ctx, {
+      type: "doughnut",
+      data: chart_data,
+      options: options,
+      plugins: [
+        {
+          id: "doughnut_text",
+          beforeDraw: function (chart, a, b) {
+            var width = chart.width,
+              height = chart.height,
+              ctx = chart.ctx;
+
+            ctx.restore();
+            var fontSize = (height / 114).toFixed(2);
+            ctx.font = "bolder " + fontSize + "em sans-serif";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "rgb(244 244 245)";
+
+            var index = Math.round(buy) + "%",
+              indexX = Math.round((width - ctx.measureText(index).width) / 2),
+              indexY = height / 2.1;
+
+            ctx.fillText(index, indexX, indexY);
+
+            fontSize = (height / 180).toFixed(2);
+            ctx.font = "bold " + fontSize + "em sans-serif";
+            ctx.fillStyle = "rgb(16 185 129)";
+
+            var action = "BUY",
+              actionX = Math.round((width - ctx.measureText(action).width) / 2),
+              actionY = height / 1.7;
+
+            ctx.fillText(action, actionX, actionY);
+
+            fontSize = (height / 200).toFixed(2);
+            ctx.font = fontSize + "em sans-serif";
+            ctx.fillStyle = "rgb(212 212 216)";
+
+            ctx.save();
+          },
+        },
+      ],
+    });
+  }
 
 	var stock_data = {{ stock_data | tojson }};
+	var rules = {{ rules | tojson }}
 
 	function draw_charts(stock_data) {
 		console.log(stock_data);
+		console.log(rules);
 
 		draw_cdl(stock_data);
 		draw_rsi(stock_data);
@@ -805,10 +876,16 @@
 		draw_stock_cmp(stock_data, current_cmp_ticker);
 		draw_industry_cmp(stock_data, current_cmp_industry);
 		draw_index_cmp(stock_data, current_cmp_index);
-		// draw_si(30)
-	}
 
-	draw_si(30)
+		if (rules["hit_buy_rules"].length > rules["hit_sell_rules"].length) {
+			draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length) * 100)
+		} else if (rules["hit_buy_rules"].length < rules["hit_sell_rules"].length) {
+			draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length+rules["miss_sell_rules"].length) * 100)
+		} else {
+			// TODO: need to add neutral graph 
+		}
+
+	}
 
 	async function update_period(period, interval) {
 		if (period == current_period && interval == current_interval) {
