@@ -16,6 +16,8 @@ col_users = db["users"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
+
+
 def add_stock_data_batch():
 	col_stock_data.drop({})
 	for i in range(1, 100):
@@ -26,6 +28,7 @@ def add_stock_data_batch():
 	for i in ["^HSI", "^HSCE", "^HSCC"]:
 		print(i)
 		add_stock_data_one(i, ticker_type="index")
+
 
 # Web Scraping Code (etnet)
 def etnet_scraping():
@@ -130,6 +133,9 @@ def add_stock_data_one(ticker, ticker_type=None):
 	# moving averages
 	for period in [10, 20, 50, 100, 250]:
 		df["sma" + str(period)] = ta.SMA(df.close, timeperiod=period)
+	
+	# volume moving average
+	df["vol_sma20"] = ta.SMA(df.volume, timeperiod=20)
 
 	# rsi + macd
 	df["rsi"] = ta.RSI(df.close, timeperiod=14)
@@ -147,6 +153,7 @@ def add_stock_data_one(ticker, ticker_type=None):
 		'data': out,
 		'type': ticker_type
 	})
+
 
 def yfinance_info(ticker_list):
 	def convert_name(name):
