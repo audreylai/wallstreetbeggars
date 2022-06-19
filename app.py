@@ -23,7 +23,7 @@ def get_data():
 
 @app.route("/rules")
 def rules():
-	return render_template("rules.html")
+	return render_template("rule-edits.html")
 
 
 @app.route("/stock-list", methods=["GET", "POST"])
