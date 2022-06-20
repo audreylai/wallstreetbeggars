@@ -671,7 +671,7 @@
 		options = {
 			scales: {
 				x: {
-					display: true,
+					display: false,
 					...x_scale_settings
 				},
 				y: {
@@ -721,6 +721,15 @@
   				},
 					ticks: {
 						callback: (val) => (val.toExponential())
+					},
+					grid: {
+						color: (val) => {
+							if (localStorage.theme = 'dark') {
+								return 'rgba(255, 255, 255, 0.1)'
+							} else {
+								return 'rgba(0, 0, 0, 0.1)'
+							}
+						}
 					}
   			}
   		},
@@ -889,16 +898,15 @@
 		draw_stock_cmp(stock_data, current_cmp_ticker);
 		draw_industry_cmp(stock_data, current_cmp_industry);
 		draw_index_cmp(stock_data, current_cmp_index);
+	}
 
-		if (rules["hit_buy_rules"].length > rules["hit_sell_rules"].length) {
-			console.log(rules["hit_buy_rules"].length,  (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length))
-			draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length) * 100)
-		} else if (rules["hit_buy_rules"].length < rules["hit_sell_rules"].length) {
-			draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length+rules["miss_sell_rules"].length) * 100)
-		} else {
-			// TODO: need to add neutral graph 
-		}
-
+	if (rules["hit_buy_rules"].length > rules["hit_sell_rules"].length) {
+		console.log(rules["hit_buy_rules"].length,  (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length))
+		draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length) * 100)
+	} else if (rules["hit_buy_rules"].length < rules["hit_sell_rules"].length) {
+		draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length+rules["miss_sell_rules"].length) * 100)
+	} else {
+		// TODO: need to add neutral graph 
 	}
 
 	async function update_period(period, interval) {

@@ -48,6 +48,9 @@ const x_scale_settings = {
 		autoSkipPadding: 80,
 		maxRotation: 0,
 		minRotation: 0
+	},
+	grid: {
+		display: false
 	}
 }
 
