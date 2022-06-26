@@ -52,13 +52,12 @@ def rules_edit():
 def stock_list_page():
 	page = request.values.get("page", type=int, default=1)
 	filter_industry = request.values.get("filter_industry", type=str, default='')
-	filter_mkt_cap = request.values.get("min_mkt_cap", type=int, default=9)
-	print(filter_mkt_cap)
+	min_mkt_cap = 10 ** request.values.get("min_mkt_cap", type=int, default=9)
 	sort_col = request.values.get("sort_col", type=str, default='ticker')
 	sort_dir_str = request.values.get("sort_dir", type=str, default='asc')
 	sort_dir = pymongo.DESCENDING if sort_dir_str == 'desc' else pymongo.ASCENDING
 
-	stock_table = get_stock_info("ALL", filter_industry, sort_col, sort_dir)
+	stock_table = get_stock_info("ALL", filter_industry, sort_col, sort_dir, min_mkt_cap)
 
 	rows_per_page = 20
 	num_of_pages = ceil(len(stock_table["table"]) / rows_per_page)
@@ -72,7 +71,7 @@ def stock_list_page():
 
 	active_tickers = get_active_tickers("test")['active']
 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
-	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, filter_mkt_cap=filter_mkt_cap)
+	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap)
 
 # this should be an api
 @app.route("/update-active", methods=["POST"])

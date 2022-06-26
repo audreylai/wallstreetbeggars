@@ -72,14 +72,18 @@ def get_all_industries():
 	return col_stock_info.distinct("industry_x")
 
 
-def get_stock_info(ticker, filter_industry="", sort_col="ticker", sort_dir=pymongo.ASCENDING):
+def get_stock_info(ticker, filter_industry="", sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=10**9):
 	if ticker == "ALL":
-		query = {"last_updated": {"$exists": False}}
+		query = {
+			"last_updated": {"$exists": False},
+			"mkt_cap": {"$gte": min_mkt_cap}
+		}
 		if filter_industry != "":
 			query["industry_x"] = filter_industry
 
 		return {
-			"table": list(col_stock_info
+			"table": list(
+				col_stock_info
 				.find(query, {"_id": 0, "ticker": 1, "name": 1, "board_lot": 1, "industry_x": 1, "mkt_cap": 1})
 				.sort([(sort_col, sort_dir), ("_id", 1)]) # '_id' to achieve consistent sort results
 			),
