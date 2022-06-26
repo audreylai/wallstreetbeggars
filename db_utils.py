@@ -98,7 +98,7 @@ def add_stock_info_batch():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker > 100].index)
+	df = df.drop(df[df.ticker > 11].index)
 	
 	# convert ticker format
 	ticker_list = []
@@ -170,7 +170,8 @@ def yfinance_info(ticker_list):
 	attrs = [
 		'sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash',
 		'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency',
-		'shortName', 'longName', 'exchangeTimezoneName', 'quoteType', 'logo_url'
+		'shortName', 'longName', 'exchangeTimezoneName', 'quoteType', 'logo_url',
+		"previousClose", "marketCap", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
 	]
 	df = pd.DataFrame(columns=[convert_name(i) for i in attrs], index=ticker_list)
 	df.index.name = 'ticker'

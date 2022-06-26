@@ -38,7 +38,7 @@
 			</div>
 		</div>
 		<div class="flex items-center space-x-1">
-			<h2 class="text-lg font-bold mr-2 dark:text-zinc-300">
+			<h2 class="mr-2 text-lg font-bold dark:text-zinc-300">
 				{{ "%.2f" % stock_data['last_close'] }}
 			</h2>
 			{% if stock_data['last_close_pct'] > 0 %}
@@ -70,7 +70,7 @@
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Industry</h3>
 					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["industry_x"] }}</h2>
-					<p class="text-md font-semibold dark:text-zinc-400">{{ stock_info["industry_y"] }}</p>
+					<p class="font-semibold text-md dark:text-zinc-400">{{ stock_info["industry_y"] }}</p>
 				</div>
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Country</h3>
@@ -98,12 +98,14 @@
 		<div class="flex flex-col col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800 dark:text-zinc-300">
 			<div class="grow"><canvas id="chart"></canvas></div>
 			<div class="grid grid-flow-row grid-cols-{{(10//-4)*-1}} gap-x-8">
-				{% for i in range(15) %}
+				{% for k, v in statistics.items()  %}
 				<div class="flex justify-between py-2 border-b dark:border-zinc-600">
-					<p class="font-semibold">{{i}}</p>
+					<p class="font-semibold">{{k}}</p>
 					<p>
-						{% if k != "Ex dividend date" %}{{"%.2f" % i}}{% else
-						%}{{ i | epoch_convert }}{% endif %}
+						{% if k != "Ex dividend date" and k != "Market cap"%}{{v|int|suffix}}{% elif k == "Market cap"%}
+            {{v|int}}
+            {% else
+						%}{{v|epoch_convert}}{% endif %}
 					</p>
 				</div>
 				{% endfor %}
