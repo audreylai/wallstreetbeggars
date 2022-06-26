@@ -345,7 +345,6 @@
 		});
 
 		chart_data = {
-			labels: data.lbl,
 			datasets: [{
 				label: data.ticker,
 				data: data.close_pct,
@@ -370,7 +369,12 @@
 					title: {
 						display: false,
 						text: '% change'
-					}
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+					},
+					...y_scale_settings
 				}
 			},
 			...misc_options
@@ -403,7 +407,6 @@
 		});
 
 		chart_data = {
-			labels: data.lbl,
 			datasets: [{
 				label: data.ticker,
 				data: data.close_pct,
@@ -428,8 +431,13 @@
 					title: {
 						display: false,
 						text: '% change'
-					}
-				}
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+					},
+					...y_scale_settings
+				},
 			},
 			...misc_options
 		}
@@ -460,9 +468,7 @@
 			data2 = JSON.parse(res);
 		});
 
-
 		chart_data = {
-			labels: data.lbl,
 			datasets: [{
 				label: data.ticker,
 				data: data.close_pct,
@@ -487,7 +493,12 @@
 					title: {
 						display: false,
 						text: '% change'
-					}
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+					},
+					...y_scale_settings
 				}
 			},
 			...misc_options
@@ -556,7 +567,12 @@
 					title: {
 						display: false,
 						text: 'Dollars (HKD)'
-					}
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+					},
+					...y_scale_settings
 				},
 				y1: {
 					display: false,
@@ -591,7 +607,6 @@
 
 	function draw_rsi(data) {
 		chart_data = {
-			labels: data.lbl,
 			datasets: [{
 				label: 'RSI',
 				data: data.rsi,
@@ -626,8 +641,14 @@
 					display: true,
 					title: {
 						display: false,
-						text: 'Dollars (HKD)'
-					}
+						text: 'RSI'
+					},
+					min: 0,
+					max: 100,
+					ticks: {
+						stepSize: 40
+					},
+					...y_scale_settings
 				}
 			},
 			...misc_options
@@ -646,7 +667,6 @@
 
 	function draw_macd(data) {
 		chart_data = {
-			labels: data.lbl,
 			datasets: [{
 				label: 'MACD',
 				data: data.macd,
@@ -662,7 +682,6 @@
 				type: 'bar',
 				backgroundColor: 'rgba(112, 110, 122, 0.4)',
 				data: data.macd_div,
-				// borderColor: 'rgb(92, 90, 102)',
 			}]
 		}
 
@@ -677,7 +696,12 @@
 					title: {
 						display: false,
 						text: 'Dollars (HKD)'
-					}
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+					},
+					...y_scale_settings
 				}
 			},
 			...misc_options
@@ -701,7 +725,6 @@
   			type: 'bar',
   			backgroundColor: data.volume_color,
   			data: data.volume,
-  			// borderColor: 'rgb(92, 90, 102)',
   		}]
   	}
 
@@ -718,17 +741,11 @@
   					text: 'Dollars (HKD)'
   				},
 					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
 						callback: (val) => (val.toExponential())
 					},
-					grid: {
-						color: (val) => {
-							if (localStorage.theme = 'dark') {
-								return 'rgba(255, 255, 255, 0.1)'
-							} else {
-								return 'rgba(0, 0, 0, 0.1)'
-							}
-						}
-					}
+					...y_scale_settings
   			}
   		},
   		...misc_options
@@ -926,5 +943,16 @@
 	}
 
 	draw_charts(stock_data);
+
+	/* $("#theme-toggle").click(function() {
+		cdl_chart.update();
+		rsi_chart.update();
+		macd_chart.update();
+		vol_chart.update();
+
+		stock_cmp_chart.update();
+		industry_cmp_chart.update();
+		index_cmp_chart.update();
+	}); */
 </script>
 {% endif %} {% endblock %}
