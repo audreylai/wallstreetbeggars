@@ -50,33 +50,33 @@
 							<td class="p-4 border-b-2 dark:border-zinc-500 var1">
 								<p>a</p>
 							</td>
-						</<div class="relative w-full group autocomplete-wrapper">
-						<td class="p-4 border-b-2 dark:border-zinc-500 op">
-							<p>b</p>
-						</td>
-						<td class="p-4 border-b-2 dark:border-zinc-500 var2">
-							<p>c</p>
-						</td>
-						<td class="p-4 border-b-2 dark:border-zinc-500">
-							<div class="flex items-center justify-end">
-								<button type="button"
-									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-									onclick="edit_row($(this), true);">
-									<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
-
+							</<div class="relative w-full group autocomplete-wrapper">
+							<td class="p-4 border-b-2 dark:border-zinc-500 op">
+								<p>b</p>
+							</td>
+							<td class="p-4 border-b-2 dark:border-zinc-500 var2">
+								<p>c</p>
+							</td>
+							<td class="p-4 border-b-2 dark:border-zinc-500">
+								<div class="flex items-center justify-end">
 									<button type="button"
-										class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-										onclick="edit_row($(this), false);">
-										<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
+										class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+										onclick="edit_row($(this), true);">
+										<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 
-									</button>
-									<button type="button"
-										class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-										onclick="delete_row($(this));">
-										<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-									</button>
-							</div>
-						</td>
+										<button type="button"
+											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+											onclick="edit_row($(this), false);">
+											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
+
+										</button>
+										<button type="button"
+											class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+											onclick="delete_row($(this));">
+											<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+										</button>
+								</div>
+							</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -218,7 +218,7 @@
 	});
 
 	function delete_row(btn) {
-		btn.parents('tr').fadeOut(300, function() {
+		btn.parents('tr').fadeOut(300, function () {
 			$(this).remove();
 		})
 	}
@@ -258,7 +258,7 @@
 
 			var1_div.empty().append(var1_clone);
 			var2_div.empty().append(var2_clone);
-			op_div.empty().append(dropdown_op.clone());	
+			op_div.empty().append(dropdown_op.clone());
 
 		} else {
 			var1_txt = var1_div.find('input').val();
@@ -267,7 +267,7 @@
 
 			var1_div.empty().text(var1_txt);
 			var2_div.empty().text(var2_txt);
-			op_div.empty().text(op_txt);	
+			op_div.empty().text(op_txt);
 		}
 	}
 
@@ -318,14 +318,40 @@
 		row.find('.op p').text(selects.eq(0).val());
 		row.find('.var2 p').text($(btn).parent().find(".term-input").eq(1).val());
 
-		$('tbody[col='+ col +']').append(row);
+		$('tbody[col=' + col + ']').append(row);
+	}
+
+	function get_table() {
+		let buyrow = []
+		let sellrow = []
+		$('tbody[col=1]').each(function () {
+			$(this).find('tr').each(function () {
+				let val1 = $(this).find('td.var1').text().trim();
+				let op = $(this).find('td.op').text().trim();
+				let val2 = $(this).find('td.var2').text().trim();
+				buyrow.push(val1 + " " + op + " " + val2);
+			});
+		});
+		$('tbody[col=2]').each(function () {
+			$(this).find('tr').each(function () {
+				let val1 = $(this).find('td.var1').text().trim();
+				let op = $(this).find('td.op').text().trim();
+				let val2 = $(this).find('td.var2').text().trim();
+				sellrow.push(val1 + " " + op + " " + val2);
+			});
+		});
+		// buyrow = buyrow.join(" ");
+		// sellrow = sellrow.join(" ");
+		console.log(buyrow);
+		console.log(sellrow);
+		return buyrow, sellrow;
 	}
 
 	function suggestion_onlick(evt) {
 		$(evt).parents().closest(".autocomplete-wrapper").children().closest("input").val($(evt).children()[0].innerHTML)
 	}
 
-	$(document).on('input',".term-input", function (e) {
+	$(document).on('input', ".term-input", function (e) {
 		let finalOptions = []
 		for (i in options) {
 			let option = options[i];
@@ -348,7 +374,7 @@
 		}
 		let element = $(this).parent().find(".autocomplete")[0];
 		console.log(window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight)
-		if (window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight){
+		if (window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight) {
 			$(this).parent().find(".autocomplete").addClass("bottom-12")
 		}
 	});

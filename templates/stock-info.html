@@ -102,8 +102,8 @@
 				<div class="flex justify-between py-2 border-b dark:border-zinc-600">
 					<p class="font-semibold">{{k}}</p>
 					<p>
-						{% if k != "Ex dividend date" and k != "Market cap"%}{{"%.2f" % v|int}}{% elif k == "Market cap"%}
-            {{"%.2e" % v|int}}
+						{% if k != "Ex dividend date" and k != "Market cap"%}{{v|int|suffix}}{% elif k == "Market cap"%}
+            {{v|int}}
             {% else
 						%}{{v|epoch_convert}}{% endif %}
 					</p>

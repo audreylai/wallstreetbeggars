@@ -1,3 +1,4 @@
+from crypt import methods
 import re
 
 from math import ceil
@@ -5,6 +6,7 @@ from math import ceil
 from flask import Flask, render_template, request
 
 from db import *
+from db_utils import *
 from utils import *
 import api
 
@@ -14,7 +16,6 @@ app = Flask(__name__)
 def home():
 	data = process_stock_data(get_stock_data('0005-HK', period=60))
 	return render_template("home.html", data=data)
-
 
 @app.route("/", methods=["POST"])
 def get_data():
@@ -74,7 +75,6 @@ def stock_list_page():
 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap)
 
-
 # this should be an api
 @app.route("/update-active", methods=["POST"])
 def update_active():
@@ -94,9 +94,13 @@ def stock_info():
 	stock_data = process_stock_data(get_stock_data(ticker, 180), 1)
 	stock_data['ticker'] = ticker
 	stock_info = get_stock_info(ticker)
-	statistics = {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower(): stock_data[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower() : stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
+	statistics = {key: get_last_stock_data(ticker)[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower() : stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
 		
 	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics)
+
+@app.route("/stock-info/update", methods=["GET"])
+def update_stock_info():
+	add_stock_info_batch()
 
 
 # stock-analytics
