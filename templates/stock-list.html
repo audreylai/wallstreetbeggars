@@ -8,7 +8,7 @@
 	<div class="flex mb-2 ml-auto space-x-2 industry-filter">
 		<form method="POST" action="{{ url_for('stock_list_page') }}">
 			<form action="{{ url_for('stock_list_page') }}" method="POST">
-				<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{filter_mkt_cap}}" class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" onchange="edit_mkt_cap(this)"/>
+				<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{ min_mkt_cap }}" class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" onchange="edit_mkt_cap(this)"/>
 			</form>
 			<select id="industry-filter"
 				class="block px-2 py-1 text-sm bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
@@ -34,7 +34,7 @@
 							<p class=".column">{{ k }}</p>
 							<form method="POST" action="{{ url_for('stock_list_page') }}">
 								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
-								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ filter_mkt_cap }}" />
+								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 								<input type="hidden" name="sort_col" value="{{ k }}" />
 								<input type="hidden" name="sort_dir" value="asc" />
 								<button type="submit">
@@ -43,7 +43,7 @@
 							</form>
 							<form method="POST" action="{{ url_for('stock_list_page') }}">
 								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
-								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ filter_mkt_cap }}" />
+								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 								<input type="hidden" name="sort_col" value="{{ k }}" />
 								<input type="hidden" name="sort_dir" value="desc" />
 								<button>
@@ -94,7 +94,7 @@
 				<form action="{{ url_for('stock_list_page') }}" method="POST">
 					<input type="text" name="page" id="page" value="{{page-1}}" hidden>
 					<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
-					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ filter_mkt_cap }}" />
+					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 					<input type="hidden" name="sort_col" value="{{ sort_col }}" />
 					<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
 					<button type="submit" {% if (page - 1)|int < 1 %} disabled {% endif %}
@@ -110,7 +110,7 @@
 				{% for i in range(1, num_of_pages+1) %}
 				<form action="{{ url_for('stock_list_page') }}" method="POST">
 					<input type="text" name="page" id="page" value="{{i}}" hidden>
-					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ filter_mkt_cap }}" />
+					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 					<input type="hidden" name="sort_col" value="{{ sort_col }}" />
 					<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
 					<button type="submit"
@@ -122,7 +122,7 @@
 				<form action="{{ url_for('stock_list_page') }}" method="POST">
 					<input type="text" name="page" id="page" value="{{page+1}}" hidden>
 					<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
-					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ filter_mkt_cap }}" />
+					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 					<input type="hidden" name="sort_col" value="{{ sort_col }}" />
 					<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
 					<button type="submit" {% if (page+1)|int> num_of_pages %} disabled {% endif %}
