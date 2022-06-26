@@ -20,6 +20,7 @@ def home():
 def get_data():
 	return render_template("home.html")
 
+
 @app.route("/rules", methods=["GET", "POST"])
 def rules():
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
@@ -35,12 +36,13 @@ def rules():
 	stock_data = get_stock_data(ticker)
 	stock_data = process_stock_data(get_stock_data(ticker, period=180))
 
-	return render_template("rules.html", stock_info=stock_info, stock_data=stock_data,rules={
-			"hit_buy_rules": hit_buy_rules,
-			"hit_sell_rules": hit_sell_rules,
-			"miss_buy_rules": miss_buy_rules,
-			"miss_sell_rules": miss_sell_rules
-		})
+	return render_template("rules.html", stock_info=stock_info, stock_data=stock_data, rules={
+		"hit_buy_rules": hit_buy_rules,
+		"hit_sell_rules": hit_sell_rules,
+		"miss_buy_rules": miss_buy_rules,
+		"miss_sell_rules": miss_sell_rules
+	})
+
 
 @app.route("/rules/edit")
 def rules_edit():
