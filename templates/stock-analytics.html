@@ -261,7 +261,6 @@
 					required
 					id="industry-cmp-txtbox"
 					class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-					placeholder="Industry..."
 					onchange="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value)"
 				>
 					<option value="">Select an industry...</option>
@@ -286,10 +285,9 @@
 					required
 					id="index-cmp-txtbox"
 					class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-					placeholder="Industry..."
 					onchange="draw_index_cmp(stock_data, document.getElementById('index-cmp-txtbox').value)"
 				>
-					<option value="">Select an industry...</option>
+					<option value="">Select an index...</option>
 					{% for index in indexes %} {% if index != None %}
 					<option value="{{index}}">{{index}}</option>
 					{% endif %} {% endfor %}
