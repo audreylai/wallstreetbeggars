@@ -1,4 +1,3 @@
-from crypt import methods
 import re
 
 from math import ceil
@@ -54,7 +53,11 @@ def rules_edit():
 def stock_list_page():
 	page = request.values.get("page", type=int, default=1)
 	filter_industry = request.values.get("filter_industry", type=str, default='')
-	min_mkt_cap = 10 ** request.values.get("min_mkt_cap", type=int, default=9)
+
+	min_mkt_cap_pow = request.values.get("min_mkt_cap", type=int, default=9)
+	min_mkt_cap = 10 ** min_mkt_cap_pow
+
+
 	sort_col = request.values.get("sort_col", type=str, default='ticker')
 	sort_dir_str = request.values.get("sort_dir", type=str, default='asc')
 	sort_dir = pymongo.DESCENDING if sort_dir_str == 'desc' else pymongo.ASCENDING
@@ -73,7 +76,11 @@ def stock_list_page():
 
 	active_tickers = get_active_tickers("test")['active']
 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
-	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap)
+
+	# return 'a'
+
+	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap_pow)
+
 
 # this should be an api
 @app.route("/update-active", methods=["POST"])
@@ -98,9 +105,9 @@ def stock_info():
 		
 	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics)
 
-@app.route("/stock-info/update", methods=["GET"])
-def update_stock_info():
-	add_stock_info_batch()
+# @app.route("/stock-info/update", methods=["GET"])
+# def update_stock_info():
+# 	add_stock_info_batch()
 
 
 # stock-analytics
@@ -140,14 +147,14 @@ def timectime(s):
 
 @app.template_filter('suffix')
 def add_suffix(num):
-    if num < 10**3:
-        return "%.1f" % (num)
-    elif num < 10**6:
-        return "%.1f" % (num / 10**3) + 'K'
-    elif num < 10**9:
-        return "%.1f" % (num / 10**6) + 'M'
-    else:
-        return "%.1f" % (num / 10**9) + 'B'
+		if num < 10**3:
+				return "%.1f" % (num)
+		elif num < 10**6:
+				return "%.1f" % (num / 10**3) + 'K'
+		elif num < 10**9:
+				return "%.1f" % (num / 10**6) + 'M'
+		else:
+				return "%.1f" % (num / 10**9) + 'B'
 
 
 if __name__ == "__main__":

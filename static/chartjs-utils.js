@@ -24,6 +24,18 @@ function round_stock_value(num) {
 	}
 }
 
+function add_suffix(num, precision=0) {
+	if (num < 10**3) {
+		return num.toFixed(1);
+	} else if (num < 10**6) {
+		return (num/10**3).toFixed(precision) + 'K';
+	} else if (num < 10**9) {
+		return (num/10**6).toFixed(precision) + 'M';
+	} else {
+		return (num/10**9).toFixed(precision) + 'B';
+	}
+}
+
 const line_chart_settings = {
 	type: 'line',
 	yAxisID: 'y',
@@ -117,12 +129,12 @@ const misc_options = {
 			callbacks: {
 				label: function(context) {
 					if (context.parsed.y != null && context.dataset.label) {
-						if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
-							return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
-						} else if (context.dataset.label == 'Volume') { // Volume label
-							return "Volume: " + context.parsed.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
+						if ($(context.chart.ctx.canvas).attr('id') == 'volume-chart' || context.dataset.label == 'Volume') { // Volume label
+							return context.dataset.label + ': ' + context.parsed.y.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
 						} else if ($(context.chart.ctx.canvas).hasClass('comparison-chart')) { // comparison charts
 							return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(2) + '%'; // add %, round 2dp
+						} else if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
+							return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
 						} else { // default
 							return context.dataset.label + ': ' + context.parsed.y.toFixed(3); // default round 3dp
 						}
@@ -213,10 +225,9 @@ const cursorpos_plugin = {
 		if ($(chart.ctx.canvas).hasClass('comparison-chart')) {
 			y_val = (y_val * 100).toFixed(2) + '%';
 		} else if ($(chart.ctx.canvas).attr('id') == 'volume-chart') {
-			y_val = Math.round(y_val / 10**4) * 10**4;
-			y_val = y_val.toExponential();
+			y_val = add_suffix(y_val);
 		} else {
-			y_val = y_val.toFixed(3)
+			y_val = y_val.toFixed(3);
 		}
 		ctx.fillText('x: ' + x_val, left+5, top+10);
 		ctx.fillText('y: ' + y_val, left+5, top+25);

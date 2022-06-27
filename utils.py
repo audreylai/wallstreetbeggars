@@ -119,21 +119,23 @@ def process_stock_data(data, interval=1, include=[], precision=4):
 		'sma10': [], 'sma20': [], 'sma50': [], 'sma100': [], 'sma250': [],
 		'macd': [], 'macd_ema': [], 'macd_div': [], 'rsi': [],
 		'cdl': [],
-		'close': [], 'close_pct': [],
-		'volume': [], 'volume_color': []
+		'close': [], 'close_pct': [], 'last_close': 0, 'last_close_pct': 0,
+		'volume': [], 'volume_color': [], 'vol_sma20': [], 'max_volume': 0
 	}
-	max_volume = 0
 	first_close = None
 	
 	volume_up_color = 'rgba(215,85,65,0.4)'
 	volume_dn_color = 'rgba(80,160,115,0.4)'
+
+	if len(data) == 0:
+		return out
 	
 	for c, i in enumerate(data):
 		if c % interval != 0:
 			continue
 
-		if i['volume'] > max_volume:
-			max_volume = i['volume']
+		if i['volume'] > out['max_volume']:
+			out['max_volume'] = i['volume']
 
 		if first_close is None:
 			first_close = i['close']
@@ -146,7 +148,7 @@ def process_stock_data(data, interval=1, include=[], precision=4):
 			'c': round(i['close'], precision)
 		})
 
-		for col in ['sma10', 'sma20', 'sma50', 'sma100', 'sma250', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume', 'close']:
+		for col in ['sma10', 'sma20', 'sma50', 'sma100', 'sma250', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume', 'vol_sma20', 'close']:
 			out[col].append({
 				'x': int(datetime.timestamp(i['date']) * 1000),
 				'y': round(i[col], precision)
@@ -163,9 +165,7 @@ def process_stock_data(data, interval=1, include=[], precision=4):
 			out['volume_color'].append(volume_dn_color)
 
 		out['last_close'] = round(i['close'], precision)
-
 	out['last_close_pct'] = round(100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y'], precision)
-	out['max_volume'] = max_volume
 
 	if len(include) != 0:
 		return dict(filter(lambda k: k[0] in include, out.items()))

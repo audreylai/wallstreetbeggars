@@ -585,9 +585,6 @@
 					max: data.max_volume.toPrecision(2) * 4,
 					grid: {
 						drawOnChartArea: false
-					},
-					ticks: {
-						callback: (val) => (val.toExponential())
 					}
 				}
 			},
@@ -612,23 +609,23 @@
 				data: data.rsi,
 				borderColor: 'rgb(16, 183, 89)',
 				...line_chart_settings
-			}/*, {
+			}, {
 				label: '',
 				data: [
-					{'x': data.date_start, 'y': 30},
-					{'x': data.date_end, 'y': 30}
+					{'x': data.start_date*1000, 'y': 30},
+					{'x': data.end_date*1000, 'y': 30}
 				],
 				borderColor: 'rgba(112, 110, 122, 0.4)',
 				...line_chart_settings
 			}, {
 				label: '',
 				data: [
-					{'x': data.date_start, 'y': 70},
-					{'x': data.date_end, 'y': 70}
+					{'x': data.start_date*1000, 'y': 70},
+					{'x': data.end_date*1000, 'y': 70}
 				],
 				borderColor: 'rgba(112, 110, 122, 0.4)',
 				...line_chart_settings
-			}*/]
+			}]
 		};
 
 		options = {
@@ -725,7 +722,12 @@
   			type: 'bar',
   			backgroundColor: data.volume_color,
   			data: data.volume,
-  		}]
+  		}, {
+				label: 'MA20',
+				data: data.vol_sma20,
+				borderColor: 'rgb(195, 177, 30)',
+				...line_chart_settings
+			}]
   	}
 
   	options = {
@@ -743,7 +745,7 @@
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
-						callback: (val) => (val.toExponential())
+						callback: (val) => (add_suffix(val))
 					},
 					...y_scale_settings
   			}
@@ -943,6 +945,18 @@
 	}
 
 	draw_charts(stock_data);
+
+	function add_suffix(num, precision=0) {
+		if (num < 10**3) {
+			return num.toFixed(precision);
+		} else if (num < 10**6) {
+			return (num/10**3).toFixed(precision) + 'K';
+		} else if (num < 10**9) {
+			return (num/10**6).toFixed(precision) + 'M';
+		} else {
+			return (num/10**9).toFixed(precision) + 'B';
+		}
+	}
 
 	/* $("#theme-toggle").click(function() {
 		cdl_chart.update();
