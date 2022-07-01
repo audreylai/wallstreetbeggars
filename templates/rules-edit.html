@@ -342,8 +342,7 @@
 		});
 		// buyrow = buyrow.join(" ");
 		// sellrow = sellrow.join(" ");
-		console.log(buyrow);
-		console.log(sellrow);
+		$.post("/rules/edit", {buy: buyrow, sell:sellrow})
 		return buyrow, sellrow;
 	}
 

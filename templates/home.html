@@ -1,189 +1,42 @@
-{% extends "base.html" %}
-{% block title %} Home {% endblock %}
-{% block content %}
-<div class="flex grid flex-1 h-screen grid-cols-6 gap-4 p-4 px-6 py-4 overflow-y-auto bg-gray-100 2xl:grid-cols-4">
-	<div class="flex flex-col col-span-6 p-1 space-y-4 overflow-y-auto lg:col-span-2 2xl:col-span-1">
-		<form action="/" method="POST" class="relative">
-			<div class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pointer-events-none">
-				<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 512 512">
-					<path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none"
-						stroke="currentColor" stroke-miterlimit="10" stroke-width="32" />
-					<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"
-						d="M338.29 338.29L448 448" />
-				</svg>
+{% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
+%}
+<div class="w-screen bg-zinc-100 dark:bg-zinc-900">
+
+	<div class="flex flex-col h-screen gap-4 px-6 py-4">
+		<div class="space-y-2">
+			<div class="flex w-full px-3 py-2 space-x-4 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100">
+				<div>item</div>
+				<div>item</div>
 			</div>
-			<input type="hidden" name="page" value="1">
-			<input type="text" name="ticker" value="{{ticker}}"
-				class="flex-1 w-full px-3 py-1 pl-10 text-base text-gray-700 placeholder-gray-400 uppercase bg-white border border-transparent border-gray-300 rounded-lg shadow-sm appearance-none placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-				placeholder="Search" />
-		</form>
-		<div class="flex flex-col h-full px-2 space-y-3 overflow-auto">
-			{% for i in range(20)%}
-			<div class="grid grid-cols-3 p-4 bg-white rounded-md shadow">
-				<div class="col-span-2">
-					<div class="flex items-center space-x-3">
-						<h3 class="font-bold">0005.HK</h3>
-						<p class="text-xs text-gray-400">Hong Kong &middot; HKD</p>
+			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">Dashboard</h1>
+		</div>
+		<div class="space-y-4 overflow-y-scroll">
+			<div class="grid h-32 grid-cols-4 gap-x-4">
+				{% for i in range(4) %}
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="flex flex-col">
+						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Market Direction</h3>
+						<h2 class="text-3xl font-semibold dark:text-zinc-100">Bearish</h2>
+						<h4 class="font-light text-rose-500">-0.77%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon></h4>
 					</div>
-					<p class="text-xs font-bold text-gray-500">HSBC Holdings plc</p>
 				</div>
-				<div class="flex flex-col">
-					<p class="font-bold text-right text-gray-800">58.15</p>
-					<p class="text-sm font-bold text-right text-red-400">-0.85</p>
-				</div>
+				{% endfor %}
 			</div>
-			{% endfor %}
-		</div>
-	</div>
-	{% if data %}
-	<div class="inset-0 w-full h-full col-span-4 g:static bg-black/20 lg:bg-transparent shrink 2xl:col-span-3"
-		id="output-panel">
-		<div
-			class="fixed bottom-0 left-0 right-0 flex-col p-4 space-y-2 bg-white lg:h-full lg:static top-16 rounded-t-2xl lg:bg-transparent lg:p-1 lg:flex">
-			<div class="flex justify-between">
-				<h2 class="text-2xl font-extrabold uppercase">{{ticker}}</h2>
-				<button onclick="document.querySelector('#output-panel').style.display = 'none';" class="lg:hidden">
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 fill-gray-200 stroke-gray-500" viewBox="0 0 512 512">
-						<title>Close Circle</title>
-						<path d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z" stroke="none"
-							stroke-miterlimit="10" stroke-width="32" />
-						<path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"
-							d="M320 320L192 192M192 320l128-128" />
-					</svg>
-				</button>
+			<div class="grid grid-cols-3 h-96 gap-x-4">
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
 			</div>
-			<div class="pb-10 overflow-auto grow h-96">
-				<div class="p-4 bg-white rounded-md shadow h-1/2">
-					<canvas id="myChart"></canvas>
-				</div>
+			<div class="grid grid-cols-2 h-96 gap-x-4">
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+			</div>
+			<div class="grid grid-cols-3 h-96 gap-x-4">
+				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
 			</div>
 		</div>
 	</div>
-	{% endif %}
+</div>
 </div>
 {% endblock %}
-
-{% block script%} {% if data %}
-<script>
-  
-	var chart = undefined;
-	const ctx = document.getElementById('myChart').getContext('2d');
-
-	function draw_candlestick(data) {
-		const line_chart_settings = {	
-			type: 'line',
-			yAxisID: 'y',
-			fill: false,
-			borderWidth: 1,
-			tension: 0.1,
-			pointRadius: 0,
-		}
-
-		console.log(data)
-
-		const chart_data = {
-			labels: data.lbl,
-			datasets: [{
-				label: 'Candlestick',
-				type: 'candlestick',
-				data: data.cdl,
-				yAxisID: 'y'
-			}, {
-				label: 'MA10',
-				data: data.sma10,
-				borderColor: 'rgb(174, 32, 18)',
-				...line_chart_settings
-			}, {
-				label: 'MA20',
-				data: data.sma20,
-				borderColor: 'rgb(202, 103, 2)',
-				...line_chart_settings
-			}, {
-				label: 'MA50',
-				data: data.sma50,
-				borderColor: 'rgb(238, 155, 0)',
-				...line_chart_settings
-			}, {
-				label: 'Volume',
-				type: 'bar',
-				data: data.vol,
-				backgroundColor: data.vol_color,
-				yAxisID: 'y1'
-			}]
-		}
-
-		const options = {
-			legend: {
-				onClick: function (e) {
-					e.stopPropagation();
-				}
-			},
-			scales: {
-				x: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Date'
-					},
-					type: 'timeseries',
-					time: {
-						unit: 'month'
-					}
-				},
-				y: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Dollars (HKD)'
-					}
-				},
-				y1: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Volume (HKD)'
-					},
-					position: 'right',
-					min: 0,
-					max: data.max_vol.toPrecision(2) * 4,
-					grid: {
-						drawOnChartArea: false
-					},
-					ticks: {
-						callback: (val) => (val.toExponential())
-					}
-				}
-			},
-			interaction: {
-				mode: 'index',
-				intersect: false
-			},
-			plugins: {
-				title: {
-					display: false
-				}
-			},
-			responsive: true,
-			maintainAspectRatio: true,
-			aspectRatio: 2,
-			stacked: false,
-			events: []
-		}
-
-		const config = {
-			type: 'candlestick',
-			data: chart_data,
-			options: options
-		}
-
-		// destroy previous chart
-		if (chart) {
-			chart.destroy();
-		}
-		
-		chart = new Chart(ctx, config);
-	}
-
-	draw_candlestick({{ data | tojson}})
-</script>
-{% endif %} {% endblock %}

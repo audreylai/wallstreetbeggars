@@ -44,8 +44,10 @@ def rules():
 	})
 
 
-@app.route("/rules/edit")
+@app.route("/rules/edit", methods=["GET", "POST"])
 def rules_edit():
+	if request.method == "POST":
+		print(request.values.get("buy"), request.values.get("sell"))
 	return render_template("rules-edit.html")
 
 
