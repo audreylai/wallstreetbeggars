@@ -13,7 +13,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-	data = process_stock_data(get_stock_data('0005-HK', period=60))
+	data = {
+		'hscc': process_stock_data(get_stock_data('^HSCC', period=180), ticker='^HSCC', period=180),
+		'hsce': process_stock_data(get_stock_data('^HSCE', period=180), ticker='^HSCE', period=180),
+		'hsi': process_stock_data(get_stock_data('^HSI', period=180), ticker='^HSI', period=180)
+	}
 	return render_template("home.html", data=data)
 
 @app.route("/", methods=["POST"])
@@ -34,7 +38,7 @@ def rules():
 	stock_info = get_stock_info(ticker)
 
 	stock_data = get_stock_data(ticker)
-	stock_data = process_stock_data(get_stock_data(ticker, period=180))
+	stock_data = process_stock_data(get_stock_data(ticker, period=180), ticker=ticker, period=180)
 
 	return render_template("rules.html", stock_info=stock_info, stock_data=stock_data, rules={
 		"hit_buy_rules": hit_buy_rules,
@@ -100,8 +104,7 @@ def update_active():
 def stock_info():
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
 
-	stock_data = process_stock_data(get_stock_data(ticker, 180), 1)
-	stock_data['ticker'] = ticker
+	stock_data = process_stock_data(get_stock_data(ticker, 180), interval=1, ticker=ticker, period=180)
 	stock_info = get_stock_info(ticker)
 	statistics = {key: get_last_stock_data(ticker)[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower() : stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
 		
@@ -125,8 +128,7 @@ def stock_analytics():
 	parsed_buy_rules, parsed_sell_rules = parse_rules(["MA10 ≤ MA20", "MA20 ≤ MA50", "RSI ≤ 30"], ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"])
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
 	
-	stock_data = process_stock_data(get_stock_data(ticker, period=180))
-	stock_data['ticker'], stock_data['period'], stock_data['interval'] = ticker, 180, 1
+	stock_data = process_stock_data(get_stock_data(ticker, period=180), ticker=ticker, period=180)
 	stock_data['start_date'], stock_data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())
 	stock_info = get_stock_info(ticker)
 

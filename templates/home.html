@@ -1,7 +1,12 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} {% block content
 %}
+<script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs-chart-financial.js')}}"></script>
+<!-- <script src="{{url_for('static', filename='chartjs/chartjs-plugin-zoom.js')}}"></script> -->
+<script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
-
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
 		<div class="space-y-2">
 			<div class="flex w-full px-3 py-2 space-x-4 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100">
@@ -23,9 +28,15 @@
 				{% endfor %}
 			</div>
 			<div class="grid grid-cols-3 h-96 gap-x-4">
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<canvas id="hscc-index-chart"></canvas>
+				</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<canvas id="hsce-index-chart"></canvas>
+				</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<canvas id="hsi-index-chart"></canvas>
+				</div>
 			</div>
 			<div class="grid grid-cols-2 h-96 gap-x-4">
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
@@ -38,5 +49,79 @@
 		</div>
 	</div>
 </div>
-</div>
+<script>
+	// init chart + ctx
+	var hscc_index_chart = undefined;
+	var hsce_index_chart = undefined;
+	var hsi_index_chart = undefined;
+
+	const hscc_index_ctx = document.getElementById('hscc-index-chart').getContext('2d');
+	const hsce_index_ctx = document.getElementById('hsce-index-chart').getContext('2d');
+	const hsi_index_ctx = document.getElementById('hsi-index-chart').getContext('2d');
+
+	function draw_chart(data, ctx, chart) {
+		gradient = ctx.createLinearGradient(0, 0, 0, 300);
+		gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
+		gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
+
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				type: 'line',
+				yAxisID: 'y',
+				label: data.ticker,
+				data: data.close,
+				borderColor: 'rgb(102, 126, 234)',
+				backgroundColor: gradient,
+				fill: true,
+				borderWidth: 1,
+				tension: 0.3,
+				pointRadius: 0,
+			}]
+		}
+
+		options = {
+			legend: {
+				onClick: function (e) {
+					e.stopPropagation();
+				}
+			},
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+						callback: (val) => (add_suffix(val, 2))
+					},
+					...y_scale_settings
+				}
+			},
+			...misc_options
+		}
+
+		if (chart) {
+			chart.destroy();
+		}
+
+		chart = new Chart(ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	data = {{ data | tojson }};
+	draw_chart(data.hscc, hscc_index_ctx, hscc_index_chart);
+	draw_chart(data.hsce, hsce_index_ctx, hsce_index_chart);
+	draw_chart(data.hsi, hsi_index_ctx, hsi_index_chart);
+</script>
 {% endblock %}

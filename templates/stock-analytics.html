@@ -946,18 +946,6 @@
 
 	draw_charts(stock_data);
 
-	function add_suffix(num, precision=0) {
-		if (num < 10**3) {
-			return num.toFixed(precision);
-		} else if (num < 10**6) {
-			return (num/10**3).toFixed(precision) + 'K';
-		} else if (num < 10**9) {
-			return (num/10**6).toFixed(precision) + 'M';
-		} else {
-			return (num/10**9).toFixed(precision) + 'B';
-		}
-	}
-
 	/* $("#theme-toggle").click(function() {
 		cdl_chart.update();
 		rsi_chart.update();

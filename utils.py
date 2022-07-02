@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from pandas import Period
 
 def get_datetime_from_period(period):
 	end_datetime = datetime.now()
@@ -114,7 +115,7 @@ def process_industry_avg(data, interval=1):
 	return out
 
 
-def process_stock_data(data, interval=1, include=[], precision=4):
+def process_stock_data(data, interval=1, include=[], precision=4, ticker=None, period=None):
 	out = {
 		'sma10': [], 'sma20': [], 'sma50': [], 'sma100': [], 'sma250': [],
 		'macd': [], 'macd_ema': [], 'macd_div': [], 'rsi': [],
@@ -167,6 +168,10 @@ def process_stock_data(data, interval=1, include=[], precision=4):
 		out['last_close'] = round(i['close'], precision)
 	out['last_close_pct'] = round(100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y'], precision)
 
+	out['interval'] = interval
+	out['period'] = period
+	out['ticker'] = ticker
+	
 	if len(include) != 0:
 		return dict(filter(lambda k: k[0] in include, out.items()))
 

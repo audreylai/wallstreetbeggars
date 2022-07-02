@@ -24,15 +24,17 @@ function round_stock_value(num) {
 	}
 }
 
-function add_suffix(num, precision=0) {
+function add_suffix(num, precision=3) {
 	if (num < 10**3) {
-		return num.toFixed(1);
+		return num.toPrecision(precision);
 	} else if (num < 10**6) {
-		return (num/10**3).toFixed(precision) + 'K';
+		return (num/10**3).toPrecision(precision) + 'K';
 	} else if (num < 10**9) {
-		return (num/10**6).toFixed(precision) + 'M';
+		return (num/10**6).toPrecision(precision) + 'M';
+	} else if (num < 10**12) {
+		return (num/10**9).toPrecision(precision) + 'B';
 	} else {
-		return (num/10**9).toFixed(precision) + 'B';
+		return (num/10**12).toPrecision(precision) + 'T';
 	}
 }
 
@@ -128,7 +130,7 @@ const misc_options = {
 			bodyColor: "rgba(255, 255, 255, 0.7)",
 			callbacks: {
 				label: function(context) {
-					if (context.parsed.y != null && context.dataset.label) {
+					if (context.parsed.y && context.dataset.label) {
 						if ($(context.chart.ctx.canvas).attr('id') == 'volume-chart' || context.dataset.label == 'Volume') { // Volume label
 							return context.dataset.label + ': ' + context.parsed.y.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
 						} else if ($(context.chart.ctx.canvas).hasClass('comparison-chart')) { // comparison charts
@@ -136,7 +138,7 @@ const misc_options = {
 						} else if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
 							return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
 						} else { // default
-							return context.dataset.label + ': ' + context.parsed.y.toFixed(3); // default round 3dp
+							return context.dataset.label + ': ' + add_suffix(context.parsed.y); // default round 4sf
 						}
 					} else if (context.dataset.type == 'candlestick') {
 						return 'O: ' + round_stock_value(context.parsed.o) +
@@ -227,7 +229,7 @@ const cursorpos_plugin = {
 		} else if ($(chart.ctx.canvas).attr('id') == 'volume-chart') {
 			y_val = add_suffix(y_val);
 		} else {
-			y_val = y_val.toFixed(3);
+			y_val = add_suffix(y_val);
 		}
 		ctx.fillText('x: ' + x_val, left+5, top+10);
 		ctx.fillText('y: ' + y_val, left+5, top+25);

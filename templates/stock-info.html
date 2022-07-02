@@ -103,30 +103,30 @@
 					<p class="font-semibold">{{k}}</p>
 					<p>
 						{% if k != "Ex dividend date" and k != "Market cap"%}{{v|int|suffix}}{% elif k == "Market cap"%}
-            {{v|int}}
-            {% else
+						{{v|int}}
+						{% else
 						%}{{v|epoch_convert}}{% endif %}
 					</p>
 				</div>
 				{% endfor %}
 			</div>
-      <div class="flex justify-center">
-        <form action="/stock-analytics" method="POST">
-          <input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
-          <a class="text-blue-600 cursor-pointer dark:text-blue-500 dark:hover:text-blue-400 hover:text-blue-500" onclick="this.parentNode.submit()">Show more</a>
-        </form>
-      </div>
+			<div class="flex justify-center">
+				<form action="/stock-analytics" method="POST">
+					<input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
+					<a class="text-blue-600 cursor-pointer dark:text-blue-500 dark:hover:text-blue-400 hover:text-blue-500" onclick="this.parentNode.submit()">Show more</a>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
 <script>
-  const line_chart_settings = {
-  	type: 'line',
-  	yAxisID: 'y',
-  	borderWidth: 2,
-  	tension: 0.3,
-  	pointRadius: 0,
-  }
+	const line_chart_settings = {
+		type: 'line',
+		yAxisID: 'y',
+		borderWidth: 2,
+		tension: 0.3,
+		pointRadius: 0,
+	}
 
 	const crosshair_plugin = {
 		id: 'crosshair',
@@ -181,87 +181,87 @@
 	// enable plugins globally
 	Chart.register(crosshair_plugin)
 
-  var chart = undefined;
-  const ctx = document.getElementById('chart').getContext('2d');
+	var chart = undefined;
+	const ctx = document.getElementById('chart').getContext('2d');
 
-  gradient = ctx.createLinearGradient(0, 0, 0, 300);
-  gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
-  gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
+	gradient = ctx.createLinearGradient(0, 0, 0, 300);
+	gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
+	gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
 
-  function draw_chart(data) {
-  	console.log(data);
-  	chart_data = {
-  		labels: data.lbl,
-  		datasets: [{
-  			label: data.ticker,
-  			data: data.close,
-  			borderColor: 'rgb(102, 126, 234)',
-  			backgroundColor: gradient,
-  			fill: true,
-  			...line_chart_settings
-  		}]
-  	}
+	function draw_chart(data) {
+		console.log(data);
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				label: data.ticker,
+				data: data.close,
+				borderColor: 'rgb(102, 126, 234)',
+				backgroundColor: gradient,
+				fill: true,
+				...line_chart_settings
+			}]
+		}
 
-  	options = {
-  		legend: {
-  			onClick: function (e) {
-  				e.stopPropagation();
-  			}
-  		},
-  		scales: {
-  			x: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: 'Date'
-  				},
-  				type: 'timeseries',
-  				time: {
-  					unit: 'month',
+		options = {
+			legend: {
+				onClick: function (e) {
+					e.stopPropagation();
+				}
+			},
+			scales: {
+				x: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Date'
+					},
+					type: 'timeseries',
+					time: {
+						unit: 'month',
 						tooltipFormat: 'DD'
-  				},
+					},
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 80,
 						maxRotation: 0,
 						minRotation: 0
 					}
-  			},
-  			y: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: 'Dollars (HKD)'
-  				}
-  			}
-  		},
-  		interaction: {
-  			mode: 'index',
-  			intersect: false
-  		},
-  		plugins: {
-  			title: {
-  				display: false
-  			},
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					}
+				}
+			},
+			interaction: {
+				mode: 'index',
+				intersect: false
+			},
+			plugins: {
+				title: {
+					display: false
+				},
 				legend: {
 					display: false
 				},
-  		},
-  		responsive: true,
-  		maintainAspectRatio: false,
-  	}
+			},
+			responsive: true,
+			maintainAspectRatio: false,
+		}
 
-  	if (chart) {
-  		chart.destroy();
-  	}
+		if (chart) {
+			chart.destroy();
+		}
 
-  	chart = new Chart(ctx, {
-  		type: 'line',
-  		data: chart_data,
-  		options: options
-  	});
-  }
+		chart = new Chart(ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
 
-  draw_chart({{ stock_data | tojson }})
+	draw_chart({{ stock_data | tojson }})
 </script>
 {% endblock %}
