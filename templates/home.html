@@ -80,6 +80,8 @@
 			}]
 		}
 
+		tmp = misc_options
+		tmp.plugins.legend.display = false;
 		options = {
 			legend: {
 				onClick: function (e) {
@@ -105,7 +107,8 @@
 					...y_scale_settings
 				}
 			},
-			...misc_options
+			...tmp
+
 		}
 
 		if (chart) {
