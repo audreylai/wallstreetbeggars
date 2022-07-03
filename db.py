@@ -221,3 +221,9 @@ def edit_rules(username, rule_type, rule, action):
 		rule_type: rule_list
 	}
 	col_users.update_one({"username": username}, {"$set": data}, upsert=False)
+
+def update_user_theme(username, theme):
+	col_users.update_one({"username": username}, {"$set": {"dark_mode": True if theme == "dark" else False}}, upsert=False)
+
+def get_user_theme(username):
+	return col_users.find_one({"username": username}, {"_id": 0, "dark_mode":1})["dark_mode"]
