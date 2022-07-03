@@ -26,7 +26,7 @@ function round_stock_value(num) {
 
 function add_suffix(num, precision=3) {
 	if (num < 10**3) {
-		return num.toPrecision(precision);
+		return num.toFixed(0);
 	} else if (num < 10**6) {
 		return (num/10**3).toPrecision(precision) + 'K';
 	} else if (num < 10**9) {
@@ -137,8 +137,10 @@ const misc_options = {
 							return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(2) + '%'; // add %, round 2dp
 						} else if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
 							return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
+						} else if (['Volume', 'RSI', 'MACD', 'EMA', 'Divergence'].includes(context.dataset.label)) { // MA labels
+							return context.dataset.label + ': ' + context.parsed.y.toFixed(2);
 						} else { // default
-							return context.dataset.label + ': ' + add_suffix(context.parsed.y); // default round 4sf
+							return context.dataset.label + ': ' + add_suffix(context.parsed.y);
 						}
 					} else if (context.dataset.type == 'candlestick') {
 						return 'O: ' + round_stock_value(context.parsed.o) +
@@ -228,9 +230,13 @@ const cursorpos_plugin = {
 			y_val = (y_val * 100).toFixed(2) + '%';
 		} else if ($(chart.ctx.canvas).attr('id') == 'volume-chart') {
 			y_val = add_suffix(y_val);
+		} else if ($(chart.ctx.canvas).attr('id') == 'macd-chart' || $(chart.ctx.canvas).attr('id') == 'rsi-chart') {
+			y_val = y_val.toFixed(2);
 		} else {
-			y_val = add_suffix(y_val);
+			y_val = round_stock_value(y_val)
 		}
+
+
 		ctx.fillText('x: ' + x_val, left+5, top+10);
 		ctx.fillText('y: ' + y_val, left+5, top+25);
 	}

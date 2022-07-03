@@ -97,41 +97,41 @@
         </div>
         <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
-            <ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-            <h2 class="text-2xl font-semibold dark:text-zinc-100">
-              HSCE Index
-            </h2>
-          </div>
-          <div class="h-96"><canvas id="hsce-index-chart"></canvas></div>
-        </div>
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-          <div class="flex items-center space-x-1">
-            <ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-            <h2 class="text-2xl font-semibold dark:text-zinc-100">
-              HSI Index
-            </h2>
-          </div>
-          <div class="h-96"><canvas id="hsi-index-chart"></canvas></div>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 h-96 gap-x-4">
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
-      </div>
-      <div class="grid grid-cols-3 h-96 gap-x-4">
-        <div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="h-96"><canvas id="all-industry-cmp-chart"></canvas></div>
-        </div>
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="h-96"><canvas id="all-industry-last-cmp-chart"></canvas></div>
+						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+							HSCE Index
+						</h2>
+					</div>
+					<div class="h-96"><canvas id="hsce-index-chart"></canvas></div>
 				</div>
-      </div>
-    </div>
-  </div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="flex items-center space-x-1">
+						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+							HSI Index
+						</h2>
+					</div>
+					<div class="h-96"><canvas id="hsi-index-chart"></canvas></div>
+				</div>
+			</div>
+			<div class="grid grid-cols-2 h-96 gap-x-4">
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+			</div>
+			<div class="grid grid-cols-3 h-96 gap-x-4">
+				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="h-96"><canvas id="all-industry-cmp-chart" class="comparison-chart"></canvas></div>
+				</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="h-96"><canvas id="all-industry-last-cmp-chart" class="comparison-chart"></canvas></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <script>
-  // init chart + ctx
-  // init chart + ctx
+	// init chart + ctx
+	// init chart + ctx
 	var hscc_index_chart = undefined;
 	var hsce_index_chart = undefined;
 	var hsi_index_chart = undefined;
@@ -144,26 +144,26 @@
 	const all_industry_cmp_ctx = document.getElementById('all-industry-cmp-chart').getContext('2d');
 	const all_industry_last_cmp_ctx = document.getElementById('all-industry-last-cmp-chart').getContext('2d');
 
-  function draw_index(data, ctx, chart) {
-  	gradient = ctx.createLinearGradient(0, 0, 0, 300);
-  	gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
-  	gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
+	function draw_index(data, ctx, chart, color) {
+		gradient = ctx.createLinearGradient(0, 0, 0, 300);
+		gradient.addColorStop(0, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.65)`);
+		gradient.addColorStop(1, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.3)`);
 
-  	chart_data = {
-  		labels: data.lbl,
-  		datasets: [{
-  			type: 'line',
-  			yAxisID: 'y',
-  			label: data.ticker,
-  			data: data.close,
-  			borderColor: 'rgb(102, 126, 234)',
-  			backgroundColor: gradient,
-  			fill: true,
-  			borderWidth: 1,
-  			tension: 0.3,
-  			pointRadius: 0,
-  		}]
-  	}
+		chart_data = {
+			labels: data.lbl,
+			datasets: [{
+				type: 'line',
+				yAxisID: 'y',
+				label: data.ticker,
+				data: data.close,
+				borderColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+				backgroundColor: gradient,
+				fill: true,
+				borderWidth: 2,
+				tension: 0.4,
+				pointRadius: 0,
+			}]
+		}
 
 		tmp = JSON.parse(JSON.stringify(misc_options));
 		tmp.plugins.legend.display = false;
@@ -194,18 +194,18 @@
 			},
 			...tmp
 
-  	}
+		}
 
-  	if (chart) {
-  		chart.destroy();
-  	}
+		if (chart) {
+			chart.destroy();
+		}
 
-  	chart = new Chart(ctx, {
-  		type: 'line',
-  		data: chart_data,
-  		options: options
-  	});
-  }
+		chart = new Chart(ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
 
 	function draw_all_industry_cmp(data) {
 		chart_data = {
@@ -227,6 +227,7 @@
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
+						callback: (val) => (val * 100 + '%')
 					},
 					...y_scale_settings
 				},
@@ -258,15 +259,19 @@
 			indexAxis: 'y',
 			scales: {
 				x: {
+					...x_scale_settings,
 					display: true,
-					...x_scale_settings
-				},
-				y: {
-					display: true,
+					type: 'linear',
 					title: {
 						display: false,
 						text: '% change'
 					},
+					ticks: {
+						callback: (val) => (val + '%')
+					}
+				},
+				y: {
+					display: true,
 					ticks: {
 						autoSkip: false
 					},
@@ -274,9 +279,9 @@
 				},
 			},
 			plugins: {
-        crosshair: false,
-        cursorpos: false,
-      },
+				crosshair: false,
+				cursorpos: false,
+			},
 			events: [],
 			...misc_options
 		}
@@ -293,9 +298,9 @@
 	}
 
 	data = {{ data | tojson }};
-	draw_index(data.hscc, hscc_index_ctx, hscc_index_chart);
-	draw_index(data.hsce, hsce_index_ctx, hsce_index_chart);
-	draw_index(data.hsi, hsi_index_ctx, hsi_index_chart);
+	draw_index(data.hscc, hscc_index_ctx, hscc_index_chart, [102, 126, 234]);
+	draw_index(data.hsce, hsce_index_ctx, hsce_index_chart, [234, 102, 126]);
+	draw_index(data.hsi, hsi_index_ctx, hsi_index_chart, [126, 234, 102]);
 
 	draw_all_industry_cmp(data.all_industry_cmp);
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);

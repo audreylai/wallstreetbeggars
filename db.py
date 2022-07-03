@@ -97,7 +97,13 @@ def get_stock_info(ticker, filter_industry="", sort_col="ticker", sort_dir=pymon
 def get_all_industries_close_pct(period=None, start_datetime=None, end_datetime=None):
 	all_industry_cmp = []
 	industry_list = get_all_industries()[:9]
-	color_list = ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"]
+
+	alpha = 0.6
+	color_list = [
+		f"rgba(230, 0, 73, {alpha})", f"rgba(11, 180, 255, {alpha})", f"rgba(80, 233, 145, {alpha})",
+		f"rgba(230, 216, 0, {alpha})", f"rgba(155, 25, 245, {alpha})", f"rgba(255, 163, 0, {alpha})",
+		f"rgba(220, 10, 180, {alpha})", f"rgba(179, 212, 255, {alpha})", f"rgb(0, 191, 160, {alpha})"
+	]
 	
 	all_industry_last_cmp_raw = []
 	all_industry_last_cmp = []
@@ -120,7 +126,7 @@ def get_all_industries_close_pct(period=None, start_datetime=None, end_datetime=
 
 	all_industry_last_cmp_raw = sorted(all_industry_last_cmp_raw, key=lambda x: x[1])
 	all_industry_last_cmp = {
-		'labels': [i[0] if len(i[0]) < 20 else i[0][:17] + '...' for i in all_industry_last_cmp_raw],
+		'labels': [i[0] if len(i[0]) < 15 else i[0][:12] + '...' for i in all_industry_last_cmp_raw],
 		'data': [i[1]*100 for i in all_industry_last_cmp_raw],
 		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
 	}
