@@ -174,7 +174,3 @@ def process_stock_data(data, interval=1, include=[], precision=4, ticker=None, p
 		return dict(filter(lambda k: k[0] in include, out.items()))
 
 	return out
-
-
-def process_all_industries_last_close_pct(data):
-	pass
