@@ -31,7 +31,7 @@ def home():
 
 @app.route("/", methods=["POST"])
 def get_data():
-    return render_template("home.html")
+		return render_template("home.html")
 
 @app.route("/theme/<theme>", methods=["GET"])
 def change_theme(theme):
@@ -45,17 +45,17 @@ def rules():
 	if not ticker_exists(ticker):
 		return 'not found', 404
 
-    last_stock_data = get_last_stock_data('0005-HK')
-    parsed_buy_rules, parsed_sell_rules = parse_rules(
-        ["MA10 ≤ MA20", "MA20 ≤ MA50", "RSI ≤ 30"], ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"])
-    hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(
-        *get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
+	last_stock_data = get_last_stock_data('0005-HK')
+	parsed_buy_rules, parsed_sell_rules = parse_rules(
+			["MA10 ≤ MA20", "MA20 ≤ MA50", "RSI ≤ 30"], ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"])
+	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(
+			*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
 
-    stock_info = get_stock_info(ticker)
+	stock_info = get_stock_info(ticker)
 
-    stock_data = get_stock_data(ticker)
-    stock_data = process_stock_data(get_stock_data(
-        ticker, period=180), ticker=ticker, period=180)
+	stock_data = get_stock_data(ticker)
+	stock_data = process_stock_data(get_stock_data(
+			ticker, period=180), ticker=ticker, period=180)
 
 	return render_template("rules.html", stock_info=stock_info, stock_data=stock_data, rules={
 		"hit_buy_rules": hit_buy_rules,
@@ -67,9 +67,9 @@ def rules():
 
 @app.route("/rules/edit", methods=["GET", "POST"])
 def rules_edit():
-    buy=request.values.get('buy')
-    sell=request.values.get('sell')
-    return render_template("rules-edit.html")
+		buy=request.values.get('buy')
+		sell=request.values.get('sell')
+		return render_template("rules-edit.html")
 
 
 @app.route("/stock-list", methods=["GET", "POST"])
@@ -78,30 +78,30 @@ def stock_list_page():
 	page = request.values.get("page", type=int, default=1)
 	filter_industry = request.values.get("filter_industry", type=str, default='')
 
-    min_mkt_cap_pow = request.values.get("min_mkt_cap", type=int, default=9)
-    min_mkt_cap = 10 ** min_mkt_cap_pow
+	min_mkt_cap_pow = request.values.get("min_mkt_cap", type=int, default=9)
+	min_mkt_cap = 10 ** min_mkt_cap_pow
 
-    sort_col = request.values.get("sort_col", type=str, default='ticker')
-    sort_dir_str = request.values.get("sort_dir", type=str, default='asc')
-    sort_dir = pymongo.DESCENDING if sort_dir_str == 'desc' else pymongo.ASCENDING
+	sort_col = request.values.get("sort_col", type=str, default='ticker')
+	sort_dir_str = request.values.get("sort_dir", type=str, default='asc')
+	sort_dir = pymongo.DESCENDING if sort_dir_str == 'desc' else pymongo.ASCENDING
 
-    stock_table = get_stock_info(
-        "ALL", filter_industry, sort_col, sort_dir, min_mkt_cap)
+	stock_table = get_stock_info(
+			"ALL", filter_industry, sort_col, sort_dir, min_mkt_cap)
 
-    rows_per_page = 20
-    num_of_pages = ceil(len(stock_table["table"]) / rows_per_page)
+	rows_per_page = 20
+	num_of_pages = ceil(len(stock_table["table"]) / rows_per_page)
 
-    page = max(1, min(page, num_of_pages))
+	page = max(1, min(page, num_of_pages))
 
-    start_index = rows_per_page*(page-1)
-    end_index = min(rows_per_page*page+1, len(stock_table["table"]))
+	start_index = rows_per_page*(page-1)
+	end_index = min(rows_per_page*page+1, len(stock_table["table"]))
 
-    stock_table["table"] = stock_table["table"][start_index:end_index]
+	stock_table["table"] = stock_table["table"][start_index:end_index]
 
-    active_tickers = get_active_tickers("test")['active']
-    last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
+	active_tickers = get_active_tickers("test")['active']
+	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
 
-    # return 'a'
+	# return 'a'
 
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap_pow, dark_mode=dark_mode)
 
@@ -109,12 +109,12 @@ def stock_list_page():
 # this should be an api
 @app.route("/update-active", methods=["POST"])
 def update_active():
-    print(request.form.get("check"), request.form.getlist("tickers[]"))
-    if request.form.get("check") == "true":
-        update_active_tickers("test", request.form.getlist("tickers[]"))
-    else:
-        delete_active_tickers("test", request.form.getlist("tickers[]"))
-    return {"tickers": request.form.getlist("tickers[]")}
+		print(request.form.get("check"), request.form.getlist("tickers[]"))
+		if request.form.get("check") == "true":
+				update_active_tickers("test", request.form.getlist("tickers[]"))
+		else:
+				delete_active_tickers("test", request.form.getlist("tickers[]"))
+		return {"tickers": request.form.getlist("tickers[]")}
 
 
 # stock-info
@@ -168,7 +168,7 @@ app.register_blueprint(api.bp)
 
 @app.template_filter('epoch_convert')
 def timectime(s):
-    return datetime.fromtimestamp(s).strftime('%d/%m/%y')
+		return datetime.fromtimestamp(s).strftime('%d/%m/%y')
 
 
 @app.template_filter('get_theme')
@@ -177,15 +177,15 @@ def get_theme(username):
 
 @app.template_filter('suffix')
 def add_suffix(num):
-    if num < 10**3:
-        return "%.1f" % (num)
-    elif num < 10**6:
-        return "%.1f" % (num / 10**3) + 'K'
-    elif num < 10**9:
-        return "%.1f" % (num / 10**6) + 'M'
-    else:
-        return "%.1f" % (num / 10**9) + 'B'
+		if num < 10**3:
+				return "%.1f" % (num)
+		elif num < 10**6:
+				return "%.1f" % (num / 10**3) + 'K'
+		elif num < 10**9:
+				return "%.1f" % (num / 10**6) + 'M'
+		else:
+				return "%.1f" % (num / 10**9) + 'B'
 
 
 if __name__ == "__main__":
-    app.run(port="5000", debug=True)
+		app.run(port="5000", debug=True)

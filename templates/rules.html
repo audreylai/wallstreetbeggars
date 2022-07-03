@@ -7,312 +7,332 @@ header %}
 <script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>
 {% endblock %}{% block content%}
 <div
-  class="flex flex-col w-screen h-screen px-6 py-4 space-y-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900"
+	class="flex flex-col w-screen h-screen px-6 py-4 space-y-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900"
 >
-<div>
-	<div class="space-y-2 bg-zinc-100 dark:bg-zinc-900">
-		<div class="flex justify-between">
-			<div>
-				<div class="flex space-x-2">
-					<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-						{{ stock_info['ticker'] }}
-					</h2>
-					<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
-						{{ stock_info['name'] }}
-					</p>
+	<div>
+		<div class="space-y-2 bg-zinc-100 dark:bg-zinc-900">
+			<div class="flex justify-between">
+				<div>
+					<div class="flex space-x-2">
+						<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
+							{{ stock_info['ticker'] }}
+						</h2>
+						<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
+							{{ stock_info['name'] }}
+						</p>
+					</div>
 				</div>
+				<form action="/rules" method="POST" class="relative">
+					<div
+						class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500"
+					>
+						<ion-icon name="search-outline" class="w-5 h-5"></ion-icon>
+					</div>
+					<input type="hidden" name="page" value="1" />
+					<input
+						type="text"
+						name="ticker"
+						value="{{ticker}}"
+						class="flex-1 w-full px-3 py-1 pl-10 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-none text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+						placeholder="Search"
+					/>
+				</form>
 			</div>
-			<form action="/rules" method="POST" class="relative">
-				<div
-					class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500"
-				>
-					<ion-icon name="search-outline" class="w-5 h-5"></ion-icon>
-				</div>
-				<input type="hidden" name="page" value="1" />
-				<input
-					type="text"
-					name="ticker"
-					value="{{ticker}}"
-					class="flex-1 w-full px-3 py-1 pl-10 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-none text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-					placeholder="Search"
-				/>
-			</form>
+		</div>
+		<div class="flex items-center space-x-1">
+			<h2 class="mr-2 text-lg font-bold dark:text-zinc-300">
+				{{ "%.2f" % stock_data['last_close'] }}
+			</h2>
+			{% if stock_data['last_close_pct'] > 0 %}
+			<p class="font-semibold dark:text-emerald-500 text-emerald-600">
+				<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
+				+{{ "%.2f" % (stock_data['last_close']*stock_data['last_close_pct']/100)
+				}} (+{{ "%.2f" % stock_data['last_close_pct'] }}%)
+			</p>
+			{% else %}
+			<p class="font-semibold dark:text-rose-500 text-rose-600">
+				<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
+				{{ "%.2f" % (stock_data['last_close']*stock_data['last_close_pct']/100)
+				}} ({{ "%.2f" % stock_data['last_close_pct'] }}%)
+			</p>
+			{% endif %}
 		</div>
 	</div>
-	<div class="flex items-center space-x-1">
-		<h2 class="mr-2 text-lg font-bold dark:text-zinc-300">
-			{{ "%.2f" % stock_data['last_close'] }}
-		</h2>
-		{% if stock_data['last_close_pct'] > 0 %}
-		<p class="font-semibold dark:text-emerald-500 text-emerald-600">
-			<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
-			+{{ "%.2f" %
-			(stock_data['last_close']*stock_data['last_close_pct']/100) }} (+{{
-			"%.2f" % stock_data['last_close_pct'] }}%)
-		</p>
-		{% else %}
-		<p class="font-semibold dark:text-rose-500 text-rose-600">
-			<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
-			{{ "%.2f" %
-			(stock_data['last_close']*stock_data['last_close_pct']/100) }} ({{
-			"%.2f" % stock_data['last_close_pct'] }}%)
-		</p>
-		{% endif %}
+	<div class="grid grid-cols-2 h-1/2 gap-x-4">
+		<div><canvas id="buy-index-chart"></canvas></div>
+		<div><canvas id="sell-index-chart"></canvas></div>
 	</div>
-</div>
-  <div class="grid grid-cols-2 h-1/2 gap-x-4">
-    <div><canvas id="buy-index-chart"></canvas></div>
-    <div><canvas id="sell-index-chart"></canvas></div>
-  </div>
-  <div class="grid grid-cols-2 gap-x-4">
-    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-      <table class="w-full">
-        <thead>
-          <tr class="sticky top-0 bg-white dark:bg-zinc-800">
-            <th
-              class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-            >
-              Rule
-            </th>
-            <th
-              class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-            >
-              Hit/Miss
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for rule in rules['hit_buy_rules']%}
-          <tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-            <td
-              class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-            >
-              {{rule}}
-            </td>
-            <td
-              class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500"
-            >
-              Hit
-            </td>
-          </tr>
-          {% endfor %} 
-					{% for rule in rules['miss_buy_rules']%}
-          <tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-            <td
-              class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-            >
-              {{rule}}
-            </td>
-            <td
-              class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500"
-            >
-              Miss
-            </td>
-          </tr>
+	<div class="grid grid-cols-2 gap-x-4">
+		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<table class="w-full">
+				<thead>
+					<tr class="sticky top-0 bg-white dark:bg-zinc-800">
+						<th
+							class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
+						>
+							Rule
+						</th>
+						<th
+							class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
+						>
+							Hit/Miss
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for rule in rules['hit_buy_rules']%}
+					<tr
+						class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
+					>
+						<td
+							class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
+						>
+							{{rule}}
+						</td>
+						<td
+							class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500"
+						>
+							Hit
+						</td>
+					</tr>
+					{% endfor %} {% for rule in rules['miss_buy_rules']%}
+					<tr
+						class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
+					>
+						<td
+							class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
+						>
+							{{rule}}
+						</td>
+						<td
+							class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500"
+						>
+							Miss
+						</td>
+					</tr>
 					{% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-      <table class="w-full">
-        <thead>
-          <tr class="sticky top-0 bg-white dark:bg-zinc-800">
-            <th
-              class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-            >
-              Rule
-            </th>
-            <th
-              class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-            >
-              Hit/Miss
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for rule in rules['hit_sell_rules']%}
-          <tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-            <td
-              class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-            >
-              {{rule}}
-            </td>
-            <td
-              class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500"
-            >
-              Hit
-            </td>
-          </tr>
-          {% endfor %} 
-					{% for rule in rules['miss_buy_rules']%}
-          <tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-            <td
-              class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-            >
-              {{rule}}
-            </td>
-            <td
-              class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500"
-            >
-              Miss
-            </td>
-          </tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<table class="w-full">
+				<thead>
+					<tr class="sticky top-0 bg-white dark:bg-zinc-800">
+						<th
+							class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
+						>
+							Rule
+						</th>
+						<th
+							class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
+						>
+							Hit/Miss
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for rule in rules['hit_sell_rules']%}
+					<tr
+						class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
+					>
+						<td
+							class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
+						>
+							{{rule}}
+						</td>
+						<td
+							class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500"
+						>
+							Hit
+						</td>
+					</tr>
+					{% endfor %} {% for rule in rules['miss_buy_rules']%}
+					<tr
+						class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
+					>
+						<td
+							class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
+						>
+							{{rule}}
+						</td>
+						<td
+							class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500"
+						>
+							Miss
+						</td>
+					</tr>
 					{% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<a href="{{ url_for('rules_edit') }}" class="text-blue-500">Edit Rules</a>
 </div>
 {% endblock %} {% block script %}
 <script>
-  var sell_chart = undefined;
-  const sell_ctx = document.getElementById('sell-index-chart').getContext('2d');
-  const buy_ctx = document.getElementById('buy-index-chart').getContext('2d');
+	var sell_chart = undefined;
+	var buy_chart = undefined;
+	const sell_ctx = document.getElementById('sell-index-chart').getContext('2d');
+	const buy_ctx = document.getElementById('buy-index-chart').getContext('2d');
 
-   function draw_sell(sell) {
-     chart_data = {
-       labels: [],
-       datasets: [
-         {
-           data: [sell, 100 - sell],
-           backgroundColor: ["rgb(244 63 94)", "rgb(34 34 39)"],
-           hoverBackgroundColor: ["rgb(79 70 229)", "rgb(34 34 39)"],
-           hoverOffset: 4,
-           borderWidth: 0,
-         },
-       ],
-     };
+	function draw_sell(sell) {
+		chart_data = {
+			labels: [],
+			datasets: [
+				{
+					data: [sell, 100 - sell],
+					backgroundColor: ["rgb(244 63 94)", dark ? "rgb(34 34 39)" : "rgb(229 231 235)"],
+					hoverBackgroundColor: ["rgb(79 70 229)", "rgb(34 34 39)"],
+					hoverOffset: 4,
+					borderWidth: 0,
+				},
+			],
+		};
 
-     options = {
-       plugins: {
-         crosshair: false,
-         cursorpos: false,
-       },
-       events: [],
-       ...misc_options,
-     };
+		options = {
+			plugins: {
+				crosshair: false,
+				cursorpos: false,
+			},
+			events: [],
+			...misc_options,
+		};
 
-     sell_chart = new Chart(sell_ctx, {
-       type: "doughnut",
-       data: chart_data,
-       options: options,
-       plugins: [
-         {
-           id: "doughnut_text",
-           beforeDraw: function (chart, a, b) {
-             var width = chart.width,
-               height = chart.height,
-               ctx = chart.ctx;
+		if (sell_chart) {
+			sell_chart.destroy();
+		}
 
-             ctx.restore();
-             var fontSellze = (height / 114).toFixed(2);
-             ctx.font = "bolder " + fontSellze + "em sans-serif";
-             ctx.textBaseline = "middle";
-             ctx.fillStyle = "rgb(244 244 245)";
+		sell_chart = new Chart(sell_ctx, {
+			type: "doughnut",
+			data: chart_data,
+			options: options,
+			plugins: [
+				{
+					id: "doughnut_text",
+					beforeDraw: function (chart, a, b) {
+						var width = chart.width,
+							height = chart.height,
+							ctx = chart.ctx;
 
-             var index = Math.round(sell) + "%",
-               indexX = Math.round((width - ctx.measureText(index).width) / 2),
-               indexY = height / 2.1;
+						ctx.restore();
+						var fontSellze = (height / 114).toFixed(2);
+						ctx.font = "bolder " + fontSellze + "em sans-serif";
+						ctx.textBaseline = "middle";
+						ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
 
-             ctx.fillText(index, indexX, indexY);
+						var index = Math.round(sell) + "%",
+							indexX = Math.round((width - ctx.measureText(index).width) / 2),
+							indexY = height / 2.1;
 
-             fontSellze = (height / 180).toFixed(2);
-             ctx.font = "bold " + fontSellze + "em sans-serif";
-             ctx.fillStyle = "rgb(244 63 94)";
+						ctx.fillText(index, indexX, indexY);
 
-             var action = "SELL",
-               actionX = Math.round((width - ctx.measureText(action).width) / 2),
-               actionY = height / 1.7;
+						fontSellze = (height / 180).toFixed(2);
+						ctx.font = "bold " + fontSellze + "em sans-serif";
+						ctx.fillStyle = "rgb(244 63 94)";
 
-             ctx.fillText(action, actionX, actionY);
+						var action = "SELL",
+							actionX = Math.round((width - ctx.measureText(action).width) / 2),
+							actionY = height / 1.7;
 
-             fontSellze = (height / 200).toFixed(2);
-             ctx.font = fontSellze + "em sans-serif";
-             ctx.fillStyle = "rgb(212 212 216)";
+						ctx.fillText(action, actionX, actionY);
 
-             ctx.save();
-           },
-         },
-       ],
-     });
-   }
+						fontSellze = (height / 200).toFixed(2);
+						ctx.font = fontSellze + "em sans-serif";
+						ctx.fillStyle = "rgb(212 212 216)";
 
-  function draw_buy(buy) {
-     chart_data = {
-       labels: [],
-       datasets: [
-         {
-           data: [buy, 100 - buy],
-           backgroundColor: ["rgb(16 185 129)", "rgb(34 34 39)"],
-           hoverBackgroundColor: ["rgb(79 70 229)", "rgb(34 34 39)"],
-           hoverOffset: 4,
-           borderWidth: 0,
-         },
-       ],
-     };
+						ctx.save();
+					},
+				},
+			],
+		});
+	}
 
-     options = {
-       plugins: {
-         crosshair: false,
-         cursorpos: false,
-       },
-       events: [],
-       ...misc_options,
-     };
+	function draw_buy(buy) {
+		chart_data = {
+			labels: [],
+			datasets: [
+				{
+					data: [buy, 100 - buy],
+					backgroundColor: ["rgb(16 185 129)", dark ? "rgb(34 34 39)" : "rgb(229 231 235)"],
+					hoverBackgroundColor: ["rgb(79 70 229)", "rgb(34 34 39)"],
+					hoverOffset: 4,
+					borderWidth: 0,
+				},
+			],
+		};
 
-     buy_chart = new Chart(buy_ctx, {
-       type: "doughnut",
-       data: chart_data,
-       options: options,
-       plugins: [
-         {
-           id: "doughnut_text",
-           beforeDraw: function (chart, a, b) {
-             var width = chart.width,
-               height = chart.height,
-               ctx = chart.ctx;
+		options = {
+			plugins: {
+				crosshair: false,
+				cursorpos: false,
+			},
+			events: [],
+			...misc_options,
+		};
 
-             ctx.restore();
-             var fontSize = (height / 114).toFixed(2);
-             ctx.font = "bolder " + fontSize + "em sans-serif";
-             ctx.textBaseline = "middle";
-             ctx.fillStyle = "rgb(244 244 245)";
+		if (buy_chart) {
+			buy_chart.destroy();
+		}
 
-             var index = Math.round(buy) + "%",
-               indexX = Math.round((width - ctx.measureText(index).width) / 2),
-               indexY = height / 2.1;
+		buy_chart = new Chart(buy_ctx, {
+			type: "doughnut",
+			data: chart_data,
+			options: options,
+			plugins: [
+				{
+					id: "doughnut_text",
+					beforeDraw: function (chart, a, b) {
+						var width = chart.width,
+							height = chart.height,
+							ctx = chart.ctx;
 
-             ctx.fillText(index, indexX, indexY);
+						ctx.restore();
+						var fontSize = (height / 114).toFixed(2);
+						ctx.font = "bolder " + fontSize + "em sans-serif";
+						ctx.textBaseline = "middle";
+						ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
 
-             fontSize = (height / 180).toFixed(2);
-             ctx.font = "bold " + fontSize + "em sans-serif";
-             ctx.fillStyle = "rgb(16 185 129)";
+						var index = Math.round(buy) + "%",
+							indexX = Math.round((width - ctx.measureText(index).width) / 2),
+							indexY = height / 2.1;
 
-             var action = "BUY",
-               actionX = Math.round((width - ctx.measureText(action).width) / 2),
-               actionY = height / 1.7;
+						ctx.fillText(index, indexX, indexY);
 
-             ctx.fillText(action, actionX, actionY);
+						fontSize = (height / 180).toFixed(2);
+						ctx.font = "bold " + fontSize + "em sans-serif";
+						ctx.fillStyle = "rgb(16 185 129)";
 
-             fontSize = (height / 200).toFixed(2);
-             ctx.font = fontSize + "em sans-serif";
-             ctx.fillStyle = "rgb(212 212 216)";
+						var action = "BUY",
+							actionX = Math.round((width - ctx.measureText(action).width) / 2),
+							actionY = height / 1.7;
 
-             ctx.save();
-           },
-         },
-       ],
-     });
-   }
+						ctx.fillText(action, actionX, actionY);
 
-  var rules = {{ rules | tojson }}
+						fontSize = (height / 200).toFixed(2);
+						ctx.font = fontSize + "em sans-serif";
+						ctx.fillStyle = "rgb(212 212 216)";
 
-  function draw_charts() {
-  	draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length) * 100)
-  	draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length+rules["miss_sell_rules"].length) * 100)
-  }
+						ctx.save();
+					},
+				},
+			],
+		});
+	}
 
-  draw_charts()
+	var rules = {{ rules | tojson }}
+
+	function draw_charts() {
+		draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length + rules["miss_buy_rules"].length) * 100)
+		draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length + rules["miss_sell_rules"].length) * 100)
+	}
+
+	draw_charts();
+
+	$().ready(function () {
+		$("#theme-toggle").bind('click', function () {
+			draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length + rules["miss_buy_rules"].length) * 100)
+			draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length + rules["miss_sell_rules"].length) * 100)
+		});
+	});
 </script>
 {% endblock %}
