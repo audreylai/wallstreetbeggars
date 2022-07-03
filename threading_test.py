@@ -56,7 +56,7 @@ def thread_add_stock_info_batch():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker > 11].index)
+	df = df.drop(df[df.ticker > 100].index)
 	
 	# convert ticker format
 	ticker_list = []
@@ -72,7 +72,7 @@ def thread_add_stock_info_batch():
 	col_stock_info.insert_many(list(df.to_dict('index').values()))
 
 	col_thread = db["stock_thread"]
-	NUM_THREADS = 500
+	NUM_THREADS = 100
 
 	ticker_q = Queue()
 	ticker_list = []
@@ -107,7 +107,7 @@ def thread_yfinance_info():
 	ticker_q = Queue()
 	ticker_list = []
 
-	for ticker in range(1, 10):
+	for ticker in range(1, 100):
 		ticker_q.put(f"0000{str(ticker)}"[-4:] + ".HK")
 
 	tickers = yf.Tickers(' '.join(list(ticker_q.queue)))
@@ -154,5 +154,5 @@ def thread_yfinance_info():
 	print(df)
 
 start = time.time()
-yfinance_info()
+thread_add_stock_info_batch()
 print('It took', time.time()-start, 'seconds.')

@@ -24,6 +24,7 @@ def home():
 		'all_industry_cmp': all_industry_cmp,
 		'all_industry_last_cmp': all_industry_last_cmp
 	}
+
 	card_data = {
 		'mkt_momentum': chart_data["hsi"]["last_close"] / (chart_data["hsi"]["close"][len(chart_data["hsi"]["close"])-10]['y']),
 		'leading_index': sorted({x: chart_data[x]["last_close_pct"] for x in chart_data if x in ["hscc", "hsce", "hsi"]}.items(), key=lambda k: k)[0],

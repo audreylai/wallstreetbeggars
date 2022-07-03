@@ -217,6 +217,8 @@ def process_gainers_losers(gainers, losers):
 	}
 
 	for ticker in gainers:
+		if get_stock_info(ticker) is None:
+			continue
 		data = get_last_stock_data(ticker)
 		out['gainers'].append({
 			'ticker': ticker,
@@ -227,6 +229,8 @@ def process_gainers_losers(gainers, losers):
 		})
 	
 	for ticker in losers:
+		if get_stock_info(ticker) is None:
+			continue
 		data = get_last_stock_data(ticker)
 		out['losers'].append({
 			'ticker': ticker,
