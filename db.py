@@ -155,7 +155,7 @@ def get_all_industries_close_pct(period=None, start_datetime=None, end_datetime=
 
 	all_industry_last_cmp_raw = sorted(all_industry_last_cmp_raw, key=lambda x: x[1])
 	all_industry_last_cmp = {
-		'labels': [i[0] if len(i[0]) < 20 else i[0][:17] + '...' for i in all_industry_last_cmp_raw],
+		'labels': [i[0] for i in all_industry_last_cmp_raw],
 		'data': [i[1]*100 for i in all_industry_last_cmp_raw],
 		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
 	}

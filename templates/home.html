@@ -71,7 +71,7 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Leading Industry
 						</h3>
-						<h2 class="text-3xl font-semibold dark:text-zinc-100">{{card_data['leading_industry']}}</h2>
+						<h2 class="text-3xl font-semibold dark:text-zinc-100">{{card_data['leading_industry'] | truncate(15)}}</h2>
 						{% if card_data['leading_industry_pct'] < 0%}
 						<h4 class="font-light text-rose-500">
 						{{"%.2f" % card_data['leading_industry_pct']}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
@@ -358,6 +358,13 @@
 	}
 
 	function draw_all_industry_last_cmp(data) {
+		for (i = 0; i < data.labels.length; i++) {
+			label = data.labels[i];
+			if (label.length > 15) {
+				data.labels[i] = label.slice(0, 12) + '...';
+			}
+		}
+
 		chart_data = {
 			labels: data.labels,
 			datasets: [{
