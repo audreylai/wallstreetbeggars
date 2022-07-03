@@ -732,6 +732,10 @@ video {
   height: 0.5rem;
 }
 
+.h-72 {
+  height: 18rem;
+}
+
 .max-h-56 {
   max-height: 14rem;
 }
@@ -1166,6 +1170,10 @@ video {
 
 .pt-4 {
   padding-top: 1rem;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .text-center {

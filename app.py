@@ -11,7 +11,6 @@ import api
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def home():
 	period = 60
@@ -31,7 +30,9 @@ def home():
 		'leading_industry': all_industry_last_cmp['labels'][-1],
 		'leading_industry_pct': all_industry_last_cmp['data'][-1] / 100
 	}
-	return render_template("home.html", chart_data=chart_data, card_data=card_data, dark_mode=dark_mode)
+	table_data = process_gainers_losers(*get_gainers_losers())
+
+	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, dark_mode=dark_mode)
 
 
 @app.route("/", methods=["POST"])

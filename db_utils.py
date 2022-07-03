@@ -17,7 +17,6 @@ col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 
 
-
 def add_stock_data_batch():
 	col_stock_data.drop({})
 	for i in range(1, 100):
@@ -141,7 +140,12 @@ def add_stock_data_one(ticker, ticker_type=None):
 	df["rsi"] = ta.RSI(df.close, timeperiod=14)
 	df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df.close, fastperiod=12, slowperiod=26, signalperiod=9)
 
+	# pct change
+	# df['close_pct'] = df['close'].pct_change()
+
 	df.dropna(inplace=True)
+	if df.empty:
+		return
 
 	# convert df to dict
 	out = df.to_dict("records")
@@ -151,7 +155,8 @@ def add_stock_data_one(ticker, ticker_type=None):
 	col_stock_data.insert_one({
 		'ticker': ticker,
 		'data': out,
-		'type': ticker_type
+		'type': ticker_type,
+		'last_close_pct': (list(df['close'])[-1] - list(df['close'])[-2]) / list(df['close'])[-2]
 	})
 
 

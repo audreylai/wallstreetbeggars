@@ -15,6 +15,32 @@ def ticker_exists(ticker):
 	return len(res) != 0
 
 
+def get_gainers_losers():
+	cursor = col_stock_data.aggregate([
+		{
+			"$sort": {"last_close_pct": pymongo.DESCENDING}
+		},
+		{
+			"$limit": 5
+		}
+	])
+	gainers = [i for i in cursor]
+	gainers = [i['ticker'] for i in gainers]
+
+	cursor = col_stock_data.aggregate([
+		{
+			"$sort": {"last_close_pct": pymongo.ASCENDING}
+		},
+		{
+			"$limit": 5
+		}
+	])
+	losers = [i for i in cursor]
+	losers = [i['ticker'] for i in losers]
+
+	return gainers, losers
+
+
 def get_last_stock_data(ticker):
 	cursor = col_stock_data.aggregate([
 		{
@@ -30,7 +56,10 @@ def get_last_stock_data(ticker):
 			"$limit": 1
 		}
 	])
-	out = [i for i in cursor][0]['data']
+	res = [i for i in cursor][0]
+
+	out = res['data']
+	out['close_pct'] = res['last_close_pct']
 	return out
 
 
@@ -126,7 +155,7 @@ def get_all_industries_close_pct(period=None, start_datetime=None, end_datetime=
 
 	all_industry_last_cmp_raw = sorted(all_industry_last_cmp_raw, key=lambda x: x[1])
 	all_industry_last_cmp = {
-		'labels': [i[0] if len(i[0]) < 20 else i[0][:17] + '...' for i in all_industry_last_cmp_raw],
+		'labels': [i[0] for i in all_industry_last_cmp_raw],
 		'data': [i[1]*100 for i in all_industry_last_cmp_raw],
 		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
 	}
@@ -181,6 +210,33 @@ def get_industry_close_pct(industry, period=None, start_datetime=None, end_datet
 	return out
 
 
+def process_gainers_losers(gainers, losers):
+	out = {
+		'gainers': [],
+		'losers': []
+	}
+
+	for ticker in gainers:
+		data = get_last_stock_data(ticker)
+		out['gainers'].append({
+			'ticker': ticker,
+			'price': data['close'],
+			'change': data['close_pct'],
+			'volume': data['volume'],
+			'mkt_cap': get_stock_info(ticker)['mkt_cap']
+		})
+	
+	for ticker in losers:
+		data = get_last_stock_data(ticker)
+		out['losers'].append({
+			'ticker': ticker,
+			'price': data['close'],
+			'change': data['close_pct'],
+			'volume': data['volume'],
+			'mkt_cap': get_stock_info(ticker)['mkt_cap']
+		})
+	
+	return out
 
 # User
 def update_active_tickers(username, tickers):
