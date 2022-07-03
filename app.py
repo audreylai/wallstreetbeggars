@@ -13,10 +13,15 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
+	period = 60
+	all_industry_cmp, all_industry_last_cmp = get_all_industries_close_pct(period=period)
+
 	data = {
-		'hscc': process_stock_data(get_stock_data('^HSCC', period=180), ticker='^HSCC', period=180),
-		'hsce': process_stock_data(get_stock_data('^HSCE', period=180), ticker='^HSCE', period=180),
-		'hsi': process_stock_data(get_stock_data('^HSI', period=180), ticker='^HSI', period=180)
+		'hscc': process_stock_data(get_stock_data('^HSCC', period=period), ticker='^HSCC', period=180),
+		'hsce': process_stock_data(get_stock_data('^HSCE', period=period), ticker='^HSCE', period=180),
+		'hsi': process_stock_data(get_stock_data('^HSI', period=period), ticker='^HSI', period=180),
+		'all_industry_cmp': all_industry_cmp,
+		'all_industry_last_cmp': all_industry_last_cmp
 	}
 	return render_template("home.html", data=data)
 

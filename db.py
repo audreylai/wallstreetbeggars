@@ -94,13 +94,46 @@ def get_stock_info(ticker, filter_industry="", sort_col="ticker", sort_dir=pymon
 		return col_stock_info.find_one({"ticker": ticker}, {"_id": 0})
 
 
+def get_all_industries_close_pct(period=None, start_datetime=None, end_datetime=None):
+	all_industry_cmp = []
+	industry_list = get_all_industries()[:9]
+	color_list = ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"]
+	
+	all_industry_last_cmp_raw = []
+	all_industry_last_cmp = []
+
+	for industry in industry_list:
+		data = process_industry_avg(get_industry_close_pct(industry, period=period))['close_pct']
+		color = color_list.pop()
+
+		all_industry_cmp.append({
+			'label': industry,
+			'data': data,
+			'borderColor': color,
+			'fill': False,
+			'borderWidth': 2.5,
+			'tension': 0.4,
+			'pointBackgroundColor': color, 
+			'pointRadius': 2,
+		})
+		all_industry_last_cmp_raw.append([industry, data[-1]['y']])
+
+	all_industry_last_cmp_raw = sorted(all_industry_last_cmp_raw, key=lambda x: x[1])
+	all_industry_last_cmp = {
+		'labels': [i[0] if len(i[0]) < 20 else i[0][:17] + '...' for i in all_industry_last_cmp_raw],
+		'data': [i[1]*100 for i in all_industry_last_cmp_raw],
+		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
+	}
+
+	return all_industry_cmp, all_industry_last_cmp
+
+
 def get_industry_close_pct(industry, period=None, start_datetime=None, end_datetime=None):
 	ticker_list = []
 	for i in col_stock_info.find({"industry_x": industry}):
 		ticker_list.append(i["ticker"])
 
 	out = {}
-	print(ticker_list)
 	for ticker in ticker_list:
 		if period:
 			start_datetime, end_datetime = get_datetime_from_period(period)
@@ -152,7 +185,6 @@ def update_active_tickers(username, tickers):
 
 
 def delete_active_tickers(username, tickers):
-	print(tickers)
 	col_users.update_one({"username":username}, {'$pull': {
 		'active': {"$in": tickers}
 		}
