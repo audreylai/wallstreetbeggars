@@ -375,7 +375,7 @@
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
-						callback: (val) => (val * 100 + '%')
+						callback: (val) => (Math.round(val * 100) + '%')
 					},
 					...y_scale_settings
 				}

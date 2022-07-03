@@ -130,7 +130,7 @@ const misc_options = {
 			bodyColor: "rgba(255, 255, 255, 0.7)",
 			callbacks: {
 				label: function(context) {
-					if (context.parsed.y && context.dataset.label) {
+					if (typeof context.parsed.y == 'number' && context.dataset.label) {
 						if ($(context.chart.ctx.canvas).attr('id') == 'volume-chart' || context.dataset.label == 'Volume') { // Volume label
 							return context.dataset.label + ': ' + context.parsed.y.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
 						} else if ($(context.chart.ctx.canvas).hasClass('comparison-chart')) { // comparison charts

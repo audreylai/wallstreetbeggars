@@ -106,7 +106,7 @@
 				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
 							HSCC Index
 						</h2>
 					</div>
@@ -115,7 +115,7 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+						<h2 class="text-2xl font-medium dark:text-zinc-200">
 							HSCE Index
 						</h2>
 					</div>
@@ -124,7 +124,7 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
 							HSI Index
 						</h2>
 					</div>
@@ -135,7 +135,7 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
 							Donors
 						</h2>
 					</div>
@@ -184,7 +184,7 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="trending-down-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
 							Beggars
 						</h2>
 					</div>
@@ -235,7 +235,7 @@
 				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="compass-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
 							Industry Rotations
 						</h2>
 					</div>
@@ -244,7 +244,7 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="podium-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
 							Industry Performance
 						</h2>
 					</div>
@@ -317,7 +317,7 @@
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
-						callback: (val) => (add_suffix(val, 2))
+						callback: (val) => (add_suffix(val, 3))
 					},
 					...y_scale_settings
 				}
@@ -443,8 +443,7 @@
 					bodyColor: "rgba(255, 255, 255, 0.7)",
 					callbacks: {
 						label: function(context) {
-							console.log(context)
-							if (context.parsed.x && context.label) {
+							if (typeof context.parsed.x == 'number' && context.label) {
 								return context.label + ': ' + context.parsed.x.toFixed(2) + '%';
 							}
 							return '';
