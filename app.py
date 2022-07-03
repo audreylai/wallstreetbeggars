@@ -71,9 +71,14 @@ def rules():
 
 @app.route("/rules/edit", methods=["GET", "POST"])
 def rules_edit():
-	buy = request.values.get('buy')
-	sell = request.values.get('sell')
-	return render_template("rules-edit.html")
+	dark_mode = get_user_theme("test")
+	rules = get_rules("test")
+	print(rules)
+	if request.method == "POST":
+		new_buy = json.loads(request.values.get('buy'))
+		new_sell = json.loads(request.values.get('sell'))
+		update_rules("test", new_buy, new_sell)
+	return render_template("rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
 
 
 @app.route("/stock-list", methods=["GET", "POST"])

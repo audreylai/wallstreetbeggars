@@ -15,10 +15,6 @@
 			<table class="w-full">
 				<thead>
 					<tr>
-						<th class="p-4 font-normal text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap">
-							<input type="checkbox" name="checked"
-								class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none allcb form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
-						</th>
 						<th
 							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
 							<p class="mx-7">Var 1</p>
@@ -38,24 +34,18 @@
 					</tr>
 				</thead>
 				<tbody col="1">
-					{% for i in range(5) %}
+					{% for rule in buy %}
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
-						<td class="p-4 border-b-2 dark:border-zinc-500">
-							<div class="flex justify-center">
-								<input type="checkbox" name="checked"
-									class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
-							</div>
-						</td>
 						<div class="relative w-full group autocomplete-wrapper">
 							<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-								<p>a</p>
+								<p>{{rule.split(" ")[0]}}</p>
 							</td>
 							</<div class="relative w-full group autocomplete-wrapper">
 							<td class="p-4 border-b-2 dark:border-zinc-500 op">
-								<p>b</p>
+								<p>{{rule.split(" ")[1]}}</p>
 							</td>
 							<td class="p-4 border-b-2 dark:border-zinc-500 var2">
-								<p>c</p>
+								<p>{{rule.split(" ")[2]}}</p>
 							</td>
 							<td class="p-4 border-b-2 dark:border-zinc-500">
 								<div class="flex items-center justify-end">
@@ -86,10 +76,6 @@
 			<table class="w-full">
 				<thead>
 					<tr>
-						<th class="p-4 font-normal text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap">
-							<input type="checkbox" name="checked"
-								class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none allcb form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
-						</th>
 						<th
 							class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
 							<p class="mx-7">Var 1</p>
@@ -109,22 +95,17 @@
 					</tr>
 				</thead>
 				<tbody col="2">
-					{% for i in range(5) %}
+					{% for rule in sell %}
 					<tr class="text-center text-gray-700 dark:text-zinc-200">
-						<td class="p-4 border-b-2 dark:border-zinc-500">
-							<div class="flex justify-center">
-								<input type="checkbox" name="checked"
-									class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
-							</div>
-						</td>
 						<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-							<p>a</p>
+							<p>{{rule.split(" ")[0]}}</p>
 						</td>
+						</<div class="relative w-full group autocomplete-wrapper">
 						<td class="p-4 border-b-2 dark:border-zinc-500 op">
-							<p>b</p>
+							<p>{{rule.split(" ")[1]}}</p>
 						</td>
 						<td class="p-4 border-b-2 dark:border-zinc-500 var2">
-							<p>c</p>
+							<p>{{rule.split(" ")[2]}}</p>
 						</td>
 						<td class="p-4 border-b-2 dark:border-zinc-500">
 							<div class="flex items-center justify-end">
@@ -206,7 +187,6 @@
 			</button>
 		</div>
 	</div>
-	<a href="{{ url_for('rules') }}" class="text-blue-500" onclick="get_table();">Done</a>
 </div>
 <script>
 	const options = ["ma10", "ma20", "ma50", "ma100", "ma250", "rsi"];
@@ -219,8 +199,9 @@
 	});
 
 	function delete_row(btn) {
-		btn.parents('tr').fadeOut(300, function () {
+		btn.parents('tr').fadeOut(100, function () {
 			$(this).remove();
+			update_table();
 		})
 	}
 
@@ -269,6 +250,7 @@
 			var1_div.empty().text(var1_txt);
 			var2_div.empty().text(var2_txt);
 			op_div.empty().text(op_txt);
+			update_table()
 		}
 	}
 
@@ -277,12 +259,6 @@
 
 		row = $(`
 			<tr class="text-center text-gray-700 dark:text-zinc-200">
-				<td class="p-4 border-b-2 dark:border-zinc-500">
-					<div class="flex justify-center">
-						<input type="checkbox" name="checked"
-							class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
-					</div>
-				</td>
 				<td class="p-4 border-b-2 dark:border-zinc-500 var1">
 					<p></p>
 				</td>
@@ -319,10 +295,14 @@
 		row.find('.op p').text(selects.eq(0).val());
 		row.find('.var2 p').text($(btn).parent().find(".term-input").eq(1).val());
 
+		$(btn).parent().find(".term-input").eq(0).val("")
+		$(btn).parent().find(".term-input").eq(1).val("")
+
 		$('tbody[col=' + col + ']').append(row);
+		update_table()
 	}
 
-	function get_table() {
+	function update_table() {
 		let buyrow = []
 		let sellrow = []
 		$('tbody[col=1]').each(function () {
@@ -341,10 +321,7 @@
 				sellrow.push(val1 + " " + op + " " + val2);
 			});
 		});
-		// buyrow = buyrow.join(" ");
-		// sellrow = sellrow.join(" ");
 		$.post("/rules/edit", { buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) })
-		return { buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) };
 	}
 
 	function suggestion_onlick(evt) {
