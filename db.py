@@ -256,33 +256,11 @@ def delete_active_tickers(username, tickers):
 def get_active_tickers(username):
 	return col_users.find_one({"username": username}, {"active": 1})
 
+def get_rules(username):
+	return col_users.find_one({"username": username}, {"_id":0, "buy": 1, "sell": 1})
 
-def add_rule(username, rule_type, rule):
-	col_users.update_one({"username": username}, {'$addToSet': {
-		rule_type: rule
-	}})
-
-
-def delete_rule(username, rule_type, rule):
-	col_users.update_one({"username": username}, {'$pull': {
-		rule_type: rule
-	}})
-
-
-def edit_rules(username, rule_type, rule, action):
-	res = list(col_users.find({"username": username}, {"_id": 0}))
-	# Gets list of rules from buy/sell
-	rule_list = res[0][rule_type]
-	# Edit rule list
-	if action == "add":
-		rule_list.append(rule)
-	elif action == "delete":
-		rule_list.remove(rule)
-		
-	data = {
-		rule_type: rule_list
-	}
-	col_users.update_one({"username": username}, {"$set": data}, upsert=False)
+def update_rules(username, buy, sell):
+	col_users.update_one({"username": username}, {"$set": {"buy": buy, "sell":sell}}, upsert=False)
 
 def update_user_theme(username, theme):
 	col_users.update_one({"username": username}, {"$set": {"dark_mode": True if theme == "dark" else False}}, upsert=False)

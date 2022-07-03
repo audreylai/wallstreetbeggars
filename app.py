@@ -54,7 +54,8 @@ def rules():
 		return 'not found', 404
 
 	last_stock_data = get_last_stock_data('0005-HK')
-	parsed_buy_rules, parsed_sell_rules = parse_rules(["MA10 ≤ MA20", "MA20 ≤ MA50", "RSI ≤ 30"], ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"])
+	user_rules = get_rules("test")
+	parsed_buy_rules, parsed_sell_rules = parse_rules(user_rules["buy"], user_rules["sell"])
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
 
 	stock_info = get_stock_info(ticker)
@@ -72,9 +73,14 @@ def rules():
 
 @app.route("/rules/edit", methods=["GET", "POST"])
 def rules_edit():
-	buy = request.values.get('buy')
-	sell = request.values.get('sell')
-	return render_template("rules-edit.html")
+	dark_mode = get_user_theme("test")
+	rules = get_rules("test")
+	print(rules)
+	if request.method == "POST":
+		new_buy = json.loads(request.values.get('buy'))
+		new_sell = json.loads(request.values.get('sell'))
+		update_rules("test", new_buy, new_sell)
+	return render_template("rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
 
 
 @app.route("/stock-list", methods=["GET", "POST"])
@@ -148,7 +154,8 @@ def stock_analytics():
 		return 'not found', 404  # proper error page later
 
 	last_stock_data = get_last_stock_data(ticker)
-	parsed_buy_rules, parsed_sell_rules = parse_rules(["MA10 ≤ MA20", "MA20 ≤ MA50", "RSI ≤ 30"], ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"])
+	user_rules = get_rules("test")
+	parsed_buy_rules, parsed_sell_rules = parse_rules(user_rules["buy"], user_rules["sell"])
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
 
 	stock_data = process_stock_data(get_stock_data(ticker, period=180), ticker=ticker, period=180)

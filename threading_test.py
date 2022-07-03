@@ -3,7 +3,6 @@ from db_utils import *
 from utils import *
 from pprint import pprint
 
-add_stock_data_batch()
 from queue import Queue
 from threading import Thread
 import time
@@ -39,7 +38,7 @@ import time
 # print('It took', time.time()-start, 'seconds.')
 
 
-def add_stock_info_batch():
+def thread_add_stock_info_batch():
 	# drop existing data
 	col_stock_info.delete_many({})
 	df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
@@ -102,7 +101,7 @@ def add_stock_info_batch():
 # add_stock_info_batch()
 # print('It took', time.time()-start, 'seconds.')
 
-def yfinance_info():
+def thread_yfinance_info():
 	NUM_THREADS = 10
 
 	ticker_q = Queue()
