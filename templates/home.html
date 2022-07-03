@@ -301,7 +301,12 @@
 			scales: {
 				x: {
 					display: true,
-					...x_scale_settings
+					...x_scale_settings,
+					type: 'timeseries',
+					time: {
+						unit: 'day',
+						tooltipFormat: 'DD'
+					},
 				},
 				y: {
 					display: true,
@@ -341,7 +346,12 @@
 			scales: {
 				x: {
 					display: true,
-					...x_scale_settings
+					...x_scale_settings,
+					type: 'timeseries',
+					time: {
+						unit: 'day',
+						tooltipFormat: 'DD'
+					}
 				},
 				y: {
 					display: true,
@@ -372,12 +382,12 @@
 	}
 
 	function draw_all_industry_last_cmp(data) {
-		for (i = 0; i < data.labels.length; i++) {
+		/*for (i = 0; i < data.labels.length; i++) {
 			label = data.labels[i];
 			if (label.length > 15) {
 				data.labels[i] = label.slice(0, 12) + '...';
 			}
-		}
+		}*/
 
 		chart_data = {
 			labels: data.labels,
@@ -400,22 +410,59 @@
 					},
 					ticks: {
 						callback: (val) => (val + '%')
-					}
+					},
+					min: Math.round(Math.min(...data.data)/10)*10 - 10,
+					max: Math.round(Math.max(...data.data)/10)*10 + 10
 				},
 				y: {
 					display: true,
 					ticks: {
 						autoSkip: false
 					},
-					...y_scale_settings
+					...y_scale_settings,
+					ticks: {
+						callback: (val, index, values) => {
+							label = data.labels[index];
+							if (label.length > 20) {
+								return label.slice(0, 17) + '...';
+							}
+							return label;
+						}
+					},
 				},
 			},
 			plugins: {
+				legend: {
+					display: false
+				},
 				crosshair: false,
 				cursorpos: false,
+				tooltip: {
+					backgroundColor: "rgba(0, 0, 0, 0.5)",
+					titleColor: "rgba(255, 255, 255, 0.7)",
+					bodyColor: "rgba(255, 255, 255, 0.7)",
+					callbacks: {
+						label: function(context) {
+							console.log(context)
+							if (context.parsed.x && context.label) {
+								return context.label + ': ' + context.parsed.x.toFixed(2) + '%';
+							}
+							return '';
+						}
+					}
+				}
 			},
-			events: [],
-			...misc_options
+			legend: {
+				onClick: function (e) {
+					e.stopPropagation();
+				}
+			},
+			interaction: {
+				mode: 'index',
+				intersect: false,
+			},
+			responsive: true,
+			maintainAspectRatio: false
 		}
 
 		if (all_industry_last_cmp_chart) {
