@@ -11,12 +11,12 @@
 		</form>
 	</div>
 	<div class="flex mb-2 ml-auto space-x-2 industry-filter">
+		<form action="{{ url_for('stock_list_page') }}" method="POST">
+			<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{min_mkt_cap}}"
+				class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+				onchange="edit_mkt_cap(this)" />
+		</form>
 		<form method="POST" action="{{ url_for('stock_list_page') }}">
-			<form action="{{ url_for('stock_list_page') }}" method="POST">
-				<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{min_mkt_cap}}"
-					class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-					onchange="edit_mkt_cap(this)" />
-			</form>
 			<select id="industry-filter"
 				class="block px-2 py-1 text-sm bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
 				name="filter_industry" onchange="this.form.submit();">
