@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
 
-from pandas import Period
-
 def get_datetime_from_period(period):
 	end_datetime = datetime.now()
 	start_datetime = end_datetime - timedelta(days=period)
@@ -95,7 +93,7 @@ def parse_rules(buy_rules, sell_rules):
 
 	return parsed_buy_rules, parsed_sell_rules
 
-# Prossessing functions
+
 def process_industry_avg(data, interval=1):
 	out = {
 		'close_pct': []
@@ -176,3 +174,7 @@ def process_stock_data(data, interval=1, include=[], precision=4, ticker=None, p
 		return dict(filter(lambda k: k[0] in include, out.items()))
 
 	return out
+
+
+def process_all_industries_last_close_pct(data):
+	pass

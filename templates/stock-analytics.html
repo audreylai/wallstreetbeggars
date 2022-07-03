@@ -718,53 +718,53 @@
 	}
 
 	function draw_vol(data) {
-  	chart_data = {
-  		datasets: [{
-  			label: 'Volume',
-  			type: 'bar',
-  			backgroundColor: data.volume_color,
-  			data: data.volume,
-  		}, {
+		chart_data = {
+			datasets: [{
+				label: 'Volume',
+				type: 'bar',
+				backgroundColor: data.volume_color,
+				data: data.volume,
+			}, {
 				label: 'MA20',
 				data: data.vol_sma20,
 				borderColor: 'rgb(195, 177, 30)',
 				...line_chart_settings
 			}]
-  	}
+		}
 
-  	options = {
-  		scales: {
-  			x: {
-  				display: true,
-  				...x_scale_settings
-  			},
-  			y: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: 'Dollars (HKD)'
-  				},
+		options = {
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					},
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
 						callback: (val) => (add_suffix(val))
 					},
 					...y_scale_settings
-  			}
-  		},
-  		...misc_options
-  	};
+				}
+			},
+			...misc_options
+		};
 
-  	if (vol_chart) {
-  		vol_chart.destroy();
-  	}
+		if (vol_chart) {
+			vol_chart.destroy();
+		}
 
-  	vol_chart = new Chart(vol_ctx, {
-  		type: 'line',
-  		data: chart_data,
-  		options: options
-  	});
-  }
+		vol_chart = new Chart(vol_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
 
 	function draw_sell(sell) {
     chart_data = {
@@ -778,14 +778,14 @@
       ],
     };
 
-    options = {
-      plugins: {
-        crosshair: false,
-        cursorpos: false,
-      },
-      events: [],
-      ...misc_options,
-    };
+		options = {
+			plugins: {
+				crosshair: false,
+				cursorpos: false,
+			},
+			events: [],
+			...misc_options,
+		};
 
 		if (sell_chart) {
 			sell_chart.destroy();
@@ -809,21 +809,21 @@
             ctx.textBaseline = "middle";
             ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
 
-            var index = Math.round(sell) + "%",
-              indexX = Math.round((width - ctx.measureText(index).width) / 2),
-              indexY = height / 2.1;
+						var index = Math.round(sell) + "%",
+							indexX = Math.round((width - ctx.measureText(index).width) / 2),
+							indexY = height / 2.1;
 
-            ctx.fillText(index, indexX, indexY);
+						ctx.fillText(index, indexX, indexY);
 
-            fontSellze = (height / 180).toFixed(2);
-            ctx.font = "bold " + fontSellze + "em sans-serif";
-            ctx.fillStyle = "rgb(244 63 94)";
+						fontSellze = (height / 180).toFixed(2);
+						ctx.font = "bold " + fontSellze + "em sans-serif";
+						ctx.fillStyle = "rgb(244 63 94)";
 
-            var action = "SELL",
-              actionX = Math.round((width - ctx.measureText(action).width) / 2),
-              actionY = height / 1.7;
+						var action = "SELL",
+							actionX = Math.round((width - ctx.measureText(action).width) / 2),
+							actionY = height / 1.7;
 
-            ctx.fillText(action, actionX, actionY);
+						ctx.fillText(action, actionX, actionY);
 
             fontSellze = (height / 200).toFixed(2);
             ctx.font = fontSellze + "em sans-serif";
@@ -852,14 +852,14 @@
       ],
     };
 
-    options = {
-      plugins: {
-        crosshair: false,
-        cursorpos: false,
-      },
-      events: [],
-      ...misc_options,
-    };
+		options = {
+			plugins: {
+				crosshair: false,
+				cursorpos: false,
+			},
+			events: [],
+			...misc_options,
+		};
 
 		if (buy_chart) {
 			buy_chart.destroy();
@@ -883,32 +883,32 @@
             ctx.textBaseline = "middle";
             ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
 
-            var index = Math.round(buy) + "%",
-              indexX = Math.round((width - ctx.measureText(index).width) / 2),
-              indexY = height / 2.1;
+						var index = Math.round(buy) + "%",
+							indexX = Math.round((width - ctx.measureText(index).width) / 2),
+							indexY = height / 2.1;
 
-            ctx.fillText(index, indexX, indexY);
+						ctx.fillText(index, indexX, indexY);
 
-            fontSize = (height / 180).toFixed(2);
-            ctx.font = "bold " + fontSize + "em sans-serif";
-            ctx.fillStyle = "rgb(16 185 129)";
+						fontSize = (height / 180).toFixed(2);
+						ctx.font = "bold " + fontSize + "em sans-serif";
+						ctx.fillStyle = "rgb(16 185 129)";
 
-            var action = "BUY",
-              actionX = Math.round((width - ctx.measureText(action).width) / 2),
-              actionY = height / 1.7;
+						var action = "BUY",
+							actionX = Math.round((width - ctx.measureText(action).width) / 2),
+							actionY = height / 1.7;
 
-            ctx.fillText(action, actionX, actionY);
+						ctx.fillText(action, actionX, actionY);
 
-            fontSize = (height / 200).toFixed(2);
-            ctx.font = fontSize + "em sans-serif";
-            ctx.fillStyle = "rgb(212 212 216)";
+						fontSize = (height / 200).toFixed(2);
+						ctx.font = fontSize + "em sans-serif";
+						ctx.fillStyle = "rgb(212 212 216)";
 
-            ctx.save();
-          },
-        },
-      ],
-    });
-  }
+						ctx.save();
+					},
+				},
+			],
+		});
+	}
 
 	var stock_data = {{ stock_data | tojson }};
 	var rules = {{ rules | tojson }}

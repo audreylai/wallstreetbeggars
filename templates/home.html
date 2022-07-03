@@ -12,7 +12,7 @@
         class="w-full px-3 py-2 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100"
         onmouseover="this.stop();"
         onmouseout="this.start();"
-        scrollamount="10"
+        scrollamount="6"
       >
         <div class="flex w-full space-x-8 text-sm">
           {% for i in range(20) %}
@@ -117,24 +117,31 @@
       </div>
       <div class="grid grid-cols-3 h-96 gap-x-4">
         <div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-          1
+					<div class="h-96"><canvas id="all-industry-cmp-chart"></canvas></div>
         </div>
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="h-96"><canvas id="all-industry-last-cmp-chart"></canvas></div>
+				</div>
       </div>
     </div>
   </div>
 </div>
 <script>
   // init chart + ctx
-  var hscc_index_chart = undefined;
-  var hsce_index_chart = undefined;
-  var hsi_index_chart = undefined;
+  // init chart + ctx
+	var hscc_index_chart = undefined;
+	var hsce_index_chart = undefined;
+	var hsi_index_chart = undefined;
+	var all_industry_cmp_chart = undefined;
+	var all_industry_last_cmp_chart = undefined;
 
-  const hscc_index_ctx = document.getElementById('hscc-index-chart').getContext('2d');
-  const hsce_index_ctx = document.getElementById('hsce-index-chart').getContext('2d');
-  const hsi_index_ctx = document.getElementById('hsi-index-chart').getContext('2d');
+	const hscc_index_ctx = document.getElementById('hscc-index-chart').getContext('2d');
+	const hsce_index_ctx = document.getElementById('hsce-index-chart').getContext('2d');
+	const hsi_index_ctx = document.getElementById('hsi-index-chart').getContext('2d');
+	const all_industry_cmp_ctx = document.getElementById('all-industry-cmp-chart').getContext('2d');
+	const all_industry_last_cmp_ctx = document.getElementById('all-industry-last-cmp-chart').getContext('2d');
 
-  function draw_chart(data, ctx, chart) {
+  function draw_index(data, ctx, chart) {
   	gradient = ctx.createLinearGradient(0, 0, 0, 300);
   	gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
   	gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
@@ -155,34 +162,34 @@
   		}]
   	}
 
-  	tmp = misc_options
-  	tmp.plugins.legend.display = false;
-  	options = {
-  		legend: {
-  			onClick: function (e) {
-  				e.stopPropagation();
-  			}
-  		},
-  		scales: {
-  			x: {
-  				display: true,
-  				...x_scale_settings
-  			},
-  			y: {
-  				display: true,
-  				title: {
-  					display: false,
-  					text: 'Dollars (HKD)'
-  				},
-  				ticks: {
-  					autoSkip: true,
-  					autoSkipPadding: 20,
-  					callback: (val) => (add_suffix(val, 2))
-  				},
-  				...y_scale_settings
-  			}
-  		},
-  		...tmp
+		tmp = JSON.parse(JSON.stringify(misc_options));
+		tmp.plugins.legend.display = false;
+		options = {
+			legend: {
+				onClick: function (e) {
+					e.stopPropagation();
+				}
+			},
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: 'Dollars (HKD)'
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+						callback: (val) => (add_suffix(val, 2))
+					},
+					...y_scale_settings
+				}
+			},
+			...tmp
 
   	}
 
@@ -197,10 +204,97 @@
   	});
   }
 
-  data = {{ data | tojson }};
-	console.log(data.hsi);
-  draw_chart(data.hscc, hscc_index_ctx, hscc_index_chart);
-  draw_chart(data.hsce, hsce_index_ctx, hsce_index_chart);
-  draw_chart(data.hsi, hsi_index_ctx, hsi_index_chart);
+	function draw_all_industry_cmp(data) {
+		chart_data = {
+			datasets: data
+		}
+
+		options = {
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: '% change'
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+					},
+					...y_scale_settings
+				},
+			},
+			...misc_options
+		}
+
+		if (all_industry_cmp_chart) {
+			all_industry_cmp_chart.destroy();
+		}
+
+		all_industry_cmp_chart = new Chart(all_industry_cmp_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	function draw_all_industry_last_cmp(data) {
+		chart_data = {
+			labels: data.labels,
+			datasets: [{
+				data: data.data,
+				backgroundColor: data.background_color
+			}]
+		}
+
+		options = {
+			indexAxis: 'y',
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: '% change'
+					},
+					ticks: {
+						autoSkip: false
+					},
+					...y_scale_settings
+				},
+			},
+			plugins: {
+        crosshair: false,
+        cursorpos: false,
+      },
+			events: [],
+			...misc_options
+		}
+
+		if (all_industry_last_cmp_chart) {
+			all_industry_last_cmp_chart.destroy();
+		}
+
+		all_industry_last_cmp_chart = new Chart(all_industry_last_cmp_ctx, {
+			type: 'bar',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	data = {{ data | tojson }};
+	draw_index(data.hscc, hscc_index_ctx, hscc_index_chart);
+	draw_index(data.hsce, hsce_index_ctx, hsce_index_chart);
+	draw_index(data.hsi, hsi_index_ctx, hsi_index_chart);
+
+	draw_all_industry_cmp(data.all_industry_cmp);
+	draw_all_industry_last_cmp(data.all_industry_last_cmp);
 </script>
 {% endblock %}

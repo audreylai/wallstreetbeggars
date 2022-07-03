@@ -206,6 +206,7 @@
 			</button>
 		</div>
 	</div>
+	<a href="{{ url_for('rules') }}" class="text-blue-500" onclick="get_table();">Done</a>
 </div>
 <script>
 	const options = ["ma10", "ma20", "ma50", "ma100", "ma250", "rsi"];
@@ -342,8 +343,8 @@
 		});
 		// buyrow = buyrow.join(" ");
 		// sellrow = sellrow.join(" ");
-		$.post("/rules/edit", {buy: buyrow, sell:sellrow})
-		return buyrow, sellrow;
+		$.post("/rules/edit", { buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) })
+		return { buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) };
 	}
 
 	function suggestion_onlick(evt) {
