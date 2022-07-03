@@ -13,20 +13,26 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
+	dark_mode = get_user_theme("test")
 	data = {
 		'hscc': process_stock_data(get_stock_data('^HSCC', period=180), ticker='^HSCC', period=180),
 		'hsce': process_stock_data(get_stock_data('^HSCE', period=180), ticker='^HSCE', period=180),
 		'hsi': process_stock_data(get_stock_data('^HSI', period=180), ticker='^HSI', period=180)
 	}
-	return render_template("home.html", data=data)
+	return render_template("home.html", data=data, dark_mode=dark_mode)
 
 @app.route("/", methods=["POST"])
 def get_data():
 	return render_template("home.html")
 
+@app.route("/theme/<theme>", methods=["GET"])
+def change_theme(theme):
+	update_user_theme("test", theme)
+	return ""
 
 @app.route("/rules", methods=["GET", "POST"])
 def rules():
+	dark_mode = get_user_theme("test")
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
 	if not ticker_exists(ticker):
 		return 'not found', 404
@@ -45,7 +51,7 @@ def rules():
 		"hit_sell_rules": hit_sell_rules,
 		"miss_buy_rules": miss_buy_rules,
 		"miss_sell_rules": miss_sell_rules
-	})
+	}, dark_mode=dark_mode)
 
 
 @app.route("/rules/edit", methods=["GET", "POST"])
@@ -57,6 +63,7 @@ def rules_edit():
 
 @app.route("/stock-list", methods=["GET", "POST"])
 def stock_list_page():
+	dark_mode = get_user_theme("test")
 	page = request.values.get("page", type=int, default=1)
 	filter_industry = request.values.get("filter_industry", type=str, default='')
 
@@ -85,7 +92,7 @@ def stock_list_page():
 
 	# return 'a'
 
-	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap_pow)
+	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap_pow, dark_mode=dark_mode)
 
 
 # this should be an api
@@ -102,22 +109,23 @@ def update_active():
 # stock-info
 @app.route("/stock-info", methods=["POST", "GET"])
 def stock_info():
+	dark_mode = get_user_theme("test")
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
 
 	stock_data = process_stock_data(get_stock_data(ticker, 180), interval=1, ticker=ticker, period=180)
 	stock_info = get_stock_info(ticker)
 	statistics = {key: get_last_stock_data(ticker)[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower() : stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
 		
-	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics)
+	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics, dark_mode=dark_mode)
 
 @app.route("/stock-info/update", methods=["GET"])
 def update_stock_info():
 	add_stock_info_batch()
 
-
 # stock-analytics
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
+	dark_mode = get_user_theme("test")
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
 	start_datetime, end_datetime = get_datetime_from_period(180)
 
@@ -138,7 +146,7 @@ def stock_analytics():
 			"hit_sell_rules": hit_sell_rules,
 			"miss_buy_rules": miss_buy_rules,
 			"miss_sell_rules": miss_sell_rules
-		}
+		}, dark_mode=dark_mode
 	)
 
 # apis
@@ -148,6 +156,10 @@ app.register_blueprint(api.bp)
 @app.template_filter('epoch_convert')
 def timectime(s):
 	return datetime.fromtimestamp(s).strftime('%d/%m/%y')
+
+@app.template_filter('get_theme')
+def get_theme(username):
+	return get_user_theme(username)
 
 @app.template_filter('suffix')
 def add_suffix(num):
