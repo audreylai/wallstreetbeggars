@@ -6,96 +6,113 @@
 <script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>{% endblock %} 
 {% block content %}
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
-  <div class="flex flex-col h-screen gap-4 px-6 py-4">
-    <div class="space-y-2">
-      <div class="flex items-center px-3 py-2 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100">
-      	<marquee
-	        class="w-full"
-	        onmouseover="this.stop();"
-	        onmouseout="this.start();"
-	        scrollamount="6"
-	      >
-	        <div class="flex w-full space-x-8 text-sm">
-	          {% for i in range(20) %}
-	          <div class="space-x-0.5 font-light">
-	            <span>HSBC</span>
-	            <span class="text-emerald-500">+5.72%</span>
-	          </div>
-	          {% endfor %}
-	        </div>
-	      </marquee>
-      </div>
-      <h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
-        Dashboard
-      </h1>
-    </div>
-    <div class="space-y-4 overflow-y-scroll">
-      <div class="grid h-32 grid-cols-4 gap-x-4">
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-          <div class="flex flex-col">
-            <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
-              Market Direction
-            </h3>
-							{% if data["hsi"]["last_close_pct"] < 0%}
+	<div class="flex flex-col h-screen gap-4 px-6 py-4">
+		<div class="space-y-2">
+			<div class="flex items-center px-3 py-2 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100">
+				<marquee
+					class="w-full"
+					onmouseover="this.stop();"
+					onmouseout="this.start();"
+					scrollamount="6"
+				>
+					<div class="flex w-full space-x-8 text-sm">
+						{% for i in range(20) %}
+						<div class="space-x-0.5 font-light">
+							<span>HSBC</span>
+							<span class="text-emerald-500">+5.72%</span>
+						</div>
+						{% endfor %}
+					</div>
+				</marquee>
+			</div>
+			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
+				Dashboard
+			</h1>
+		</div>
+		<div class="space-y-4 overflow-y-scroll">
+			<div class="grid h-32 grid-cols-4 gap-x-4">
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="flex flex-col">
+						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
+							Market Direction
+						</h3>
+							{% if chart_data["hsi"]["last_close_pct"] < 0%}
 							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bearish</h2>
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % data["hsi"]["last_close_pct"]}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % data["hsi"]["last_close_pct"]}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
-          </div>
-        </div>
+					</div>
+				</div>
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-          <div class="flex flex-col">
-            <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
-              Leader Index
-            </h3>
-            <h2 class="text-3xl font-semibold uppercase dark:text-zinc-100">{{leading_index[0]}}</h2>
-							{% if leading_index[1] < 0%}
+					<div class="flex flex-col">
+						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
+							Leader Index
+						</h3>
+						<h2 class="text-3xl font-semibold uppercase dark:text-zinc-100">{{card_data['leading_index'][0]}}</h2>
+							{% if card_data['leading_index'][1] < 0%}
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % leading_index[1]}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data['leading_index'][1]}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % leading_index[1]}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data['leading_index'][1]}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
-          </div>
-        </div>
+					</div>
+				</div>
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-          <div class="flex flex-col">
-            <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
-              Leading Industry
-            </h3>
-							{% if mkt_momentum < 0%}
+					<div class="flex flex-col">
+						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
+							Leading Industry
+						</h3>
+						<h2 class="text-3xl font-semibold dark:text-zinc-100">{{card_data['leading_industry']}}</h2>
+						{% if card_data['leading_industry_pct'] < 0%}
+						<h4 class="font-light text-rose-500">
+						{{"%.2f" % card_data['leading_industry_pct']}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+						</h4>
+						{% else %}
+						<h4 class="font-light text-emerald-500">
+						{{"%.2f" % card_data['leading_industry_pct']}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+						</h4>
+						{% endif %}
+					</div>
+				</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="flex flex-col">
+						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
+							Market Momentum
+						</h3>
+							{% if card_data['mkt_momentum'] < 0%}
 							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bearish</h2>
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % mkt_momentum}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data['mkt_momentum']}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % mkt_momentum}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data['mkt_momentum']}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
-          </div>
-        </div>
-      </div>
-      <div class="grid grid-cols-3 gap-x-4">
-        <div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-          <div class="flex items-center space-x-1">
-            <ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-            <h2 class="text-2xl font-semibold dark:text-zinc-100">
-              HSCC Index
-            </h2>
-          </div>
-          <div class="h-96"><canvas id="hscc-index-chart"></canvas></div>
-        </div>
-        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					</div>
+				</div>
+			</div>
+			<div class="grid grid-cols-3 gap-x-4">
+				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="flex items-center space-x-1">
+						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+							HSCC Index
+						</h2>
+					</div>
+					<div class="h-96"><canvas id="hscc-index-chart"></canvas></div>
+				</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold dark:text-zinc-100">
@@ -120,9 +137,21 @@
 			</div>
 			<div class="grid grid-cols-3 h-96 gap-x-4">
 				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="flex items-center space-x-1">
+						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+							Industry Rotations
+						</h2>
+					</div>
 					<div class="h-96"><canvas id="all-industry-cmp-chart" class="comparison-chart"></canvas></div>
 				</div>
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="flex items-center space-x-1">
+						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+						<h2 class="text-2xl font-semibold dark:text-zinc-100">
+							Industry Performance
+						</h2>
+					</div>
 					<div class="h-96"><canvas id="all-industry-last-cmp-chart" class="comparison-chart"></canvas></div>
 				</div>
 			</div>
@@ -297,7 +326,7 @@
 		});
 	}
 
-	data = {{ data | tojson }};
+	data = {{ chart_data | tojson }};
 	draw_index(data.hscc, hscc_index_ctx, hscc_index_chart, [102, 126, 234]);
 	draw_index(data.hsce, hsce_index_ctx, hsce_index_chart, [234, 102, 126]);
 	draw_index(data.hsi, hsi_index_ctx, hsi_index_chart, [126, 234, 102]);

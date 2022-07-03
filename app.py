@@ -18,16 +18,20 @@ def home():
 	all_industry_cmp, all_industry_last_cmp = get_all_industries_close_pct(period=period)
 
 	dark_mode = get_user_theme("test")
-	data = {
+	chart_data = {
 		'hscc': process_stock_data(get_stock_data('^HSCC', period=period), ticker='^HSCC', period=period),
 		'hsce': process_stock_data(get_stock_data('^HSCE', period=period), ticker='^HSCE', period=period),
 		'hsi': process_stock_data(get_stock_data('^HSI', period=period), ticker='^HSI', period=period),
 		'all_industry_cmp': all_industry_cmp,
 		'all_industry_last_cmp': all_industry_last_cmp
 	}
-	mkt_momentum = data["hsi"]["last_close"]/(data["hsi"]["close"][len(data["hsi"]["close"])-10]['y'])
-	leading_index = sorted({x: data[x]["last_close_pct"] for x in data if x in ["hscc", "hsce", "hsi"]}.items(), key=lambda k: k)[0]
-	return render_template("home.html", data=data, dark_mode=dark_mode, leading_index=leading_index, mkt_momentum=mkt_momentum)
+	card_data = {
+		'mkt_momentum': chart_data["hsi"]["last_close"] / (chart_data["hsi"]["close"][len(chart_data["hsi"]["close"])-10]['y']),
+		'leading_index': sorted({x: chart_data[x]["last_close_pct"] for x in chart_data if x in ["hscc", "hsce", "hsi"]}.items(), key=lambda k: k)[0],
+		'leading_industry': all_industry_last_cmp['labels'][-1],
+		'leading_industry_pct': all_industry_last_cmp['data'][-1] / 100
+	}
+	return render_template("home.html", chart_data=chart_data, card_data=card_data, dark_mode=dark_mode)
 
 
 @app.route("/", methods=["POST"])
