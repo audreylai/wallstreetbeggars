@@ -97,6 +97,62 @@ def add_stock_info_batch():
 
 	ticker_q.join()
 	
+# start = time.time()
+# add_stock_info_batch()
+# print('It took', time.time()-start, 'seconds.')
+
+def yfinance_info():
+	NUM_THREADS = 10
+
+	ticker_q = Queue()
+	ticker_list = []
+
+	for ticker in range(1, 10):
+		ticker_q.put(f"0000{str(ticker)}"[-4:] + ".HK")
+
+	tickers = yf.Tickers(' '.join(list(ticker_q.queue)))
+
+	ticker_list = list(map(lambda x: x.replace('-', '.'), ticker_list)) # yfinance takes . in ticker format
+
+	def convert_name(name):
+		out = ''
+		for char in name:
+			if char.isupper():
+				out += f'_{char.lower()}'
+			else:
+				out += char
+		return out
+
+	attrs = [
+		'sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash',
+		'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency',
+		'shortName', 'longName', 'exchangeTimezoneName', 'quoteType', 'logo_url',
+		"previousClose", "marketCap", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
+	]
+	df = pd.DataFrame(columns=[convert_name(i) for i in attrs], index=ticker_list)
+	df.index.name = 'ticker'
+
+	def get_info():
+		while True:
+			ticker_name = ticker_q.get()
+			res = []
+			info = tickers.tickers[ticker_name].info
+			try:
+				for attr in attrs:
+					res.append(info[attr])
+				df.loc[ticker_name.replace('.', '-')] = res
+			except:
+				pass
+			ticker_q.task_done()
+
+	for t in range(NUM_THREADS):
+		worker = Thread(target=get_info)
+		worker.daemon = True
+		worker.start()
+	
+	ticker_q.join()
+	print(df)
+
 start = time.time()
-add_stock_info_batch()
+yfinance_info()
 print('It took', time.time()-start, 'seconds.')
