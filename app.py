@@ -19,7 +19,8 @@ def home():
 		'hsce': process_stock_data(get_stock_data('^HSCE', period=180), ticker='^HSCE', period=180),
 		'hsi': process_stock_data(get_stock_data('^HSI', period=180), ticker='^HSI', period=180)
 	}
-	return render_template("home.html", data=data, dark_mode=dark_mode)
+	leading_index = sorted({x: data[x]["last_close_pct"] for x in data}.items(), key=lambda k: k)[0]
+	return render_template("home.html", data=data, dark_mode=dark_mode, leading_index=leading_index)
 
 @app.route("/", methods=["POST"])
 def get_data():

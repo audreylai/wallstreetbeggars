@@ -15,25 +15,29 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
     />
     {% block header %}{% endblock %}
-    <!-- <script src="{{ url_for('static', filename='theme.js') }}"></script> -->
 		<script>
-			let dark = "{{dark_mode}}";
-			if (dark == "True") {
+			let dark = ("{{dark_mode}}" == "True");
+			if (dark) {
 				document.documentElement.classList.add('dark');
 				// $("#light-icon").hide();
 			} else {
 				document.documentElement.classList.remove('dark');
+				dark = false;
 				// $("#dark-icon").hide();
 			}
+			var change_dark_mode = () => {}
 			$().ready(function() {
-				$("#theme-toggle").click(function() {
+				$("#theme-toggle").bind('click', function() {
+					console.log("HELLO")
 					if (document.documentElement.classList.contains('dark')) {
 						document.documentElement.classList.remove('dark');
+						dark = false;
 						$.get("/theme/light")
 						$("#dark-icon").hide();
 						$("#light-icon").show();
 					} else {
 						document.documentElement.classList.add('dark');
+						dark = true;
 						$.get("/theme/dark")
 						$("#light-icon").hide();
 						$("#dark-icon").show();
