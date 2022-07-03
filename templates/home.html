@@ -131,40 +131,91 @@
 					<div class="h-96"><canvas id="hsi-index-chart"></canvas></div>
 				</div>
 			</div>
-			<div class="grid grid-cols-2 h-96 gap-x-4">
+			<div class="grid grid-cols-2 h-72 gap-x-4">
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800"><table class="w-full">
 					<thead>
-						<tr class="sticky top-0 bg-white dark:bg-zinc-800">
-							<th
-								class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-							>
-								a
+						<tr class="top-0 bg-white dark:bg-zinc-800">
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Ticker
 							</th>
-							<th
-								class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-							>
-								b
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Price
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Change
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Volume
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Market Cap
 							</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr
-							class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
-						>
-							<td
-								class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-							>
-								a
+						{% for row in table_data['gainers'] %}
+						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ row['ticker'] }}
 							</td>
-							<td
-								class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500"
-							>
-								b
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ "%.2f" % row['price'] }}
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
+								{{ "%.2f" % (row['change']*100) }}%
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ row['volume'] | suffix }}
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ row['mkt_cap'] | suffix }}
 							</td>
 						</tr>
+						{% endfor %}
 					</tbody>
 				</table></div>
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800"><table class="w-full">
+					<thead>
+						<tr class="top-0 bg-white dark:bg-zinc-800">
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Ticker
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Price
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Change
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Volume
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Market Cap
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for row in table_data['losers'] %}
+						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ row['ticker'] }}
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ "%.2f" % row['price'] }}
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
+								{{ "%.2f" % (row['change']*100) }}%
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ row['volume'] | suffix }}
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ row['mkt_cap'] | suffix }}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table></div>
 			</div>
 			<div class="grid grid-cols-3 h-96 gap-x-4">
 				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
