@@ -25,7 +25,7 @@ def home():
 		'all_industry_cmp': all_industry_cmp,
 		'all_industry_last_cmp': all_industry_last_cmp
 	}
-	leading_index = sorted({x: data[x]["last_close_pct"] for x in data}.items(), key=lambda k: k)[0]
+	leading_index = sorted({x: data[x]["last_close_pct"] for x in data if x in ["hscc", "hsce", "hsi"]}.items(), key=lambda k: k)[0]
 	return render_template("home.html", data=data, dark_mode=dark_mode, leading_index=leading_index)
 
 
