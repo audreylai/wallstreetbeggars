@@ -110,9 +110,9 @@ def stock_info():
 		
 	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics)
 
-# @app.route("/stock-info/update", methods=["GET"])
-# def update_stock_info():
-# 	add_stock_info_batch()
+@app.route("/stock-info/update", methods=["GET"])
+def update_stock_info():
+	add_stock_info_batch()
 
 
 # stock-analytics

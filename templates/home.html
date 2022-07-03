@@ -7,124 +7,149 @@
 <script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
-	<div class="flex flex-col h-screen gap-4 px-6 py-4">
-		<div class="space-y-2">
-			<div class="flex w-full px-3 py-2 space-x-4 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100">
-				<div>item</div>
-				<div>item</div>
-			</div>
-			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">Dashboard</h1>
-		</div>
-		<div class="space-y-4 overflow-y-scroll">
-			<div class="grid h-32 grid-cols-4 gap-x-4">
-				{% for i in range(4) %}
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex flex-col">
-						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Market Direction</h3>
-						<h2 class="text-3xl font-semibold dark:text-zinc-100">Bearish</h2>
-						<h4 class="font-light text-rose-500">-0.77%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon></h4>
-					</div>
-				</div>
-				{% endfor %}
-			</div>
-			<div class="grid grid-cols-3 h-96 gap-x-4">
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<canvas id="hscc-index-chart"></canvas>
-				</div>
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<canvas id="hsce-index-chart"></canvas>
-				</div>
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<canvas id="hsi-index-chart"></canvas>
-				</div>
-			</div>
-			<div class="grid grid-cols-2 h-96 gap-x-4">
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
-			</div>
-			<div class="grid grid-cols-3 h-96 gap-x-4">
-				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
-				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
-			</div>
-		</div>
-	</div>
+  <div class="flex flex-col h-screen gap-4 px-6 py-4">
+    <div class="space-y-2">
+      <marquee
+        class="w-full px-3 py-2 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100"
+        onmouseover="this.stop();"
+        onmouseout="this.start();"
+				scrollamount="10"
+      >
+        <div class="flex w-full space-x-8 text-sm">
+					{% for i in range(20) %}
+          <div class="space-x-0.5 font-light">
+            <span>HSBC</span>
+						<span class="text-emerald-500">+5.72%</span>
+          </div>
+					{% endfor %}
+        </div>
+      </marquee>
+      <h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
+        Dashboard
+      </h1>
+    </div>
+    <div class="space-y-4 overflow-y-scroll">
+      <div class="grid h-32 grid-cols-4 gap-x-4">
+        {% for i in range(4) %}
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          <div class="flex flex-col">
+            <h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
+              Market Direction
+            </h3>
+            <h2 class="text-3xl font-semibold dark:text-zinc-100">Bearish</h2>
+            <h4 class="font-light text-rose-500">
+              -0.77%<ion-icon
+                name="arrow-down-outline"
+                class="align-middle"
+              ></ion-icon>
+            </h4>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="grid grid-cols-3 gap-x-4">
+        <div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          <h2 class="text-2xl font-semibold dark:text-zinc-100">HSCC Index</h2>
+          <div class="h-96"><canvas id="hscc-index-chart"></canvas></div>
+        </div>
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          <h2 class="text-2xl font-semibold dark:text-zinc-100">HSCE Index</h2>
+          <div class="h-96"><canvas id="hsce-index-chart"></canvas></div>
+        </div>
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          <h2 class="text-2xl font-semibold dark:text-zinc-100">HSI Index</h2>
+          <div class="h-96"><canvas id="hsi-index-chart"></canvas></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 h-96 gap-x-4">
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+      </div>
+      <div class="grid grid-cols-3 h-96 gap-x-4">
+        <div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+          1
+        </div>
+        <div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">1</div>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
-	// init chart + ctx
-	var hscc_index_chart = undefined;
-	var hsce_index_chart = undefined;
-	var hsi_index_chart = undefined;
+  // init chart + ctx
+  var hscc_index_chart = undefined;
+  var hsce_index_chart = undefined;
+  var hsi_index_chart = undefined;
 
-	const hscc_index_ctx = document.getElementById('hscc-index-chart').getContext('2d');
-	const hsce_index_ctx = document.getElementById('hsce-index-chart').getContext('2d');
-	const hsi_index_ctx = document.getElementById('hsi-index-chart').getContext('2d');
+  const hscc_index_ctx = document.getElementById('hscc-index-chart').getContext('2d');
+  const hsce_index_ctx = document.getElementById('hsce-index-chart').getContext('2d');
+  const hsi_index_ctx = document.getElementById('hsi-index-chart').getContext('2d');
 
-	function draw_chart(data, ctx, chart) {
-		gradient = ctx.createLinearGradient(0, 0, 0, 300);
-		gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
-		gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
+  function draw_chart(data, ctx, chart) {
+  	gradient = ctx.createLinearGradient(0, 0, 0, 300);
+  	gradient.addColorStop(0, 'rgba(102, 126, 234, 0.6)');
+  	gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
 
-		chart_data = {
-			labels: data.lbl,
-			datasets: [{
-				type: 'line',
-				yAxisID: 'y',
-				label: data.ticker,
-				data: data.close,
-				borderColor: 'rgb(102, 126, 234)',
-				backgroundColor: gradient,
-				fill: true,
-				borderWidth: 1,
-				tension: 0.3,
-				pointRadius: 0,
-			}]
-		}
+  	chart_data = {
+  		labels: data.lbl,
+  		datasets: [{
+  			type: 'line',
+  			yAxisID: 'y',
+  			label: data.ticker,
+  			data: data.close,
+  			borderColor: 'rgb(102, 126, 234)',
+  			backgroundColor: gradient,
+  			fill: true,
+  			borderWidth: 1,
+  			tension: 0.3,
+  			pointRadius: 0,
+  		}]
+  	}
 
-		tmp = misc_options
-		tmp.plugins.legend.display = false;
-		options = {
-			legend: {
-				onClick: function (e) {
-					e.stopPropagation();
-				}
-			},
-			scales: {
-				x: {
-					display: true,
-					...x_scale_settings
-				},
-				y: {
-					display: true,
-					title: {
-						display: false,
-						text: 'Dollars (HKD)'
-					},
-					ticks: {
-						autoSkip: true,
-						autoSkipPadding: 20,
-						callback: (val) => (add_suffix(val, 2))
-					},
-					...y_scale_settings
-				}
-			},
-			...tmp
+  	tmp = misc_options
+  	tmp.plugins.legend.display = false;
+  	options = {
+  		legend: {
+  			onClick: function (e) {
+  				e.stopPropagation();
+  			}
+  		},
+  		scales: {
+  			x: {
+  				display: true,
+  				...x_scale_settings
+  			},
+  			y: {
+  				display: true,
+  				title: {
+  					display: false,
+  					text: 'Dollars (HKD)'
+  				},
+  				ticks: {
+  					autoSkip: true,
+  					autoSkipPadding: 20,
+  					callback: (val) => (add_suffix(val, 2))
+  				},
+  				...y_scale_settings
+  			}
+  		},
+  		...tmp
 
-		}
+  	}
 
-		if (chart) {
-			chart.destroy();
-		}
+  	if (chart) {
+  		chart.destroy();
+  	}
 
-		chart = new Chart(ctx, {
-			type: 'line',
-			data: chart_data,
-			options: options
-		});
-	}
+  	chart = new Chart(ctx, {
+  		type: 'line',
+  		data: chart_data,
+  		options: options
+  	});
+  }
 
-	data = {{ data | tojson }};
-	draw_chart(data.hscc, hscc_index_ctx, hscc_index_chart);
-	draw_chart(data.hsce, hsce_index_ctx, hsce_index_chart);
-	draw_chart(data.hsi, hsi_index_ctx, hsi_index_chart);
+  data = {{ data | tojson }};
+  draw_chart(data.hscc, hscc_index_ctx, hscc_index_chart);
+  draw_chart(data.hsce, hsce_index_ctx, hsce_index_chart);
+  draw_chart(data.hsi, hsi_index_ctx, hsi_index_chart);
 </script>
 {% endblock %}
