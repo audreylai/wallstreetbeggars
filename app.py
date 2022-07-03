@@ -25,8 +25,9 @@ def home():
 		'all_industry_cmp': all_industry_cmp,
 		'all_industry_last_cmp': all_industry_last_cmp
 	}
+	mkt_momentum = data["hsi"]["last_close"]/(data["hsi"]["close"][len(data["hsi"]["close"])-10]['y'])
 	leading_index = sorted({x: data[x]["last_close_pct"] for x in data if x in ["hscc", "hsce", "hsi"]}.items(), key=lambda k: k)[0]
-	return render_template("home.html", data=data, dark_mode=dark_mode, leading_index=leading_index)
+	return render_template("home.html", data=data, dark_mode=dark_mode, leading_index=leading_index, mkt_momentum=mkt_momentum)
 
 
 @app.route("/", methods=["POST"])
