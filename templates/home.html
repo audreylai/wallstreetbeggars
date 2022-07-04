@@ -410,10 +410,10 @@
 					position: 'top',
 					padding: 10,
 					align: 'left',
-					beforeDraw: function (ctx) {
-						console.log(ctx.element.height, ctx.element.width);
-						if (ctx.element.height > 50 && ctx.element.width > 80) {
-							return [ctx.raw.g, (last_close_pct[ctx.dataIndex] * 100).toFixed(2) + '%'];
+					formatter: function (chart) {
+						console.log(chart.element);
+						if (chart.element.height > 50 && chart.element.width > 80) {
+							return [chart.raw.g, (last_close_pct[chart.dataIndex] * 100).toFixed(2) + '%'];
 						}
 					}
 				}
@@ -602,7 +602,7 @@
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);
 
 	$('document').ready(() => {
-		// setTimeout(() => {mkt_overview_chart.update()}, 100)
+		setTimeout(() => {mkt_overview_chart.update()}, 100)
 		$("#theme-toggle").bind('click', function() {
 			// draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
 			mkt_overview_chart.update()
