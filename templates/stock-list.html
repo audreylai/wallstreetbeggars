@@ -98,7 +98,7 @@
 			</tbody>
 		</table>
 		<div class="flex flex-col items-center px-3 py-3 xs:flex-row xs:justify-between">
-			<div class="flex items-center">
+			<div class="flex items-center" id="pagination-btns">
 				<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 					<input type="text" name="page" id="page" value="{{page-1}}" hidden>
 					<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
@@ -157,6 +157,7 @@
 		
 		$.post("/stock-list", params, function (data) {
 			$("#table").html($(data).find("table"))
+			$("#pagination-btns").html($(data).find("#pagination-btns"))
 		})
 	}
 
