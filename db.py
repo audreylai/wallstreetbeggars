@@ -259,6 +259,23 @@ def get_mkt_overview_data():
 			})
 	return data, last_close_pct
 
+
+def get_marquee_data():
+	out = []
+
+	hsi_tickers = ['0005', '0011', '0388', '0939', '1299', '1398', '2318', '2388', '2628', '3328', '3988', '0002', '0003', '0006', '1038', '0012', '0016', '0017', '0083', '0101', '0688', '0823', '1109', '1113', '1997', '2007', '0001', '0019', '0027', '0066', '0151', '0175', '0267', '0288', '0386', '0669', '0700', '0762', '0857', '0883', '0941', '1044', '1088', '1093', '1177', '1928', '2018', '2313', '2319', '2382']
+	hsi_tickers = map(lambda x: x + '-HK', hsi_tickers)
+	for ticker in hsi_tickers:
+		if not ticker_exists(ticker):
+			continue
+		out.append({
+			'ticker': ticker,
+			'last_close_pct': get_last_stock_data(ticker)['close_pct']*100
+		})
+
+	return out
+
+
 # User
 def update_active_tickers(username, tickers):
 	col_users.update_one({"username":username}, {'$addToSet': {
