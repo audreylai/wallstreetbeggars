@@ -462,6 +462,7 @@
 		}
 
 		options = {
+			...misc_options,
 			scales: {
 				x: {
 					display: true,
@@ -488,7 +489,10 @@
 					...y_scale_settings
 				},
 			},
-			...misc_options
+			interaction: {
+				mode: 'point',
+				intersect: false,
+			}
 		}
 
 		if (all_industry_cmp_chart) {
