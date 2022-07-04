@@ -270,7 +270,7 @@
 							Market Overview
 						</h2>
 					</div>
-					<div class="h-96 pt-4"><canvas id="mkt-overview-chart"></canvas></div>
+					<div class="pt-4 h-96"><canvas id="mkt-overview-chart"></canvas></div>
 				</div>
 			</div>
 			<div class="grid grid-cols-3 h-96 gap-x-4">
@@ -394,9 +394,9 @@
 				backgroundColor: (ctx) => {
 					tmp = last_close_pct[ctx.dataIndex];
 					if (tmp < 0) {
-						return `rgba(244, 63, 94, ${Math.min(-tmp*20, 0.75)})`;
+						return dark ? `rgba(244, 63, 94, ${Math.min(-tmp*50, 0.75)})` : `rgba(225, 29, 72, ${Math.min(-tmp*100, 0.75)})`;
 					} else {
-						return `rgba(16, 185, 129, ${Math.min(tmp*20, 0.75)})`;
+						return dark ? `rgba(16, 185, 129, ${Math.min(tmp*50, 0.75)})`: `rgba(5, 150, 105, ${Math.min(tmp*100, 0.75)})`;
 					}
 				},
 				labels: {
@@ -602,7 +602,11 @@
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);
 
 	$('document').ready(() => {
-		setTimeout(() => {mkt_overview_chart.update()}, 100)
+		// setTimeout(() => {mkt_overview_chart.update()}, 100)
+		$("#theme-toggle").bind('click', function() {
+			// draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
+			mkt_overview_chart.update()
+		})
 	})
 </script>
 {% endblock %}
