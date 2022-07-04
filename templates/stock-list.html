@@ -39,24 +39,32 @@
 					{% if k != "_id" and k != "last_updated"%}
 					<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 						<div class="flex">
-							<p class=".column">{{ k | convert_colname }}</p>
-							<form method="POST" action="{{ url_for('stock_list_page') }}" onsubmit="redrawTable(this); return false;">
+							<form class="flex" method="POST" action="{{ url_for('stock_list_page') }}" onsubmit="redrawTable(this); return false;">
+								{% if sort_col != k %}
+								<button type="submit">{{ k | convert_colname }}</button>
+								{% endif %}
 								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
 								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 								<input type="hidden" name="sort_col" value="{{ k }}" />
-								<input type="hidden" name="sort_dir" value="asc" />
+								{% if sort_col == k and sort_dir == 1 %}
+								<input type="hidden" name="sort_dir" value="desc" />
 								<button type="submit">
+									{{ k | convert_colname }}
 									<ion-icon name="caret-up-outline" class="w-4 ascending"></ion-icon>
 								</button>
+								{% endif %}
 							</form>
 							<form method="POST" action="{{ url_for('stock_list_page') }}" onsubmit="redrawTable(this); return false;">
 								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
 								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 								<input type="hidden" name="sort_col" value="{{ k }}" />
-								<input type="hidden" name="sort_dir" value="desc" />
+								{% if sort_col == k and sort_dir == -1 %}
+								<input type="hidden" name="sort_dir" value="asc" />
 								<button>
+									{{ k | convert_colname }}
 									<ion-icon name="caret-down-outline" class="w-4 descending"></ion-icon>
 								</button>
+								{% endif %}
 							</form>
 						</div>
 					</th>
