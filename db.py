@@ -127,7 +127,7 @@ def get_all_industries_close_pct(period=None, start_datetime=None, end_datetime=
 	all_industry_cmp = []
 	industry_list = get_all_industries()[:9]
 
-	alpha = 0.6
+	alpha = 0.7
 	color_list = [
 		f"rgba(230, 0, 73, {alpha})", f"rgba(11, 180, 255, {alpha})", f"rgba(80, 233, 145, {alpha})",
 		f"rgba(230, 216, 0, {alpha})", f"rgba(155, 25, 245, {alpha})", f"rgba(255, 163, 0, {alpha})",

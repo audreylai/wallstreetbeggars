@@ -163,19 +163,34 @@
 						{% for row in table_data['gainers'] %}
 						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								{{ row['ticker'] }}
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'] }}</a>
+								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								{{ "%.2f" % row['price'] }}
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row['price'] }}</a>
+								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
-								{{ "%.2f" % (row['change']*100) }}%
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']*100) }}%</a>
+								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								{{ row['volume'] | suffix }}
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['volume'] | suffix }}</a>
+								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								{{ row['mkt_cap'] | suffix }}
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['mkt_cap'] | suffix }}</a>
+								</form>
 							</td>
 						</tr>
 						{% endfor %}
@@ -212,19 +227,34 @@
 						{% for row in table_data['losers'] %}
 						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								{{ row['ticker'] }}
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'] }}</a>
+								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								{{ "%.2f" % row['price'] }}
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row['price'] }}</a>
+								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
-								{{ "%.2f" % (row['change']*100) }}%
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']*100) }}%</a>
+								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								{{ row['volume'] | suffix }}
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['volume'] | suffix }}</a>
+								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								{{ row['mkt_cap'] | suffix }}
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['mkt_cap'] | suffix }}</a>
+								</form>
 							</td>
 						</tr>
 						{% endfor %}
@@ -355,6 +385,8 @@
 				},
 				y: {
 					display: true,
+					min: -0.3,
+					max: 0.3,
 					title: {
 						display: false,
 						text: '% change'
@@ -362,7 +394,7 @@
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
-						callback: (val) => (val * 100 + '%')
+						callback: (val) => (Math.round(val * 100) + '%')
 					},
 					...y_scale_settings
 				},
@@ -409,8 +441,10 @@
 						text: '% change'
 					},
 					ticks: {
+						autoSkip: true,
 						callback: (val) => (val + '%')
 					},
+					/*min: -50, max: 50 */
 					min: Math.round(Math.min(...data.data)/10)*10 - 10,
 					max: Math.round(Math.max(...data.data)/10)*10 + 10
 				},

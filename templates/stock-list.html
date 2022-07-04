@@ -35,10 +35,11 @@
 						<input id="allcb" type="checkbox" name="active"
 							class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
 					</th>
-					{% for k in stock_table[0] %}{% if k != "_id" and k != "last_updated"%}
+					{% for k in stock_table[0] %}
+					{% if k != "_id" and k != "last_updated"%}
 					<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 						<div class="flex">
-							<p class=".column">{{ k }}</p>
+							<p class=".column">{{ k | convert_colname }}</p>
 							<form method="POST" action="{{ url_for('stock_list_page') }}">
 								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
 								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />

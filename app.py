@@ -3,6 +3,7 @@ import re
 from math import ceil
 
 from flask import Flask, render_template, request
+from matplotlib.axis import Ticker
 
 from db import *
 from db_utils import *
@@ -143,8 +144,6 @@ def stock_info():
 # 	add_stock_info_batch()
 
 # stock-analytics
-
-
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
 	dark_mode = get_user_theme("test")
@@ -183,6 +182,21 @@ def timectime(s):
 @app.template_filter('get_theme')
 def get_theme(username):
 	return get_user_theme(username)
+
+@app.template_filter('convert_colname')
+def convert_colname(name):
+	if name == 'ticker':
+		return 'Ticker'
+	elif name == 'name':
+		return 'Name'
+	elif name == 'board_lot':
+		return 'Board Lot'
+	elif name == 'industry_x':
+		return 'Industry'
+	elif name == 'mkt_cap':
+		return 'Market Cap'
+	else:
+		return name
 
 @app.template_filter('suffix')
 def add_suffix(num):
