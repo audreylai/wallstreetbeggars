@@ -1,4 +1,5 @@
 from datetime import *
+from xml.etree.ElementInclude import include
 import pymongo
 from utils import *
 
@@ -207,7 +208,20 @@ def get_industry_close_pct(industry, period=None, start_datetime=None, end_datet
  
 		except:
 			pass
+	return out
 
+def get_industry_stocks(industry, period, stock_params=None):
+	ticker_list = []
+	for i in col_stock_info.find({"industry_x": industry}):
+		ticker_list.append(i["ticker"])
+	
+	out = {}
+
+	for ticker in ticker_list:
+		raw = get_stock_data(ticker, period)
+		data = process_stock_data(raw, 1, include=stock_params)
+		out[ticker] = data
+	
 	return out
 
 
@@ -249,14 +263,28 @@ def process_gainers_losers_industry(gainers, losers):
 		'losers': []
 	}
 
-	for industry in gainers:
-		out["gainers"].append({
-			"industry": industry[0], 
-			"change": industry[1],
-		})
+	# for industry in losers:
+	# 	industry_stocks_close = {ticker: data["close"][0] for ticker, data in get_industry_stocks(industry[0], 1, stock_params=["close"]).items()}
+	# 	print(industry_stocks_close)
+	# 	industry_stocks_last_close = get_industry_stocks(industry[0], 1, stock_params=["last_close"])
+	# 	top_ticker = sorted(industry_stocks_last_close.items(), key=lambda k : k[1]["last_close"])[0]
+	# 	out["losers"].append({
+	# 		"industry": industry[0], 
+	# 		"change": industry[1],
+	# 		"top_ticker":  top_ticker[0],
+	# 		"top_ticker_change": top_ticker[1]["last_close"]
+	# 	})
 
 	for industry in losers:
-		out["losers"].append({"industry": industry[0], "change": industry[1]})
+		industry_stocks = get_industry_stocks(industry[0], 60, stock_params=["last_close_pct"])
+		# print(sorted(industry_stocks.items(), key=lambda k : k[1]["close_pct"]))
+		top_ticker = sorted(industry_stocks.items(), key=lambda k : k[1]["last_close_pct"])[0]
+		out["losers"].append({
+			"industry": industry[0], 
+			"change": industry[1],
+			"top_ticker":  top_ticker[0],
+			"top_ticker_change": top_ticker[1]["last_close_pct"]
+		})
 	
 	return out
 
