@@ -18,7 +18,7 @@ def home():
 	all_industry_cmp, all_industry_last_cmp = get_all_industries_close_pct(period=period)
 	mkt_overview_data, mkt_overview_last_close_pct = get_mkt_overview_data()
 	dark_mode = get_user_theme("test")
-	
+
 	chart_data = {
 		'hscc': process_stock_data(get_stock_data('^HSCC', period=period), ticker='^HSCC', period=period),
 		'hsce': process_stock_data(get_stock_data('^HSCE', period=period), ticker='^HSCE', period=period),
@@ -36,8 +36,9 @@ def home():
 		'leading_industry_pct': all_industry_last_cmp['data'][-1] / 100
 	}
 	table_data = process_gainers_losers(*get_gainers_losers())
+	marquee_data = get_marquee_data()
 
-	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, dark_mode=dark_mode)
+	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, marquee_data=marquee_data, dark_mode=dark_mode)
 
 @app.route("/theme/<theme>", methods=["GET"])
 def change_theme(theme):
