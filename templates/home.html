@@ -410,7 +410,7 @@
 					position: 'top',
 					padding: 10,
 					align: 'left',
-					formatter(ctx) {
+					beforeDraw: function (ctx) {
 						console.log(ctx.element.height, ctx.element.width);
 						if (ctx.element.height > 50 && ctx.element.width > 80) {
 							return [ctx.raw.g, (last_close_pct[ctx.dataIndex] * 100).toFixed(2) + '%'];
