@@ -394,26 +394,33 @@
 				backgroundColor: (ctx) => {
 					tmp = last_close_pct[ctx.dataIndex];
 					if (tmp < 0) {
-						return dark ? `rgba(244, 63, 94, ${Math.min(-tmp*50, 0.75)})` : `rgba(225, 29, 72, ${Math.min(-tmp*100, 0.75)})`;
+						return dark ? `rgba(244, 63, 94, ${Math.min(-tmp*40, 0.75)})` : `rgba(225, 29, 72, ${Math.min(-tmp*80, 0.75)})`;
 					} else {
-						return dark ? `rgba(16, 185, 129, ${Math.min(tmp*50, 0.75)})`: `rgba(5, 150, 105, ${Math.min(tmp*100, 0.75)})`;
+						return dark ? `rgba(16, 185, 129, ${Math.min(tmp*40, 0.75)})`: `rgba(5, 150, 105, ${Math.min(tmp*80, 0.75)})`;
 					}
 				},
 				labels: {
 					color: 'white',
           font: {
 						family: 'sans-serif',
-            size: 16,
+            size: (ctx) => {
+							a = -0.0001930;
+							b = 0.1858;
+							c = -5.888;
+							x = ctx.element.width;
+							return Math.max(a * x**2 + b * x + c, 10.5);
+						},
 						weight: 'lighter'
           },
 					display: true,
 					position: 'top',
-					padding: 10,
+					padding: (ctx) => {
+						return Math.min(Math.max(ctx.element.width / 20, 4), 14);
+					},
 					align: 'left',
-					formatter: function (chart) {
-						console.log(chart.element);
-						if (chart.element.height > 50 && chart.element.width > 80) {
-							return [chart.raw.g, (last_close_pct[chart.dataIndex] * 100).toFixed(2) + '%'];
+					formatter: function (ctx) {
+						if (ctx.element.width > 46) {
+							return [ctx.raw.g, (last_close_pct[ctx.dataIndex] * 100).toFixed(2) + '%'];
 						}
 					}
 				}
@@ -606,7 +613,7 @@
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);
 
 	$('document').ready(() => {
-		setTimeout(() => {mkt_overview_chart.update()}, 100)
+		setTimeout(() => {mkt_overview_chart.update()}, 200)
 		$("#theme-toggle").bind('click', function() {
 			// draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
 			mkt_overview_chart.update()
