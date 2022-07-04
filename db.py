@@ -263,32 +263,35 @@ def process_gainers_losers_industry(gainers, losers):
 		'losers': []
 	}
 
-	# for industry in losers:
-	# 	industry_stocks_close = {ticker: data["close"][0] for ticker, data in get_industry_stocks(industry[0], 1, stock_params=["close"]).items()}
-	# 	print(industry_stocks_close)
-	# 	industry_stocks_last_close = get_industry_stocks(industry[0], 1, stock_params=["last_close"])
-	# 	top_ticker = sorted(industry_stocks_last_close.items(), key=lambda k : k[1]["last_close"])[0]
-	# 	out["losers"].append({
-	# 		"industry": industry[0], 
-	# 		"change": industry[1],
-	# 		"top_ticker":  top_ticker[0],
-	# 		"top_ticker_change": top_ticker[1]["last_close"]
-	# 	})
-
 	for industry in losers:
-		industry_stocks = get_industry_stocks(industry[0], 60, stock_params=["last_close_pct"])
-		# print(sorted(industry_stocks.items(), key=lambda k : k[1]["close_pct"]))
-		top_ticker = sorted(industry_stocks.items(), key=lambda k : k[1]["last_close_pct"])[0]
+		# industry_stocks_close = {ticker: data["close"][0]["y"] for ticker, data in get_industry_stocks(industry[0], 60, stock_params=["close"]).items() if len(data["close"]) != 0}
+		industry_stocks_last_close = get_industry_stocks(industry[0], 60, stock_params=["last_close"])
+		industry_stocks_close = get_industry_stocks(industry[0], 60, stock_params=["first_close"])
+		top_ticker = sorted(industry_stocks_close.keys(), key=lambda ticker:(industry_stocks_close[ticker]["first_close"] - industry_stocks_last_close[ticker]["last_close"]) / industry_stocks_last_close[ticker]["last_close"] if industry_stocks_last_close[ticker]["last_close"] != 0 else 1)[0]
+		top_ticker_change = (industry_stocks_close[top_ticker]["first_close"] - industry_stocks_last_close[top_ticker]["last_close"]) / industry_stocks_last_close[top_ticker]["last_close"] if industry_stocks_last_close[top_ticker]["last_close"] != 0 else 1
 		out["losers"].append({
 			"industry": industry[0], 
 			"change": industry[1],
-			"top_ticker":  top_ticker[0],
-			"top_ticker_change": top_ticker[1]["last_close_pct"]
+			"top_ticker":  top_ticker,
+			"top_ticker_change": top_ticker_change
+		})
+
+	for industry in gainers:
+		# industry_stocks_close = {ticker: data["close"][0]["y"] for ticker, data in get_industry_stocks(industry[0], 60, stock_params=["close"]).items() if len(data["close"]) != 0}
+		industry_stocks_last_close = get_industry_stocks(industry[0], 60, stock_params=["last_close"])
+		industry_stocks_close = get_industry_stocks(industry[0], 60, stock_params=["first_close"])
+		print(industry_stocks_last_close, industry_stocks_close)
+		top_ticker = sorted(industry_stocks_close.keys(), key=lambda ticker:(industry_stocks_last_close[ticker]["last_close"] - industry_stocks_close[ticker]["first_close"]) / industry_stocks_close[ticker]["first_close"] if industry_stocks_close[ticker]["first_close"] != 0 else 1)[-1]
+		top_ticker_change = (industry_stocks_last_close[top_ticker]["last_close"] - industry_stocks_close[top_ticker]["first_close"]) / industry_stocks_close[top_ticker]["first_close"] if industry_stocks_close[top_ticker]["first_close"] != 0 else 1
+		out["gainers"].append({
+			"industry": industry[0], 
+			"change": industry[1],
+			"top_ticker":  top_ticker,
+			"top_ticker_change": top_ticker_change
 		})
 	
 	return out
 
-	return out
 def get_mkt_overview_data():
 	res = get_stock_info('ALL', sort_col='mkt_cap', sort_dir=pymongo.DESCENDING)['table'][:40]
 	data, last_close_pct = [], []

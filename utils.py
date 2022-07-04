@@ -119,7 +119,7 @@ def process_stock_data(data, interval=1, include=[], precision=4, ticker=None, p
 		'macd': [], 'macd_ema': [], 'macd_div': [], 'rsi': [],
 		'cdl': [],
 		'close': [], 'close_pct': [], 'last_close': 0, 'last_close_pct': 0,
-		'volume': [], 'volume_color': [], 'vol_sma20': [], 'max_volume': 0
+		'volume': [], 'volume_color': [], 'vol_sma20': [], 'max_volume': 0, "first_close": 0
 	}
 	first_close = None
 	
@@ -138,6 +138,7 @@ def process_stock_data(data, interval=1, include=[], precision=4, ticker=None, p
 
 		if first_close is None:
 			first_close = i['close']
+			out["first_close"] = first_close
 
 		out['cdl'].append({
 			'x': int(datetime.timestamp(i['date']) * 1000),
