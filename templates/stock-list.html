@@ -11,7 +11,7 @@
 		</form>
 	</div>
 	<div class="flex mb-2 ml-auto space-x-2 industry-filter">
-		<form action="{{ url_for('stock_list_page') }}" method="POST">
+		<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 			<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{min_mkt_cap}}"
 				class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
 				onchange="edit_mkt_cap(this)" />
@@ -19,7 +19,7 @@
 		<form method="POST" action="{{ url_for('stock_list_page') }}">
 			<select id="industry-filter"
 				class="block px-2 py-1 text-sm bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
-				name="filter_industry" onchange="this.form.submit();">
+				name="filter_industry" onchange="redrawTable(this.form); return false;">
 				<option value="" {% if filter_industry=="" %} selected {% endif %}>All industries</option>
 				{% for industry in industries %}
 				<option value="{{industry}}" {% if filter_industry==industry %} selected {% endif %}>{{industry}}</option>
@@ -40,7 +40,7 @@
 					<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 						<div class="flex">
 							<p class=".column">{{ k | convert_colname }}</p>
-							<form method="POST" action="{{ url_for('stock_list_page') }}">
+							<form method="POST" action="{{ url_for('stock_list_page') }}" onsubmit="redrawTable(this); return false;">
 								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
 								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 								<input type="hidden" name="sort_col" value="{{ k }}" />
@@ -49,7 +49,7 @@
 									<ion-icon name="caret-up-outline" class="w-4 ascending"></ion-icon>
 								</button>
 							</form>
-							<form method="POST" action="{{ url_for('stock_list_page') }}">
+							<form method="POST" action="{{ url_for('stock_list_page') }}" onsubmit="redrawTable(this); return false;">
 								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
 								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 								<input type="hidden" name="sort_col" value="{{ k }}" />
@@ -99,7 +99,7 @@
 		</table>
 		<div class="flex flex-col items-center px-3 py-3 xs:flex-row xs:justify-between">
 			<div class="flex items-center">
-				<form action="{{ url_for('stock_list_page') }}" method="POST">
+				<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 					<input type="text" name="page" id="page" value="{{page-1}}" hidden>
 					<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
 					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
@@ -116,7 +116,7 @@
 					</button>
 				</form>
 				{% for i in range(1, num_of_pages+1) %}
-				<form action="{{ url_for('stock_list_page') }}" method="POST">
+				<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 					<input type="text" name="page" id="page" value="{{i}}" hidden>
 					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 					<input type="hidden" name="sort_col" value="{{ sort_col }}" />
@@ -127,7 +127,7 @@
 					</button>
 				</form>
 				{% endfor %}
-				<form action="{{ url_for('stock_list_page') }}" method="POST">
+				<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 					<input type="text" name="page" id="page" value="{{page+1}}" hidden>
 					<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
 					<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
@@ -150,6 +150,17 @@
 </div>
 {% endblock %} {% block script %}
 <script>
+
+	function redrawTable(evt) {
+		const formData = new FormData(evt);
+  	const params = Object.fromEntries(formData);
+		
+		$.post("/stock-list", params, function (data) {
+			$("#table").html($(data).find("table"))
+		})
+	}
+
+
 	$("#allcb").change(function () {
 		$('tbody tr td input[type="checkbox"]').prop(
 			"checked",
