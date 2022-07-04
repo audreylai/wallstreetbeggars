@@ -39,12 +39,12 @@
 							{% if chart_data["hsi"]["last_close_pct"] < 0%}
 							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bearish</h2>
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
 					</div>
@@ -57,11 +57,11 @@
 						<h2 class="text-3xl font-semibold uppercase dark:text-zinc-100">{{card_data['leading_index'][0]}}</h2>
 							{% if card_data['leading_index'][1] < 0%}
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % card_data['leading_index'][1]}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data['leading_index'][1]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % card_data['leading_index'][1]}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data['leading_index'][1]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
 					</div>
@@ -74,11 +74,11 @@
 						<h2 class="text-3xl font-semibold dark:text-zinc-100">{{card_data['leading_industry'] | truncate(15)}}</h2>
 						{% if card_data['leading_industry_pct'] < 0%}
 						<h4 class="font-light text-rose-500">
-						{{"%.2f" % card_data['leading_industry_pct']}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+						{{"%.2f" % (card_data['leading_industry_pct']*100)}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 						</h4>
 						{% else %}
 						<h4 class="font-light text-emerald-500">
-						{{"%.2f" % card_data['leading_industry_pct']}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+						{{"%.2f" % (card_data['leading_industry_pct']*100)}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 						</h4>
 						{% endif %}
 					</div>
@@ -414,13 +414,6 @@
 	}
 
 	function draw_all_industry_last_cmp(data) {
-		/*for (i = 0; i < data.labels.length; i++) {
-			label = data.labels[i];
-			if (label.length > 15) {
-				data.labels[i] = label.slice(0, 12) + '...';
-			}
-		}*/
-
 		chart_data = {
 			labels: data.labels,
 			datasets: [{

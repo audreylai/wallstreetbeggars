@@ -201,13 +201,13 @@ def convert_colname(name):
 @app.template_filter('suffix')
 def add_suffix(num):
 	if num < 10**3:
-		return "%.1f" % (num)
+		return "%.2f" % (num)
 	elif num < 10**6:
-		return "%.1f" % (num / 10**3) + 'K'
+		return "%.2f" % (num / 10**3) + 'K'
 	elif num < 10**9:
-		return "%.1f" % (num / 10**6) + 'M'
+		return "%.2f" % (num / 10**6) + 'M'
 	else:
-		return "%.1f" % (num / 10**9) + 'B'
+		return "%.2f" % (num / 10**9) + 'B'
 
 if __name__ == "__main__":
 	app.run(port="5000", debug=True)

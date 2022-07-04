@@ -151,7 +151,8 @@ def get_all_industries_close_pct(period=None, start_datetime=None, end_datetime=
 			'pointBackgroundColor': color, 
 			'pointRadius': 2,
 		})
-		all_industry_last_cmp_raw.append([industry, data[-1]['y']])
+		last_pct_change = (data[-1]['y'] - data[-2]['y']) / data[-2]['y']
+		all_industry_last_cmp_raw.append([industry, last_pct_change])
 
 	all_industry_last_cmp_raw = sorted(all_industry_last_cmp_raw, key=lambda x: x[1])
 	all_industry_last_cmp = {
