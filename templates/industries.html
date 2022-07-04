@@ -1,0 +1,86 @@
+{% extends "base.html" %} {% block title %} Stock List {% endblock %}
+{% block content %}
+<div class="flex flex-col w-screen h-screen px-6 py-4 overflow-hidden bg-gray-100 dark:bg-zinc-900">
+	<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
+		Industries
+	</h1>
+	<div class="grid grid-cols-2 gap-x-4">
+		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<div class="flex items-center space-x-1">
+				<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+				<h2 class="text-2xl font-semibold dark:text-zinc-200">
+					Donors
+				</h2>
+			</div>
+			<table class="w-full">
+			<thead>
+				<tr class="top-0 bg-white dark:bg-zinc-800">
+					<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+						Industry
+					</th>
+					<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+						Change
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for row in table_data['gainers'][:5] %}
+				<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+						<form action="{{ url_for("stock_info") }}" method="POST">
+							<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
+						</form>
+					</td>
+					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
+						<form action="{{ url_for("stock_info") }}" method="POST">
+							<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
+						</form>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+			</table>
+		</div>
+		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<div class="flex items-center space-x-1">
+				<ion-icon name="trending-down-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+				<h2 class="text-2xl font-semibold dark:text-zinc-200">
+					Beggars
+				</h2>
+			</div>
+			<table class="w-full">
+				<thead>
+					<tr class="top-0 bg-white dark:bg-zinc-800">
+						<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							Industry
+						</th>
+						<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							Change
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for row in table_data['losers'][:5] %}
+					<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+							<form action="{{ url_for("stock_info") }}" method="POST">
+								<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
+							</form>
+						</td>
+						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
+							<form action="{{ url_for("stock_info") }}" method="POST">
+								<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
+							</form>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -12,7 +12,7 @@ import api
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
 	period = 60
 	all_industry_cmp, all_industry_last_cmp = get_all_industries_close_pct(period=period)
@@ -38,12 +38,6 @@ def home():
 	table_data = process_gainers_losers(*get_gainers_losers())
 
 	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, dark_mode=dark_mode)
-
-
-@app.route("/", methods=["POST"])
-def get_data():
-	return render_template("home.html")
-
 
 @app.route("/theme/<theme>", methods=["GET"])
 def change_theme(theme):
@@ -118,6 +112,18 @@ def stock_list_page():
 
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap_pow, dark_mode=dark_mode)
 
+@app.route("/industries", methods=["GET", "POST"])
+def industries():
+	dark_mode = get_user_theme("test")
+	industries_pct = get_all_industries_close_pct(period=60)[1]
+	gainers, losers = [], []
+	for i in range(len(industries_pct['labels'])):
+		if industries_pct['data'][i] > 1:
+			gainers.append((industries_pct['labels'][i], industries_pct['data'][i]))
+		else:
+			losers.append((industries_pct['labels'][i], industries_pct['data'][i]))
+	table_data = process_gainers_losers_industry(gainers, losers)
+	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data)
 
 # this should be an api
 @app.route("/update-active", methods=["POST"])

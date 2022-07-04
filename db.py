@@ -243,7 +243,24 @@ def process_gainers_losers(gainers, losers):
 	
 	return out
 
+def process_gainers_losers_industry(gainers, losers):
+	out = {
+		'gainers': [],
+		'losers': []
+	}
 
+	for industry in gainers:
+		out["gainers"].append({
+			"industry": industry[0], 
+			"change": industry[1],
+		})
+
+	for industry in losers:
+		out["losers"].append({"industry": industry[0], "change": industry[1]})
+	
+	return out
+
+	return out
 def get_mkt_overview_data():
 	res = get_stock_info('ALL', sort_col='mkt_cap', sort_dir=pymongo.DESCENDING)['table'][:40]
 	data, last_close_pct = [], []
