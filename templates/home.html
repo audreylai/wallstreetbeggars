@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} {% block header %}<script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
 <script src="{{url_for('static', filename='chartjs/chartjs.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs/chartjs-chart-financial.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs-chart-treemap.js')}}"></script>
 <!-- <script src="{{url_for('static', filename='chartjs/chartjs-plugin-zoom.js')}}"></script> -->
 <script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>{% endblock %} 
@@ -261,6 +262,17 @@
 					</tbody>
 				</table></div>
 			</div>
+			<div class="grid grid-cols-1 gap-x-4">
+				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="flex items-center space-x-1">
+						<ion-icon name="camera-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+							Market Overview
+						</h2>
+					</div>
+					<div class="h-96 pt-4"><canvas id="mkt-overview-chart"></canvas></div>
+				</div>
+			</div>
 			<div class="grid grid-cols-3 h-96 gap-x-4">
 				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
@@ -290,12 +302,14 @@
 	var hscc_index_chart = undefined;
 	var hsce_index_chart = undefined;
 	var hsi_index_chart = undefined;
+	var mkt_overview_chart = undefined;
 	var all_industry_cmp_chart = undefined;
 	var all_industry_last_cmp_chart = undefined;
 
 	const hscc_index_ctx = document.getElementById('hscc-index-chart').getContext('2d');
 	const hsce_index_ctx = document.getElementById('hsce-index-chart').getContext('2d');
 	const hsi_index_ctx = document.getElementById('hsi-index-chart').getContext('2d');
+	const mkt_overview_ctx = document.getElementById('mkt-overview-chart').getContext('2d');
 	const all_industry_cmp_ctx = document.getElementById('all-industry-cmp-chart').getContext('2d');
 	const all_industry_last_cmp_ctx = document.getElementById('all-industry-last-cmp-chart').getContext('2d');
 
@@ -362,6 +376,81 @@
 
 		chart = new Chart(ctx, {
 			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	async function draw_mkt_overview(data, last_close_pct) {
+		chart_data = {
+			// labels: data.labels,
+			labels: ['0005-HK', '0011-HK', '0016-HK', '0066-HK', '0020-HK'],
+			datasets: [{
+				key: "mkt_cap",
+				groups: ["ticker"],
+				tree: data,
+				borderWidth: 0,
+				spacing: 3,
+				backgroundColor: (ctx) => {
+					tmp = last_close_pct[ctx.dataIndex];
+					if (tmp < 0) {
+						return `rgba(244, 63, 94, ${Math.min(-tmp*20, 0.75)})`;
+					} else {
+						return `rgba(16, 185, 129, ${Math.min(tmp*20, 0.75)})`;
+					}
+				},
+				labels: {
+					color: 'white',
+          font: {
+						family: 'sans-serif',
+            size: 16,
+						weight: 'lighter'
+          },
+					display: true,
+					position: 'top',
+					padding: 10,
+					align: 'left',
+					formatter(ctx) {
+						console.log(ctx.element.height, ctx.element.width);
+						if (ctx.element.height > 50 && ctx.element.width > 80) {
+							return [ctx.raw.g, (last_close_pct[ctx.dataIndex] * 100).toFixed(2) + '%'];
+						}
+					}
+				}
+				// borderColor: "rgba(255,255,255, 1)"
+			}]
+		}
+
+		options = {
+			plugins: {
+				legend: {
+					display: false
+				},
+				crosshair: false,
+				cursorpos: false,
+				tooltip: {
+					enabled: false
+				},
+			},
+			legend: {
+				onClick: function (e) {
+					e.stopPropagation();
+				}
+			},
+			interaction: {
+				// mode: 'index',
+				intersect: false,
+			},
+			responsive: true,
+			maintainAspectRatio: false
+		}
+
+		if (mkt_overview_chart) {
+			mkt_overview_chart.destroy();
+		}
+
+		mkt_overview_chart = new Chart(mkt_overview_ctx, {
+			type: 'treemap',
 			data: chart_data,
 			options: options
 		});
@@ -504,11 +593,16 @@
 	}
 
 	data = {{ chart_data | tojson }};
+
 	draw_index(data.hscc, hscc_index_ctx, hscc_index_chart, [102, 126, 234]);
 	draw_index(data.hsce, hsce_index_ctx, hsce_index_chart, [234, 102, 126]);
 	draw_index(data.hsi, hsi_index_ctx, hsi_index_chart, [126, 234, 102]);
-
+	draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
 	draw_all_industry_cmp(data.all_industry_cmp);
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);
+
+	$('document').ready(() => {
+		setTimeout(() => {mkt_overview_chart.update()}, 100)
+	})
 </script>
 {% endblock %}

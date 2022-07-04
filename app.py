@@ -16,12 +16,15 @@ app = Flask(__name__)
 def home():
 	period = 60
 	all_industry_cmp, all_industry_last_cmp = get_all_industries_close_pct(period=period)
-
+	mkt_overview_data, mkt_overview_last_close_pct = get_mkt_overview_data()
 	dark_mode = get_user_theme("test")
+	
 	chart_data = {
 		'hscc': process_stock_data(get_stock_data('^HSCC', period=period), ticker='^HSCC', period=period),
 		'hsce': process_stock_data(get_stock_data('^HSCE', period=period), ticker='^HSCE', period=period),
 		'hsi': process_stock_data(get_stock_data('^HSI', period=period), ticker='^HSI', period=period),
+		'mkt_overview_data': mkt_overview_data,
+		'mkt_overview_last_close_pct': mkt_overview_last_close_pct,
 		'all_industry_cmp': all_industry_cmp,
 		'all_industry_last_cmp': all_industry_last_cmp
 	}

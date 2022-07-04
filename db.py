@@ -243,6 +243,22 @@ def process_gainers_losers(gainers, losers):
 	
 	return out
 
+
+def get_mkt_overview_data():
+	res = get_stock_info('ALL', sort_col='mkt_cap', sort_dir=pymongo.DESCENDING)['table'][:40]
+	data, last_close_pct = [], []
+	for i in res:
+		try:
+			last_close_pct.append(get_last_stock_data(i['ticker'])['close_pct'])
+		except:
+			continue
+		else:
+			data.append({
+				'ticker': i['ticker'], 
+				'mkt_cap': i['mkt_cap']
+			})
+	return data, last_close_pct
+
 # User
 def update_active_tickers(username, tickers):
 	col_users.update_one({"username":username}, {'$addToSet': {
