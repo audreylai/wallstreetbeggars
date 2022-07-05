@@ -1,13 +1,13 @@
 from datetime import *
-from dateutil.relativedelta import relativedelta
-from bs4 import BeautifulSoup
-import pymongo
-import json
-import yfinance as yf
+from queue import Queue
+from threading import Thread
+
 import pandas as pd
-import numpy as np
-import talib as ta
+import pymongo
 import requests
+import talib as ta
+import yfinance as yf
+from bs4 import BeautifulSoup
 
 # MongoDB Connection
 client = pymongo.MongoClient("mongodb://localhost:27017")
@@ -15,6 +15,61 @@ db = client["wallstreetbeggars"]
 col_users = db["users"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
+
+def thread_yfinance_info(ticker_list):
+	ticker_q = Queue()
+
+	for ticker in ticker_list:
+		ticker_q.put(ticker.replace("-", "."))
+
+	tickers = yf.Tickers(' '.join(list(ticker_q.queue)))
+
+	def convert_name(name):
+		out = ''
+		for char in name:
+			if char.isupper():
+				out += f'_{char.lower()}'
+			else:
+				out += char
+		return out
+
+	attrs = [
+		'sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash',
+		'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency',
+		'shortName', 'longName', 'exchangeTimezoneName', 'quoteType', 'logo_url',
+		"previousClose", "marketCap", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
+	]
+	df = pd.DataFrame(columns=[convert_name(i) for i in attrs], index=ticker_list)
+	df.index.name = 'ticker'
+
+	def get_info():
+		while True:
+			ticker_name = ticker_q.get()
+			print(ticker_name)
+
+			res = []
+			info = tickers.tickers[ticker_name].info
+
+			for attr in attrs:
+				try:
+					res.append(info[attr])
+				except:
+					res.append(None)
+					
+			df.loc[ticker_name.replace('.', '-')] = res
+
+			ticker_q.task_done()
+
+
+	NUM_THREADS = 100
+	for t in range(NUM_THREADS):
+		worker = Thread(target=get_info)
+		worker.daemon = True
+		worker.start()
+	
+	ticker_q.join()
+
+	return df
 
 
 def add_stock_data_batch():
@@ -97,7 +152,7 @@ def add_stock_info_batch():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker > 11].index)
+	df = df.drop(df[df.ticker > 100].index)
 	
 	# convert ticker format
 	ticker_list = []
@@ -111,7 +166,7 @@ def add_stock_info_batch():
 	df = df.reset_index(drop=True)
 
 	# yfinance info
-	yfinance_df = yfinance_info(ticker_list)
+	yfinance_df = thread_yfinance_info(ticker_list)
 	df = pd.merge(df, yfinance_df, on="ticker", how="left") # merge dfs by comparing tickers
 	df = df.reset_index(drop=True)
 	

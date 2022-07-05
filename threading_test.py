@@ -1,11 +1,10 @@
 from db import *
 from db_utils import *
 from utils import *
-from pprint import pprint
-
+# from pprint import pprint
 from queue import Queue
 from threading import Thread
-import time
+# import time
 
 # col_thread = db["stock_thread"]
 # NUM_THREADS = 1500
@@ -38,81 +37,76 @@ import time
 # print('It took', time.time()-start, 'seconds.')
 
 
-def thread_add_stock_info_batch():
-	# drop existing data
-	col_stock_info.delete_many({})
-	df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
+# def thread_add_stock_info_batch():
+# 	# drop existing data
+# 	col_stock_info.delete_many({})
+# 	df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
 
-	# last update date
-	last_updated = datetime.strptime(df.iloc[0, 0].split()[3], "%d/%m/%Y")
-	col_stock_info.insert_one({"last_updated": last_updated})
+# 	# last update date
+# 	last_updated = datetime.strptime(df.iloc[0, 0].split()[3], "%d/%m/%Y")
+# 	col_stock_info.insert_one({"last_updated": last_updated})
 
-	# preprocessing
-	df = df.iloc[2:] # remove first 2 unrelated rows
-	df.columns.values[:4] = ['ticker', 'name', 'category', 'board_lot']
-	df[['ticker', 'board_lot']] = df[['ticker', 'board_lot']].apply(pd.to_numeric)
+# 	# preprocessing
+# 	df = df.iloc[2:] # remove first 2 unrelated rows
+# 	df.columns.values[:4] = ['ticker', 'name', 'category', 'board_lot']
+# 	df[['ticker', 'board_lot']] = df[['ticker', 'board_lot']].apply(pd.to_numeric)
 
-	# drop unrelated rows
-	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
-	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
-	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker > 100].index)
+# 	# drop unrelated rows
+# 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
+# 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
+# 	# df = df.drop(df[df.ticker > 10000].index)
+# 	df = df.drop(df[df.ticker > 100].index)
 	
-	# convert ticker format
-	ticker_list = []
-	for ticker in df.ticker:
-		ticker_list.append(f"0000{str(ticker)}"[-4:] + "-HK")
-	df.ticker = ticker_list
+# 	# convert ticker format
+# 	ticker_list = []
+# 	for ticker in df.ticker:
+# 		ticker_list.append(f"0000{str(ticker)}"[-4:] + "-HK")
+# 	df.ticker = ticker_list
 
-	# etnet web scraping
-	scrape_df = etnet_scraping()
-	df = pd.merge(df, scrape_df, on="ticker", how="left") # merge dfs by comparing tickers
-	df = df.reset_index(drop=True)
+# 	# etnet web scraping
+# 	scrape_df = etnet_scraping()
+# 	df = pd.merge(df, scrape_df, on="ticker", how="left") # merge dfs by comparing tickers
+# 	df = df.reset_index(drop=True)
 
-	col_stock_info.insert_many(list(df.to_dict('index').values()))
+# 	col_stock_info.insert_many(list(df.to_dict('index').values()))
 
-	col_thread = db["stock_thread"]
-	NUM_THREADS = 100
+# 	col_thread = db["stock_thread"]
+# 	NUM_THREADS = 100
 
-	ticker_q = Queue()
-	ticker_list = []
-
-
-	for ticker in range(1, 100):
-		ticker_q.put(f"0000{str(ticker)}"[-4:] + ".HK")
-
-	tickers = yf.Tickers(' '.join(list(ticker_q.queue)))
-
-	def get_info():
-		while True:
-			ticker_name = ticker_q.get()
-			col_stock_info.replace_one({'ticker':ticker_name.replace(".", "-")}, tickers.tickers[ticker_name].info | {"ticker":ticker_name.replace(".", "-")}, upsert=True)
-			ticker_q.task_done()
+# 	ticker_q = Queue()
+# 	ticker_list = []
 
 
-	for t in range(NUM_THREADS):
-		worker = Thread(target=get_info)
-		worker.daemon = True
-		worker.start()
+# 	for ticker in range(1, 100):
+# 		ticker_q.put(f"0000{str(ticker)}"[-4:] + ".HK")
 
-	ticker_q.join()
+# 	tickers = yf.Tickers(' '.join(list(ticker_q.queue)))
+
+# 	def get_info():
+# 		while True:
+# 			ticker_name = ticker_q.get()
+# 			col_stock_info.replace_one({'ticker':ticker_name.replace(".", "-")}, tickers.tickers[ticker_name].info | {"ticker":ticker_name.replace(".", "-")}, upsert=True)
+# 			ticker_q.task_done()
+
+
+# 	for t in range(NUM_THREADS):
+# 		worker = Thread(target=get_info)
+# 		worker.daemon = True
+# 		worker.start()
+
+# 	ticker_q.join()
 	
 # start = time.time()
 # add_stock_info_batch()
 # print('It took', time.time()-start, 'seconds.')
 
-def thread_yfinance_info():
-	NUM_THREADS = 10
-
+def thread_yfinance_info(ticker_list):
 	ticker_q = Queue()
-	ticker_list = []
 
-	for ticker in range(1, 100):
-		ticker_q.put(f"0000{str(ticker)}"[-4:] + ".HK")
+	for ticker in ticker_list:
+		ticker_q.put(ticker.replace("-", "."))
 
 	tickers = yf.Tickers(' '.join(list(ticker_q.queue)))
-
-	ticker_list = list(map(lambda x: x.replace('-', '.'), ticker_list)) # yfinance takes . in ticker format
 
 	def convert_name(name):
 		out = ''
@@ -135,24 +129,32 @@ def thread_yfinance_info():
 	def get_info():
 		while True:
 			ticker_name = ticker_q.get()
+			print(ticker_name)
+
 			res = []
 			info = tickers.tickers[ticker_name].info
-			try:
-				for attr in attrs:
+
+			for attr in attrs:
+				try:
 					res.append(info[attr])
-				df.loc[ticker_name.replace('.', '-')] = res
-			except:
-				pass
+				except:
+					res.append(None)
+					
+			df.loc[ticker_name.replace('.', '-')] = res
+
 			ticker_q.task_done()
 
+
+	NUM_THREADS = 100
 	for t in range(NUM_THREADS):
 		worker = Thread(target=get_info)
 		worker.daemon = True
 		worker.start()
 	
 	ticker_q.join()
-	print(df)
 
-start = time.time()
-thread_add_stock_info_batch()
-print('It took', time.time()-start, 'seconds.')
+	return df
+
+# start = time.time()
+# thread_add_stock_info_batch()
+# print('It took', time.time()-start, 'seconds.')
