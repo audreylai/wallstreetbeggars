@@ -543,23 +543,23 @@
 						autoSkip: true,
 						callback: (val) => (val + '%')
 					},
-					/*min: -50, max: 50 */
-					min: Math.round(Math.min(...data.data)/10)*10 - 10,
-					max: Math.round(Math.max(...data.data)/10)*10 + 10
+					min: Math.round(Math.min(...data.data)/10)*10 - 2,
+					max: Math.round(Math.max(...data.data)/10)*10 + 2
 				},
 				y: {
+					...y_scale_settings,
 					display: true,
 					ticks: {
-						autoSkip: false
-					},
-					...y_scale_settings,
-					ticks: {
+						autoSkip: false,
 						callback: (val, index, values) => {
 							label = data.labels[index];
-							if (label.length > 20) {
-								return label.slice(0, 17) + '...';
+							if (label.length > 30) {
+								return label.slice(0, 27) + '...';
 							}
 							return label;
+						},
+						font: {
+							size: 10
 						}
 					},
 				},

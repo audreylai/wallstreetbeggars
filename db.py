@@ -127,10 +127,7 @@ def get_stock_info(ticker, filter_industry="", sort_col="ticker", sort_dir=pymon
 def get_all_industries_close_pct(period=None, limit=9):
 	all_industry_cmp = []
 
-	if limit:
-		industry_list = get_all_industries()[:limit]
-	else:
-		industry_list = get_all_industries()
+	industry_list = get_all_industries()
 
 	alpha = 0.7
 	color_list = [
@@ -170,7 +167,7 @@ def get_all_industries_close_pct(period=None, limit=9):
 		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
 	}
 
-	return all_industry_cmp, all_industry_last_cmp
+	return all_industry_cmp[:limit], all_industry_last_cmp
 
 
 def get_industry_close_pct(industry, period=None, start_datetime=None, end_datetime=None):
