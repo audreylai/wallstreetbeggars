@@ -183,6 +183,10 @@ def stock_analytics():
 		}
 	)
 
+@app.errorhandler(404)
+def page_not_found(e):
+	dark_mode = get_user_theme("test")
+	return render_template('404.html', dark_mode=dark_mode), 404
 # apis
 app.register_blueprint(api.bp)
 
