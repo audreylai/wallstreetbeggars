@@ -285,31 +285,37 @@ def process_gainers_losers_industry(gainers, losers):
 		'losers': []
 	}
 
+	industry_details = {}
+
 	for industry in losers:
 		industry_stocks_last_close_pct = get_industry_stocks(industry[0], 60, stock_params=["last_close_pct"])
-		top_ticker, top_ticker_change = sorted(industry_stocks_last_close_pct.items(), key=lambda kv: kv[1]['last_close_pct'])[0]
-		top_ticker_change = top_ticker_change['last_close_pct']
+		industry_stocks_last_close_pct = sorted(industry_stocks_last_close_pct.items(), key=lambda kv: kv[1]['last_close_pct'])
+		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
+		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
 
 		out["losers"].append({
-			"industry": industry[0], 
+			"industry": industry[0],
 			"change": industry[1],
 			"top_ticker":  top_ticker,
 			"top_ticker_change": top_ticker_change
 		})
+		industry_details[industry[0]] = industry_stocks_last_close_pct
 
 	for industry in gainers:
 		industry_stocks_last_close_pct = get_industry_stocks(industry[0], 60, stock_params=["last_close_pct"])
-		top_ticker, top_ticker_change = sorted(industry_stocks_last_close_pct.items(), key=lambda kv: kv[1]['last_close_pct'], reverse=True)[0]
-		top_ticker_change = top_ticker_change['last_close_pct']
+		industry_stocks_last_close_pct = sorted(industry_stocks_last_close_pct.items(), key=lambda kv: kv[1]['last_close_pct'], reverse=True)
+		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
+		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
 
-		out["gainers"].append({
-			"industry": industry[0], 
+		out["losers"].append({
+			"industry": industry[0],
 			"change": industry[1],
 			"top_ticker":  top_ticker,
 			"top_ticker_change": top_ticker_change
 		})
+		industry_details[industry[0]] = industry_stocks_last_close_pct
 	
-	return out
+	return out, industry_details
 
 
 def get_mkt_overview_data():

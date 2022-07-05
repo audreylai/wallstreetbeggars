@@ -125,8 +125,8 @@ def industries():
 			gainers.append((industries_pct['labels'][i], industries_pct['data'][i]))
 		else:
 			losers.append((industries_pct['labels'][i], industries_pct['data'][i]))
-	table_data = process_gainers_losers_industry(gainers[::-1], losers)
-	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data)
+	table_data, industry_details = process_gainers_losers_industry(gainers[::-1], losers)
+	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industry_details=industry_details)
 
 
 # this should be an api
@@ -221,6 +221,10 @@ def add_suffix(num):
 		return "%.2f" % (num / 10**6) + 'M'
 	else:
 		return "%.2f" % (num / 10**9) + 'B'
+
+@app.template_filter('pretty_json')
+def pretty_json(data):
+	return json.dumps(data, indent=2)
 
 if __name__ == "__main__":
 	app.run(port="5000", debug=True)
