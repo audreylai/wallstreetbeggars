@@ -307,7 +307,7 @@ def process_gainers_losers_industry(gainers, losers):
 		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
 		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
 
-		out["losers"].append({
+		out["gainers"].append({
 			"industry": industry[0],
 			"change": industry[1],
 			"top_ticker":  top_ticker,
