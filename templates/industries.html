@@ -31,20 +31,35 @@
 				<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 						<form action="{{ url_for("stock_info") }}" method="POST">
-							<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+							<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
 							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
 						</form>
 					</td>
-					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
+					{% if row['change'] > 0 %}
+					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
 						<form action="{{ url_for("stock_info") }}" method="POST">
-							<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+							<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
 							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
 						</form>
 					</td>
+					{% else %}
+					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
+						<form action="{{ url_for("stock_info") }}" method="POST">
+							<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
+						</form>
+					</td>
+					{% endif %}
 					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 						<form action="{{ url_for("stock_info") }}" method="POST">
-							<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker'] }} <span class="text-emerald-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span></a>
+							<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker'] }}
+								{% if row['top_ticker_change'] > 0 %}
+								<span class="text-emerald-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span>
+								{% else %}
+								<span class="text-rose-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span>
+								{% endif %}
+							</a>
 						</form>
 					</td>
 				</tr>
@@ -78,20 +93,26 @@
 					<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 							<form action="{{ url_for("stock_info") }}" method="POST">
-								<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+								<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
 								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
 							</form>
 						</td>
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
 							<form action="{{ url_for("stock_info") }}" method="POST">
-								<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+								<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
 								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
 							</form>
 						</td>
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 							<form action="{{ url_for("stock_info") }}" method="POST">
-								<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker'] }} <span class="text-rose-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span></a>
+								<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker'] }}
+									{% if row['top_ticker_change'] > 0 %}
+									<span class="text-emerald-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span>
+									{% else %}
+									<span class="text-rose-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span>
+									{% endif %}
+								</a>
 							</form>
 						</td>
 					</tr>

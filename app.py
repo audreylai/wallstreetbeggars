@@ -41,6 +41,7 @@ def home():
 
 	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, marquee_data=marquee_data, dark_mode=dark_mode)
 
+
 @app.route("/theme/<theme>", methods=["GET"])
 def change_theme(theme):
 	update_user_theme("test", theme)
@@ -117,15 +118,16 @@ def stock_list_page():
 @app.route("/industries", methods=["GET", "POST"])
 def industries():
 	dark_mode = get_user_theme("test")
-	industries_pct = get_all_industries_close_pct(period=60)[1]
+	industries_pct = get_all_industries_close_pct(period=60, limit=None)[1]
 	gainers, losers = [], []
 	for i in range(len(industries_pct['labels'])):
-		if industries_pct['data'][i] > 1:
+		if industries_pct['data'][i] > 0:
 			gainers.append((industries_pct['labels'][i], industries_pct['data'][i]))
 		else:
 			losers.append((industries_pct['labels'][i], industries_pct['data'][i]))
-	table_data = process_gainers_losers_industry(gainers, losers)
+	table_data = process_gainers_losers_industry(gainers[::-1], losers)
 	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data)
+
 
 # this should be an api
 @app.route("/update-active", methods=["POST"])
