@@ -128,7 +128,6 @@ def industries():
 	table_data, industry_details = process_gainers_losers_industry(gainers[::-1], losers)
 	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industry_details=industry_details)
 
-
 # this should be an api
 @app.route("/update-active", methods=["POST"])
 def update_active():

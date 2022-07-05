@@ -232,7 +232,7 @@ def get_industry_close_pct(industry, period=None, start_datetime=None, end_datet
 	return out
 
 
-def get_industry_stocks(industry, period, stock_params=None):
+def get_industry_stocks(industry, period, stock_params=[]):
 	ticker_list = []
 	for i in col_stock_info.find({"industry_x": industry}):
 		ticker_list.append(i["ticker"])
