@@ -292,11 +292,21 @@ def process_gainers_losers_industry(gainers, losers):
 		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
 		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
 
+		perf_distribution = [0 for _ in range(5)]
+		for ticker, change in industry_stocks_last_close_pct:
+			if change > 2: perf_distribution[0] += 1
+			elif change > 0: perf_distribution[1] += 1
+			elif change == 0: perf_distribution[2] += 1
+			elif change > -2: perf_distribution[3] += 1
+			else: perf_distribution[4] += 1
+		perf_distribution = list(map(lambda x: x/sum(perf_distribution), perf_distribution))
+
 		out["losers"].append({
 			"industry": industry[0],
 			"change": industry[1],
 			"top_ticker":  top_ticker,
-			"top_ticker_change": top_ticker_change
+			"top_ticker_change": top_ticker_change,
+			"perf_distribution": perf_distribution
 		})
 		industry_details[industry[0]] = industry_stocks_last_close_pct
 
@@ -306,11 +316,21 @@ def process_gainers_losers_industry(gainers, losers):
 		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
 		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
 
+		perf_distribution = [0 for _ in range(5)]
+		for ticker, change in industry_stocks_last_close_pct:
+			if change > 2: perf_distribution[0] += 1
+			elif change > 0: perf_distribution[1] += 1
+			elif change == 0: perf_distribution[2] += 1
+			elif change > -2: perf_distribution[3] += 1
+			else: perf_distribution[4] += 1
+		perf_distribution = list(map(lambda x: x/sum(perf_distribution), perf_distribution))
+
 		out["gainers"].append({
 			"industry": industry[0],
 			"change": industry[1],
 			"top_ticker":  top_ticker,
-			"top_ticker_change": top_ticker_change
+			"top_ticker_change": top_ticker_change,
+			"perf_distribution": perf_distribution
 		})
 		industry_details[industry[0]] = industry_stocks_last_close_pct
 	
