@@ -251,3 +251,25 @@ def yfinance_info(ticker_list):
 
 	df.reset_index(inplace=True)
 	return df
+
+
+def scmp_scraping(limit=10):
+	page = requests.get("https://www.scmp.com/topics/hong-kong-stock-market")
+	soup = BeautifulSoup(page.content, "html.parser")
+	rows = list(soup.find_all("div", attrs={"class": "article-level"}))
+
+	out = []
+	for i in range(11, 12+limit):
+		try:
+			row = rows[i]
+			title_tag = row.find('a')
+
+			out.append({
+				'title': title_tag.get_text().strip(),
+				'link': 'https://www.scmp.com' + title_tag['href'],
+				'time': row.find_all('span', attrs={'class': 'author__status-left-time'})[0].get_text()
+			})
+		except:
+			continue
+
+	return out

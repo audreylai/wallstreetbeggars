@@ -4,4 +4,5 @@ from utils import *
 from pprint import pprint
 from threading_test import *
 
-add_stock_info_batch()
+# add_stock_info_batch()
+pprint(scmp_scraping())

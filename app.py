@@ -36,8 +36,9 @@ def home():
 	}
 	table_data = process_gainers_losers(*get_gainers_losers())
 	marquee_data = get_marquee_data()
+	news = scmp_scraping(limit=20)
 
-	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, marquee_data=marquee_data, dark_mode=dark_mode)
+	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, marquee_data=marquee_data, news=news, dark_mode=dark_mode)
 
 
 @app.route("/theme/<theme>", methods=["GET"])
@@ -51,7 +52,7 @@ def rules():
 	dark_mode = get_user_theme("test")
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
 	if not ticker_exists(ticker):
-		return 'not found', 404
+		return render_template("404.html", dark_mode=dark_mode), 404
 
 	last_stock_data = get_last_stock_data('0005-HK')
 	user_rules = get_rules("test")
@@ -161,7 +162,7 @@ def stock_analytics():
 	start_datetime, end_datetime = get_datetime_from_period(180)
 
 	if not ticker_exists(ticker):
-		return 'not found', 404  # proper error page later
+		return render_template("404.html", dark_mode=dark_mode)
 
 	last_stock_data = get_last_stock_data(ticker)
 	user_rules = get_rules("test")
@@ -184,7 +185,8 @@ def stock_analytics():
 @app.errorhandler(404)
 def page_not_found(e):
 	dark_mode = get_user_theme("test")
-	return render_template('404.html', dark_mode=dark_mode), 404
+	return render_template('404.html', dark_mode=dark_mode)
+
 # apis
 app.register_blueprint(api.bp)
 
