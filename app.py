@@ -1,8 +1,9 @@
 import json
 import re
+import os
 from math import ceil
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 
 from db import *
 from db_utils import *
@@ -237,6 +238,10 @@ def add_suffix(num):
 @app.template_filter('pretty_json')
 def pretty_json(data):
 	return json.dumps(data, indent=2)
+
+@app.route('/favicon.ico')
+def favicon():
+	return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == "__main__":
 	app.run(port="5000", debug=True)

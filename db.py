@@ -299,7 +299,7 @@ def process_gainers_losers_industry(gainers, losers):
 			elif change == 0: perf_distribution[2] += 1
 			elif change > -2: perf_distribution[3] += 1
 			else: perf_distribution[4] += 1
-		perf_distribution = list(map(lambda x: x/sum(perf_distribution), perf_distribution))
+		perf_distribution = list(map(lambda x: (x/sum(perf_distribution))*100, perf_distribution))
 
 		out["losers"].append({
 			"industry": industry[0],
@@ -323,7 +323,7 @@ def process_gainers_losers_industry(gainers, losers):
 			elif change == 0: perf_distribution[2] += 1
 			elif change > -2: perf_distribution[3] += 1
 			else: perf_distribution[4] += 1
-		perf_distribution = list(map(lambda x: x/sum(perf_distribution), perf_distribution))
+		perf_distribution = list(map(lambda x: (x/sum(perf_distribution))*100, perf_distribution))
 
 		out["gainers"].append({
 			"industry": industry[0],

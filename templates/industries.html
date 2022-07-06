@@ -66,8 +66,15 @@
 								</a>
 							</form>
 						</td>
-						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-							{{ row['perf_distribution'] }}
+						<td class="items-center w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+							<div class="flex w-full h-2 mt-3 overflow-hidden rounded-lg">
+								<div class="h-full text-xs text-center text-white bg-rose-500" style="width: {{row['perf_distribution'][0]}}%;"></div>
+								<div class="h-full text-xs text-center text-white bg-rose-400" style="width: {{row['perf_distribution'][1]}}%;"></div>
+								<div class="h-full text-xs text-center text-white bg-gray-300 dark:bg-zinc-300" style="width: {{row['perf_distribution'][2]}}%;"></div>
+								<div class="h-full text-xs text-center text-white bg-emerald-400" style="width: {{row['perf_distribution'][3]}}%;"></div>
+								<div class="h-full text-xs text-center text-white bg-emerald-500" style="width: {{row['perf_distribution'][4]}}%;"></div>
+							</div>
+						</div>
 						</td>
 					</tr>
 					{% endfor %}
@@ -202,7 +209,7 @@
 				<div class="flex items-center w-full border-8 border-gray-200 border-dashed rounded-xl dark:border-zinc-700 h-96">
 					<div class="w-full space-y-2 text-center text-gray-300 dark:text-zinc-700">
 						<h2 class="text-4xl font-bold">No data available</h2>
-						<ion-icon name="skull-outline" class="w-24 h-24"></ion-icon>
+						<ion-icon name="server-outline" class="w-24 h-24"></ion-icon>
 					</div>
 				</div>
 			</div>
