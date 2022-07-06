@@ -125,7 +125,14 @@ def industries():
 		else:
 			losers.append((industries_pct['labels'][i], industries_pct['data'][i]))
 	table_data, industry_details = process_gainers_losers_industry(gainers[::-1], losers)
-	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industry_details=industry_details)
+	industries = get_all_industries()
+	print(industry_details.keys())
+
+	industry_detail = {}
+	if request.method == "POST":
+		industry_detail = {request.values.get("industry_detail"): industry_details[request.values.get("industry_detail")]}
+		print(industry_detail)
+	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industry_details=industry_details, industries=industries, industry_detail=industry_detail)
 
 # this should be an api
 @app.route("/update-active", methods=["POST"])

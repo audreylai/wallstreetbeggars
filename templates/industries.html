@@ -1,80 +1,19 @@
-{% extends "base.html" %} {% block title %} Stock List {% endblock %}
+{% extends "base.html" %} {% block title %} Industries {% endblock %}
 {% block content %}
-<div class="flex flex-col w-screen h-screen px-6 py-4 space-y-2 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
-	<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
-		Industries
-	</h1>
-	<div class="grid grid-cols-2 gap-x-4">
-		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-			<div class="flex items-center space-x-1">
-				<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-				<h2 class="text-2xl font-semibold dark:text-zinc-200">
-					Donors
-				</h2>
-			</div>
-			<table class="w-full">
-			<thead>
-				<tr class="top-0 bg-white dark:bg-zinc-800">
-					<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-						Industry
-					</th>
-					<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-						Change
-					</th>
-					<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-						Top Ticker
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for row in table_data['gainers'][:5] %}
-				<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-						<form action="{{ url_for("stock_info") }}" method="POST">
-							<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
-							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
-						</form>
-					</td>
-					{% if row['change'] > 0 %}
-					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
-						<form action="{{ url_for("stock_info") }}" method="POST">
-							<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
-							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
-						</form>
-					</td>
-					{% else %}
-					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
-						<form action="{{ url_for("stock_info") }}" method="POST">
-							<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
-							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
-						</form>
-					</td>
-					{% endif %}
-					<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-						<form action="{{ url_for("stock_info") }}" method="POST">
-							<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
-							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker'] }}
-								{% if row['top_ticker_change'] > 0 %}
-								<span class="text-emerald-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span>
-								{% else %}
-								<span class="text-rose-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span>
-								{% endif %}
-							</a>
-						</form>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-			</table>
-		</div>
-		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-			<div class="flex items-center space-x-1">
-				<ion-icon name="trending-down-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-				<h2 class="text-2xl font-semibold dark:text-zinc-200">
-					Beggars
-				</h2>
-			</div>
-			<table class="w-full">
+<div class="flex flex-col w-screen h-screen px-6 py-4 space-y-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
+	<div class="space-y-2">
+		<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
+			Industries
+		</h1>
+		<div class="grid grid-cols-2 gap-x-4">
+			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+				<div class="flex items-center space-x-1">
+					<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+					<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						Donors
+					</h2>
+				</div>
+				<table class="w-full">
 				<thead>
 					<tr class="top-0 bg-white dark:bg-zinc-800">
 						<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
@@ -89,7 +28,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for row in table_data['losers'][:5] %}
+					{% for row in table_data['gainers'][:5] %}
 					<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 							<form action="{{ url_for("stock_info") }}" method="POST">
@@ -97,12 +36,21 @@
 								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
 							</form>
 						</td>
+						{% if row['change'] > 0 %}
+						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
+							<form action="{{ url_for("stock_info") }}" method="POST">
+								<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
+							</form>
+						</td>
+						{% else %}
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
 							<form action="{{ url_for("stock_info") }}" method="POST">
 								<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
 								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
 							</form>
 						</td>
+						{% endif %}
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 							<form action="{{ url_for("stock_info") }}" method="POST">
 								<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
@@ -118,18 +66,86 @@
 					</tr>
 					{% endfor %}
 				</tbody>
-			</table>
-		</div>
-	</div>
-	<div>
-		<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
-		Industry Overview
-		</h1>
-		<div class="grid grid-cols-2 gap-4">
-			{% for industry, table_data in industry_details.items() %}
+				</table>
+			</div>
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 				<div class="flex items-center space-x-1">
-					<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+					<ion-icon name="trending-down-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+					<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						Beggars
+					</h2>
+				</div>
+				<table class="w-full">
+					<thead>
+						<tr class="top-0 bg-white dark:bg-zinc-800">
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Industry
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Change
+							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Top Ticker
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for row in table_data['losers'][:5] %}
+						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
+								</form>
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']) }}%</a>
+								</form>
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								<form action="{{ url_for("stock_info") }}" method="POST">
+									<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker'] }}
+										{% if row['top_ticker_change'] > 0 %}
+										<span class="text-emerald-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span>
+										{% else %}
+										<span class="text-rose-500">({{ "%.2f" % (row['top_ticker_change']) }}%)</span>
+										{% endif %}
+									</a>
+								</form>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="space-y-2">
+		<div class="flex justify-between w-full">
+			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
+			Industry Overview
+			</h1>
+			<form>
+				<select
+					name="industry_detail"
+					class="px-3 py-2 text-sm bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
+					onchange="filter_industry(this.form)"
+					>
+					<option value="" {% if filter_industry=="" %} selected {% endif %}>All industries</option>
+					{% for industry in industries %}
+					<option value="{{industry}}" {% if filter_industry==industry %} selected {% endif %}>{{industry}}</option>
+					{% endfor %}
+				</select>
+			</form>
+		</div>				
+		<div id="industry_detail">
+			{% for industry, table_data in industry_detail.items() %}
+			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+
+				<div class="flex items-center space-x-1">
 					<h2 class="text-2xl font-semibold dark:text-zinc-200">
 						{{industry}}
 					</h2>
@@ -175,4 +191,17 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
+{% block script %}
+<script>
+	function filter_industry(evt) {
+		const formData = new FormData(evt);
+		const params = Object.fromEntries(formData);
+		
+		$.post("/industries", params, function (data) {
+			console.log($("#industry_detail"))
+			$("#industry_detail").html($(data).find("#industry_detail"))
+		})
+	}
+</script>
 {% endblock %}
