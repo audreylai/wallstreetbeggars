@@ -36,7 +36,7 @@ def home():
 	}
 	table_data = process_gainers_losers(*get_gainers_losers())
 	marquee_data = get_marquee_data()
-	news = scmp_scraping(limit=20)
+	news = scmp_scraping(limit=5)
 
 	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, marquee_data=marquee_data, news=news, dark_mode=dark_mode)
 

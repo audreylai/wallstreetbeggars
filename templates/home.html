@@ -9,7 +9,7 @@
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
 		<div class="space-y-2">
-			<div class="flex items-center px-3 py-2 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100">
+			<div class="flex items-center px-3 py-2 text-gray-800 bg-white rounded-full dark:bg-zinc-900 dark:text-zinc-100">
 				<marquee
 					class="w-full"
 					onmouseover="this.stop();"
@@ -42,12 +42,12 @@
 							Market Direction
 						</h3>
 							{% if chart_data["hsi"]["last_close_pct"] < 0%}
-							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bearish</h2>
+							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bearish</h2>
 							<h4 class="font-light text-rose-500">
 							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
-							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bullish</h2>
+							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
 							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
@@ -59,7 +59,7 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Leader Index
 						</h3>
-						<h2 class="text-3xl font-semibold uppercase dark:text-zinc-100">{{card_data['leading_index'][0]}}</h2>
+						<h2 class="text-3xl font-semibold text-gray-800 uppercase dark:text-zinc-100">{{card_data['leading_index'][0]}}</h2>
 							{% if card_data['leading_index'][1] < 0%}
 							<h4 class="font-light text-rose-500">
 							{{"%.2f" % card_data['leading_index'][1]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
@@ -76,7 +76,7 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Leading Industry
 						</h3>
-						<h2 class="text-3xl font-semibold dark:text-zinc-100">{{card_data['leading_industry'] | truncate(15)}}</h2>
+						<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">{{card_data['leading_industry'] | truncate(15)}}</h2>
 						{% if card_data['leading_industry_pct'] < 0%}
 						<h4 class="font-light text-rose-500">
 						{{"%.2f" % (card_data['leading_industry_pct']*100)}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
@@ -94,12 +94,12 @@
 							Market Momentum
 						</h3>
 							{% if card_data['mkt_momentum'] < 0%}
-							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bearish</h2>
+							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bearish</h2>
 							<h4 class="font-light text-rose-500">
 							{{"%.2f" % card_data['mkt_momentum']}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
-							<h2 class="text-3xl font-semibold dark:text-zinc-100">Bullish</h2>
+							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
 							{{"%.2f" % card_data['mkt_momentum']}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
@@ -111,7 +111,7 @@
 				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							HSCC Index
 						</h2>
 					</div>
@@ -120,7 +120,7 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-medium dark:text-zinc-200">
+						<h2 class="text-2xl font-medium text-gray-700 dark:text-zinc-200">
 							HSCE Index
 						</h2>
 					</div>
@@ -129,7 +129,7 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							HSI Index
 						</h2>
 					</div>
@@ -140,26 +140,26 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Donors
 						</h2>
 					</div>
 					<table class="w-full">
 					<thead>
 						<tr class="top-0 bg-white dark:bg-zinc-800">
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Ticker
 							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Price
 							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Change
 							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Volume
 							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Market Cap
 							</th>
 						</tr>
@@ -205,26 +205,26 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="trending-down-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Beggars
 						</h2>
 					</div>
 					<table class="w-full">
 					<thead>
 						<tr class="top-0 bg-white dark:bg-zinc-800">
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Ticker
 							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Price
 							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Change
 							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Volume
 							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Market Cap
 							</th>
 						</tr>
@@ -272,7 +272,7 @@
 				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="camera-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Market Overview
 						</h2>
 					</div>
@@ -283,7 +283,7 @@
 				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="compass-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Industry Rotations
 						</h2>
 					</div>
@@ -292,22 +292,37 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="podium-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Industry Performance
 						</h2>
 					</div>
 					<div class="h-96"><canvas id="all-industry-last-cmp-chart" class="comparison-chart"></canvas></div>
 				</div>
 			</div>
-			<div class="grid grid-cols-1 h-96 gap-x-4">
-				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<div class="grid grid-cols-3 h-96 gap-x-4">
+				<div class="h-full col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="newspaper-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
-						<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							News
 						</h2>
 					</div>
-					<pre class="dark:text-zinc-100 text-sm" style="white-space: pre-wrap;">{{ news }}</pre>
+					<table class="w-full text-gray-800 dark:text-zinc-100">
+						<thead>
+							<tr>
+								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Time</th>
+								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Title</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in news %}
+							<tr class="text-gray-600 bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100 dark:text-zinc-300 hover:text-gray-800">
+								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["time"]}}</td>
+								<td class="px-2 py-2 text-left border-b dark:border-zinc-700"><a class="underline hover:text-blue-400 dark:hover:text-blue-500" href="{{row['link']}}">{{row["title"]}}</a></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
