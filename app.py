@@ -1,10 +1,8 @@
+import json
 import re
-
 from math import ceil
 
 from flask import Flask, render_template, request
-from matplotlib.axis import Ticker
-from matplotlib.pyplot import table
 
 from db import *
 from db_utils import *
