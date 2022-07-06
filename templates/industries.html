@@ -150,7 +150,7 @@
 			</form>
 		</div>				
 		<div id="industry_detail">
-			{% if industry_detail %}
+			{% if industry_detail|length != 0 %}
 			{% for industry, table_data in industry_detail.items() %}
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 
