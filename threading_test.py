@@ -145,7 +145,7 @@ def thread_yfinance_info(ticker_list):
 			ticker_q.task_done()
 
 
-	NUM_THREADS = 100
+	NUM_THREADS = 250
 	for t in range(NUM_THREADS):
 		worker = Thread(target=get_info)
 		worker.daemon = True

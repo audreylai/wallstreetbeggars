@@ -216,7 +216,7 @@ def get_industry_close_pct(industry, period=None, start_datetime=None, end_datet
 					prev_date = j
 
 				if prev_date is None:
-					out[i["date"]] = [222 for _ in range(c)]
+					out[i["date"]] = [0 for _ in range(c)]
 				else:
 					out[i["date"]] = out[j][:-1]
 
@@ -297,8 +297,8 @@ def process_gainers_losers_industry(gainers, losers):
 			if change > 2: perf_distribution[4] += 1
 			elif change > 0: perf_distribution[3] += 1
 			elif change == 0: perf_distribution[2] += 1
-			elif change > -2: perf_distribution[3] += 1
-			else: perf_distribution[4] += 1
+			elif change > -2: perf_distribution[1] += 1
+			else: perf_distribution[0] += 1
 		perf_distribution = list(map(lambda x: (x/sum(perf_distribution))*100, perf_distribution))
 
 		out["losers"].append({
@@ -321,8 +321,8 @@ def process_gainers_losers_industry(gainers, losers):
 			if change > 2: perf_distribution[4] += 1
 			elif change > 0: perf_distribution[3] += 1
 			elif change == 0: perf_distribution[2] += 1
-			elif change > -2: perf_distribution[3] += 1
-			else: perf_distribution[4] += 1
+			elif change > -2: perf_distribution[1] += 1
+			else: perf_distribution[0] += 1
 		perf_distribution = list(map(lambda x: (x/sum(perf_distribution))*100, perf_distribution))
 
 		out["gainers"].append({

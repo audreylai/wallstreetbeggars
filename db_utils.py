@@ -74,7 +74,7 @@ def thread_yfinance_info(ticker_list):
 
 def add_stock_data_batch():
 	col_stock_data.drop({})
-	for i in range(1, 100):
+	for i in range(1, 250):
 		ticker = "%04d-HK" % i
 		print(ticker)
 		add_stock_data_one(ticker, ticker_type="stock")
@@ -152,7 +152,7 @@ def add_stock_info_batch():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker > 100].index)
+	df = df.drop(df[df.ticker >= 250].index)
 	
 	# convert ticker format
 	ticker_list = []
