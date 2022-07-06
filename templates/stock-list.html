@@ -10,9 +10,9 @@
 			class="px-2 py-1 text-xs font-semibold text-center text-white transition duration-200 ease-in bg-indigo-600 rounded-lg shadow-md hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2">Update</button>
 		</form>
 	</div>
-	<div class="flex mb-2 ml-auto space-x-2 industry-filter">
-		<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
-			Market Cap:
+	<div class="flex mb-2 ml-auto space-x-4 industry-filter">
+		<form onsubmit="redrawTable(this); return false;" class="flex items-center space-x-2">
+			<p class="text-gray-800 dark:text-zinc-200">Minimum Market Cap:</p>
 			<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{min_mkt_cap}}"
 				class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
 				onchange="edit_mkt_cap(this)" />
@@ -28,7 +28,7 @@
 			</select>
 		</form>
 	</div>
-	<div class="overflow-y-scroll grow rounded-xl">
+	<div class="overflow-y-scroll grow rounded-xl" id="table-wrapper">
 		<table id="table" class="w-full">
 			<thead>
 				<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
@@ -75,7 +75,7 @@
 			<tbody>
 				{% for row in stock_table %}
 				<tr
-					class="odd:bg-gray-100 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-700 dark:hover:bg-zinc-600 hover:bg-gray-300">
+					class="odd:bg-gray-300 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-700 dark:hover:bg-zinc-600 hover:bg-gray-300">
 					<td class="w-6 px-2 py-2 text-center text-gray-700 border-b dark:border-zinc-700 dark:text-zinc-300">
 						<input type="checkbox" name="active" value="{{row['ticker']}}" onchange="update_active(this)" {% if
 							(row['ticker'] in active_tickers) %} checked {% endif %}
@@ -171,7 +171,8 @@
 	}
 
 
-	$("#allcb").change(function () {
+	$("#table-wrapper").on('change', "#allcb", function () {
+		console.log("hello")
 		$('tbody tr td input[type="checkbox"]').prop(
 			"checked",
 			$(this).prop("checked")
