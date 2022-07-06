@@ -128,9 +128,11 @@ def industries():
 	industries = get_all_industries()
 	print(industry_details.keys())
 
-	industry_detail = {"Banks": industry_details["Banks"] }
+	industry_detail = {"Banks": industry_details["Banks"]}
 	if request.method == "POST" and request.values.get("industry_detail") in industry_details:
 		industry_detail = {request.values.get("industry_detail"): industry_details[request.values.get("industry_detail")]}
+	if request.method == "POST" and request.values.get("industry_detail") not in industry_detail:
+		industry_detail = {}
 
 	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industry_details=industry_details, industries=industries, industry_detail=industry_detail)
 
