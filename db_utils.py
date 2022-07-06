@@ -184,6 +184,10 @@ def add_stock_data_one(ticker, ticker_type=None):
 	df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
 	pd.to_datetime(df.date)
 
+	now = datetime.now()
+	if now - df.date.iloc[-1] > timedelta(days=7):
+		return
+
 	# moving averages
 	for period in [10, 20, 50, 100, 250]:
 		df["sma" + str(period)] = ta.SMA(df.close, timeperiod=period)
@@ -199,7 +203,7 @@ def add_stock_data_one(ticker, ticker_type=None):
 	# df['close_pct'] = df['close'].pct_change()
 
 	df.dropna(inplace=True)
-	if df.empty:
+	if len(df) < 2:
 		return
 
 	# convert df to dict
@@ -211,7 +215,7 @@ def add_stock_data_one(ticker, ticker_type=None):
 		'ticker': ticker,
 		'data': out,
 		'type': ticker_type,
-		'last_close_pct': (list(df['close'])[-1] - list(df['close'])[-2]) / list(df['close'])[-2]
+		'last_close_pct': (df.close.iloc[-1] - df.close.iloc[-2]) / df.close.iloc[-2]
 	})
 
 
