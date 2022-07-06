@@ -100,6 +100,9 @@
 							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								Top Ticker
 							</th>
+							<th class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								Distribution
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -128,6 +131,9 @@
 										{% endif %}
 									</a>
 								</form>
+							</td>
+							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+								{{ row['perf_distribution'] }}
 							</td>
 						</tr>
 						{% endfor %}

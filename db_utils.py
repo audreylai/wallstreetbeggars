@@ -184,10 +184,6 @@ def add_stock_data_one(ticker, ticker_type=None):
 	df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
 	pd.to_datetime(df.date)
 
-	now = datetime.now()
-	if now - df.date.iloc[-1] > timedelta(days=7):
-		return
-
 	# moving averages
 	for period in [10, 20, 50, 100, 250]:
 		df["sma" + str(period)] = ta.SMA(df.close, timeperiod=period)
@@ -204,6 +200,10 @@ def add_stock_data_one(ticker, ticker_type=None):
 
 	df.dropna(inplace=True)
 	if len(df) < 2:
+		return
+
+	now = datetime.now()
+	if now - df.date.iloc[-1] > timedelta(days=7):
 		return
 
 	# convert df to dict
