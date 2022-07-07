@@ -45,7 +45,6 @@ def thread_yfinance_info(ticker_list):
 	def get_info():
 		while True:
 			ticker_name = ticker_q.get()
-			print(ticker_name)
 
 			res = []
 			info = tickers.tickers[ticker_name].info
@@ -57,11 +56,12 @@ def thread_yfinance_info(ticker_list):
 					res.append(None)
 					
 			df.loc[ticker_name.replace('.', '-')] = res
+			print(ticker_name)
 
 			ticker_q.task_done()
 
 
-	NUM_THREADS = 100
+	NUM_THREADS = 500
 	for t in range(NUM_THREADS):
 		worker = Thread(target=get_info)
 		worker.daemon = True
@@ -134,7 +134,7 @@ def etnet_scraping():
 	return df
 
 
-def add_stock_info_batch():
+def add_stock_info_batch(limit=100):
 	# drop existing data
 	col_stock_info.delete_many({})
 	df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
@@ -152,7 +152,7 @@ def add_stock_info_batch():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df = df.drop(df[df.ticker >= 250].index)
+	df = df.drop(df[df.ticker >= limit].index)
 	
 	# convert ticker format
 	ticker_list = []
@@ -277,3 +277,58 @@ def scmp_scraping(limit=10):
 			continue
 
 	return out
+
+def thread_add_stock_data_batch(limit=100):
+	col_stock_data.delete_many({})
+
+	ticker_str = ''
+	ticker_list = []
+
+	for i in range(1, limit):
+		ticker = "%04d-HK" % i
+		ticker_str += ticker + ' '
+		ticker_list.append(ticker)
+
+	index_list = ['^HSCC', '^HSCE', '^HSI']
+	for index in index_list:
+		ticker_str += index + ' '
+		ticker_list.append(index)
+
+	ticker_str = ticker_str[:-1]
+	big_df = yf.download(tickers=ticker_str.replace('-', '.'), period='max', threads=limit, group_by='ticker')
+
+	for ticker in ticker_list:
+		df = big_df[ticker.replace('-', '.')].copy()
+		ticker_type = 'index' if ticker[-1] == '^' else 'stock'
+
+		df.sort_index(inplace=True)
+		df.reset_index(inplace=True)
+		df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
+		pd.to_datetime(df.date)
+
+		df.dropna(inplace=True)
+		if df.empty: continue
+
+		for period in [10, 20, 50, 100, 250]:
+			df["sma" + str(period)] = ta.SMA(df.close, timeperiod=period)
+		
+		df["vol_sma20"] = ta.SMA(df.volume, timeperiod=20)
+		df["rsi"] = ta.RSI(df.close, timeperiod=14)
+		df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df.close, fastperiod=12, slowperiod=26, signalperiod=9)
+
+		# pct change: df['close_pct'] = df['close'].pct_change()
+
+		df.dropna(inplace=True)
+		if len(df) < 2: continue
+
+		now = datetime.now()
+		if now - df.date.iloc[-1] > timedelta(days=7): continue
+
+		out = df.to_dict("records")
+		col_stock_data.insert_one({
+			'ticker': ticker,
+			'data': out,
+			'type': ticker_type,
+			'last_close_pct': (df.close.iloc[-1] - df.close.iloc[-2]) / df.close.iloc[-2]
+		})
+		print(ticker)

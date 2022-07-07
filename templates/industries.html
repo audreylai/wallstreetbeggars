@@ -193,18 +193,21 @@
 					<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 							<form action="{{ url_for("stock_info") }}" method="POST">
+								<input type="hidden" name="ticker" value="{{ row[0] }}">
 								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row[0] }}</a>
 							</form>
 						</td>
 						{% if row[1] > 0 %}
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
 							<form action="{{ url_for("stock_info") }}" method="POST">
+								<input type="hidden" name="ticker" value="{{ row[0] }}">
 								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row[1]) }}%</a>
 							</form>
 						</td>
 						{% else %}
 						<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
 							<form action="{{ url_for("stock_info") }}" method="POST">
+								<input type="hidden" name="ticker" value="{{ row[0] }}">
 								<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row[1]) }}%</a>
 							</form>
 						</td>
