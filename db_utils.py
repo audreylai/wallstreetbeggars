@@ -278,6 +278,26 @@ def scmp_scraping(limit=10):
 
 	return out
 
+def ticker_news_scraping(ticker):
+	page = requests.get(f"https://www.etnet.com.hk/www/eng/stocks/realtime/quote.php?code={'0' + ticker[:4]}", headers={
+		'Referer': f'https://www.etnet.com.hk/www/eng/stocks/realtime/quote.php?code={"0" + ticker[:4]}',
+		'Sec-Fetch-Site': 'same-origin'
+	})
+	soup = BeautifulSoup(page.content, "html.parser")
+	rows = soup.find_all("div", attrs={"class": "DivArticleList"})
+
+	out = []
+	for row in rows:
+		if row.find('span') is None: break
+		out.append({
+			'title': row.find('a').get_text(),
+			'link': "https://www.etnet.com.hk/www/eng/stocks/" + row.find('a')['href'],
+			'time': row.find('span').get_text()
+		})
+	
+	return out
+
+
 def thread_add_stock_data_batch(limit=100):
 	col_stock_data.delete_many({})
 
