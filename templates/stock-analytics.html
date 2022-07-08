@@ -190,7 +190,7 @@
 						<div class="h-1/2"><canvas id="strength-index-chart"></canvas></div>
 						<table>
 							<thead>
-								<tr class="sticky top-0 bg-white dark:bg-zinc-800">
+								<tr class="top-0 bg-white dark:bg-zinc-800">
 									<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Rule</th>
 									<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Hit/Miss</th>
 								</tr>
@@ -322,8 +322,7 @@
 	var rsi_chart = undefined;
 	var macd_chart = undefined;
 	var vol_chart = undefined;
-	var sell_chart = undefined;
-	var buy_chart = undefined;
+	var si_chart = undefined;
 
 	const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
 	const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
@@ -772,91 +771,29 @@
 		});
 	}
 
-	function draw_sell(sell) {
-    chart_data = {
-      labels: [],
-      datasets: [
-        {
-          data: [sell, 100 - sell],
-          backgroundColor: ["rgb(244 63 94)", dark ? "rgb(34 34 39)" : "rgb(229 231 235)"],
-          borderWidth: 0,
-        },
-      ],
-    };
-
-		options = {
-			plugins: {
-				crosshair: false,
-				cursorpos: false,
-			},
-			events: [],
-			...misc_options,
-		};
-
-		if (sell_chart) {
-			sell_chart.destroy();
-		}
-
-    sell_chart = new Chart(si_ctx, {
-      type: "doughnut",
-      data: chart_data,
-      options: options,
-      plugins: [
-        {
-          id: "doughnut_text",
-          beforeDraw: function (chart, a, b) {
-            var width = chart.width,
-              height = chart.height,
-              ctx = chart.ctx;
-
-            ctx.restore();
-            var fontSellze = (height / 114).toFixed(2);
-            ctx.font = "bolder " + fontSellze + "em sans-serif";
-            ctx.textBaseline = "middle";
-            ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
-
-						var index = Math.round(sell) + "%",
-							indexX = Math.round((width - ctx.measureText(index).width) / 2),
-							indexY = height / 2.1;
-
-						ctx.fillText(index, indexX, indexY);
-
-						fontSellze = (height / 180).toFixed(2);
-						ctx.font = "bold " + fontSellze + "em sans-serif";
-						ctx.fillStyle = "rgb(244 63 94)";
-
-						var action = "SELL",
-							actionX = Math.round((width - ctx.measureText(action).width) / 2),
-							actionY = height / 1.7;
-
-						ctx.fillText(action, actionX, actionY);
-
-            fontSellze = (height / 200).toFixed(2);
-            ctx.font = fontSellze + "em sans-serif";
-            ctx.fillStyle = "rgb(212 212 216)";
-						
-            ctx.save();
-
-						//console.log(chart.data.datasets[0]["backgroundColor"][1])
-						//chart.data.datasets[0]["backgroundColor"][1] = dark ? "rgb(34 34 39)" : "rgb(229 231 235)"
-          },
-        },
-      ],
-    });
+	function draw_si(type, pct) {
 		
-	}
+		if (type == 'buy') {
+			mainColor = "rgb(16 185 129)";
+			backgroundColor = [mainColor, dark ? "rgb(34 34 39)" : "rgb(229 231 235)"];
+		} else if (type == 'sell') {
+			mainColor = "rgb(244 63 94)";
+			backgroundColor = [mainColor, dark ? "rgb(34 34 39)" : "rgb(229 231 235)"];
+		} else if (type == 'neutral') {
+			mainColor = "rgb(130 130 130)";
+			backgroundColor = [mainColor, dark ? "rgb(34 34 39)" : "rgb(229 231 235)"];
+		}
 
-	function draw_buy(buy) {
-    chart_data = {
-      labels: [],
-      datasets: [
-        {
-          data: [buy, 100 - buy],
-          backgroundColor: ["rgb(16 185 129)", dark ? "rgb(34 34 39)" : "rgb(229 231 235)"],
-          borderWidth: 0,
-        },
-      ],
-    };
+		chart_data = {
+			labels: [],
+			datasets: [
+				{
+					data: [pct, 100 - pct],
+					backgroundColor: backgroundColor,
+					borderWidth: 0,
+				},
+			],
+		};
 
 		options = {
 			plugins: {
@@ -867,29 +804,29 @@
 			...misc_options,
 		};
 
-		if (buy_chart) {
-			buy_chart.destroy();
+		if (si_chart) {
+			si_chart.destroy();
 		}
 
-    buy_chart = new Chart(si_ctx, {
-      type: "doughnut",
-      data: chart_data,
-      options: options,
-      plugins: [
-        {
-          id: "doughnut_text",
-          beforeDraw: function (chart, a, b) {
-            var width = chart.width,
-              height = chart.height,
-              ctx = chart.ctx;
+		si_chart = new Chart(si_ctx, {
+			type: "doughnut",
+			data: chart_data,
+			options: options,
+			plugins: [
+				{
+					id: "doughnut_text",
+					beforeDraw: function (chart, a, b) {
+						var width = chart.width,
+							height = chart.height,
+							ctx = chart.ctx;
 
-            ctx.restore();
-            var fontSize = (height / 114).toFixed(2);
-            ctx.font = "bolder " + fontSize + "em sans-serif";
-            ctx.textBaseline = "middle";
-            ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
+						ctx.restore();
+						var fontSize = (height / 114).toFixed(2);
+						ctx.font = "bolder " + fontSize + "em sans-serif";
+						ctx.textBaseline = "middle";
+						ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
 
-						var index = Math.round(buy) + "%",
+						var index = Math.round(pct) + "%",
 							indexX = Math.round((width - ctx.measureText(index).width) / 2),
 							indexY = height / 2.1;
 
@@ -897,9 +834,9 @@
 
 						fontSize = (height / 180).toFixed(2);
 						ctx.font = "bold " + fontSize + "em sans-serif";
-						ctx.fillStyle = "rgb(16 185 129)";
+						ctx.fillStyle = mainColor;
 
-						var action = "BUY",
+						var action = type.toUpperCase(),
 							actionX = Math.round((width - ctx.measureText(action).width) / 2),
 							actionY = height / 1.7;
 
@@ -934,12 +871,11 @@
 	}
 
 	if (rules["buy_pct"] > rules["sell_pct"]) {
-		draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length) * 100)
+		draw_si('buy', rules["buy_pct"] * 100);
 	} else if (rules["buy_pct"] < rules["sell_pct"]) {
-		draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length+rules["miss_sell_rules"].length) * 100)
-	} else {
-		console.log('TODO: need to add neutral graph');
-		// TODO: need to add neutral graph 
+		draw_si('sell', rules["sell_pct"] * 100);
+	} else { // equal
+		draw_si('neutral', rules["buy_pct"] * 100);
 	}
 
 	async function update_period(period, interval) {
@@ -964,10 +900,12 @@
 	
 	$().ready(function() {
 		$("#theme-toggle").bind('click', function() {
-			if (rules["hit_buy_rules"].length > rules["hit_sell_rules"].length) {
-				draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length) * 100)
-			} else if (rules["hit_buy_rules"].length < rules["hit_sell_rules"].length) {
-				draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length+rules["miss_sell_rules"].length) * 100)
+			if (rules["buy_pct"] > rules["sell_pct"]) {
+				draw_si('buy', rules["buy_pct"] * 100);
+			} else if (rules["buy_pct"] < rules["sell_pct"]) {
+				draw_si('sell', rules["sell_pct"] * 100);
+			} else { // equal
+				draw_si('neutral', rules["buy_pct"] * 100);
 			}
 		});
 	});
