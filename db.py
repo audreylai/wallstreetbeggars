@@ -343,7 +343,7 @@ def process_gainers_losers_industry(gainers, losers):
 
 
 def get_mkt_overview_data():
-	res = get_stock_info('ALL', sort_col='mkt_cap', sort_dir=pymongo.DESCENDING)['table'][:40]
+	res = get_stock_info('ALL', sort_col='mkt_cap', sort_dir=pymongo.DESCENDING)['table'][:50]
 	data, last_close_pct = [], []
 	for i in res:
 		try:
@@ -409,7 +409,7 @@ def ticker_news_scraping(ticker):
 		if row.find('span') is None: break
 		out.append({
 			'title': row.find('a').get_text(),
-			'link': "https://www.etnet.com.hk/www/eng/stocks/" + row.find('a')['href'],
+			'link': "https://www.etnet.com.hk/www/eng/stocks/realtime/" + row.find('a')['href'],
 			'time': row.find('span').get_text()
 		})
 	

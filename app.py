@@ -4,6 +4,7 @@ import os
 from math import ceil
 
 from flask import Flask, render_template, request, send_from_directory
+from matplotlib.axis import Ticker
 
 from db import *
 from db_utils import *
@@ -151,7 +152,9 @@ def stock_info():
 	stock_info = get_stock_info(ticker)
 	statistics = {key: get_last_stock_data(ticker)[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower(): stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
 
-	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics, dark_mode=dark_mode)
+	news = ticker_news_scraping(ticker)
+	
+	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics, news=news, dark_mode=dark_mode)
 
 # @app.route("/stock-info/update", methods=["GET"])
 # def update_stock_info():
