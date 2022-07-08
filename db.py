@@ -1,5 +1,9 @@
 from datetime import *
+
 import pymongo
+import requests
+from bs4 import BeautifulSoup
+
 from utils import *
 
 # MongoDB Connection
@@ -8,6 +12,7 @@ db = client["wallstreetbeggars"]
 col_users = db["users"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
+col_rules_results = db["rules_results"]
 
 
 def ticker_exists(ticker):
@@ -367,6 +372,77 @@ def get_marquee_data():
 		})
 
 	return out
+
+
+def scmp_scraping(limit=10):
+	page = requests.get("https://www.scmp.com/topics/hong-kong-stock-market")
+	soup = BeautifulSoup(page.content, "html.parser")
+	rows = list(soup.find_all("div", attrs={"class": "article-level"}))
+
+	out = []
+	for i in range(11, 12+limit):
+		try:
+			row = rows[i]
+			title_tag = row.find('a')
+
+			out.append({
+				'title': title_tag.get_text().strip(),
+				'link': 'https://www.scmp.com' + title_tag['href'],
+				'time': row.find_all('span', attrs={'class': 'author__status-left-time'})[0].get_text()
+			})
+		except:
+			continue
+
+	return out
+
+
+def ticker_news_scraping(ticker):
+	page = requests.get(f"https://www.etnet.com.hk/www/eng/stocks/realtime/quote.php?code={'0' + ticker[:4]}", headers={
+		'Referer': f'https://www.etnet.com.hk/www/eng/stocks/realtime/quote.php?code={"0" + ticker[:4]}',
+		'Sec-Fetch-Site': 'same-origin'
+	})
+	soup = BeautifulSoup(page.content, "html.parser")
+	rows = soup.find_all("div", attrs={"class": "DivArticleList"})
+
+	out = []
+	for row in rows:
+		if row.find('span') is None: break
+		out.append({
+			'title': row.find('a').get_text(),
+			'link': "https://www.etnet.com.hk/www/eng/stocks/" + row.find('a')['href'],
+			'time': row.find('span').get_text()
+		})
+	
+	return out
+
+
+def save_rules_results(limit=100):
+	col_rules_results.delete_many({})
+
+	for i in range(limit):
+		ticker = "%04d-HK" % i
+		if not ticker_exists(ticker): continue
+	
+		last_stock_data = get_last_stock_data(ticker)
+		user_rules = get_rules("test")
+		parsed_buy_rules, parsed_sell_rules = parse_rules(user_rules["buy"], user_rules["sell"])
+		hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
+
+		col_rules_results.insert_one({
+			'ticker': ticker,
+			'hit_buy_rules': hit_buy_rules,
+			'hit_sell_rules': hit_sell_rules,
+			'miss_buy_rules': miss_buy_rules,
+			'miss_sell_rules': miss_sell_rules
+		})
+		
+		print(ticker)
+
+
+def get_rules_results(ticker):
+	cursor = col_rules_results.find({"ticker": ticker}, {"_id": 0, "hit_buy_rules": 1, "hit_sell_rules": 1, "miss_buy_rules": 1, "miss_sell_rules": 1})
+	res = [i for i in cursor][0]
+	return res
 
 
 # User

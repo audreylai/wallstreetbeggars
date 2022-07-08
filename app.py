@@ -55,14 +55,9 @@ def rules():
 	if not ticker_exists(ticker):
 		return render_template("404.html", dark_mode=dark_mode), 404
 
-	last_stock_data = get_last_stock_data('0005-HK')
-	user_rules = get_rules("test")
-	parsed_buy_rules, parsed_sell_rules = parse_rules(user_rules["buy"], user_rules["sell"])
-	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
+	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = get_rules_results(ticker).values()
 
 	stock_info = get_stock_info(ticker)
-
-	stock_data = get_stock_data(ticker)
 	stock_data = process_stock_data(get_stock_data(ticker, period=180), ticker=ticker, period=180)
 
 	return render_template("rules.html", stock_info=stock_info, stock_data=stock_data, dark_mode=dark_mode, rules={
@@ -127,7 +122,6 @@ def industries():
 			losers.append((industries_pct['labels'][i], industries_pct['data'][i]))
 	table_data, industry_details = process_gainers_losers_industry(gainers[::-1], losers)
 	industries = get_all_industries()
-	print(industry_details.keys())
 
 	industry_detail = {"Banks": industry_details["Banks"]}
 	if request.method == "POST" and request.values.get("industry_detail") in industry_details:
@@ -140,7 +134,6 @@ def industries():
 # this should be an api
 @app.route("/update-active", methods=["POST"])
 def update_active():
-	print(request.form.get("check"), request.form.getlist("tickers[]"))
 	if request.form.get("check") == "true":
 		update_active_tickers("test", request.form.getlist("tickers[]"))
 	else:
@@ -174,10 +167,7 @@ def stock_analytics():
 	if not ticker_exists(ticker):
 		return render_template("404.html", dark_mode=dark_mode)
 
-	last_stock_data = get_last_stock_data(ticker)
-	user_rules = get_rules("test")
-	parsed_buy_rules, parsed_sell_rules = parse_rules(user_rules["buy"], user_rules["sell"])
-	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = format_rules(*get_hit_miss_rules(last_stock_data, parsed_buy_rules, parsed_sell_rules))
+	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = get_rules_results(ticker).values()
 
 	stock_data = process_stock_data(get_stock_data(ticker, period=180), ticker=ticker, period=180)
 	stock_data['start_date'], stock_data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())

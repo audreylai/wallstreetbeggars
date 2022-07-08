@@ -15,6 +15,7 @@ db = client["wallstreetbeggars"]
 col_users = db["users"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
+col_rules_results = db["rules_results"]
 
 def thread_yfinance_info(ticker_list):
 	ticker_q = Queue()
@@ -68,7 +69,6 @@ def thread_yfinance_info(ticker_list):
 		worker.start()
 	
 	ticker_q.join()
-
 	return df
 
 
@@ -210,7 +210,6 @@ def add_stock_data_one(ticker, ticker_type=None):
 	out = df.to_dict("records")
 
 	# upsert
-	col_stock_data.delete_one({'ticker': ticker})
 	col_stock_data.insert_one({
 		'ticker': ticker,
 		'data': out,
@@ -255,47 +254,6 @@ def yfinance_info(ticker_list):
 
 	df.reset_index(inplace=True)
 	return df
-
-
-def scmp_scraping(limit=10):
-	page = requests.get("https://www.scmp.com/topics/hong-kong-stock-market")
-	soup = BeautifulSoup(page.content, "html.parser")
-	rows = list(soup.find_all("div", attrs={"class": "article-level"}))
-
-	out = []
-	for i in range(11, 12+limit):
-		try:
-			row = rows[i]
-			title_tag = row.find('a')
-
-			out.append({
-				'title': title_tag.get_text().strip(),
-				'link': 'https://www.scmp.com' + title_tag['href'],
-				'time': row.find_all('span', attrs={'class': 'author__status-left-time'})[0].get_text()
-			})
-		except:
-			continue
-
-	return out
-
-def ticker_news_scraping(ticker):
-	page = requests.get(f"https://www.etnet.com.hk/www/eng/stocks/realtime/quote.php?code={'0' + ticker[:4]}", headers={
-		'Referer': f'https://www.etnet.com.hk/www/eng/stocks/realtime/quote.php?code={"0" + ticker[:4]}',
-		'Sec-Fetch-Site': 'same-origin'
-	})
-	soup = BeautifulSoup(page.content, "html.parser")
-	rows = soup.find_all("div", attrs={"class": "DivArticleList"})
-
-	out = []
-	for row in rows:
-		if row.find('span') is None: break
-		out.append({
-			'title': row.find('a').get_text(),
-			'link': "https://www.etnet.com.hk/www/eng/stocks/" + row.find('a')['href'],
-			'time': row.find('span').get_text()
-		})
-	
-	return out
 
 
 def thread_add_stock_data_batch(limit=100):
