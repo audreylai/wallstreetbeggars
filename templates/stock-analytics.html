@@ -196,7 +196,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% if rules["hit_buy_rules"]|length > rules["hit_sell_rules"]|length %}
+								{% if rules["buy_pct"] > rules["sell_pct"] %}
 								{% for rule in rules['hit_buy_rules']%}
 								<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
@@ -209,7 +209,7 @@
 									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">Miss</td>
 								</tr>
 								{% endfor %}
-								{% elif rules["hit_buy_rules"]|length < rules["hit_sell_rules"]|length %}
+								{% elif rules["buy_pct"] < rules["sell_pct"] %}
 								{% for rule in rules['hit_sell_rules']%}
 								<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
@@ -225,7 +225,10 @@
 								{% endif %}
 							</tbody>
 						</table>
-						<a href="{{ url_for('rules') }}" class="mt-2 text-center text-blue-500">Show more</a>
+						<form class="text-center cursor-pointer mt-2" action="{{ url_for('rules') }}" method="POST">
+							<input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
+							<a class="text-blue-500" onclick="this.parentNode.submit()">Show more</a>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -438,7 +441,7 @@
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
-						callback: (val) => (val * 100 + '%')
+						callback: (val) => (Math.round(val * 100) + '%')
 					},
 					...y_scale_settings
 				},
@@ -501,7 +504,7 @@
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
-						callback: (val) => (val * 100 + '%')
+						callback: (val) => (Math.round(val * 100) + '%')
 					},
 					...y_scale_settings
 				}
@@ -930,12 +933,12 @@
 		draw_index_cmp(stock_data, current_cmp_index);
 	}
 
-	if (rules["hit_buy_rules"].length > rules["hit_sell_rules"].length) {
-		console.log(rules["hit_buy_rules"].length,  (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length))
+	if (rules["buy_pct"] > rules["sell_pct"]) {
 		draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length+rules["miss_buy_rules"].length) * 100)
-	} else if (rules["hit_buy_rules"].length < rules["hit_sell_rules"].length) {
+	} else if (rules["buy_pct"] < rules["sell_pct"]) {
 		draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length+rules["miss_sell_rules"].length) * 100)
 	} else {
+		console.log('TODO: need to add neutral graph');
 		// TODO: need to add neutral graph 
 	}
 

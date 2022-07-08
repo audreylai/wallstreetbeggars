@@ -299,7 +299,7 @@ def thread_add_stock_data_batch(limit=100):
 
 	for ticker in ticker_list:
 		df = big_df[ticker.replace('-', '.')].copy()
-		ticker_type = 'index' if ticker[-1] == '^' else 'stock'
+		ticker_type = 'index' if ticker[0] == '^' else 'stock'
 
 		df.sort_index(inplace=True)
 		df.reset_index(inplace=True)

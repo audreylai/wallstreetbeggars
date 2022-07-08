@@ -188,7 +188,9 @@ def stock_analytics():
 			"hit_buy_rules": hit_buy_rules,
 			"hit_sell_rules": hit_sell_rules,
 			"miss_buy_rules": miss_buy_rules,
-			"miss_sell_rules": miss_sell_rules
+			"miss_sell_rules": miss_sell_rules,
+			"buy_pct": len(hit_buy_rules) / (len(hit_buy_rules) + len(miss_buy_rules)),
+			"sell_pct": len(hit_sell_rules) / (len(hit_sell_rules) + len(miss_sell_rules))
 		}
 	)
 

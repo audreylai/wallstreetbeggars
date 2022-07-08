@@ -138,7 +138,7 @@ const misc_options = {
 						} else if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
 							return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
 						} else if (['Volume', 'RSI', 'MACD', 'EMA', 'Divergence'].includes(context.dataset.label)) { // MA labels
-							return context.dataset.label + ': ' + context.parsed.y.toFixed(2);
+							return context.dataset.label + ': ' + context.parsed.y.toFixed(3);
 						} else { // default
 							return context.dataset.label + ': ' + add_suffix(context.parsed.y);
 						}
@@ -221,7 +221,7 @@ const cursorpos_plugin = {
 		}
 
 		ctx.font = '12px Arial';
-		ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+		ctx.fillStyle = dark ? 'rgba(255, 255, 255, 0.8)': 'rgba(0, 0, 0, 0.8)';
 
 		x_val = new Date(chart.scales.x.getValueForPixel(x)).toISOString().slice(0, 10);
 		y_val = chart.scales.y.getValueForPixel(y);
@@ -231,7 +231,7 @@ const cursorpos_plugin = {
 		} else if ($(chart.ctx.canvas).attr('id') == 'volume-chart') {
 			y_val = add_suffix(y_val);
 		} else if ($(chart.ctx.canvas).attr('id') == 'macd-chart' || $(chart.ctx.canvas).attr('id') == 'rsi-chart') {
-			y_val = y_val.toFixed(2);
+			y_val = y_val.toFixed(3);
 		} else {
 			y_val = round_stock_value(y_val)
 		}

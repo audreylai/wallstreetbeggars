@@ -451,7 +451,7 @@
 					},
 					align: 'left',
 					formatter: function (ctx) {
-						if (ctx.element.width > 50) {
+						if (ctx.element.width > 50 && ctx.element.height > 30) {
 							return [ctx.raw.g, (last_close_pct[ctx.dataIndex] * 100).toFixed(2) + '%'];
 						}
 					}

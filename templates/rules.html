@@ -67,47 +67,31 @@ header %}
 			<table class="w-full">
 				<thead>
 					<tr class="sticky top-0 bg-white dark:bg-zinc-800">
-						<th
-							class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-						>
+						<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 							Rule
 						</th>
-						<th
-							class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-						>
+						<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 							Hit/Miss
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for rule in rules['hit_buy_rules']%}
-					<tr
-						class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
-					>
-						<td
-							class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-						>
+					<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+						<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">
 							{{rule}}
 						</td>
-						<td
-							class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500"
-						>
+						<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500">
 							Hit
 						</td>
 					</tr>
 					{% endfor %}
 					{% for rule in rules['miss_buy_rules']%}
-					<tr
-						class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
-					>
-						<td
-							class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-						>
+					<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+						<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">
 							{{rule}}
 						</td>
-						<td
-							class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500"
-						>
+						<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">
 							Miss
 						</td>
 					</tr>
@@ -119,47 +103,31 @@ header %}
 			<table class="w-full">
 				<thead>
 					<tr class="sticky top-0 bg-white dark:bg-zinc-800">
-						<th
-							class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-						>
+						<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 							Rule
 						</th>
-						<th
-							class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap"
-						>
+						<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 							Hit/Miss
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for rule in rules['hit_sell_rules']%}
-					<tr
-						class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
-					>
-						<td
-							class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-						>
+					<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+						<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">
 							{{rule}}
 						</td>
-						<td
-							class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500"
-						>
+						<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500">
 							Hit
 						</td>
 					</tr>
 					{% endfor %}
 					{% for rule in rules['miss_sell_rules']%}
-					<tr
-						class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100"
-					>
-						<td
-							class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300"
-						>
+					<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+						<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">
 							{{rule}}
 						</td>
-						<td
-							class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500"
-						>
+						<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">
 							Miss
 						</td>
 					</tr>
