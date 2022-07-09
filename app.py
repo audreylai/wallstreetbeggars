@@ -1,15 +1,17 @@
 import json
-import re
 import os
+import re
 from math import ceil
 
 from flask import Flask, render_template, request, send_from_directory
-from matplotlib.axis import Ticker
 
-from db import *
-from db_utils import *
-from utils import *
 import api
+from db_pkg.industries import *
+from db_pkg.news import *
+from db_pkg.rules import *
+from db_pkg.stock import *
+from db_pkg.user import *
+from db_pkg.utils import *
 
 app = Flask(__name__)
 
@@ -37,7 +39,7 @@ def home():
 		'leading_industry_pct': all_industry_last_cmp['data'][-1] / 100
 	}
 	table_data = process_gainers_losers(*get_gainers_losers())
-	marquee_data = get_marquee_data()
+	marquee_data = get_hsi_tickers_data()
 	watchlist_rules_data = get_watchlist_rules_results('test')
 	news = scmp_scraping(limit=5)
 
