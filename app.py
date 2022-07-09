@@ -38,9 +38,10 @@ def home():
 	}
 	table_data = process_gainers_losers(*get_gainers_losers())
 	marquee_data = get_marquee_data()
+	watchlist_rules_data = get_watchlist_rules_results('test')
 	news = scmp_scraping(limit=5)
 
-	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, marquee_data=marquee_data, news=news, dark_mode=dark_mode)
+	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, marquee_data=marquee_data, watchlist_rules_data=watchlist_rules_data, news=news, dark_mode=dark_mode)
 
 
 @app.route("/theme/<theme>", methods=["GET"])
@@ -110,7 +111,7 @@ def stock_list_page():
 
 	stock_table["table"] = stock_table["table"][start_index:end_index]
 
-	active_tickers = get_active_tickers("test")['active']
+	active_tickers = get_active_tickers("test")
 	last_updated = stock_table['last_updated'].strftime("%d/%m/%Y")
 
 	return render_template("stock-list.html", stock_table=stock_table['table'], last_updated=last_updated, industries=stock_table['industries'], active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap_pow, dark_mode=dark_mode)
@@ -235,9 +236,9 @@ def add_suffix(num):
 	else:
 		return "%.2f" % (num / 10**9) + 'B'
 
-@app.template_filter('pretty_json')
-def pretty_json(data):
-	return json.dumps(data, indent=2)
+@app.template_filter('format_json')
+def format_json(data):
+	return json.dumps(data, indent=2, ensure_ascii=False)
 
 @app.route('/favicon.ico')
 def favicon():

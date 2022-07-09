@@ -269,6 +269,19 @@
 				</div>
 			</div>
 			<div class="grid grid-cols-1 gap-x-4">
+				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800 overflow-y-scroll">
+					<div class="flex items-center space-x-1">
+						<ion-icon name="newspaper-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
+							Watchlist
+						</h2>
+					</div>
+					<div class="pt-4 h-96">
+						<pre class="dark:text-white" style="white-space: pre-wrap;">{{ watchlist_rules_data | format_json }}</pre>
+					</div>
+				</div>
+			</div>
+			<div class="grid grid-cols-1 gap-x-4">
 				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="camera-outline" class="w-5 h-5 text-zinc-500"></ion-icon>

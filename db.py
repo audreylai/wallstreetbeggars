@@ -445,6 +445,13 @@ def get_rules_results(ticker):
 	return res
 
 
+def get_watchlist_rules_results(username):
+	ticker_list = get_active_tickers(username)
+	out = {}
+	for ticker in ticker_list:
+		out[ticker] = get_rules_results(ticker)
+	return out
+
 # User
 def update_active_tickers(username, tickers):
 	col_users.update_one({"username":username}, {'$addToSet': {
@@ -461,10 +468,10 @@ def delete_active_tickers(username, tickers):
 
 
 def get_active_tickers(username):
-	return col_users.find_one({"username": username}, {"active": 1})
+	return col_users.find_one({"username": username}, {"_id": 0, "active": 1})['active']
 
 def get_rules(username):
-	return col_users.find_one({"username": username}, {"_id":0, "buy": 1, "sell": 1})
+	return col_users.find_one({"username": username}, {"_id": 0, "buy": 1, "sell": 1})
 
 def update_rules(username, buy, sell):
 	col_users.update_one({"username": username}, {"$set": {"buy": buy, "sell":sell}}, upsert=False)
@@ -473,4 +480,4 @@ def update_user_theme(username, theme):
 	col_users.update_one({"username": username}, {"$set": {"dark_mode": True if theme == "dark" else False}}, upsert=False)
 
 def get_user_theme(username):
-	return col_users.find_one({"username": username}, {"_id": 0, "dark_mode":1})["dark_mode"]
+	return col_users.find_one({"username": username}, {"_id": 0, "dark_mode": 1})["dark_mode"]
