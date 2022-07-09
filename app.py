@@ -73,13 +73,17 @@ def rules():
 def rules_edit():
 	dark_mode = get_user_theme("test")
 	rules = get_rules("test")
-	print(rules)
 	if request.method == "POST":
 		new_buy = json.loads(request.values.get('buy'))
 		new_sell = json.loads(request.values.get('sell'))
 		update_rules("test", new_buy, new_sell)
 	return render_template("rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
 
+
+@app.route("/rules/save", methods=["GET", "POST"])
+def rules_save():
+	save_rules_results(limit=500)
+	return '', 200
 
 @app.route("/stock-list", methods=["GET", "POST"])
 def stock_list_page():
@@ -131,6 +135,7 @@ def industries():
 		industry_detail = {}
 
 	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industry_details=industry_details, industries=industries, industry_detail=industry_detail)
+
 
 # this should be an api
 @app.route("/update-active", methods=["POST"])
