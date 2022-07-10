@@ -88,6 +88,10 @@ def rules_save():
 	save_rules_results(limit=500)
 	return '', 200
 
+@app.route("/watchlist", methods=["GET", "POST"])
+def watchlist():
+	return render_template("watchlist.html")
+
 @app.route("/stock-list", methods=["GET", "POST"])
 def stock_list_page():
 	dark_mode = get_user_theme("test")

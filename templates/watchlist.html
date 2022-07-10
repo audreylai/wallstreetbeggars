@@ -1,0 +1,68 @@
+{% extends "base.html" %} {% block title %} Stock List {% endblock %} {% block content %}
+<div class="flex flex-col w-screen h-screen px-6 py-4 space-y-4 overflow-hidden bg-gray-100 dark:bg-zinc-900">
+	<div class="flex justify-between">
+		<div class="flex flex-col space-y-2">
+			<h1 class="text-2xl font-black text-gray-900 dark:text-zinc-100">Watchlist</h1>
+			<p class="text-sm text-gray-600 dark:text-zinc-400">52 items</p>
+			<p class="text-xs text-gray-500 dark:text-zinc-500">Updated 01/01/2020</p>
+		</div>
+		<div class="flex items-end"><button class="flex items-center px-2 py-2 text-sm text-gray-100 bg-gray-500 rounded dark:bg-zinc-700" type="button"><ion-icon name="add-outline" class="w-4 h-4"></ion-icon><p>Add Ticker</p></button></div>
+	</div>
+	<div class="overflow-y-scroll rounded-xl">
+		<table id="table" class="w-full">
+			<thead>
+				<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
+					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+						Ticker
+					</th>
+					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+						Name
+					</th>
+					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+						Price
+					</th>
+					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+						Change
+					</th>
+					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+						Market Cap
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for i in range(10) %}
+				<tr
+					class="odd:bg-gray-100 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-900 dark:hover:bg-zinc-700 hover:bg-gray-300">
+					{% for i in range(5) %}
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+						0005.HK
+					</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+				<tr class="sticky bottom-0 bg-gray-300 border-t-2 border-gray-400 dark:bg-zinc-800">
+					{% for i in range(5) %}
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+						Average
+					</td>
+					{% endfor %}
+				</tr>
+				<tr class="sticky bottom-0 bg-gray-300 dark:bg-zinc-800">
+					{% for i in range(5) %}
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+						Median
+					</td>
+					{% endfor %}
+				</tr>
+				<tr class="sticky bottom-0 bg-gray-300 dark:bg-zinc-800">
+					{% for i in range(5) %}
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+						Total
+					</td>
+					{% endfor %}
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}
