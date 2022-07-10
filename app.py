@@ -82,6 +82,16 @@ def rules_edit():
 		update_rules("test", new_buy, new_sell)
 	return render_template("rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
 
+@app.route("/cdl/edit", methods=["GET", "POST"])
+def cdl_edit():
+	dark_mode = get_user_theme("test")
+	rules = get_rules("test")
+	if request.method == "POST":
+		new_buy = json.loads(request.values.get('buy'))
+		new_sell = json.loads(request.values.get('sell'))
+		update_rules("test", new_buy, new_sell)
+	return render_template("cdl-rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
+
 
 @app.route("/rules/save", methods=["GET", "POST"])
 def rules_save():
@@ -90,7 +100,8 @@ def rules_save():
 
 @app.route("/watchlist", methods=["GET", "POST"])
 def watchlist():
-	return render_template("watchlist.html")
+	dark_mode = get_user_theme("test")
+	return render_template("watchlist.html", dark_mode=dark_mode)
 
 @app.route("/stock-list", methods=["GET", "POST"])
 def stock_list_page():

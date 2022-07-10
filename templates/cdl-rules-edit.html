@@ -9,10 +9,11 @@
 </style>
 {% endblock %}{% block content
 %}
+
 <div class="flex flex-col w-screen h-screen px-6 py-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
 	<div class="inline-flex mb-4 border-b-2 border-gray-300 dark:border-zinc-800 w-fit">
-		<a class="px-3 py-2 text-gray-600 bg-gray-300 rounded-tl-lg rounded-tr-lg dark:bg-zinc-800 dark:text-zinc-200" href="/rules/edit">Technical Indicators</a>
-		<a class="px-3 py-2 text-gray-700 bg-gray-100 rounded-tl-lg rounded-tr-lg dark:bg-zinc-900 dark:text-zinc-100" href="/cdl/edit">Candlestick</a>
+		<a class="px-3 py-2 text-gray-600 bg-gray-100 rounded-tl-lg rounded-tr-lg dark:bg-zinc-900 dark:text-zinc-100" href="/rules/edit">Technical Indicators</a>
+		<a class="px-3 py-2 text-gray-700 bg-gray-300 rounded-tl-lg rounded-tr-lg dark:bg-zinc-800 dark:text-zinc-200" href="/cdl/edit">Candlestick</a>
 	</div>
 	<div class="grid grid-cols-2 gap-x-4">
 		<div class="space-y-2">
@@ -23,16 +24,7 @@
 						<tr>
 							<th
 								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-								<p class="mx-7">Var 1</p>
-							</th>
-							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-								<p class="mx-7">Operator</p>
-
-							</th>
-							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-								<p class="mx-7">Var 2</p>
+								<p class="mx-7">CDL</p>
 							</th>
 							<th
 								class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
@@ -40,19 +32,12 @@
 						</tr>
 					</thead>
 					<tbody col="1">
-						{% for rule in buy %}
 						<tr class="text-center text-gray-700 dark:text-zinc-200">
 							<div class="relative w-full group autocomplete-wrapper">
 								<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-									<p>{{rule.split(" ")[0]}}</p>
+									<p>help</p>
 								</td>
-								</<div class="relative w-full group autocomplete-wrapper">
-								<td class="p-4 border-b-2 dark:border-zinc-500 op">
-									<p>{{rule.split(" ")[1]}}</p>
-								</td>
-								<td class="p-4 border-b-2 dark:border-zinc-500 var2">
-									<p>{{rule.split(" ")[2]}}</p>
-								</td>
+								<div class="relative w-full group autocomplete-wrapper">
 								<td class="p-4 border-b-2 dark:border-zinc-500">
 									<div class="flex items-center justify-end">
 										<button type="button"
@@ -60,13 +45,13 @@
 											onclick="edit_row($(this), true);">
 											<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 										</button>
-
+		
 										<button type="button"
 											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 											onclick="edit_row($(this), false);">
 											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
 										</button>
-
+		
 										<button type="button"
 											class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 											onclick="delete_row($(this));">
@@ -75,7 +60,6 @@
 									</div>
 								</td>
 						</tr>
-						{% endfor %}
 					</tbody>
 				</table>
 			</div>
@@ -88,16 +72,7 @@
 						<tr>
 							<th
 								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-								<p class="mx-7">Var 1</p>
-							</th>
-							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-								<p class="mx-7">Operator</p>
-
-							</th>
-							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-								<p class="mx-7">Var 2</p>
+								<p class="mx-7">CDL</p>
 							</th>
 							<th
 								class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
@@ -105,41 +80,34 @@
 						</tr>
 					</thead>
 					<tbody col="2">
-						{% for rule in sell %}
 						<tr class="text-center text-gray-700 dark:text-zinc-200">
-							<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-								<p>{{rule.split(" ")[0]}}</p>
-							</td>
-							</<div class="relative w-full group autocomplete-wrapper">
-							<td class="p-4 border-b-2 dark:border-zinc-500 op">
-								<p>{{rule.split(" ")[1]}}</p>
-							</td>
-							<td class="p-4 border-b-2 dark:border-zinc-500 var2">
-								<p>{{rule.split(" ")[2]}}</p>
-							</td>
-							<td class="p-4 border-b-2 dark:border-zinc-500">
-								<div class="flex items-center justify-end">
-									<button type="button"
-										class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-										onclick="edit_row($(this), true);">
-										<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
-									</button>
-
-									<button type="button"
-										class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-										onclick="edit_row($(this), false);">
-										<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-									</button>
-
-									<button type="button"
-										class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-										onclick="delete_row($(this));">
-										<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-									</button>
-								</div>
-							</td>
+							<div class="relative w-full group autocomplete-wrapper">
+								<td class="p-4 border-b-2 dark:border-zinc-500 var1">
+									<p>help</p>
+								</td>
+								<div class="relative w-full group autocomplete-wrapper">
+								<td class="p-4 border-b-2 dark:border-zinc-500">
+									<div class="flex items-center justify-end">
+										<button type="button"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+											onclick="edit_row($(this), true);">
+											<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+										</button>
+		
+										<button type="button"
+											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+											onclick="edit_row($(this), false);">
+											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
+										</button>
+		
+										<button type="button"
+											class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+											onclick="delete_row($(this));">
+											<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+										</button>
+									</div>
+								</td>
 						</tr>
-						{% endfor %}
 					</tbody>
 				</table>
 			</div>
@@ -147,19 +115,7 @@
 	</div>
 	<div class="grid grid-cols-2">
 		<div class="flex p-4 space-x-2">
-			<div class="relative w-2/6 group autocomplete-wrapper">
-				<input
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-				</ul>
-			</div>
-			<select
-				class="block w-1/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
-				<option value="≤">≤</option>
-				<option value="≥">≥</option>
-			</select>
-			<div class="relative w-2/6 group autocomplete-wrapper">
+			<div class="relative w-full group autocomplete-wrapper">
 				<input
 					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
 				<ul tabindex="0"
@@ -173,19 +129,7 @@
 			</button>
 		</div>
 		<div class="flex p-4 space-x-2">
-			<div class="relative w-2/6 group autocomplete-wrapper">
-				<input
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-				</ul>
-			</div>
-			<select
-				class="block w-1/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
-				<option value="≤">≤</option>
-				<option value="≥">≥</option>
-			</select>
-			<div class="relative w-2/6 group autocomplete-wrapper">
+			<div class="relative w-full group autocomplete-wrapper">
 				<input
 					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
 				<ul tabindex="0"
@@ -352,12 +296,12 @@
 		el = $(evt);
 		el.parents().closest(".autocomplete-wrapper").children().closest("input").val(el.children()[0].innerHTML);
 		[var1, var2] = el.parents('tr').find('input');
-
-		var1.dispatchEvent(new Event('change', { bubbles: true }));
-		var2.dispatchEvent(new Event('change', { bubbles: true }));
+		
+		var1.dispatchEvent(new Event('change', {bubbles: true}));
+		var2.dispatchEvent(new Event('change', {bubbles: true}));
 	}
 
-	$(document).on('input focus', ".term-input", function (e) {
+	$(document).on('input focus', ".term-input", function(e) {
 		let finalOptions = []
 		for (i in options) {
 			let option = options[i];
@@ -383,7 +327,7 @@
 		}
 	});
 
-	$('table').on('input change', 'tr', function (e) {
+	$('table').on('input change', 'tr', function(e) {
 		[var1, var2] = $(e.currentTarget).find('input');
 		if (is_valid_input($(var1).val()) && is_valid_input($(var2).val())) {
 			console.log($(e.currentTarget).find('.confirm-btn').prop('disabled', false));
