@@ -814,6 +814,14 @@ video {
   width: 16.666667%;
 }
 
+.w-80 {
+  width: 20rem;
+}
+
+.w-60 {
+  width: 15rem;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1296,6 +1304,11 @@ video {
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+}
+
+.px-\[10px\] {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .pt-4 {

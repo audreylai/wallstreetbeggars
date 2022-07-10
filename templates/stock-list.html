@@ -12,10 +12,22 @@
 	</div>
 	<div class="flex mb-2 ml-auto space-x-4 industry-filter">
 		<form onsubmit="redrawTable(this); return false;" class="flex items-center space-x-2">
-			<p class="text-gray-800 dark:text-zinc-200">Minimum Market Cap:</p>
-			<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{min_mkt_cap}}"
-				class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-				onchange="edit_mkt_cap(this)" />
+			<p class="text-gray-700 dark:text-zinc-300">Minimum Market Cap:</p>
+			<div class="flex flex-col p-2 mb-2 space-y-2 w-80">
+				<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{min_mkt_cap}}"
+					class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+					onchange="edit_mkt_cap(this)" 
+				/>
+				<ul class="flex justify-between w-full px-[10px] dark:text-zinc-400 text-gray-600">
+					<li class="relative flex justify-center"><span class="absolute">1M</span></li>
+					<li class="relative flex justify-center"><span class="absolute">10M</span></li>
+					<li class="relative flex justify-center"><span class="absolute">100M</span></li>
+					<li class="relative flex justify-center"><span class="absolute">1B</span></li>
+					<li class="relative flex justify-center"><span class="absolute">10B</span></li>
+					<li class="relative flex justify-center"><span class="absolute">100B</span></li>
+					<li class="relative flex justify-center"><span class="absolute">1T</span></li>
+				</ul>
+			</div>
 		</form>
 		<form>
 			<select id="industry-filter"
