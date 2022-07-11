@@ -39,7 +39,7 @@ def main():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df.drop(df[df.ticker >= 500].index, inplace=True)
+	df.drop(df[df.ticker >= 100].index, inplace=True)
 
 	print('Step 2/4: Etnet scraping')
 	etnet_df = etnet_scraping()
@@ -63,6 +63,7 @@ def main():
 	print('Step 4/4: Stock info + calculations + insert')
 	for _ in range(NUM_THREADS):
 		worker = Thread(target=insert_data, daemon=True)
+		worker.daemon = True
 		worker.start()
 	ticker_q.join()
 
@@ -194,11 +195,11 @@ def insert_data():
 				**etnet_dict,
 				"last_close_pct": df.close_pct.iloc[-1]
 			})
-			print(ticker_name)
 		except Exception as e:
 			print(f'{ticker_name} - {e}')
-		
-		ticker_q.task_done()
+		finally:
+			ticker_q.task_done()
+		print(ticker_name, "done")
 
 		
 if __name__ == "__main__":

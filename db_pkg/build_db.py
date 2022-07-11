@@ -44,22 +44,25 @@ def thread_yfinance_info(ticker_list):
 	df.index.name = 'ticker'
 
 	def get_info():
-		while True:
-			ticker_name = ticker_q.get()
+		try:
+			while not ticker_q.empty():
+				ticker_name = ticker_q.get()
 
-			res = []
-			info = tickers.tickers[ticker_name].info
+				res = []
+				info = tickers.tickers[ticker_name].info
 
-			for attr in attrs:
-				try:
-					res.append(info[attr])
-				except:
-					res.append(None)
-					
-			df.loc[ticker_name.replace('.', '-')] = res
-			print(ticker_name)
+				for attr in attrs:
+					try:
+						res.append(info[attr])
+					except:
+						res.append(None)
+						
+				df.loc[ticker_name.replace('.', '-')] = res
+				print(ticker_name)
 
-			ticker_q.task_done()
+				ticker_q.task_done()
+		except ticker_q.empty():
+			pass
 
 
 	NUM_THREADS = 500

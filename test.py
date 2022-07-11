@@ -11,10 +11,9 @@ from db_pkg.news import *
 # from threading_test import *
 # from timeit import default_timer as timer
 
-# thread_add_stock_data_batch(limit=500)
-add_stock_info_batch(limit=500)
-# save_rules_results(limit=500)
-
+thread_add_stock_data_batch(limit=100)
+# add_stock_info_batch(limit=100)
+save_rules_results(limit=100)
 
 # start = timer()
 # get_all_industries_close_pct(period=180)

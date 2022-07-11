@@ -7,6 +7,13 @@
 	@apply hidden;
 }
 
+input[type='range']::-webkit-slider-thumb {
+	@apply w-4 h-4;
+	-webkit-appearance: none;
+	@apply rounded-xl;
+	background: rgb(99, 102, 241);
+}
+
 /*
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
