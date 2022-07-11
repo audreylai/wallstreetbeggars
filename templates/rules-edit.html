@@ -11,8 +11,8 @@
 %}
 <div class="flex flex-col w-screen h-screen px-6 py-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
 	<div class="inline-flex mb-4 border-b-2 border-gray-300 dark:border-zinc-800 w-fit">
-		<a class="px-3 py-2 text-gray-600 bg-gray-300 rounded-tl-lg rounded-tr-lg dark:bg-zinc-800 dark:text-zinc-200" href="/rules/edit">Technical Indicators</a>
-		<a class="px-3 py-2 text-gray-700 bg-gray-100 rounded-tl-lg rounded-tr-lg dark:bg-zinc-900 dark:text-zinc-100" href="/cdl/edit">Candlestick</a>
+		<a class="px-3 py-1 text-sm text-gray-600 bg-gray-300 rounded-tl-lg rounded-tr-lg dark:bg-zinc-800 dark:text-zinc-400" href="/rules/edit">Technical Indicators</a>
+		<a class="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-tl-lg rounded-tr-lg dark:bg-zinc-900 dark:text-zinc-500" href="/cdl/edit">Candlestick</a>
 	</div>
 	<div class="grid grid-cols-2 gap-x-4">
 		<div class="space-y-2">
@@ -241,7 +241,7 @@
 		if (enable_editing) {
 			dropdown_var = $(`
 				<div class="relative w-full group autocomplete-wrapper">
-					<input class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300 invalid:border-pink-500 focus:ring-1 focus:invalid:border-pink-500 focus:invalid:ring-pink-500" />
+					<input class="block w-full px-3 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300 invalid:border-pink-500 focus:ring-1 focus:invalid:border-pink-500 focus:invalid:ring-pink-500" />
 					<ul tabindex="0"
 						class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
 					</ul>

@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Dict, List, Tuple
+from . import user
 
 import pymongo
 
@@ -233,3 +234,13 @@ def get_mkt_overview_data() -> Tuple[List, List]:
 				'mkt_cap': i['mkt_cap']
 			})
 	return data, last_close_pct
+
+def get_watchlist_data(username):
+	period = 60
+	watchlist_tickers = user.get_watchlist_tickers(username)
+	result = []
+	for ticker in watchlist_tickers:
+		raw = get_stock_data(ticker, period=period)
+		info = get_stock_info(ticker)
+		result.append({"ticker": ticker, "name" : info["name"], "price" : raw[-1]['close'], "change": process_stock_data(raw, precision=2, include=['last_close_pct'])['last_close_pct'], "mkt_cap": info['mkt_cap']})
+	return {"table": result, "last_updated": col_stock_info.find_one({"last_updated": {"$exists": True}})["last_updated"]}

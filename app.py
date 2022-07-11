@@ -98,10 +98,18 @@ def rules_save():
 	save_rules_results(limit=500)
 	return '', 200
 
-@app.route("/watchlist", methods=["GET", "POST"])
+@app.route("/watchlist", methods=["GET"])
 def watchlist():
 	dark_mode = get_user_theme("test")
-	return render_template("watchlist.html", dark_mode=dark_mode)
+	watchlist_data = get_watchlist_data('test')
+	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=watchlist_data['table'], last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"))
+
+@app.route("/watchlist", methods=["POST"])
+def watchlist_add_ticker():
+	add_watchlist('test', request.values.get("ticker").replace('.', '-').upper())
+	dark_mode = get_user_theme("test")
+	watchlist_data = get_watchlist_data('test')
+	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=watchlist_data['table'], last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"))
 
 @app.route("/stock-list", methods=["GET", "POST"])
 def stock_list_page():

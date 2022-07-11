@@ -21,7 +21,7 @@ def get_rules_results(ticker):
 
 
 def get_watchlist_rules_results(username):
-	ticker_list = user.get_active_tickers(username)
+	ticker_list = user.get_watchlist_tickers(username)
 	out = {}
 	for ticker in ticker_list:
 		out[ticker] = get_rules_results(ticker)

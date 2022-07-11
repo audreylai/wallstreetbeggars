@@ -23,3 +23,9 @@ def update_user_theme(username, theme):
 
 def get_user_theme(username):
 	return col_users.find_one({"username": username}, {"_id": 0, "dark_mode": 1})["dark_mode"]
+
+def get_watchlist_tickers(username):
+	return col_users.find_one({"username": username}, {"_id": 0, "watchlist": 1})['watchlist']
+
+def add_watchlist(username, ticker):
+	col_users.update_one({"username": username}, {"$addToSet": { "watchlist": ticker }})
