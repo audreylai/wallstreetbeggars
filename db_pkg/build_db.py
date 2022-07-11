@@ -283,7 +283,6 @@ def thread_add_stock_data_batch(limit=100):
 		df.reset_index(inplace=True)
 		df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
 		pd.to_datetime(df.date)
-
 		df.dropna(inplace=True)
 		if df.empty: continue
 
