@@ -21,13 +21,12 @@ def home():
 	all_industry_cmp, all_industry_last_cmp = get_all_industries_close_pct(period=period)
 	mkt_overview_data = get_mkt_overview_table()
 	dark_mode = get_user_theme("test")
-	print(mkt_overview_data)
 
 	chart_data = {
 		'hscc': get_stock_data_chartjs('^HSCC', period),
 		'hsce': get_stock_data_chartjs('^HSCE', period),
 		'hsi': get_stock_data_chartjs('^HSI', period),
-		'mkt_overview_data': mkt_overview_data,
+		'mkt_overview_data': 		[{k: v for k, v in d.items() if k != 'last_close_pct'} for d in mkt_overview_data],
 		'mkt_overview_last_close_pct': [x["last_close_pct"] for x in mkt_overview_data],
 		'all_industry_cmp': all_industry_cmp,
 		'all_industry_last_cmp': all_industry_last_cmp
