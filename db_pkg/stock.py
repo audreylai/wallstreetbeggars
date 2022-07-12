@@ -178,7 +178,7 @@ def get_last_stock_data(ticker) -> Dict | None:
 
 def get_mkt_overview_table() -> List[Dict]:
 	cursor = col_testing\
-		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
+		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1, "mkt_cap":1})\
 		.limit(50).sort("last_volume", pymongo.DESCENDING)
 
 	return list(cursor)
