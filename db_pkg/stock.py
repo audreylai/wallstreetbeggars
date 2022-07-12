@@ -27,19 +27,18 @@ def get_stock_data(ticker, period) -> List[Dict] | None:
 	cursor = col_testing.aggregate([
 		{"$match": {"ticker": ticker}},
 		{"$project": {
-				"_id": 0,
-				"cdl_data": {
-					"$filter": {
-						"input": "$cdl_data",
-						"as": "cdl_data",
-						"cond": {"$and": [
-							{"$gte": ["$$cdl_data.date", start_datetime]},
-							{"$lte": ["$$cdl_data.date", end_datetime]}
-						]}
-					}
+			"_id": 0,
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "cdl_data",
+					"cond": {"$and": [
+						{"$gte": ["$$cdl_data.date", start_datetime]},
+						{"$lte": ["$$cdl_data.date", end_datetime]}
+					]}
 				}
 			}
-		}
+		}}
 	])
 	return cursor.next()['cdl_data']
 
@@ -106,7 +105,7 @@ def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCEND
 		"type": "stock",
 		"mkt_cap": {"$gte": min_mkt_cap}
 	}
-	if industry: query["industry_x"] = industry
+	if industry: query["industry"] = industry
 	
 	cursor = col_testing\
 		.find(query, {"_id": 0, "cdl_data": 0})\

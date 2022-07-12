@@ -153,7 +153,8 @@ Example:
  'last_volume': 6152540.0,
  'last_close': 49.150001525878906,
  'last_close_pct': 0.0030612556301816696,
- 'last_cdl_data': {'date': datetime.datetime(2022, 7, 12, 0, 0),
+ 'last_cdl_data': {
+  'date': datetime.datetime(2022, 7, 12, 0, 0),
   'open': 48.900001525878906,
   'high': 49.349998474121094,
   'low': 48.900001525878906,
@@ -333,5 +334,5 @@ Example:
   'last_close_pct': 0.016374197254421796},
  {'ticker': '0033-HK',
   'last_volume': 108040.0,
-	'last_close_pct': 0.0}]
+  'last_close_pct': 0.0}]
 ```
