@@ -22,48 +22,59 @@ info_attrs = [
 	'shortName', 'longName', 'exchangeTimezoneName', 'quoteType', 'logo_url',
 	"previousClose", "marketCap", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
 ]
-all_stock_data_df = None
+
+all_stock_data_dict = {}
+excel_df = None
 etnet_df = None
 
 def main():
-	global all_stock_data_df
 	global etnet_df
+	global excel_df
 
 	print('Step 1/4: Excel data')
-	df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
-	df = df.iloc[2:] # remove first 2 unrelated rows
-	df.columns.values[:4] = ['ticker', 'name', 'category', 'board_lot']
-	df[['ticker', 'board_lot']] = df[['ticker', 'board_lot']].apply(pd.to_numeric)
+	excel_df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
+	excel_df = excel_df.iloc[2:] # remove first 2 unrelated rows
+	excel_df.columns.values[:4] = ['ticker', 'name', 'category', 'board_lot']
+	excel_df[['ticker', 'board_lot']] = excel_df[['ticker', 'board_lot']].apply(pd.to_numeric)
 
 	# drop unrelated rows
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	df.drop(df[df.ticker >= 100].index, inplace=True)
+	excel_df.drop(excel_df[excel_df.ticker >= 1000].index, inplace=True)
+
+	# convert ticker format
+	ticker_list = []
+	for ticker in excel_df.ticker:
+		ticker_name = f"0000{str(ticker)}"[-4:] + ".HK"
+		ticker_list.append(ticker_name)
+		ticker_q.put(ticker_name)
+
+	for index in ['^HSI', '^HSCC', '^HSCE']:
+		ticker_list.append(index)
+		ticker_q.put(index)
+
+	excel_df.ticker = ticker_list[:-3]
+	excel_df.set_index('ticker', inplace=True)
+
 
 	print('Step 2/4: Etnet scraping')
 	etnet_df = etnet_scraping()
 
-	# convert ticker format
-	ticker_list = []
-	for ticker in df.ticker:
-		ticker_list.append(f"0000{str(ticker)}"[-4:] + "-HK")
-		ticker_q.put(f"0000{str(ticker)}"[-4:] + ".HK")
-
-	df.ticker = ticker_list
-
-	# start threads
-	NUM_THREADS = len(ticker_list)
+	
 	print('Step 3/4: Download stock data')
+	NUM_THREADS = 500
 	all_stock_data_df = yf.download(
 		tickers=' '.join(ticker_list).replace('-', '.'),
 		period="max", threads=NUM_THREADS, group_by="ticker"
 	)
+	for ticker in ticker_list:
+		all_stock_data_dict[ticker.replace('-', '.')] = all_stock_data_df[ticker.replace('-', '.')].copy()
+
 
 	print('Step 4/4: Stock info + calculations + insert')
 	for _ in range(NUM_THREADS):
 		worker = Thread(target=insert_data, daemon=True)
-		worker.daemon = True
 		worker.start()
 	ticker_q.join()
 
@@ -137,8 +148,8 @@ def insert_data():
 			ticker_name = ticker_q.get()
 
 			# download stock data
-			if ticker_name not in all_stock_data_df: return
-			df = all_stock_data_df[ticker_name].copy()
+			if ticker_name not in all_stock_data_dict: raise Exception('Not found in yfinance stock data')
+			df = all_stock_data_dict[ticker_name]
 
 			# download stock info
 			ticker_obj = yf.Ticker(ticker_name)
@@ -150,8 +161,7 @@ def insert_data():
 			df = df.rename(columns={"Date": "date", "Open": "open", "Close": "close", "High": "high", "Low": "low", "Adj Close": "adj_close", "Volume": "volume"})
 			pd.to_datetime(df.date)
 			df.dropna(inplace=True)
-			if df.empty:
-				return
+			if df.empty: raise Exception('Invalid DF')
 
 			# sma
 			for sma_period in [10, 20, 50, 100, 250]:
@@ -166,40 +176,53 @@ def insert_data():
 			# date checking
 			df.dropna(inplace=True)
 			now, last = datetime.now(), df.date.iloc[-1]
-			if df.empty or now - last > timedelta(days=7):
-				return
+			if df.empty or now - last > timedelta(days=7): raise Exception('Invalid DF')
 
 			cdl_data = df.to_dict("records")
 
-			# stock info
-			info_dict = {}
-			for attr in info_attrs:
-				try:
-					info_dict[convert_name(attr)] = ticker_info[attr]
-				except:
-					info_dict[convert_name(attr)] = None
-
-			if info_dict['ex_dividend_date'] is not None:
-				info_dict['ex_dividend_date'] = datetime.fromtimestamp(info_dict['ex_dividend_date'])
-
-			# etnet data
-			etnet_dict = etnet_df.loc[ticker_name].to_dict()
-
+			ticker_type = "index" if ticker_name[0] == "^" else "stock"
 			col_testing.delete_many({"ticker": ticker_name.replace('.', '-')})
-			col_testing.insert_one({
-				"ticker": ticker_name.replace('.', '-'),
-				"type": "index" if ticker_name[0] == "^" else "stock",
-				"last_updated": now,
-				"cdl_data": cdl_data,
-				**info_dict,
-				**etnet_dict,
-				"last_close_pct": df.close_pct.iloc[-1]
-			})
+
+			if ticker_type == "stock":
+				# stock info
+				info_dict = {}
+				for attr in info_attrs:
+					try:
+						info_dict[convert_name(attr)] = ticker_info[attr]
+					except:
+						info_dict[convert_name(attr)] = None
+
+				if info_dict['ex_dividend_date'] is not None:
+					info_dict['ex_dividend_date'] = datetime.fromtimestamp(info_dict['ex_dividend_date'])
+
+				# etnet data
+				etnet_dict = etnet_df.loc[ticker_name].to_dict()
+				
+				# insert
+				col_testing.insert_one({
+					"ticker": ticker_name.replace('.', '-'),
+					"type": ticker_type,
+					"last_updated": now,
+					"cdl_data": cdl_data,
+					**info_dict,
+					**etnet_dict,
+					"last_close_pct": df.close_pct.iloc[-1]
+				})
+			else:
+				# insert
+				col_testing.insert_one({
+					"ticker": ticker_name.replace('.', '-'),
+					"type": ticker_type,
+					"last_updated": now,
+					"cdl_data": cdl_data,
+					"last_close_pct": df.close_pct.iloc[-1]
+				})
+
+			print(ticker_name)
 		except Exception as e:
 			print(f'{ticker_name} - {e}')
-		finally:
-			ticker_q.task_done()
-		print(ticker_name, "done")
+		
+		ticker_q.task_done()
 
 		
 if __name__ == "__main__":
