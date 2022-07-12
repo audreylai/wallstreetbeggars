@@ -19,19 +19,20 @@ app = Flask(__name__)
 def home():
 	period = 60
 	all_industry_cmp, all_industry_last_cmp = get_all_industries_close_pct(period=period)
-	mkt_overview_data, mkt_overview_last_close_pct = get_mkt_overview_data()
+	mkt_overview_data = get_mkt_overview_table()
 	dark_mode = get_user_theme("test")
+	print(mkt_overview_data)
 
 	chart_data = {
-		'hscc': chartjs_stock_data('^HSCC', period),
-		'hsce': chartjs_stock_data('^HSCE', period),
-		'hsi': chartjs_stock_data('^HSI', period),
+		'hscc': get_stock_data_chartjs('^HSCC', period),
+		'hsce': get_stock_data_chartjs('^HSCE', period),
+		'hsi': get_stock_data_chartjs('^HSI', period),
 		'mkt_overview_data': mkt_overview_data,
-		'mkt_overview_last_close_pct': mkt_overview_last_close_pct,
+		'mkt_overview_last_close_pct': [x["last_close_pct"] for x in mkt_overview_data],
 		'all_industry_cmp': all_industry_cmp,
 		'all_industry_last_cmp': all_industry_last_cmp
 	}
-
+	
 	card_data = {
 		'mkt_momentum': chart_data["hsi"]["last_close"] / (chart_data["hsi"]["close"][len(chart_data["hsi"]["close"])-10]['y']),
 		'leading_index': sorted({x: chart_data[x]["last_close_pct"] for x in chart_data if x in ["hscc", "hsce", "hsi"]}.items(), key=lambda k: k)[0],
@@ -39,8 +40,8 @@ def home():
 		'leading_industry_pct': all_industry_last_cmp['data'][-1] / 100
 	}
 	
-	table_data = process_gainers_losers(*get_gainers_losers())
-	marquee_data = get_hsi_tickers_data()
+	table_data = get_gainers_losers_table()
+	marquee_data = get_hsi_tickers_table()
 	watchlist_rules_data = get_watchlist_rules_results('test')
 	news = scmp_scraping(limit=5)
 

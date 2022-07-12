@@ -487,6 +487,8 @@
 			}]
 		}
 
+		console.log(chart_data.datasets[0])
+
 		options = {
 			plugins: {
 				legend: {
@@ -672,7 +674,7 @@
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);
 
 	$('document').ready(() => {
-		setTimeout(() => {mkt_overview_chart.update()}, 500)
+		setTimeout(() => {mkt_overview_chart.update(); console.log("hello")}, 500)
 		$("#theme-toggle").bind('click', function() {
 			// draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
 			mkt_overview_chart.update()
