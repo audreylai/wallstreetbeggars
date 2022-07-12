@@ -197,6 +197,9 @@ def insert_data():
 
 				# etnet data
 				etnet_dict = etnet_df.loc[ticker_name].to_dict()
+
+				# excel_data
+				excel_dict = excel_df.loc[ticker_name].to_dict()
 				
 				# insert
 				col_testing.insert_one({
@@ -206,6 +209,7 @@ def insert_data():
 					"cdl_data": cdl_data,
 					**info_dict,
 					**etnet_dict,
+					**excel_dict,
 					"last_close_pct": df.close_pct.iloc[-1]
 				})
 			else:
