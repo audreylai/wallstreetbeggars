@@ -29,3 +29,13 @@ def get_watchlist_tickers(username):
 
 def add_watchlist(username, ticker):
 	col_users.update_one({"username": username}, {"$addToSet": { "watchlist": ticker }})
+
+def get_watchlist_data(username):
+	period = 60
+	watchlist_tickers = get_watchlist_tickers(username)
+	result = []
+	for ticker in watchlist_tickers:
+		raw = get_stock_data(ticker, period=period)
+		info = get_stock_info(ticker)
+		result.append({"ticker": ticker, "name" : info["name"], "price" : raw[-1]['close'], "change": chartjs_stock_data(raw, precision=2, include=['last_close_pct'])['last_close_pct'], "mkt_cap": info['mkt_cap']})
+	return {"table": result, "last_updated": col_stock_info.find_one({"last_updated": {"$exists": True}})["last_updated"]}

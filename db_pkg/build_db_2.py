@@ -17,11 +17,17 @@ col_testing = db["testing"]
 
 ticker_q = Queue()
 info_attrs = [
-	'sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash',
-	'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency',
-	'shortName', 'longName', 'exchangeTimezoneName', 'quoteType', 'logo_url',
+	"sector", "country", "website", "industry", "totalCash",
+	"totalDebt", "totalRevenue", "totalCashPerShare", "financialCurrency",
+	"shortName", "longName", "exchangeTimezoneName", "quoteType", "logo_url",
 	"previousClose", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
 ]
+hsi_tickers = list(map(lambda x: x + '.HK', [
+	"0005", "0011", "0388", "0939", "1299", "1398", "2318", "2388", "2628", "3328", "3988", "0002", "0003",
+	"0006", "1038", "0012", "0016", "0017", "0083", "0101", "0688", "0823", "1109", "1113", "1997", "2007", 
+	"0001", "0019", "0027", "0066", "0151", "0175", "0267", "0288", "0386", "0669", "0700", "0762", "0857",
+	"0883", "0941", "1044", "1088", "1093", "1177", "1928", "2018", "2313", "2319", "2382"
+]))
 
 all_stock_data_dict = {}
 excel_df = None
@@ -43,7 +49,7 @@ def main():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	excel_df.drop(excel_df[excel_df.ticker >= 10].index, inplace=True)
+	excel_df.drop(excel_df[excel_df.ticker >= 100].index, inplace=True)
 
 	# convert ticker format
 	ticker_list = []
@@ -207,6 +213,7 @@ def insert_data():
 				col_testing.insert_one({
 					"ticker": ticker_name.replace('.', '-'),
 					"type": ticker_type,
+					"is_hsi_stock": ticker_name in hsi_tickers,
 					"last_updated": now,
 					"cdl_data": cdl_data,
 					**info_dict,
@@ -223,6 +230,7 @@ def insert_data():
 				col_testing.insert_one({
 					"ticker": ticker_name.replace('.', '-'),
 					"type": ticker_type,
+					"is_hsi_stock": False,
 					"last_updated": now,
 					"cdl_data": cdl_data,
 					

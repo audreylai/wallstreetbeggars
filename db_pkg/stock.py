@@ -12,7 +12,6 @@ col_users = db["users"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 col_rules_results = db["rules_results"]
-
 col_testing = db["testing"]
 
 
@@ -97,19 +96,22 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 	return out
 
 
-def get_stock_info(ticker) -> Dict:
+def get_stock_info(ticker) -> Dict | None:
+	if not ticker_exists(ticker): return None
 	return col_testing.find_one({"ticker": ticker}, {"_id": 0, "cdl_data": 0})
 
 
-def get_stock_info_all(industry="", sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=0):
+def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=0):
 	query = {
+		"type": "stock",
 		"mkt_cap": {"$gte": min_mkt_cap}
 	}
-	if len(filter_industry) != 0: query["industry_x"] = filter_industry
+	if industry: query["industry_x"] = industry
 	
 	cursor = col_testing\
 		.find(query, {"_id": 0, "cdl_data": 0})\
-		.sort([(sort_col, sort_dir), ("_id", 1)])
+		.sort([(sort_col, sort_dir), ("_id", 1)])\
+		.allow_disk_use(True)
 	
 	return list(cursor)
 
@@ -121,7 +123,7 @@ def get_ticker_list(ticker_type=None) -> List:
 		return col_testing.distinct("ticker", {"type": ticker_type})
 
 
-def get_gainers_losers(limit=2) -> Tuple[List, List]:
+def get_gainers_losers(limit=5) -> Tuple[List[str], List[str]]:
 	cursor = col_testing.aggregate([
 		{"$match": {"type": "stock"}},
 		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1}},
@@ -140,7 +142,7 @@ def get_gainers_losers(limit=2) -> Tuple[List, List]:
 	return gainers, losers
 
 
-def get_gainers_losers_table(limit=2) -> Tuple[Dict, Dict]:
+def get_gainers_losers_table(limit=5) -> Tuple[List[Dict], List[Dict]]:
 	attrs = {"last_close": 1, "last_volume": 1, "mkt_cap": 1}
 
 	cursor = col_testing.aggregate([
@@ -161,97 +163,23 @@ def get_gainers_losers_table(limit=2) -> Tuple[Dict, Dict]:
 	return gainers, losers
 
 
-def process_gainers_losers(gainers, losers) -> Dict:
-	out = {
-		'gainers': [],
-		'losers': []
-	}
+def get_hsi_tickers_table() -> List[Dict]:
+	attrs = {"last_close": 1, "last_close_pct": 1}
+	cursor = col_testing\
+		.find({"is_hsi_stock": True}, {"_id": 0, "ticker": 1, **attrs})\
+		.sort("ticker", pymongo.ASCENDING)
 
-	for ticker in gainers:
-		if get_stock_info(ticker) is None:
-			continue
-		data = get_last_stock_data(ticker)
-		out['gainers'].append({
-			'ticker': ticker,
-			'price': data['close'],
-			'change': data['close_pct'],
-			'volume': data['volume'],
-			'mkt_cap': get_stock_info(ticker)['mkt_cap']
-		})
-	
-	for ticker in losers:
-		if get_stock_info(ticker) is None:
-			continue
-		data = get_last_stock_data(ticker)
-		out['losers'].append({
-			'ticker': ticker,
-			'price': data['close'],
-			'change': data['close_pct'],
-			'volume': data['volume'],
-			'mkt_cap': get_stock_info(ticker)['mkt_cap']
-		})
-	
-	return out
+	return list(cursor)
 
 
-def get_hsi_tickers_data() -> List:
-	out = []
-
-	hsi_tickers = map(lambda x: x + '-HK', [
-		'0005', '0011', '0388', '0939', '1299', '1398', '2318', '2388', '2628', '3328', '3988', '0002', '0003', '0006',
-		'1038', '0012', '0016', '0017', '0083', '0101', '0688', '0823', '1109', '1113', '1997', '2007', '0001', '0019',
-		'0027', '0066', '0151', '0175', '0267', '0288', '0386', '0669', '0700', '0762', '0857', '0883', '0941', '1044',
-		'1088', '1093', '1177', '1928', '2018', '2313', '2319', '2382'
-	])
-	for ticker in hsi_tickers:
-		if not ticker_exists(ticker):
-			continue
-		out.append({
-			'ticker': ticker,
-			'last_close_pct': get_last_stock_data(ticker)['close_pct']*100
-		})
-
-	return out
+def get_last_stock_data(ticker) -> Dict | None:
+	if not ticker_exists(ticker): return None
+	return col_testing.find_one({"ticker": ticker}, {"_id": 0, "last_cdl_data": 1})["last_cdl_data"]
 
 
-def get_last_stock_data(ticker) -> Dict:
-	if not ticker_exists(ticker): return
+def get_mkt_overview_table() -> List[Dict]:
+	cursor = col_testing\
+		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
+		.limit(50).sort("last_volume", pymongo.DESCENDING)
 
-	cursor = col_testing.aggregate([
-		{"$match": {"ticker": ticker}},
-		{"$unwind": "$cdl_data"},
-		{"$sort": {"cdl_data.date": pymongo.DESCENDING}},
-		{"$limit": 1}
-	])
-	res = cursor.next()
-
-	return {
-		**res['cdl_data'],
-		'close_pct': res['last_close_pct']
-	}
-
-
-def get_mkt_overview_data() -> Tuple[List, List]:
-	res = get_stock_info('ALL', sort_col='mkt_cap', sort_dir=pymongo.DESCENDING)['table'][:50]
-	data, last_close_pct = [], []
-	for i in res:
-		try:
-			last_close_pct.append(get_last_stock_data(i['ticker'])['close_pct'])
-		except:
-			continue
-		else:
-			data.append({
-				'ticker': i['ticker'], 
-				'mkt_cap': i['mkt_cap']
-			})
-	return data, last_close_pct
-
-def get_watchlist_data(username):
-	period = 60
-	watchlist_tickers = user.get_watchlist_tickers(username)
-	result = []
-	for ticker in watchlist_tickers:
-		raw = get_stock_data(ticker, period=period)
-		info = get_stock_info(ticker)
-		result.append({"ticker": ticker, "name" : info["name"], "price" : raw[-1]['close'], "change": chartjs_stock_data(raw, precision=2, include=['last_close_pct'])['last_close_pct'], "mkt_cap": info['mkt_cap']})
-	return {"table": result, "last_updated": col_stock_info.find_one({"last_updated": {"$exists": True}})["last_updated"]}
+	return list(cursor)

@@ -5,6 +5,12 @@
 - `get_stock_data_chartjs()` - Returns chartjs-formatted data of a ticker
 - `get_stock_info()` - Returns stock info of a ticker
 - `get_stock_info_all()` - Returns stock info of all tickers (with optional sorting)
+- `get_ticker_list()` - Returns a list of all tickers of (optional) specified type
+- `get_gainers_losers()` - Returns gainers/losers as list of tickers
+- `get_gainers_losers_table()` - Returns gainers/losers as dicts containing additional info of each ticker
+- `get_hsi_tickers_table()` - Returns hsi tickers as dicts containing additional info of each ticker
+- `get_last_stock_data()` - Returns stock data of the last trading day of a ticker
+- `get_mkt_overview_table()` - Returns tickers sorted by last volume as dicts
 
 ---
 ### `ticker_exists(ticker)`
@@ -61,7 +67,7 @@ None
 ```
 
 ---
-### `get_stock_data_chartjs(ticker, period, interval, precision)`
+### `get_stock_data_chartjs(ticker, period, [interval, precision])`
 Params:
 * ticker (`str`)
 * period (`int`): Number of days from today
@@ -171,9 +177,9 @@ None
 ```
 
 ---
-### `get_stock_info_all()`
+### `get_stock_info_all([industry, sort_col, sort_dir, min_mkt_cap])`
 Params:
-* industry (`str`, default=`""`): Filter results by a specific industry
+* industry (`str | None`, default=`None`): Filter results by a specific industry
 * sort_col (`str`, default=`"ticker"`): Column to perform sorting on
 * sort_dir (`int`, default=`pymongo.ASCENDING`): Direction of sorting
 * min_mkt_cap (`int`, default=`0`): Filter results by minimum market cap
@@ -192,4 +198,140 @@ Example:
    'macd_ema': -0.00015620165490531213,
    'macd_div': -0.0002277917945434222,
    'close_pct': -0.060606070868568396}}]
+```
+
+---
+### `get_ticker_list([ticker_type])`
+Params:
+* ticker_type (`"stock" | "index" | None`, default=`None`)
+
+Returns: `List`
+
+Example:
+```
+>>> get_ticker_list()
+['0001-HK', '0002-HK', '0003-HK', '0004-HK', '0005-HK', '0006-HK', '0007-HK', '0008-HK', '0009-HK', '^HSCC', '^HSCE', '^HSI']
+
+>>> get_ticker_list("index")
+['^HSCC', '^HSCE', '^HSI']
+```
+
+---
+### `get_gainers_losers([limit])`
+Params:
+* limit (`int`, default=`5`)
+
+Returns: `Tuple[List[str], List[str]]`
+
+Example:
+```
+>>> get_gainers_losers()
+(['0084-HK', '0090-HK', '0039-HK', '0048-HK', '0092-HK'],
+ ['0079-HK', '0021-HK', '0059-HK', '0009-HK', '0072-HK'])
+
+>>> get_gainers_losers(2)
+(['0084-HK', '0090-HK'], ['0079-HK', '0021-HK'])
+```
+
+---
+### `get_gainers_losers_table([limit])`
+Params:
+* limit (`int`, default=`5`)
+
+Returns: `Tuple[List[Dict], List[Dict]]`
+
+Example:
+```
+>>> get_gainers_losers_table()
+([{'ticker': '0084-HK',
+   'mkt_cap': 63835000.0,
+...
+   'last_close': 0.09200000017881393,
+   'last_close_pct': 0.02222218358958372}],
+ [{'ticker': '0079-HK',
+   'mkt_cap': 35216000.0,
+...
+   'last_close': 0.3199999928474426,
+   'last_close_pct': -0.05882356034843117}])
+```
+
+---
+### `get_hsi_tickers_table()`
+Params: None
+
+Returns: `List[Dict]`
+
+Example:
+```
+>>> get_hsi_tickers_table()
+[{'last_close': 53.0,
+  'last_close_pct': 0.0037878932922232877,
+  'ticker': '0001-HK'},
+ {'last_close': 66.30000305175781,
+  'last_close_pct': 0.007598783842102552,
+  'ticker': '0002-HK'},
+...
+ {'last_close': 41.54999923706055,
+  'last_close_pct': 0.012180268192272914,
+  'ticker': '0066-HK'},
+ {'last_close': 11.5,
+  'last_close_pct': 0.005244792116914532,
+  'ticker': '0083-HK'}]
+```
+
+---
+### `get_last_stock_data(ticker)`
+Params:
+* ticker (`str`)
+
+Returns: `Dict | None`
+
+Example:
+```
+>>> get_last_stock_data("0005-HK")
+{'adj_close': 49.04999923706055,
+ 'close': 49.04999923706055,
+ 'close_pct': 0.0010203925930722946,
+ 'date': datetime.datetime(2022, 7, 12, 0, 0),
+ 'high': 49.349998474121094,
+ 'low': 48.900001525878906,
+ 'macd': -0.28972434826229687,
+ 'macd_div': -0.24371881024823444,
+ 'macd_ema': -0.04600553801406242,
+ 'open': 48.900001525878906,
+ 'rsi': 40.56837408919447,
+ 'sma10': 50.43500022888183,
+ 'sma100': 51.641500091552736,
+ 'sma20': 50.40500030517578,
+ 'sma250': 48.07140003967285,
+ 'sma50': 50.07700019836426,
+ 'vol_sma20': 20811668.35,
+ 'volume': 10129745.0}
+
+>>> get_last_stock_data("foo")
+None
+```
+
+---
+### `get_mkt_overview_table()`
+Params: None
+
+Returns: `List[Dict]`
+
+Example:
+```
+>>> get_mkt_overview_table()
+[{'ticker': '0059-HK',
+  'last_volume': 354216004.0,
+  'last_close_pct': -0.06097564078171491},
+ {'ticker': '0092-HK',
+  'last_volume': 96770881.0,
+  'last_close_pct': 0.02222218358958372},
+...
+ {'ticker': '0041-HK',
+  'last_volume': 153125.0,
+  'last_close_pct': 0.016374197254421796},
+ {'ticker': '0033-HK',
+  'last_volume': 108040.0,
+	'last_close_pct': 0.0}]
 ```

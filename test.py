@@ -12,9 +12,9 @@ from pprint import pprint
 from timeit import default_timer as timer
 
 def test():
-	return get_stock_info_all()
+	return get_mkt_overview_table()
 
-# pprint(test())
+pprint(test())
 
 start = timer()
 test()
