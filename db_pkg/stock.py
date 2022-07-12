@@ -13,142 +13,151 @@ col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 col_rules_results = db["rules_results"]
 
+col_testing = db["testing"]
+
 
 def ticker_exists(ticker) -> bool:
-	res = list(col_stock_data.find({"ticker": ticker}, {"_id": 1}))
-	return len(res) != 0
+	res = col_testing.count_documents({"ticker": ticker})
+	return res != 0
 
 
-def get_stock_data(ticker, period=None, start_datetime=None, end_datetime=None) -> List[Dict]:
-	if period: start_datetime, end_datetime = utils.get_datetime_from_period(period)
+def get_stock_data(ticker, period) -> List[Dict] | None:
+	if not ticker_exists(ticker): return
+	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 	
-	cursor = col_stock_data.aggregate([
+	cursor = col_testing.aggregate([
 		{"$match": {"ticker": ticker}},
 		{"$project": {
 				"_id": 0,
-				"data": {
+				"cdl_data": {
 					"$filter": {
-						"input": "$data",
-						"as": "data",
+						"input": "$cdl_data",
+						"as": "cdl_data",
 						"cond": {"$and": [
-							{"$gte": ["$$data.date", start_datetime]},
-							{"$lte": ["$$data.date", end_datetime]}
+							{"$gte": ["$$cdl_data.date", start_datetime]},
+							{"$lte": ["$$cdl_data.date", end_datetime]}
 						]}
 					}
 				}
 			}
 		}
 	])
-	return cursor.next()['data']
+	return cursor.next()['cdl_data']
 
 
-def process_stock_data(data, interval=1, include=[], precision=4, ticker=None, period=None) -> Dict:
+def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | None:
+	if not ticker_exists(ticker): return
+	data = get_stock_data(ticker, period)
+
 	out = {
-		'sma10': [], 'sma20': [], 'sma50': [], 'sma100': [], 'sma250': [],
-		'macd': [], 'macd_ema': [], 'macd_div': [], 'rsi': [],
-		'cdl': [],
-		'close': [], 'close_pct': [], 'last_close': 0, 'last_close_pct': 0,
-		'volume': [], 'volume_color': [], 'vol_sma20': [], 'max_volume': 0, "first_close": 0
+		"cdl": [], "close": [], "close_pct": [], "last_close": 0, "last_close_pct": 0,
+		"sma10": [], "sma20": [], "sma50": [], "sma100": [], "sma250": [],
+		"rsi": [], "macd": [], "macd_ema": [], "macd_div": [],
+		"volume": [], "vol_color": [], "vol_sma20": [], "max_vol": 0,
+		"ticker": ticker, "period": period, "interval": interval
 	}
-	first_close = None
-	
-	volume_up_color = 'rgba(215,85,65,0.4)'
-	volume_dn_color = 'rgba(80,160,115,0.4)'
+	attrs = [
+		"sma10", "sma20", "sma50", "sma100", "sma250",
+		"rsi", "macd", "macd_div", "macd_ema", "volume", "vol_sma20",
+		"close", "close_pct"
+	]
 
-	if len(data) == 0:
-		return out
-	
-	for c, i in enumerate(data):
-		if c % interval != 0:
-			continue
+	volume_up_color = "rgba(215 85 65 0.4)"
+	volume_dn_color = "rgba(80 160 115 0.4)"
 
-		if i['volume'] > out['max_volume']:
-			out['max_volume'] = i['volume']
+	for c, row in enumerate(data):
+		if c % interval != 0: continue
 
-		if first_close is None:
-			first_close = i['close']
-			out["first_close"] = first_close
+		epoch_timestamp = int(datetime.timestamp(row['date']) * 1000)
 
-		out['cdl'].append({
-			'x': int(datetime.timestamp(i['date']) * 1000),
-			'o': round(i['open'], precision),
-			'h': round(i['high'], precision),
-			'l': round(i['low'], precision),
-			'c': round(i['close'], precision)
+		out["cdl"].append({
+			'x': epoch_timestamp,
+			'o': round(row["open"], precision),
+			'h': round(row["high"], precision),
+			'l': round(row["low"], precision),
+			'c': round(row["close"], precision)
 		})
 
-		for col in ['sma10', 'sma20', 'sma50', 'sma100', 'sma250', 'rsi', 'macd', 'macd_div', 'macd_ema', 'volume', 'vol_sma20', 'close']:
-			out[col].append({
-				'x': int(datetime.timestamp(i['date']) * 1000),
-				'y': round(i[col], precision)
+		for attr in attrs:
+			out[attr].append({
+				'x': epoch_timestamp,
+				'y': round(row[attr], precision)
 			})
 
-		out['close_pct'].append({
-			'x': int(datetime.timestamp(i['date']) * 1000),
-			'y': round((i['close'] - first_close) / first_close, precision)
-		})
-
-		if i['open'] > i['close']:
-			out['volume_color'].append(volume_up_color)
+		out["max_vol"] = max(row["volume"], out["max_vol"])
+		
+		if row["open"] > row["close"]:
+			out["vol_color"].append(volume_up_color)
 		else:
-			out['volume_color'].append(volume_dn_color)
-
-		out['last_close'] = round(i['close'], precision)
-	out['last_close_pct'] = round(100 * (out['close'][-1]['y'] - out['close'][-2]['y']) / out['close'][-2]['y'], precision)
-
-	out['interval'] = interval
-	out['period'] = period
-	out['ticker'] = ticker
+			out["vol_color"].append(volume_dn_color)
 	
-	if len(include) != 0:
-		return dict(filter(lambda k: k[0] in include, out.items()))
+	out["last_close"] = data[-1]["close"]
+	out["last_close_pct"] = data[-1]["close_pct"]
 
 	return out
 
 
-def get_stock_info(ticker, filter_industry="", sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=10**9):
-	if ticker == "ALL":
-		query = {
-			"last_updated": {"$exists": False},
-			"mkt_cap": {"$gte": min_mkt_cap}
-		}
-		if filter_industry != "":
-			query["industry_x"] = filter_industry
-
-		return {
-			"table": list(
-				col_stock_info
-				.find(query, {"_id": 0, "ticker": 1, "name": 1, "board_lot": 1, "industry_x": 1, "mkt_cap": 1})
-				.sort([(sort_col, sort_dir), ("_id", 1)]) # '_id' to achieve consistent sort results
-			),
-			"last_updated": col_stock_info.find_one({"last_updated": {"$exists": True}})["last_updated"],
-			"industries": industries.get_all_industries()
-		}
-	else:
-		return col_stock_info.find_one({"ticker": ticker}, {"_id": 0})
+def get_stock_info(ticker) -> Dict:
+	return col_testing.find_one({"ticker": ticker}, {"_id": 0, "cdl_data": 0})
 
 
-def get_all_tickers(ticker_type=None) -> List:
+def get_stock_info_all(industry="", sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=0):
+	query = {
+		"mkt_cap": {"$gte": min_mkt_cap}
+	}
+	if len(filter_industry) != 0: query["industry_x"] = filter_industry
+	
+	cursor = col_testing\
+		.find(query, {"_id": 0, "cdl_data": 0})\
+		.sort([(sort_col, sort_dir), ("_id", 1)])
+	
+	return list(cursor)
+
+
+def get_ticker_list(ticker_type=None) -> List:
 	if ticker_type is None:
-		return col_stock_data.distinct("ticker")
+		return col_testing.distinct("ticker")
 	else:
-		return col_stock_data.distinct("ticker", {"type": ticker_type})
+		return col_testing.distinct("ticker", {"type": ticker_type})
 
 
-def get_gainers_losers(limit=5) -> Tuple[List, List]:
-	cursor = col_stock_data.aggregate([
+def get_gainers_losers(limit=2) -> Tuple[List, List]:
+	cursor = col_testing.aggregate([
+		{"$match": {"type": "stock"}},
+		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1}},
 		{"$sort": {"last_close_pct": pymongo.DESCENDING}},
 		{"$limit": limit}
 	])
-	gainers = [i['ticker'] for i in cursor]
+	gainers = [i["ticker"] for i in cursor]
 
-	cursor = col_stock_data.aggregate([
+	cursor = col_testing.aggregate([
+		{"$match": {"type": "stock"}},
+		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1}},
 		{"$sort": {"last_close_pct": pymongo.ASCENDING}},
-		{"$limit": 5
-		}
+		{"$limit": limit}
 	])
-	losers = [i['ticker'] for i in cursor]
+	losers = [i["ticker"] for i in cursor]
+	return gainers, losers
 
+
+def get_gainers_losers_table(limit=2) -> Tuple[Dict, Dict]:
+	attrs = {"last_close": 1, "last_volume": 1, "mkt_cap": 1}
+
+	cursor = col_testing.aggregate([
+		{"$match": {"type": "stock"}},
+		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1, **attrs}},
+		{"$sort": {"last_close_pct": pymongo.DESCENDING}},
+		{"$limit": limit}
+	])
+	gainers = list(cursor)
+
+	cursor = col_testing.aggregate([
+		{"$match": {"type": "stock"}},
+		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1, **attrs}},
+		{"$sort": {"last_close_pct": pymongo.ASCENDING}},
+		{"$limit": limit}
+	])
+	losers = list(cursor)
 	return gainers, losers
 
 
@@ -206,16 +215,18 @@ def get_hsi_tickers_data() -> List:
 
 
 def get_last_stock_data(ticker) -> Dict:
-	cursor = col_stock_data.aggregate([
+	if not ticker_exists(ticker): return
+
+	cursor = col_testing.aggregate([
 		{"$match": {"ticker": ticker}},
-		{"$unwind": "$data"},
-		{"$sort": {"data.date": pymongo.DESCENDING}},
+		{"$unwind": "$cdl_data"},
+		{"$sort": {"cdl_data.date": pymongo.DESCENDING}},
 		{"$limit": 1}
 	])
 	res = cursor.next()
 
 	return {
-		**res['data'],
+		**res['cdl_data'],
 		'close_pct': res['last_close_pct']
 	}
 
@@ -242,5 +253,5 @@ def get_watchlist_data(username):
 	for ticker in watchlist_tickers:
 		raw = get_stock_data(ticker, period=period)
 		info = get_stock_info(ticker)
-		result.append({"ticker": ticker, "name" : info["name"], "price" : raw[-1]['close'], "change": process_stock_data(raw, precision=2, include=['last_close_pct'])['last_close_pct'], "mkt_cap": info['mkt_cap']})
+		result.append({"ticker": ticker, "name" : info["name"], "price" : raw[-1]['close'], "change": chartjs_stock_data(raw, precision=2, include=['last_close_pct'])['last_close_pct'], "mkt_cap": info['mkt_cap']})
 	return {"table": result, "last_updated": col_stock_info.find_one({"last_updated": {"$exists": True}})["last_updated"]}

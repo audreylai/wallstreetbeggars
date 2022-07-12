@@ -20,7 +20,7 @@ info_attrs = [
 	'sector', 'country', 'website', 'industry', 'currentPrice', 'totalCash',
 	'totalDebt', 'totalRevenue', 'totalCashPerShare', 'financialCurrency',
 	'shortName', 'longName', 'exchangeTimezoneName', 'quoteType', 'logo_url',
-	"previousClose", "marketCap", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
+	"previousClose", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
 ]
 
 all_stock_data_dict = {}
@@ -30,6 +30,8 @@ etnet_df = None
 def main():
 	global etnet_df
 	global excel_df
+
+	col_testing.delete_many({})
 
 	print('Step 1/4: Excel data')
 	excel_df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
@@ -41,7 +43,7 @@ def main():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	excel_df.drop(excel_df[excel_df.ticker >= 1000].index, inplace=True)
+	excel_df.drop(excel_df[excel_df.ticker >= 10].index, inplace=True)
 
 	# convert ticker format
 	ticker_list = []
@@ -210,7 +212,11 @@ def insert_data():
 					**info_dict,
 					**etnet_dict,
 					**excel_dict,
-					"last_close_pct": df.close_pct.iloc[-1]
+
+					"last_volume": df.volume.iloc[-1],
+					"last_close": df.close.iloc[-1],
+					"last_close_pct": df.close_pct.iloc[-1],
+					"last_cdl_data": cdl_data[-1]
 				})
 			else:
 				# insert
@@ -219,7 +225,11 @@ def insert_data():
 					"type": ticker_type,
 					"last_updated": now,
 					"cdl_data": cdl_data,
-					"last_close_pct": df.close_pct.iloc[-1]
+					
+					"last_volume": df.volume.iloc[-1],
+					"last_close": df.close.iloc[-1],
+					"last_close_pct": df.close_pct.iloc[-1],
+					"last_cdl_data": cdl_data[-1]
 				})
 
 			print(ticker_name)
