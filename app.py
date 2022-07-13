@@ -126,7 +126,7 @@ def stock_list_page():
 	sort_dir_str = request.values.get("sort_dir", type=str, default='asc')
 	sort_dir = pymongo.DESCENDING if sort_dir_str == 'desc' else pymongo.ASCENDING
 
-	data = get_all_stock_info(filter_industry, sort_col, sort_dir, min_mkt_cap)
+	data = get_stock_info_all(filter_industry, sort_col, sort_dir, min_mkt_cap, inclusions={"ticker", "country"})
 
 	rows_per_page = 20
 	num_of_pages = ceil(len(data) / rows_per_page)
