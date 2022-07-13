@@ -12,7 +12,7 @@ from pprint import pprint
 from timeit import default_timer as timer
 
 def test():
-	return get_all_industries_avg_close_pct(period=60)
+	return get_industry_gainers_losers("Properties", limit=3)
 
 pprint(test())
 

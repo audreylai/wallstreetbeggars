@@ -1,9 +1,13 @@
 # industries.py
 ## Table of contents
 - `get_all_industries` - Returns a list of all industry names
-- `get_industry_avg_close_pct()` - Returns the average close pct of stocks in an industry per trading day
-- `get_industry_avg_close_pct_chartjs()` - Returns chartjs-formatted average close pct of stocks in an industry per trading day
-- `get_all_industries_avg_close_pct()` - Returns the average close pct of stocks of all industries per trading day
+- `get_industry_avg_close_pct()` - Returns the average close pct of tickers in an industry per trading day
+- `get_industry_avg_close_pct_chartjs()` - Returns chartjs-formatted average close pct of tickers in an industry per trading day
+- `get_all_industries_avg_close_pct()` - Returns the average close pct of stocks per industry per trading day
+- `get_all_industries_avg_last_close_pct()` - Returns the average last close pct of stocks per industry
+- `get_top_industry()` - Returns the top performing industry by average last close pct
+- `get_industry_tickers_last_close_pct()` - Returns the last close pct of tickers in an industry
+- `get_industry_gainers_losers()` - Returns the gainer and loser tickers of an industry by close pct of the last trading day
 
 ---
 ### `get_all_industries()`
@@ -24,9 +28,9 @@ Example:
 ```
 
 ---
-### `get_industry_avg_close_pct(ticker, period)`
+### `get_industry_avg_close_pct(industry, period)`
 Params:
-* ticker (`str`)
+* industry (`str`)
 * period (`int`): Number of days from today
 
 Returns: `List[Dict]`
@@ -47,9 +51,9 @@ Example:
 ```
 
 ---
-### `get_industry_avg_close_pct_chartjs(ticker, period, [interval, precision])`
+### `get_industry_avg_close_pct_chartjs(industry, period[, interval, precision])`
 Params:
-* ticker (`str`)
+* industry (`str`)
 * period (`int`): Number of days from today
 * interval (`int`, default=`1`): Interval between trading days
 * precision (`int`, default=`4`): No. of decimal places to round to
@@ -92,3 +96,71 @@ Example:
     'close_pct': 0.004099622793031221}, ...
    ]}]
 ```
+
+---
+### `get_all_industries_avg_last_close_pct()`
+Params: None
+
+Returns: `List[Dict]`
+
+Example:
+```
+>>> get_all_industries_avg_last_close_pct()
+[{'close_pct': -0.13114756100666625, 'industry': 'Jewellery & Watches'},
+ {'close_pct': -0.044843050861548606, 'industry': 'Health Care'},
+ {'close_pct': -0.015696090946450785, 'industry': 'Transportation'},
+...
+ {'close_pct': 0.02128314809300898, 'industry': 'Other Financials'},
+ {'close_pct': 0.029147331303756907, 'industry': 'Food & Beverages'},
+ {'close_pct': 0.11111105745466787,
+  'industry': 'Commercial & Professional Services'}]
+```
+
+---
+### `get_top_industry()`
+Params: None
+
+Returns: `Dict`
+
+Example:
+```
+>>> get_top_industry()
+{'close_pct': 0.11111105745466787,
+ 'industry': 'Commercial & Professional Services'}
+```
+
+---
+### `get_industry_tickers_last_close_pct(industry)`
+Params:
+* industry (`str`)
+
+Returns: `List[Dict]`
+
+Example:
+```
+>>> get_industry_tickers_last_close_pct("Banks")
+[{'close_pct': -0.023465724789903275, 'ticker': '0023-HK'},
+ {'close_pct': 0.001019352453379252, 'ticker': '0005-HK'},
+ {'close_pct': 0.0022641739755306922, 'ticker': '0011-HK'}]
+```
+
+---
+### `get_industry_gainers_losers(industry[, limit])`
+Params:
+* industry (`str`)
+* limit (`int`): No. of results to return
+
+Returns: `Tuple[List, List]`
+
+Example: 
+```
+>>> get_industry_gainers_losers("Properties", 3)
+([{'close_pct': 0.02459015242116691, 'ticker': '0036-HK'},
+  {'close_pct': 0.012987039376318732, 'ticker': '0059-HK'},
+  {'close_pct': 0.008695685345193604, 'ticker': '0083-HK'}],
+ [{'close_pct': -0.03490761402234188, 'ticker': '0029-HK'},
+  {'close_pct': -0.028037466475174244, 'ticker': '0095-HK'},
+  {'close_pct': -0.025316506313829312, 'ticker': '0037-HK'}])
+```
+
+---

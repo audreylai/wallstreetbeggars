@@ -108,7 +108,7 @@ def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCEND
 	if industry: query["industry"] = industry
 	
 	cursor = col_testing\
-		.find(query, {"_id":0} | {k: 1 for k in inclusions})\
+		.find(query, {"_id": 0} | {k: 1 for k in inclusions})\
 		.sort([(sort_col, sort_dir), ("_id", 1)])\
 		.allow_disk_use(True)
 	

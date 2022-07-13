@@ -67,7 +67,7 @@ None
 ```
 
 ---
-### `get_stock_data_chartjs(ticker, period, [interval, precision])`
+### `get_stock_data_chartjs(ticker, period[, interval, precision])`
 Params:
 * ticker (`str`)
 * period (`int`): Number of days from today

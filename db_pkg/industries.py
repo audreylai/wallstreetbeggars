@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+
 from typing import Dict, List, Tuple
 import pymongo
 from pprint import pprint
@@ -9,6 +10,8 @@ db = client["wallstreetbeggars"]
 col_stock_data = db["stock_data"]
 col_stock_info = db["stock_info"]
 col_testing = db["testing"]
+
+last_trading_date = datetime(2022, 7, 13)
 
 
 def get_all_industries() -> List:
@@ -57,7 +60,7 @@ def get_industry_avg_close_pct_chartjs(industry, period, interval=1, precision=4
 
 		out["close_pct"].append({
 			'x': epoch_timestamp,
-			'y': row["close_pct"]
+			'y': round(row["close_pct"], precision)
 		})
 	
 	return out
@@ -129,7 +132,90 @@ def get_all_industries_avg_close_pct(period) -> List[Dict]:
 		})
 	return out
 
+# WARN: this function will break, update last_trading date
+def get_all_industries_avg_last_close_pct() -> List[Dict]:
+	cursor = col_testing.aggregate([
+		{"$match": {"type": "stock"}},
+		{"$project": {
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "cdl_data",
+					"cond": {"$and": [
+						{"$gte": ["$$cdl_data.date", last_trading_date]},
+					]}
+				}
+			},
+			"industry": 1,
+			"_id": 0
+		}},
+		{"$unwind": "$cdl_data"},
+		{"$project": {
+			"industry": 1,
+			"close_pct": "$cdl_data.close_pct"
+		}},
+		{"$group": {
+			"_id": "$industry",
+			"close_pct": {"$avg": "$close_pct"}
+		}},
+		{"$project": {
+			"_id": 0,
+			"industry": "$_id",
+			"close_pct": 1
+		}},
+		{"$sort": {
+			'close_pct': pymongo.ASCENDING
+		}}
+	])
 
+	return list(cursor)
+	
+
+def get_top_industry() -> Dict:
+	data = get_all_industries_avg_last_close_pct()
+	return data[-1]
+
+# WARN: this function will break, update last_trading date
+def get_industry_tickers_last_close_pct(industry) -> List[Dict]:
+	last_trading_date = datetime(2022, 7, 13)
+
+	cursor = col_testing.aggregate([
+		{"$match": {"industry": industry}},
+		{"$project": {
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "cdl_data",
+					"cond": {"$and": [
+						{"$gte": ["$$cdl_data.date", last_trading_date]},
+					]}
+				}
+			},
+			"ticker": 1,
+			"close_pct": 1,
+			"_id": 0
+		}},
+		{"$unwind": "$cdl_data"},
+		{"$project": {
+			"ticker": 1,
+			"close_pct": "$cdl_data.close_pct"
+		}},
+		{"$sort": {
+			'close_pct': pymongo.ASCENDING
+		}}
+	])
+
+	return list(cursor)
+
+# WARN: this function will break, update last_trading date
+def get_industry_gainers_losers(industry, limit=5) -> Tuple[List, List]:
+	data = get_industry_tickers_last_close_pct(industry)
+	gainers = list(filter(lambda x: x['close_pct'] > 0, data))
+	losers = list(filter(lambda x: x['close_pct'] < 0, data))
+
+	return gainers[::-1][:min(len(gainers), limit):], losers[:min(len(losers), limit)]
+
+# TODO: rewrite this hot garbage
 def process_gainers_losers_industry(gainers, losers):
 	out = {
 		'gainers': [],
@@ -188,8 +274,7 @@ def process_gainers_losers_industry(gainers, losers):
 	
 	return out, industry_details
 
-
-# TODO: rewrite this hot garbage
+# TODO: replace this hot garbage with a chartjs fn
 def get_all_industries_close_pct(period=None, limit=9):
 	all_industry_cmp = []
 
