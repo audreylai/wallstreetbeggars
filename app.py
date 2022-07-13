@@ -63,7 +63,7 @@ def rules():
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = get_rules_results(ticker).values()
 
 	stock_info = get_stock_info(ticker)
-	stock_data = chartjs_stock_data(get_stock_data(ticker, period=180), ticker=ticker, period=180)
+	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
 
 	return render_template("rules.html", stock_info=stock_info, stock_data=stock_data, dark_mode=dark_mode, rules={
 		"hit_buy_rules": hit_buy_rules,
@@ -126,7 +126,7 @@ def stock_list_page():
 	sort_dir_str = request.values.get("sort_dir", type=str, default='asc')
 	sort_dir = pymongo.DESCENDING if sort_dir_str == 'desc' else pymongo.ASCENDING
 
-	data = get_stock_info_all(filter_industry, sort_col, sort_dir, min_mkt_cap, inclusions={"ticker", "country"})
+	data = get_stock_info_all(filter_industry, sort_col, sort_dir, min_mkt_cap, inclusions={"ticker", "name", "mkt_cap", "industry"})
 
 	rows_per_page = 20
 	num_of_pages = ceil(len(data) / rows_per_page)
@@ -181,7 +181,7 @@ def stock_info():
 	dark_mode = get_user_theme("test")
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
 
-	stock_data = chartjs_stock_data(get_stock_data(ticker, 180), interval=1, ticker=ticker, period=180)
+	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
 	stock_info = get_stock_info(ticker)
 	statistics = {key: get_last_stock_data(ticker)[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower(): stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
 
@@ -205,11 +205,11 @@ def stock_analytics():
 
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = get_rules_results(ticker).values()
 
-	stock_data = chartjs_stock_data(get_stock_data(ticker, period=180), ticker=ticker, period=180)
+	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
 	stock_data['start_date'], stock_data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())
 	stock_info = get_stock_info(ticker)
 
-	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_all_industries(), indexes=get_all_tickers(ticker_type='index'), dark_mode=dark_mode,
+	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_all_industries(), indexes=get_ticker_list(ticker_type='index'), dark_mode=dark_mode,
 		rules={
 			"hit_buy_rules": hit_buy_rules,
 			"hit_sell_rules": hit_sell_rules,
@@ -245,7 +245,7 @@ def convert_colname(name):
 		return 'Name'
 	elif name == 'board_lot':
 		return 'Board Lot'
-	elif name == 'industry_x':
+	elif name == 'industry':
 		return 'Industry'
 	elif name == 'mkt_cap':
 		return 'Market Cap'
