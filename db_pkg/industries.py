@@ -40,7 +40,6 @@ def get_industry_avg_close_pct(industry, period) -> List[Dict]:
 			"date": pymongo.ASCENDING
 		}}
 	])
-
 	return list(cursor)
 
 
@@ -209,10 +208,9 @@ def get_all_industries_close_pct(period=None, limit=9):
 
 	color_index = 0
 	for industry in industry_list:
-		data = process_industry_avg(get_industry_close_pct(industry, period=period))['close_pct']
+		data = get_industry_avg_close_pct_chartjs(industry, period=period)['close_pct']
 		color = color_list[color_index % len(color_list)]
 		color_index += 1
-
 		all_industry_cmp.append({
 			'label': industry,
 			'data': data,
@@ -234,5 +232,4 @@ def get_all_industries_close_pct(period=None, limit=9):
 		'data': [i[1]*100 for i in all_industry_last_cmp_raw],
 		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
 	}
-	print(all_industry_last_cmp)
 	return all_industry_cmp[:limit], all_industry_last_cmp
