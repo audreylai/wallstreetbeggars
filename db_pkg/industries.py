@@ -45,7 +45,6 @@ def get_industry_avg_close_pct(industry, period) -> List[Dict]:
 
 def get_industry_avg_close_pct_chartjs(industry, period, interval=1, precision=4) -> Dict:
 	data = get_industry_avg_close_pct(industry, period)
-	
 	out = {
 		"close_pct": [],
 		"industry": industry, "period": period, "interval": interval

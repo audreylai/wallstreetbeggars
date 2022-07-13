@@ -225,7 +225,7 @@
 								{% endif %}
 							</tbody>
 						</table>
-						<form class="text-center cursor-pointer mt-2" action="{{ url_for('rules') }}" method="POST">
+						<form class="mt-2 text-center cursor-pointer" action="{{ url_for('rules') }}" method="POST">
 							<input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
 							<a class="text-blue-500" onclick="this.parentNode.submit()">Show more</a>
 						</form>
@@ -589,7 +589,7 @@
 					},
 					position: 'right',
 					min: 0,
-					max: data.max_volume.toPrecision(2) * 4,
+					max: data.max_vol.toPrecision(2) * 4,
 					grid: {
 						drawOnChartArea: false
 					}
