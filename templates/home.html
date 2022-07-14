@@ -451,13 +451,13 @@
 				backgroundColor: (ctx) => {
 					tmp = last_close_pct[ctx.dataIndex];
 					if (tmp < 0) {
-						return dark ? `rgba(244, 63, 94, ${Math.min(-tmp*40, 0.75)})` : `rgba(225, 29, 72, ${Math.min(-tmp*80, 0.75)})`;
+						return dark ? `rgba(244, 63, 94, ${Math.min(-tmp*5, 0.5)})` : `rgba(225, 29, 72, ${Math.min(-tmp*20, 0.75)})`;
 					} else {
-						return dark ? `rgba(16, 185, 129, ${Math.min(tmp*40, 0.75)})`: `rgba(5, 150, 105, ${Math.min(tmp*80, 0.75)})`;
+						return dark ? `rgba(16, 185, 129, ${Math.min(tmp*5, 0.5)})`: `rgba(5, 150, 105, ${Math.min(tmp*20, 0.75)})`;
 					}
 				},
 				labels: {
-					color: 'white',
+					color: 'rgb(75, 85, 99)',
           font: {
 						family: 'sans-serif',
             size: (ctx) => {
