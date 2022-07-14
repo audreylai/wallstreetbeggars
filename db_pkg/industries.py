@@ -348,4 +348,38 @@ def get_all_industries_avg_last_close_pct_chartjs() -> Dict:
 		"background_color": ["rgb(16 185 129)" if row["close_pct"] > 0 else "rgb(244 63 94)" for row in data]
 	}
 
-
+def help(start_date=datetime(2022, 7, 13)):
+	cursor = col_testing.aggregate([{"$match": {"type": "stock"}},
+		{"$project": {
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "cdl_data",
+					"cond": {"$or": [
+						{"$eq": ["$$cdl_data.date", last_trading_date]},
+						{"$eq": ["$$cdl_data.date", start_date]}
+					]}
+				}
+			},
+			"industry": 1,
+			"_id": 0
+		}},
+		{"$group": {
+			"_id": "$industry",
+			"close": {"$push": "$cdl_data.close"}
+		}},
+		{"$unwind": "$close"},
+		{"$project": {
+			"industry": 1,
+			"close": {"$divide": [{"$subtract": [{"$arrayElemAt":["$close", 1]}, {"$arrayElemAt":["$close", 0]}]}, {"$arrayElemAt":["$close", 0]}]}
+		}},
+		{"$group": {
+			"_id": "$_id",
+			"change": {"$avg": "$close"}
+		}},
+		{"$project" : {
+			"industry": 1,
+			"change": 1
+		}}
+	])
+	print(list(cursor))
