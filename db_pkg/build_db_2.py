@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
 col_testing = db["testing"]
+col_cache = db["cache"]
 
 ticker_q = Queue()
 info_attrs = [
@@ -38,6 +39,7 @@ def main():
 	global excel_df
 
 	col_testing.delete_many({})
+	col_cache.delete_many({})
 
 	print('Step 1/4: Excel data')
 	excel_df = pd.read_excel('https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx', usecols=[0, 1, 2, 4], thousands=',')
@@ -49,7 +51,7 @@ def main():
 	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
 	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
 	# df = df.drop(df[df.ticker > 10000].index)
-	excel_df.drop(excel_df[excel_df.ticker >= 100].index, inplace=True)
+	excel_df.drop(excel_df[excel_df.ticker >= 1000].index, inplace=True)
 
 	# convert ticker format
 	ticker_list = []
@@ -88,27 +90,27 @@ def main():
 
 
 def convert_name(name):
-		out = ''
-		prev_isupper = False
-		for char in name:
-			if not prev_isupper and char.isupper(): out += f'_{char.lower()}'
-			else: out += char.lower()
+	out = ''
+	prev_isupper = False
+	for char in name:
+		if not prev_isupper and char.isupper(): out += f'_{char.lower()}'
+		else: out += char.lower()
 
-			if char.isupper(): prev_isupper = True
-			else: prev_isupper = False
-		return out
+		if char.isupper(): prev_isupper = True
+		else: prev_isupper = False
+	return out
 
 	
 def suffix_to_int(num_str):
-		num_str = num_str.replace(',', '')
-		if num_str == '': return None
-		if num_str[-1] in 'KMB':
-			unit_map = {'K': 10**3, 'M': 10**6, 'B': 10**9}
-			num = num_str[:-1]
-			unit = num_str[-1]
-			return round(float(num) * unit_map.get(unit), 5)
-		else:
-			return float(num_str)
+	num_str = num_str.replace(',', '')
+	if num_str == '': return None
+	if num_str[-1] in 'KMB':
+		unit_map = {'K': 10**3, 'M': 10**6, 'B': 10**9}
+		num = num_str[:-1]
+		unit = num_str[-1]
+		return round(float(num) * unit_map.get(unit), 5)
+	else:
+		return float(num_str)
 
 
 def etnet_scraping():

@@ -4,7 +4,7 @@ from . import user
 
 import pymongo
 
-from . import industries, utils
+from . import industries, utils, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
@@ -176,12 +176,19 @@ def get_last_stock_data(ticker) -> Dict | None:
 	return col_testing.find_one({"ticker": ticker}, {"_id": 0, "last_cdl_data": 1})["last_cdl_data"]
 
 
-def get_mkt_overview_table() -> List[Dict]:
+def get_mkt_overview_table(use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_mkt_overview_table", {})
+		if cache_res is not None:
+			return cache_res
+
 	cursor = col_testing\
 		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
 		.limit(50).sort("last_volume", pymongo.DESCENDING)
 
-	return list(cursor)
+	out = list(cursor)
+	cache.store_cached_result("get_mkt_overview_table", {}, out)
+	return out
 
 
 def get_leading_index() -> Dict:

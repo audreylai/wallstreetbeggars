@@ -3,15 +3,13 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Tuple
 import pymongo
 from pprint import pprint
-from . import stock, utils
+from . import stock, utils, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
-col_stock_data = db["stock_data"]
-col_stock_info = db["stock_info"]
 col_testing = db["testing"]
 
-last_trading_date = datetime(2022, 7, 13)
+last_trading_date = datetime(2022, 7, 14)
 
 
 def industry_exists(industry) -> bool:
@@ -23,8 +21,13 @@ def get_all_industries() -> List:
 	return col_testing.distinct("industry")
 
 
-def get_industry_avg_close_pct(industry, period) -> List[Dict]:
+def get_industry_avg_close_pct(industry, period, use_cache=False) -> List[Dict]:
 	if not industry_exists(industry): return []
+
+	if use_cache:
+		cache_res = cache.get_cached_result("get_industry_avg_close_pct", {"industry": industry, "period": period})
+		if cache_res is not None:
+			return cache_res
 
 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 
@@ -50,7 +53,10 @@ def get_industry_avg_close_pct(industry, period) -> List[Dict]:
 			"date": pymongo.ASCENDING
 		}}
 	])
-	return list(cursor)
+
+	out = list(cursor)
+	cache.store_cached_result("get_industry_avg_close_pct", {"industry": industry, "period": period}, out)
+	return out
 
 
 def get_industry_avg_close_pct_chartjs(industry, period, interval=1, precision=4) -> Dict:
@@ -93,7 +99,12 @@ def get_industry_avg_last_close_pct(industry) -> float:
 	return cursor.next()["close_pct"]
 
 
-def get_all_industries_avg_close_pct(period) -> List[Dict]:
+def get_all_industries_avg_close_pct(period, use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_all_industries_avg_close_pct", {"period": period})
+		if cache_res is not None:
+			return cache_res
+
 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 
 	cursor = col_testing.aggregate([
@@ -157,10 +168,17 @@ def get_all_industries_avg_close_pct(period) -> List[Dict]:
 				"close_pct": close_pct
 			} for date, close_pct in zip(row["date"], row["close_pct"])]
 		})
+	
+	cache.store_cached_result("get_all_industries_avg_close_pct", {"period": period}, out)
 	return out
 
 # WARN: this function will break, update last_trading date
-def get_all_industries_avg_last_close_pct() -> List[Dict]:
+def get_all_industries_avg_last_close_pct(use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_all_industries_avg_last_close_pct", {})
+		if cache_res is not None:
+			return cache_res
+
 	cursor = col_testing.aggregate([
 		{"$match": {"type": "stock"}},
 		{"$project": {
@@ -195,7 +213,9 @@ def get_all_industries_avg_last_close_pct() -> List[Dict]:
 		}}
 	])
 
-	return list(cursor)
+	out = list(cursor)
+	cache.store_cached_result("get_all_industries_avg_last_close_pct", {}, out)
+	return out
 	
 
 def get_leading_industry() -> Dict:
@@ -203,7 +223,12 @@ def get_leading_industry() -> Dict:
 	return data[-1]
 
 # WARN: this function will break, update last_trading date
-def get_industry_tickers_last_close_pct(industry) -> List[Dict]:
+def get_industry_tickers_last_close_pct(industry, use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_industry_tickers_last_close_pct", {"industry": industry})
+		if cache_res is not None:
+			return cache_res
+
 	cursor = col_testing.aggregate([
 		{"$match": {"industry": industry}},
 		{"$project": {
@@ -230,7 +255,9 @@ def get_industry_tickers_last_close_pct(industry) -> List[Dict]:
 		}}
 	])
 
-	return list(cursor)
+	out = list(cursor)
+	cache.store_cached_result("get_industry_tickers_last_close_pct", {"industry": industry}, out)
+	return out
 
 # WARN: this function will break, update last_trading date
 def get_industry_tickers_gainers_losers(industry, limit=5) -> Tuple[List, List]:
@@ -311,7 +338,7 @@ def get_all_industries_avg_close_pct_chartjs(period) -> List[Dict]:
 		})
 	return out
 
-
+# WARN: this function will break, update last_trading date
 def get_all_industries_avg_last_close_pct_chartjs() -> Dict:
 	data = get_all_industries_avg_last_close_pct()
 
