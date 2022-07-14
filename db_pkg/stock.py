@@ -1,6 +1,5 @@
 from datetime import datetime
 from typing import Dict, List, Tuple
-from . import user
 
 import pymongo
 
@@ -89,7 +88,7 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 		else:
 			out["vol_color"].append(volume_dn_color)
 	
-	out["last_close"] = data[-1]["close"]
+	out["last_close"] = round(data[-1]["close"], precision)
 	out["last_close_pct"] = data[-1]["close_pct"]
 
 	return out
