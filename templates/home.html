@@ -491,7 +491,7 @@
 					}
 				},
 				labels: {
-					color: dark ? 'white' : 'rgb(75, 85, 99)',
+					color:  dark ? 'rgb(212 212 216)' : 'rgb(75, 85, 99)',
           font: {
 						family: 'sans-serif',
             size: (ctx) => {
@@ -706,10 +706,10 @@
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);
 
 	$('document').ready(() => {
-		setTimeout(() => {mkt_overview_chart.update(); console.log("hello")}, 500)
+		setTimeout(() => {mkt_overview_chart.update()}, 500)
 		$("#theme-toggle").bind('click', function() {
-			// draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
-			mkt_overview_chart.update()
+			draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
+			setTimeout(() => {mkt_overview_chart.update()}, 500)
 		})
 	})
 </script>

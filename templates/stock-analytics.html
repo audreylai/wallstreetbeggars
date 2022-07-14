@@ -898,7 +898,7 @@
 
 	draw_charts(stock_data);
 	
-	$().ready(function() {
+	$('document').ready(function() {
 		$("#theme-toggle").bind('click', function() {
 			if (rules["buy_pct"] > rules["sell_pct"]) {
 				draw_si('buy', rules["buy_pct"] * 100);
