@@ -41,15 +41,15 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Market Direction
 						</h3>
-							{% if chart_data["hsi"]["last_close_pct"] < 0%}
+							{% if card_data["mkt_momentum"] < 0 %}
 							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bearish</h2>
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data["mkt_momentum"] }}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % chart_data["hsi"]["last_close_pct"]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data["mkt_momentum"] }}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
 					</div>
@@ -57,16 +57,16 @@
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex flex-col">
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
-							Leader Index
+							Leading Index
 						</h3>
-						<h2 class="text-3xl font-semibold text-gray-800 uppercase dark:text-zinc-100">{{card_data['leading_index'][0]}}</h2>
-							{% if card_data['leading_index'][1] < 0%}
+						<h2 class="text-3xl font-semibold text-gray-800 uppercase dark:text-zinc-100">{{card_data["leading_index"]["index"][1:]}}</h2>
+							{% if card_data["leading_index"]["close_pct"] < 0 %}
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % card_data['leading_index'][1]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data['leading_index']["close_pct"]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % card_data['leading_index'][1]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data["leading_index"]["close_pct"]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
 					</div>
@@ -76,14 +76,14 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Leading Industry
 						</h3>
-						<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">{{card_data['leading_industry'] | truncate(15)}}</h2>
-						{% if card_data['leading_industry_pct'] < 0%}
+						<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">{{card_data['leading_industry']['industry'] | truncate(15)}}</h2>
+						{% if card_data['leading_industry']['close_pct'] < 0 %}
 						<h4 class="font-light text-rose-500">
-						{{"%.2f" % (card_data['leading_industry_pct']*100)}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+						{{"%.2f" % (card_data['leading_industry']['close_pct']*100)}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 						</h4>
 						{% else %}
 						<h4 class="font-light text-emerald-500">
-						{{"%.2f" % (card_data['leading_industry_pct']*100)}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+						{{"%.2f" % (card_data['leading_industry']['close_pct']*100)}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 						</h4>
 						{% endif %}
 					</div>
@@ -666,9 +666,12 @@
 
 	data = {{ chart_data | tojson }};
 
-	draw_index(data.hscc, hscc_index_ctx, hscc_index_chart, [102, 126, 234]);
-	draw_index(data.hsce, hsce_index_ctx, hsce_index_chart, [234, 102, 126]);
-	draw_index(data.hsi, hsi_index_ctx, hsi_index_chart, [126, 234, 102]);
+	
+	
+	draw_index(data.hsi_chartjs, hsi_index_ctx, hsi_index_chart, [102, 126, 234]);
+	draw_index(data.hscc_chartjs, hscc_index_ctx, hscc_index_chart, [234, 102, 126]);
+	draw_index(data.hsce_chartjs, hsce_index_ctx, hsce_index_chart, [126, 234, 102]);
+
 	draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
 	draw_all_industry_cmp(data.all_industry_cmp);
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);

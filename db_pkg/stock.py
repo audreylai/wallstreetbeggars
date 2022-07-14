@@ -178,7 +178,37 @@ def get_last_stock_data(ticker) -> Dict | None:
 
 def get_mkt_overview_table() -> List[Dict]:
 	cursor = col_testing\
-		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1, "mkt_cap":1})\
+		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1, "mkt_cap": 1})\
 		.limit(50).sort("last_volume", pymongo.DESCENDING)
 
 	return list(cursor)
+
+
+def get_leading_index() -> Dict:
+	index_list = ["^HSI", "^HSCC", "^HSCE"]
+	res = []
+
+	for index in index_list:
+		res.append({
+			"index": index,
+			"close_pct": get_last_stock_data(index)["close_pct"]
+		})
+	
+	res = sorted(res, key=lambda x: x["close_pct"])
+	return res[0]
+
+
+def get_mkt_direction() -> float:
+	return get_last_stock_data("^HSI")["close_pct"]
+
+
+def get_mkt_momentum(days=10) -> float:
+	data = get_stock_data("^HSI", 60)
+
+	# momentum = (V - Vx) / Vx, where V = Latest price, Vx = Closing price x days ago
+	V = data[-1]["close_pct"]
+	Vx = data[-days]["close_pct"]
+	
+	return (V - Vx) / Vx
+
+

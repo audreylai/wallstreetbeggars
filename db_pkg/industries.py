@@ -14,11 +14,18 @@ col_testing = db["testing"]
 last_trading_date = datetime(2022, 7, 13)
 
 
+def industry_exists(industry) -> bool:
+	res = col_testing.count_documents({"industry": industry})
+	return res != 0
+
+
 def get_all_industries() -> List:
 	return col_testing.distinct("industry")
 
 
 def get_industry_avg_close_pct(industry, period) -> List[Dict]:
+	if not industry_exists(industry): return []
+
 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 
 	cursor = col_testing.aggregate([
@@ -64,6 +71,26 @@ def get_industry_avg_close_pct_chartjs(industry, period, interval=1, precision=4
 		})
 	
 	return out
+
+# WARN: this function will break, update last_trading date
+def get_industry_avg_last_close_pct(industry) -> float:
+	if not industry_exists(industry): return None
+
+	cursor = col_testing.aggregate([
+		{"$match": {"industry": industry}},
+		{"$unwind": "$cdl_data"},
+		{"$match": {
+			"cdl_data.date": {"$gte": last_trading_date}
+		}},
+		{"$group": {
+			"_id": "$industry",
+			"close_pct": {"$avg": "$cdl_data.close_pct"}
+		}},
+		{"$project": {
+			"_id": 0
+		}}
+	])
+	return cursor.next()["close_pct"]
 
 
 def get_all_industries_avg_close_pct(period) -> List[Dict]:
@@ -141,9 +168,9 @@ def get_all_industries_avg_last_close_pct() -> List[Dict]:
 				"$filter": {
 					"input": "$cdl_data",
 					"as": "cdl_data",
-					"cond": {"$and": [
-						{"$gte": ["$$cdl_data.date", last_trading_date]},
-					]}
+					"cond": {
+						"$gte": ["$$cdl_data.date", last_trading_date]
+					}
 				}
 			},
 			"industry": 1,
@@ -164,21 +191,19 @@ def get_all_industries_avg_last_close_pct() -> List[Dict]:
 			"close_pct": 1
 		}},
 		{"$sort": {
-			'close_pct': pymongo.ASCENDING
+			"close_pct": pymongo.ASCENDING
 		}}
 	])
 
 	return list(cursor)
 	
 
-def get_top_industry() -> Dict:
+def get_leading_industry() -> Dict:
 	data = get_all_industries_avg_last_close_pct()
 	return data[-1]
 
 # WARN: this function will break, update last_trading date
 def get_industry_tickers_last_close_pct(industry) -> List[Dict]:
-	last_trading_date = datetime(2022, 7, 13)
-
 	cursor = col_testing.aggregate([
 		{"$match": {"industry": industry}},
 		{"$project": {
@@ -186,9 +211,9 @@ def get_industry_tickers_last_close_pct(industry) -> List[Dict]:
 				"$filter": {
 					"input": "$cdl_data",
 					"as": "cdl_data",
-					"cond": {"$and": [
-						{"$gte": ["$$cdl_data.date", last_trading_date]},
-					]}
+					"cond": {
+						"$gte": ["$$cdl_data.date", last_trading_date]
+					}
 				}
 			},
 			"ticker": 1,
@@ -201,78 +226,65 @@ def get_industry_tickers_last_close_pct(industry) -> List[Dict]:
 			"close_pct": "$cdl_data.close_pct"
 		}},
 		{"$sort": {
-			'close_pct': pymongo.ASCENDING
+			"close_pct": pymongo.ASCENDING
 		}}
 	])
 
 	return list(cursor)
 
 # WARN: this function will break, update last_trading date
-def get_industry_gainers_losers(industry, limit=5) -> Tuple[List, List]:
+def get_industry_tickers_gainers_losers(industry, limit=5) -> Tuple[List, List]:
 	data = get_industry_tickers_last_close_pct(industry)
-	gainers = list(filter(lambda x: x['close_pct'] > 0, data))
-	losers = list(filter(lambda x: x['close_pct'] < 0, data))
+	gainers = list(filter(lambda x: x["close_pct"] > 0, data))
+	losers = list(filter(lambda x: x["close_pct"] < 0, data))
 
-	return gainers[::-1][:min(len(gainers), limit):], losers[:min(len(losers), limit)]
+	return gainers[::-1][:min(len(gainers), limit)], losers[:min(len(losers), limit)]
 
-# TODO: rewrite this hot garbage
-def process_gainers_losers_industry(gainers, losers):
-	out = {
-		'gainers': [],
-		'losers': []
-	}
+# WARN: this function will break, update last_trading date
+def get_industry_perf_distribution(industry) -> List[int | None]:
+	if not industry_exists(industry): return [None for _ in range(5)]
 
-	industry_details = {}
+	data = get_industry_tickers_last_close_pct(industry)
+	out = [0, 0, 0, 0, 0] # <=-2, -2~0, 0, 0~2, >=2
 
-	for industry in losers:
-		industry_stocks_last_close_pct = get_industry_stocks(industry[0], 60, stock_params=["last_close_pct"])
-		industry_stocks_last_close_pct = sorted(industry_stocks_last_close_pct.items(), key=lambda kv: kv[1]['last_close_pct'])
-		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
-		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
-
-		perf_distribution = [0 for _ in range(5)]
-		for ticker, change in industry_stocks_last_close_pct:
-			if change > 2: perf_distribution[4] += 1
-			elif change > 0: perf_distribution[3] += 1
-			elif change == 0: perf_distribution[2] += 1
-			elif change > -2: perf_distribution[1] += 1
-			else: perf_distribution[0] += 1
-		perf_distribution = list(map(lambda x: (x/sum(perf_distribution))*100, perf_distribution))
-
-		out["losers"].append({
-			"industry": industry[0],
-			"change": industry[1],
-			"top_ticker":  top_ticker,
-			"top_ticker_change": top_ticker_change,
-			"perf_distribution": perf_distribution
-		})
-		industry_details[industry[0]] = industry_stocks_last_close_pct
-
-	for industry in gainers:
-		industry_stocks_last_close_pct = get_industry_stocks(industry[0], 60, stock_params=["last_close_pct"])
-		industry_stocks_last_close_pct = sorted(industry_stocks_last_close_pct.items(), key=lambda kv: kv[1]['last_close_pct'], reverse=True)
-		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
-		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
-
-		perf_distribution = [0 for _ in range(5)]
-		for ticker, change in industry_stocks_last_close_pct:
-			if change > 2: perf_distribution[4] += 1
-			elif change > 0: perf_distribution[3] += 1
-			elif change == 0: perf_distribution[2] += 1
-			elif change > -2: perf_distribution[1] += 1
-			else: perf_distribution[0] += 1
-		perf_distribution = list(map(lambda x: (x/sum(perf_distribution))*100, perf_distribution))
-
-		out["gainers"].append({
-			"industry": industry[0],
-			"change": industry[1],
-			"top_ticker":  top_ticker,
-			"top_ticker_change": top_ticker_change,
-			"perf_distribution": perf_distribution
-		})
-		industry_details[industry[0]] = industry_stocks_last_close_pct
+	for row in data:
+		if row["close_pct"] <= -2:
+			out[0] += 1
+		elif row["close_pct"] < 0:
+			out[1] += 1
+		elif row["close_pct"] == 0:
+			out[2] += 1
+		elif row["close_pct"] < 2:
+			out[3] += 1
+		else:
+			out[4] += 1
 	
-	return out, industry_details
+	out = [i/len(data) if len(data) != 0 else None for i in out] # convert to pct
+	return out
+
+# WARN: this function will break, update last_trading date
+def get_industries_gainers_losers_table(limit=5) -> Tuple[Dict, Dict]:
+	data = get_all_industries_avg_last_close_pct()
+	gainers = list(filter(lambda x: x["close_pct"] > 0, data))
+	losers = list(filter(lambda x: x["close_pct"] < 0, data))
+	gainers = gainers[::-1][:min(len(gainers), limit)]
+	losers = losers[:min(len(losers), limit)]
+
+	for i in range(len(gainers)):
+		industry = gainers[i]["industry"]
+		top_ticker, _ = get_industry_tickers_gainers_losers(industry, limit=1)
+		top_ticker = top_ticker[0]
+		gainers[i]["top_ticker"] = top_ticker
+		gainers[i]["perf_distribution"] = get_industry_perf_distribution(industry)
+	
+	for i in range(len(losers)):
+		industry = losers[i]["industry"]
+		_, bottom_ticker = get_industry_tickers_gainers_losers(industry, limit=1)
+		bottom_ticker = bottom_ticker[0]
+		losers[i]["bottom_ticker"] = bottom_ticker
+		losers[i]["perf_distribution"] = get_industry_perf_distribution(industry)
+
+	return gainers, losers
 
 # TODO: replace this hot garbage with a chartjs fn
 def get_all_industries_close_pct(period=None, limit=9):
@@ -317,3 +329,5 @@ def get_all_industries_close_pct(period=None, limit=9):
 		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
 	}
 	return all_industry_cmp[:limit], all_industry_last_cmp
+
+

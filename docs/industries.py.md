@@ -1,13 +1,32 @@
 # industries.py
 ## Table of contents
-- `get_all_industries` - Returns a list of all industry names
+- `industry_exists()` - Checks if industry exists
+- `get_all_industries()` - Returns a list of all industry names
 - `get_industry_avg_close_pct()` - Returns the average close pct of tickers in an industry per trading day
 - `get_industry_avg_close_pct_chartjs()` - Returns chartjs-formatted average close pct of tickers in an industry per trading day
 - `get_all_industries_avg_close_pct()` - Returns the average close pct of stocks per industry per trading day
 - `get_all_industries_avg_last_close_pct()` - Returns the average last close pct of stocks per industry
-- `get_top_industry()` - Returns the top performing industry by average last close pct
+- `get_leading_industry()` - Returns the leading industry by average last close pct
 - `get_industry_tickers_last_close_pct()` - Returns the last close pct of tickers in an industry
-- `get_industry_gainers_losers()` - Returns the gainer and loser tickers of an industry by close pct of the last trading day
+- `get_industry_tickers_gainers_losers()` - Returns the gainer and loser tickers in an industry
+- `get_industry_perf_distribution()` - Returns the performance distribution of tickers in an industry
+- `get_industries_gainers_losers_table()` - Returns the gainer and loser industries with additional information
+
+---
+### `industry_exists(industry)`
+Params:
+* industry (`str`)
+
+Returns: `bool`
+
+Example:
+```
+>>> industry_exists("Banks")
+True
+
+>>> industry_exists("foo")
+False
+```
 
 ---
 ### `get_all_industries()`
@@ -117,14 +136,14 @@ Example:
 ```
 
 ---
-### `get_top_industry()`
+### `get_leading_industry()`
 Params: None
 
 Returns: `Dict`
 
 Example:
 ```
->>> get_top_industry()
+>>> get_leading_industry()
 {'close_pct': 0.11111105745466787,
  'industry': 'Commercial & Professional Services'}
 ```
@@ -145,16 +164,16 @@ Example:
 ```
 
 ---
-### `get_industry_gainers_losers(industry[, limit])`
+### `get_industry_tickers_gainers_losers(industry[, limit])`
 Params:
 * industry (`str`)
-* limit (`int`): No. of results to return
+* limit (`int`, default=`5`): No. of results to return
 
 Returns: `Tuple[List, List]`
 
 Example: 
 ```
->>> get_industry_gainers_losers("Properties", 3)
+>>> get_industry_tickers_gainers_losers("Properties", 3)
 ([{'close_pct': 0.02459015242116691, 'ticker': '0036-HK'},
   {'close_pct': 0.012987039376318732, 'ticker': '0059-HK'},
   {'close_pct': 0.008695685345193604, 'ticker': '0083-HK'}],
@@ -164,3 +183,54 @@ Example:
 ```
 
 ---
+### `get_industry_perf_distribution(industry)`
+Params:
+* industry (`str`)
+
+Returns: `List[int | None]`
+
+Example:
+```
+>>> get_industry_perf_distribution("Properties")
+[0.0, 0.5238095238095238, 0.09523809523809523, 0.38095238095238093, 0.0]
+
+>>> get_industry_perf_distribution("foo")
+[None, None, None, None, None]
+```
+
+---
+### `get_industries_gainers_losers_table([limit])`
+Params:
+* limit (`int`, default=`5`)
+
+Returns: `Tuple[Dict, Dict]`
+
+Example:
+```
+>>> get_industries_gainers_losers_table()
+([{'close_pct': 0.11111105745466787,
+   'industry': 'Commercial & Professional Services',
+   'perf_distribution': [0.0, 0.0, 0.0, 1.0, 0.0],
+   'top_ticker': {'close_pct': 0.11111105745466787, 'ticker': '0079-HK'}},
+...
+  {'close_pct': 0.0166666501098216,
+   'industry': 'Software & Services',
+   'perf_distribution': [0.0, 0.0, 0.0, 1.0, 0.0],
+   'top_ticker': {'close_pct': 0.0166666501098216, 'ticker': '0082-HK'}}],
+ [{'bottom_ticker': {'close_pct': -0.13114756100666625, 'ticker': '0084-HK'},
+   'close_pct': -0.13114756100666625,
+   'industry': 'Jewellery & Watches',
+   'perf_distribution': [0.0, 1.0, 0.0, 0.0, 0.0]},
+...
+  {'bottom_ticker': {'close_pct': -0.023465724789903275, 'ticker': '0023-HK'},
+   'close_pct': -0.006727399453664444,
+   'industry': 'Banks',
+   'perf_distribution': [0.0,
+                         0.3333333333333333,
+                         0.0,
+                         0.6666666666666666,
+                         0.0]}])
+```
+
+---
+### 

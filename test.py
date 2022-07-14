@@ -12,7 +12,7 @@ from pprint import pprint
 from timeit import default_timer as timer
 
 def test():
-	return get_industry_gainers_losers("Properties", limit=3)
+	return get_industries_gainers_losers_table()
 
 pprint(test())
 
