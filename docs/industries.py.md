@@ -11,6 +11,8 @@
 - `get_industry_tickers_gainers_losers()` - Returns the gainer and loser tickers in an industry
 - `get_industry_perf_distribution()` - Returns the performance distribution of tickers in an industry
 - `get_industries_gainers_losers_table()` - Returns the gainer and loser industries with additional information
+- `get_all_industries_avg_close_pct_chartjs()` - Returns chartjs-formatted average close pct of stocks per industry per trading day
+- `get_all_industries_avg_last_close_pct_chartjs()` - Returns chartjs-formatted average last close pct of stocks per industry
 
 ---
 ### `industry_exists(industry)`
@@ -201,7 +203,7 @@ Example:
 ---
 ### `get_industries_gainers_losers_table([limit])`
 Params:
-* limit (`int`, default=`5`)
+* limit (`int`, default=`5`): No. of results to return
 
 Returns: `Tuple[Dict, Dict]`
 
@@ -233,4 +235,51 @@ Example:
 ```
 
 ---
-### 
+### `get_all_industries_avg_close_pct_chartjs(period)`
+Params:
+* period (`int`)
+
+Returns: `List[Dict]`
+
+Example:
+```
+>>> get_all_industries_avg_close_pct_chartjs(10)
+[{'borderColor': 'rgb(0, 191, 160, 0.7)',
+  'borderWidth': 2.5,
+  'data': [{'x': 1656950400000, 'y': -0.0254}, ...],
+  'fill': False,
+  'label': 'Agricultural Products',
+  'pointBackgroundColor': 'rgb(0, 191, 160, 0.7)',
+  'pointRadius': 2,
+  'tension': 0.4},
+...
+  'label': 'Food & Beverages',
+  'pointBackgroundColor': 'rgba(230, 0, 73, 0.7)',
+  'pointRadius': 2,
+  'tension': 0.4}]
+```
+
+---
+### `get_all_industries_avg_last_close_pct_chartjs()`
+Params: None
+
+Returns: `Dict`
+
+Example:
+```
+>>> get_all_industries_avg_last_close_pct_chartjs()
+{'background_color': ['rgb(244 63 94)',
+                      'rgb(244 63 94)',
+                      ...
+                      'rgb(16 185 129)',
+                      'rgb(16 185 129)'],
+ 'data': [-0.13114756100666625,
+          -0.044843050861548606,
+          ...
+          0.029147331303756907,
+          0.11111105745466787],
+ 'labels': ['Jewellery & Watches',
+            'Health Care',
+            ...
+            'Food & Beverages',
+            'Commercial & Professional Services']}

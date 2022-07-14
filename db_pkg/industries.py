@@ -286,48 +286,39 @@ def get_industries_gainers_losers_table(limit=5) -> Tuple[Dict, Dict]:
 
 	return gainers, losers
 
-# TODO: replace this hot garbage with a chartjs fn
-def get_all_industries_close_pct(period=None, limit=9):
-	all_industry_cmp = []
 
-	industry_list = get_all_industries()
-
+def get_all_industries_avg_close_pct_chartjs(period) -> List[Dict]:
 	alpha = 0.7
 	color_list = [
 		f"rgba(230, 0, 73, {alpha})", f"rgba(11, 180, 255, {alpha})", f"rgba(80, 233, 145, {alpha})",
 		f"rgba(230, 216, 0, {alpha})", f"rgba(155, 25, 245, {alpha})", f"rgba(255, 163, 0, {alpha})",
 		f"rgba(220, 10, 180, {alpha})", f"rgba(179, 212, 255, {alpha})", f"rgb(0, 191, 160, {alpha})"
 	]
-	
-	all_industry_last_cmp_raw = []
-	all_industry_last_cmp = []
+	industry_list = get_all_industries()[:9]
 
-	color_index = 0
+	out = []
 	for industry in industry_list:
-		data = get_industry_avg_close_pct_chartjs(industry, period=period)['close_pct']
-		color = color_list[color_index % len(color_list)]
-		color_index += 1
-		all_industry_cmp.append({
-			'label': industry,
-			'data': data,
-			'borderColor': color,
-			'fill': False,
-			'borderWidth': 2.5,
-			'tension': 0.4,
-			'pointBackgroundColor': color, 
-			'pointRadius': 2,
+		color = color_list.pop()
+		out.append({
+			"label": industry,
+			"data": get_industry_avg_close_pct_chartjs(industry, period)['close_pct'],
+			"borderColor": color,
+			"pointBackgroundColor": color,
+			"fill": False,
+			"borderWidth": 2.5,
+			"tension": 0.4,
+			"pointRadius": 2
 		})
-		
-		if len(data) > 2:
-			last_pct_change = (data[-1]['y'] - data[-2]['y']) / (1 + data[-2]['y'])
-			all_industry_last_cmp_raw.append([industry, last_pct_change])
+	return out
 
-	all_industry_last_cmp_raw = sorted(all_industry_last_cmp_raw, key=lambda x: x[1])
-	all_industry_last_cmp = {
-		'labels': [i[0] for i in all_industry_last_cmp_raw],
-		'data': [i[1]*100 for i in all_industry_last_cmp_raw],
-		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
+
+def get_all_industries_avg_last_close_pct_chartjs() -> Dict:
+	data = get_all_industries_avg_last_close_pct()
+
+	return {
+		"labels": [row["industry"] for row in data],
+		"data": [row["close_pct"] for row in data],
+		"background_color": ["rgb(16 185 129)" if row["close_pct"] > 0 else "rgb(244 63 94)" for row in data]
 	}
-	return all_industry_cmp[:limit], all_industry_last_cmp
 
 

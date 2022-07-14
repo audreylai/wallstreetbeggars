@@ -41,15 +41,15 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Market Direction
 						</h3>
-							{% if card_data["mkt_momentum"] < 0 %}
+							{% if card_data["mkt_direction"] < 0 %}
 							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bearish</h2>
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % card_data["mkt_momentum"] }}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data["mkt_direction"]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % card_data["mkt_momentum"] }}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+							{{"%.2f" % card_data["mkt_direction"]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
 					</div>
@@ -165,36 +165,36 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for row in table_data['gainers'] %}
+						{% for row in table_data["gainers"] %}
 						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'] }}</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"] }}</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row['price'] }}</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row["last_close"] }}</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']*100) }}%</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row["last_close_pct"]*100) }}%</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['volume'] | suffix }}</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["last_volume"] | suffix }}</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['mkt_cap'] | suffix }}</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["mkt_cap"] | suffix }}</a>
 								</form>
 							</td>
 						</tr>
@@ -230,36 +230,36 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for row in table_data['losers'] %}
+						{% for row in table_data["losers"] %}
 						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'] }}</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"] }}</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row['price'] }}</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row["last_close"] }}</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['change']*100) }}%</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row["last_close_pct"]*100) }}%</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['volume'] | suffix }}</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["last_volume"] | suffix }}</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['mkt_cap'] | suffix }}</a>
+									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["mkt_cap"] | suffix }}</a>
 								</form>
 							</td>
 						</tr>
@@ -442,10 +442,8 @@
 
 	async function draw_mkt_overview(data, last_close_pct) {
 		chart_data = {
-			// labels: data.labels,
-			labels: ['0005-HK', '0011-HK', '0016-HK', '0066-HK', '0020-HK'],
 			datasets: [{
-				key: "mkt_cap",
+				key: "last_volume",
 				groups: ["ticker"],
 				tree: data,
 				borderWidth: 0,
@@ -466,7 +464,7 @@
 							a = -0.0001930;
 							b = 0.1858;
 							c = -5.888;
-							x = ctx.element.width;
+							x = Math.min(ctx.element.width, 480);
 							return Math.max(a * x**2 + b * x + c, 10.5);
 						},
 						weight: 'lighter'
@@ -578,8 +576,8 @@
 		chart_data = {
 			labels: data.labels,
 			datasets: [{
-				data: data.data.reverse(),
-				backgroundColor: data.background_color.reverse()
+				data: data.data,
+				backgroundColor: data.background_color
 			}]
 		}
 
@@ -596,10 +594,10 @@
 					},
 					ticks: {
 						autoSkip: true,
-						callback: (val) => (val + '%')
+						callback: (val) => (Math.round(val*100) + '%')
 					},
-					min: -2,
-					max: 2
+					/* min: -2,
+					max: 2 */
 				},
 				x: {
 					...y_scale_settings,
@@ -612,9 +610,6 @@
 								return label.slice(0, 27) + '...';
 							}
 							return label;
-						},
-						font: {
-							size: 10
 						}
 					},
 				},
@@ -632,8 +627,8 @@
 					bodyColor: "rgba(255, 255, 255, 0.7)",
 					callbacks: {
 						label: function(context) {
-							if (typeof context.parsed.x == 'number' && context.label) {
-								return context.label + ': ' + context.parsed.x.toFixed(2) + '%';
+							if (typeof context.parsed.y == 'number' && context.label) {
+								return context.label + ': ' + (context.parsed.y*100).toFixed(2) + '%';
 							}
 							return '';
 						}

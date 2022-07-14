@@ -100,7 +100,7 @@ def get_stock_info(ticker) -> Dict | None:
 	return col_testing.find_one({"ticker": ticker}, {"_id": 0, "cdl_data": 0})
 
 
-def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=0, inclusions=[]):
+def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=0, cols=[]):
 	query = {
 		"type": "stock",
 		"mkt_cap": {"$gte": min_mkt_cap}
@@ -108,7 +108,7 @@ def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCEND
 	if industry: query["industry"] = industry
 	
 	cursor = col_testing\
-		.find(query, {"_id": 0} | {k: 1 for k in inclusions})\
+		.find(query, {"_id": 0} | {k: 1 for k in cols})\
 		.sort([(sort_col, sort_dir), ("_id", 1)])\
 		.allow_disk_use(True)
 	
@@ -178,7 +178,7 @@ def get_last_stock_data(ticker) -> Dict | None:
 
 def get_mkt_overview_table() -> List[Dict]:
 	cursor = col_testing\
-		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1, "mkt_cap": 1})\
+		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
 		.limit(50).sort("last_volume", pymongo.DESCENDING)
 
 	return list(cursor)

@@ -18,7 +18,7 @@ app = Flask(__name__)
 @app.route("/", methods=["GET"])
 def home():
 	period = 60
-	all_industry_cmp, all_industry_last_cmp = get_all_industries_close_pct(period)
+
 	mkt_overview_data = get_mkt_overview_table()
 	dark_mode = get_user_theme("test")
 
@@ -29,8 +29,8 @@ def home():
 
 		'mkt_overview_data': 		[{k: v for k, v in d.items() if k != 'last_close_pct'} for d in mkt_overview_data],
 		'mkt_overview_last_close_pct': [x["last_close_pct"] for x in mkt_overview_data],
-		'all_industry_cmp': all_industry_cmp,
-		'all_industry_last_cmp': all_industry_last_cmp
+		'all_industry_cmp': get_all_industries_avg_close_pct_chartjs(period),
+		'all_industry_last_cmp': get_all_industries_avg_last_close_pct_chartjs()
 	}
 	
 	card_data = {
@@ -39,13 +39,25 @@ def home():
 		"leading_index": get_leading_index(),
 		"leading_industry": get_leading_industry()
 	}
+
+	gainers_data, losers_data = get_gainers_losers_table()
+	table_data = {
+		"gainers": gainers_data,
+		"losers": losers_data
+	}
 	
-	table_data = get_gainers_losers_table()
 	marquee_data = get_hsi_tickers_table()
 	watchlist_rules_data = get_watchlist_rules_results('test')
-	news = scmp_scraping(limit=5)
+	news = scmp_scraping(5)
 
-	return render_template("home.html", chart_data=chart_data, card_data=card_data, table_data=table_data, marquee_data=marquee_data, watchlist_rules_data=watchlist_rules_data, news=news, dark_mode=dark_mode)
+	return render_template("home.html",
+		chart_data=chart_data,
+		card_data=card_data,
+		table_data=table_data,
+		marquee_data=marquee_data,
+		watchlist_rules_data=watchlist_rules_data,
+		news=news, dark_mode=dark_mode
+	)
 
 
 @app.route("/theme/<theme>", methods=["GET"])
@@ -127,7 +139,7 @@ def stock_list_page():
 	sort_dir_str = request.values.get("sort_dir", type=str, default='asc')
 	sort_dir = pymongo.DESCENDING if sort_dir_str == 'desc' else pymongo.ASCENDING
 
-	data = get_stock_info_all(filter_industry, sort_col, sort_dir, min_mkt_cap, inclusions={"ticker", "name", "mkt_cap", "industry"})
+	data = get_stock_info_all(filter_industry, sort_col, sort_dir, min_mkt_cap, ["ticker", "name", "mkt_cap", "industry"])
 
 	rows_per_page = 20
 	num_of_pages = ceil(len(data) / rows_per_page)

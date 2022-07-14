@@ -11,6 +11,9 @@
 - `get_hsi_tickers_table()` - Returns hsi tickers as dicts containing additional info of each ticker
 - `get_last_stock_data()` - Returns stock data of the last trading day of a ticker
 - `get_mkt_overview_table()` - Returns tickers sorted by last volume as dicts
+- `get_leading_index()` - Returns the index with highest last close pct
+- `get_mkt_direction()` - Returns the market direction (by taking last close pct of HSI)
+- `get_mkt_momentum()` - Returns the market momentum
 
 ---
 ### `ticker_exists(ticker)`
@@ -178,12 +181,13 @@ None
 ```
 
 ---
-### `get_stock_info_all([industry, sort_col, sort_dir, min_mkt_cap])`
+### `get_stock_info_all([industry, sort_col, sort_dir, min_mkt_cap, cols])`
 Params:
 * industry (`str | None`, default=`None`): Filter results by a specific industry
 * sort_col (`str`, default=`"ticker"`): Column to perform sorting on
 * sort_dir (`int`, default=`pymongo.ASCENDING`): Direction of sorting
 * min_mkt_cap (`int`, default=`0`): Filter results by minimum market cap
+* cols (`List[str]`, default=`[]`): Columns to return
 
 Returns: `List[Dict]`
 
@@ -204,7 +208,7 @@ Example:
 ---
 ### `get_ticker_list([ticker_type])`
 Params:
-* ticker_type (`"stock" | "index" | None`, default=`None`)
+* ticker_type (`str`, default=`None`): Type of ticker. One of `"index"`, `"stock"`
 
 Returns: `List`
 
@@ -220,7 +224,7 @@ Example:
 ---
 ### `get_gainers_losers([limit])`
 Params:
-* limit (`int`, default=`5`)
+* limit (`int`, default=`5`): No. of results to return
 
 Returns: `Tuple[List[str], List[str]]`
 
@@ -237,23 +241,31 @@ Example:
 ---
 ### `get_gainers_losers_table([limit])`
 Params:
-* limit (`int`, default=`5`)
+* limit (`int`, default=`5`): No. of results to return
 
 Returns: `Tuple[List[Dict], List[Dict]]`
 
 Example:
 ```
 >>> get_gainers_losers_table()
-([{'ticker': '0084-HK',
-   'mkt_cap': 63835000.0,
+([{'last_close': 0.05999999865889549,
+   'last_close_pct': 0.11111105745466787,
+   'last_volume': 50000.0,
+   'mkt_cap': 116329000.0,
+   'ticker': '0070-HK'},
 ...
-   'last_close': 0.09200000017881393,
-   'last_close_pct': 0.02222218358958372}],
- [{'ticker': '0079-HK',
-   'mkt_cap': 35216000.0,
+   'last_volume': 280000.0,
+   'mkt_cap': 257968000.0,
+   'ticker': '0080-HK'}],
+ [{'last_close': 0.05299999937415123,
+   'last_close_pct': -0.13114756100666625,
+   'last_volume': 3532000.0,
+   'mkt_cap': 55463000.0,
+   'ticker': '0084-HK'},
 ...
-   'last_close': 0.3199999928474426,
-   'last_close_pct': -0.05882356034843117}])
+   'last_volume': 34000.0,
+   'mkt_cap': 2234000000.0,
+   'ticker': '0029-HK'}])
 ```
 
 ---
@@ -335,4 +347,41 @@ Example:
  {'ticker': '0033-HK',
   'last_volume': 108040.0,
   'last_close_pct': 0.0}]
+```
+
+---
+### `get_leading_index()`
+Params: None
+
+Returns: `Dict`
+
+Example:
+```
+>>> get_leading_index()
+{'close_pct': -0.007391449315000798, 'index': '^HSCC'}
+```
+
+---
+### `get_mkt_direction()`
+Params: None
+
+Returns: `float`
+
+Example:
+```
+>>> get_mkt_direction()
+-0.002244739684874375
+```
+
+---
+### `get_mkt_momentum([days])`
+Params:
+* days (`int`, default=`10`)
+
+Returns: `float`
+
+Example:
+```
+>>> get_mkt_momentum()
+-0.880769655239599
 ```

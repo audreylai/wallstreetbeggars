@@ -12,7 +12,7 @@ from pprint import pprint
 from timeit import default_timer as timer
 
 def test():
-	return get_industries_gainers_losers_table()
+	return get_all_industries_avg_last_close_pct_chartjs()
 
 pprint(test())
 

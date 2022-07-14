@@ -5,7 +5,7 @@ def get_datetime_from_period(period):
 	end_datetime = datetime.now()
 	start_datetime = end_datetime - timedelta(days=period)
 	return start_datetime, end_datetime
-	
+
 
 def format_rules(hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules):
 	indicators_map = {
