@@ -159,23 +159,27 @@ def stock_list_page():
 @app.route("/industries", methods=["GET", "POST"])
 def industries_page():
 	dark_mode = get_user_theme("test")
-	industries_pct = get_all_industries_close_pct(period=60, limit=None)[1]
+	industries_pct = get_all_industries_avg_close_pct_chartjs(period=60)
+	print(industries_pct)
 	gainers, losers = [], []
-	for i in range(len(industries_pct['labels'])):
-		if industries_pct['data'][i] > 0:
-			gainers.append((industries_pct['labels'][i], industries_pct['data'][i]))
+	for i in range(len(industries_pct)):
+		if industries_pct[i]['data'][-1]['y'] > 0:
+			gainers.append((industries_pct[i]['label'], industries_pct[i]['data']))
 		else:
-			losers.append((industries_pct['labels'][i], industries_pct['data'][i]))
-	table_data, industry_details = process_gainers_losers_industry(gainers[::-1], losers)
+			losers.append((industries_pct[i]['label'], industries_pct[i]['data']))
+	table_data = get_industries_gainers_losers_table()
 	industries = get_all_industries()
+	
 
-	industry_detail = {"Banks": industry_details["Banks"]}
-	if request.method == "POST" and request.values.get("industry_detail") in industry_details:
-		industry_detail = {request.values.get("industry_detail"): industry_details[request.values.get("industry_detail")]}
-	if request.method == "POST" and request.values.get("industry_detail") not in industry_detail:
+	industry_detail = {"Banks": get_industry_tickers_last_close_pct("Banks")}
+	if request.method == "POST" and industry_exists(request.values.get("industry_detail")):
+		industry_detail = {request.values.get("industry_detail"): get_industry_tickers_last_close_pct(request.values.get("industry_detail"))}
+	if request.method == "POST" and not industry_exists(request.values.get("industry_detail")):
 		industry_detail = {}
+	
+	print(industry_detail)
 
-	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industry_details=industry_details, industries=industries, industry_detail=industry_detail)
+	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industries=industries, industry_detail=industry_detail)
 
 
 # this should be an api
