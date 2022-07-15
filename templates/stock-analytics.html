@@ -351,12 +351,12 @@
 		chart_data = {
 			datasets: [{
 				label: data.ticker,
-				data: data.close_pct,
+				data: data.accum_close_pct,
 				borderColor: 'rgb(234, 63, 51)',
 				...line_chart_settings
 			}, {
 				label: data2.ticker,
-				data: data2.close_pct,
+				data: data2.accum_close_pct,
 				borderColor: 'rgba(102, 126, 234)',
 				...line_chart_settings
 			}]
@@ -414,12 +414,12 @@
 		chart_data = {
 			datasets: [{
 				label: data.ticker,
-				data: data.close_pct,
+				data: data.accum_close_pct,
 				borderColor: 'rgb(234, 63, 51)',
 				...line_chart_settings
 			}, {
 				label: data2.industry,
-				data: data2.close_pct,
+				data: data2.accum_close_pct,
 				borderColor: 'rgba(102, 126, 234)',
 				...line_chart_settings
 			}]
@@ -477,12 +477,12 @@
 		chart_data = {
 			datasets: [{
 				label: data.ticker,
-				data: data.close_pct,
+				data: data.accum_close_pct,
 				borderColor: 'rgb(234, 63, 51)',
 				...line_chart_settings
 			}, {
 				label: data2.ticker,
-				data: data2.close_pct,
+				data: data2.accum_close_pct,
 				borderColor: 'rgba(102, 126, 234)',
 				...line_chart_settings
 			}]
@@ -558,7 +558,7 @@
 				label: 'Volume',
 				type: 'bar',
 				data: data.volume,
-				backgroundColor: data.volume_color,
+				backgroundColor: data.vol_color,
 				yAxisID: 'y1'
 			}]
 		}
@@ -727,7 +727,7 @@
 			datasets: [{
 				label: 'Volume',
 				type: 'bar',
-				backgroundColor: data.volume_color,
+				backgroundColor: data.vol_color,
 				data: data.volume,
 			}, {
 				label: 'MA20',

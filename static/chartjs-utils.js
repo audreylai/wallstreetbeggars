@@ -183,11 +183,10 @@ const crosshair_plugin = {
 			return;
 		}
 
+		ctx.save();
 		ctx.lineWidth = opts.width || 2;
 		ctx.setLineDash(opts.dash || [3, 3]);
 		ctx.strokeStyle = opts.color || 'rgba(112, 110, 122, 0.6)'
-
-		ctx.save();
 		ctx.beginPath();
 		ctx.moveTo(x, bottom);
 		ctx.lineTo(x, top);
@@ -195,9 +194,6 @@ const crosshair_plugin = {
 		ctx.lineTo(right, y);
 		ctx.stroke();
 		ctx.restore();
-
-		// reset line dash
-		ctx.setLineDash([]);
 	}
 }
 
@@ -220,6 +216,7 @@ const cursorpos_plugin = {
 			return;
 		}
 
+		ctx.save()
 		ctx.font = '12px Arial';
 		ctx.fillStyle = dark ? 'rgba(255, 255, 255, 0.8)': 'rgba(0, 0, 0, 0.8)';
 
@@ -236,9 +233,9 @@ const cursorpos_plugin = {
 			y_val = round_stock_value(y_val)
 		}
 
-
 		ctx.fillText('x: ' + x_val, left+5, top+10);
 		ctx.fillText('y: ' + y_val, left+5, top+25);
+		ctx.restore()
 	}
 }
 
