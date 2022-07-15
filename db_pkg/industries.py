@@ -59,21 +59,21 @@ def get_industry_avg_close_pct(industry, period, use_cache=True) -> List[Dict]:
 	return out
 
 
-def get_industry_avg_close_pct_chartjs(industry, period, interval=1, precision=4) -> Dict:
-	data = get_industry_avg_close_pct(industry, period)
+def get_industry_accum_avg_close_pct_chartjs(industry, period, interval=1, precision=4) -> Dict:
+	data = get_industry_accum_avg_close_pct(industry, period)
 	out = {
-		"close_pct": [],
+		"accum_close_pct": [],
 		"industry": industry, "period": period, "interval": interval
 	}
 
 	for c, row in enumerate(data):
 		if c % interval != 0: continue
 
-		epoch_timestamp = int(datetime.timestamp(row['date']) * 1000)
+		epoch_timestamp = int(datetime.timestamp(row["date"]) * 1000)
 
-		out["close_pct"].append({
+		out["accum_close_pct"].append({
 			'x': epoch_timestamp,
-			'y': round(row["close_pct"], precision)
+			'y': round(row["accum_close_pct"], precision)
 		})
 	
 	return out
@@ -314,7 +314,7 @@ def get_industries_gainers_losers_table(limit=5) -> Tuple[Dict, Dict]:
 	return gainers, losers
 
 
-def get_all_industries_avg_close_pct_chartjs(period) -> List[Dict]:
+def get_all_industries_accum_avg_close_pct_chartjs(period) -> List[Dict]:
 	alpha = 0.7
 	color_list = [
 		f"rgba(230, 0, 73, {alpha})", f"rgba(11, 180, 255, {alpha})", f"rgba(80, 233, 145, {alpha})",
@@ -328,7 +328,7 @@ def get_all_industries_avg_close_pct_chartjs(period) -> List[Dict]:
 		color = color_list.pop()
 		out.append({
 			"label": industry,
-			"data": get_industry_avg_close_pct_chartjs(industry, period)['close_pct'],
+			"data": get_industry_accum_avg_close_pct_chartjs(industry, period)["accum_close_pct"],
 			"borderColor": color,
 			"pointBackgroundColor": color,
 			"fill": False,
@@ -350,96 +350,75 @@ def get_all_industries_avg_last_close_pct_chartjs() -> Dict:
 
 
 def get_industry_accum_avg_close_pct(industry, period) -> List[Dict]:
-	start_datetime, end_datetime = utils.get_datetime_from_period(period)
+	data = get_industry_avg_close_pct(industry, period)
+
 	accum_close_pct = 0
-
-	cursor = col_testing.aggregate([
-		{"$match": {"industry": industry}},
-		{"$unwind": "$cdl_data"},
-		{"$match": {
-			"$and": [
-				{"cdl_data.date": {"$gte": start_datetime}},
-				{"cdl_data.date": {"$lte": end_datetime}}
-			]
-		}},
-		{"$group": {
-			"_id": "$cdl_data.date",
-			"close_pct": {"$avg": "$cdl_data.close_pct"}
-		}},
-		{"$sort": {
-			"date": pymongo.ASCENDING
-		}},
-		{"$project": {
-			"close_pct": {
-				"$let": {
-					"vars": {
-						"accum_close_pct": {
-							{"$add": ["$$accum_close_pct", "$close_pct"]}
-						}
-					},
-					"in": "$$accum_close_pct"
-				}
-			}
-		}},
-		{"$sort": {
-			"date": pymongo.ASCENDING
-		}}
-
-		# {"$project": {
-		# 	"_id": 0,
-		# 	"date": "$_id",
-		# 	"close_pct": 1
-		# }},
-		# {"$group": {
-		# 	"_id": None,
-		# 	"close_pct": {"$sum": "$close_pct"}
-		# }},
-		# {"$project": {
-		# 	"_id": 0,
-		# 	"date": 1,
-		# 	"close_pct": 1
-		# }},
-		# {"$sort": {
-		# 	"date": pymongo.ASCENDING
-		# }}
-	])
-	return list(cursor)
+	out = []
+	for i in range(len(data)):
+		accum_close_pct += data[i]["close_pct"]
+		out.append({
+			"date": data[i]["date"],
+			"accum_close_pct": accum_close_pct
+		})
+	return out
 
 
+def get_all_industries_accum_avg_close_pct(period) -> List[Dict]:
+	data = get_all_industries_avg_close_pct(period)
+	out = []
 
-def audrey_needs_help(start_date=datetime(2022, 7, 13)):
-	cursor = col_testing.aggregate([
-		{"$match": {"type": "stock"}},
-		{"$project": {
-			"cdl_data": {
-				"$filter": {
-					"input": "$cdl_data",
-					"as": "cdl_data",
-					"cond": {"$or": [
-						{"$eq": ["$$cdl_data.date", last_trading_date]},
-						{"$eq": ["$$cdl_data.date", start_date]}
-					]}
-				}
-			},
-			"industry": 1,
-			"_id": 0
-		}},
-		{"$group": {
-			"_id": "$industry",
-			"close": {"$push": "$cdl_data.close"}
-		}},
-		{"$unwind": "$close"},
-		{"$project": {
-			"industry": 1,
-			"close": {"$divide": [{"$subtract": [{"$arrayElemAt":["$close", 1]}, {"$arrayElemAt":["$close", 0]}]}, {"$arrayElemAt":["$close", 0]}]}
-		}},
-		{"$group": {
-			"_id": "$_id",
-			"change": {"$avg": "$close"}
-		}},
-		{"$project" : {
-			"industry": 1,
-			"change": 1
-		}}
-	])
-	print(list(cursor))
+	for row in data:
+		industry = row["industry"]
+		industry_data = row["data"]
+
+		accum_close_pct = 0
+		tmp = []
+		for i in range(len(industry_data)):
+			accum_close_pct += industry_data[i]["close_pct"]
+			tmp.append({
+				"date": industry_data[i]["date"],
+				"accum_close_pct": accum_close_pct
+			})
+		out.append({
+			"industry": industry,
+			"data": tmp
+		})
+	return out
+
+
+# def audrey_needs_help(start_date=datetime(2022, 7, 13)):
+# 	cursor = col_testing.aggregate([
+# 		{"$match": {"type": "stock"}},
+# 		{"$project": {
+# 			"cdl_data": {
+# 				"$filter": {
+# 					"input": "$cdl_data",
+# 					"as": "cdl_data",
+# 					"cond": {"$or": [
+# 						{"$eq": ["$$cdl_data.date", last_trading_date]},
+# 						{"$eq": ["$$cdl_data.date", start_date]}
+# 					]}
+# 				}
+# 			},
+# 			"industry": 1,
+# 			"_id": 0
+# 		}},
+# 		{"$group": {
+# 			"_id": "$industry",
+# 			"close": {"$push": "$cdl_data.close"}
+# 		}},
+# 		{"$unwind": "$close"},
+# 		{"$project": {
+# 			"industry": 1,
+# 			"close": {"$divide": [{"$subtract": [{"$arrayElemAt":["$close", 1]}, {"$arrayElemAt":["$close", 0]}]}, {"$arrayElemAt":["$close", 0]}]}
+# 		}},
+# 		{"$group": {
+# 			"_id": "$_id",
+# 			"change": {"$avg": "$close"}
+# 		}},
+# 		{"$project" : {
+# 			"industry": 1,
+# 			"change": 1
+# 		}}
+# 	])
+# 	print(list(cursor))

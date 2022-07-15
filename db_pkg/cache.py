@@ -13,16 +13,22 @@ col_cache = db["cache"]
 
 
 def store_cached_result(fn_name, params, data):
-	col_cache.delete_many({"fn_name": fn_name} | {"param_"+k: v for k, v in params.items()})
+	param_query = {"param_"+k: json.dumps(v, ensure_ascii=False, default=json_util.default) for k, v in params.items()}
 
+	col_cache.delete_many({"fn_name": fn_name} | param_query)
 	col_cache.insert_one({
 		"fn_name": fn_name,
 		"data": json.dumps(data, ensure_ascii=False, default=json_util.default)
-	} | {"param_"+k: v for k, v in params.items()})
+	} | param_query)
 
 
 def get_cached_result(fn_name, params):
-	res = col_cache.find_one({"fn_name": fn_name} | {"param_"+k: v for k, v in params.items()}, {"_id": 0, "data": 1})
+	param_query = {"param_"+k: json.dumps(v, ensure_ascii=False, default=json_util.default) for k, v in params.items()}
+
+	res = col_cache.find_one({"fn_name": fn_name} | param_query, {"_id": 0, "data": 1})
 	if res is None: return None
 	return json.loads(res["data"], object_hook=json_util.object_hook)
-	
+
+
+def clear_all_cache():
+	col_cache.delete_many({})

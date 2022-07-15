@@ -99,7 +99,19 @@ def get_stock_info(ticker) -> Dict | None:
 	return col_testing.find_one({"ticker": ticker}, {"_id": 0, "cdl_data": 0})
 
 
-def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=0, cols=[]):
+def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=0, cols=[], use_cache=True):
+	if use_cache:
+		param_dict = {
+			"industry": industry,
+			"sort_col": sort_col,
+			"sort_dir": sort_dir,
+			"min_mkt_cap": min_mkt_cap,
+			"cols": cols
+		}
+		cache_res = cache.get_cached_result("get_stock_info_all", param_dict)
+		if cache_res is not None:
+			return cache_res
+
 	query = {
 		"type": "stock",
 		"mkt_cap": {"$gte": min_mkt_cap}
@@ -111,7 +123,9 @@ def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCEND
 		.sort([(sort_col, sort_dir), ("_id", 1)])\
 		.allow_disk_use(True)
 	
-	return list(cursor)
+	out = list(cursor)
+	cache.store_cached_result("get_stock_info_all", param_dict, out)
+	return out
 
 
 def get_ticker_list(ticker_type=None) -> List:

@@ -13,7 +13,8 @@ from db_pkg.cache import *
 from timeit import default_timer as timer
 
 def test():
-	return get_industry_accum_avg_close_pct("Banks", 60)
+	# return clear_all_cache()
+	return get_stock_info_all()
 
 pprint(test())
 
@@ -25,3 +26,43 @@ print(f'{round((end - start)*1000, 3)}ms')
 
 # print(get_watchlist_rules_results('test'))
 # pprint(get_all_tickers())
+
+# def get_industry_accum_avg_close_pct(industry, period) -> List[Dict]:
+# 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
+# 	accum_close_pct = 0
+
+# 	cursor = col_testing.aggregate([
+# 		{"$match": {"industry": industry}},
+# 		{"$unwind": "$cdl_data"},
+# 		{"$match": {
+# 			"$and": [
+# 				{"cdl_data.date": {"$gte": start_datetime}},
+# 				{"cdl_data.date": {"$lte": end_datetime}}
+# 			]
+# 		}},
+# 		{"$group": {
+# 			"_id": "$cdl_data.date",
+# 			"close_pct": {"$avg": "$cdl_data.close_pct"}
+# 		}},
+# 		{"$sort": {
+# 			"date": pymongo.ASCENDING
+# 		}},
+# 		{"$project": {
+# 			"_id": 0,
+# 			"date": "$_id",
+# 			"close_pct": {
+# 				"$let": {
+# 					"vars": {
+# 						"accum_close_pct": {
+# 							"$ifNull": [{"$add": ["$$accum_close_pct", "$close_pct"]}, "$close_pct"]
+# 						}
+# 					},
+# 					"in": "$$accum_close_pct"
+# 				}
+# 			}
+# 		}},
+# 		{"$sort": {
+# 			"date": pymongo.ASCENDING
+# 		}}
+# 	])
+# 	return list(cursor)
