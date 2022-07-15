@@ -11,9 +11,11 @@ def get_rules(username):
 	return col_users.find_one({"username": username}, {"_id": 0, "buy": 1, "sell": 1})
 
 
-def update_rules(username, buy, sell):
-	col_users.update_one({"username": username}, {"$set": {"buy": buy, "sell": sell}})
-
+def update_rules(username, buy, sell, cdl):
+	if cdl:
+		col_users.update_one({"username": username}, {"$set": {"cdl_buy": buy, "cdl_sell": sell}})
+	else:
+		col_users.update_one({"username": username}, {"$set": {"buy": buy, "sell": sell}})
 
 def get_rules_results(ticker):
 	cursor = col_rules_results.find({"ticker": ticker}, {"_id": 0, "hit_buy_rules": 1, "hit_sell_rules": 1, "miss_buy_rules": 1, "miss_sell_rules": 1})

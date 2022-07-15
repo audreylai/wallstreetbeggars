@@ -177,8 +177,6 @@
 		row = btn.parents('tr');
 
 		var1_div = row.find('.var1');
-		var2_div = row.find('.var2');
-		op_div = row.find('.op');
 
 		row.find('.confirm-btn').toggleClass('hidden');
 		row.find('.edit-btn').toggleClass('hidden');
@@ -192,31 +190,15 @@
 				</div>`
 			);
 
-			dropdown_op = $(`
-				<select
-					class="self-center px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300"
-				>
-					<option>≤</option>
-					<option>≥</option>
-				</select>`
-			);
 			let var1_clone = dropdown_var.clone()
-			let var2_clone = dropdown_var.clone()
 			$(var1_clone).find("input").val($(var1_div).text().trim())
-			$(var2_clone).find("input").val($(var2_div).text().trim())
 
 			var1_div.empty().append(var1_clone);
-			var2_div.empty().append(var2_clone);
-			op_div.empty().append(dropdown_op.clone());
 
 		} else {
 			var1_txt = var1_div.find('input').val();
-			var2_txt = var2_div.find('input').val();
-			op_txt = op_div.find('select').val();
 
 			var1_div.empty().text(var1_txt);
-			var2_div.empty().text(var2_txt);
-			op_div.empty().text(op_txt);
 			update_table()
 		}
 	}
@@ -227,12 +209,6 @@
 		row = $(`
 			<tr class="text-center text-gray-700 dark:text-zinc-200">
 				<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-					<p></p>
-				</td>
-				<td class="p-4 border-b-2 dark:border-zinc-500 op">
-					<p></p>
-				</td>
-				<td class="p-4 border-b-2 dark:border-zinc-500 var2">
 					<p></p>
 				</td>
 				<td class="p-4 border-b-2 dark:border-zinc-500">
@@ -260,11 +236,8 @@
 		`);
 
 		row.find('.var1 p').text($(btn).parent().find(".term-input").eq(0).val())
-		row.find('.op p').text(selects.eq(0).val());
-		row.find('.var2 p').text($(btn).parent().find(".term-input").eq(1).val());
 
 		$(btn).parent().find(".term-input").eq(0).val("")
-		$(btn).parent().find(".term-input").eq(1).val("")
 
 		$('tbody[col=' + col + ']').append(row);
 		update_table();
@@ -276,20 +249,17 @@
 		$('tbody[col=1]').each(function () {
 			$(this).find('tr').each(function () {
 				let val1 = $(this).find('td.var1').text().trim();
-				let op = $(this).find('td.op').text().trim();
-				let val2 = $(this).find('td.var2').text().trim();
-				buyrow.push(val1 + " " + op + " " + val2);
+				buyrow.push(val1);
 			});
 		});
 		$('tbody[col=2]').each(function () {
 			$(this).find('tr').each(function () {
 				let val1 = $(this).find('td.var1').text().trim();
-				let op = $(this).find('td.op').text().trim();
-				let val2 = $(this).find('td.var2').text().trim();
-				sellrow.push(val1 + " " + op + " " + val2);
+				sellrow.push(val1);
 			});
 		});
-		$.post("/rules/edit", { buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) })
+		console.log({ buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) })
+		$.post("/cdl/edit", { buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) })
 	}
 
 	function suggestion_onlick(evt) {
@@ -298,7 +268,6 @@
 		[var1, var2] = el.parents('tr').find('input');
 		
 		var1.dispatchEvent(new Event('change', {bubbles: true}));
-		var2.dispatchEvent(new Event('change', {bubbles: true}));
 	}
 
 	$(document).on('input focus', ".term-input", function(e) {
@@ -327,7 +296,7 @@
 		}
 	});
 
-	$('table').on('input change', 'tr', function(e) {
+	/* $('table').on('input change', 'tr', function(e) {
 		[var1, var2] = $(e.currentTarget).find('input');
 		if (is_valid_input($(var1).val()) && is_valid_input($(var2).val())) {
 			console.log($(e.currentTarget).find('.confirm-btn').prop('disabled', false));
@@ -341,6 +310,6 @@
 		} else {
 			el[0].setCustomValidity('Invalid input.');
 		}
-	});
+	}); */
 </script>
 {% endblock %}

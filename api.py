@@ -79,7 +79,7 @@ def api_get_industry_close_pct():
 	else:
 		return {}, 400
 	
-	data = get_industry_avg_close_pct_chartjs(industry, period)
+	data = get_industry_accum_avg_close_pct_chartjs(industry, period)
 	data['industry'], data['period'], data['interval'] = industry, period, interval
 	data['start_date'], data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())
 	return json.dumps(data)

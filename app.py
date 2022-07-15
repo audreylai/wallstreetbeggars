@@ -12,6 +12,7 @@ from db_pkg.rules import *
 from db_pkg.stock import *
 from db_pkg.user import *
 from db_pkg.utils import *
+from db_pkg import build_db_2
 
 app = Flask(__name__)
 
@@ -93,7 +94,7 @@ def rules_edit():
 	if request.method == "POST":
 		new_buy = json.loads(request.values.get('buy'))
 		new_sell = json.loads(request.values.get('sell'))
-		update_rules("test", new_buy, new_sell)
+		update_rules("test", new_buy, new_sell, cdl=False)
 	return render_template("rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
 
 @app.route("/cdl/edit", methods=["GET", "POST"])
@@ -103,7 +104,7 @@ def cdl_edit():
 	if request.method == "POST":
 		new_buy = json.loads(request.values.get('buy'))
 		new_sell = json.loads(request.values.get('sell'))
-		update_rules("test", new_buy, new_sell)
+		update_rules("test", new_buy, new_sell, cdl=True)
 	return render_template("cdl-rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
 
 
@@ -199,9 +200,9 @@ def stock_info():
 	
 	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics, news=news, dark_mode=dark_mode)
 
-# @app.route("/stock-info/update", methods=["GET"])
-# def update_stock_info():
-# 	add_stock_info_batch()
+@app.route("/stock-info/update", methods=["GET"])
+def update_stock_info():
+	build_db_2.main()
 
 # stock-analytics
 @app.route("/stock-analytics", methods=["GET", "POST"])
