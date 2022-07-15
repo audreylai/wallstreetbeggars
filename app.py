@@ -140,21 +140,22 @@ def stock_list_page():
 	sort_dir = pymongo.DESCENDING if sort_dir_str == 'desc' else pymongo.ASCENDING
 
 	data = get_stock_info_all(filter_industry, sort_col, sort_dir, min_mkt_cap, ["ticker", "name", "mkt_cap", "industry"])
-
 	rows_per_page = 20
-	num_of_pages = ceil(len(data) / rows_per_page)
-
-	page = max(1, min(page, num_of_pages))
-
+	max_page = ceil(len(data) / rows_per_page)
+	page = max(1, min(page, max_page))
 	start_index = rows_per_page*(page-1)
 	end_index = min(rows_per_page*page+1, len(data))
-
 	data = data[start_index:end_index]
 
 	active_tickers = get_active_tickers("test")
-	last_updated = 0
+	last_updated = get_last_updated().strftime("%m/%d/%Y %H:%M:%S")
 
-	return render_template("stock-list.html", stock_table=data, last_updated=last_updated, industries=get_all_industries(), active_tickers=active_tickers, num_of_pages=num_of_pages, page=page, filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, min_mkt_cap=min_mkt_cap_pow, dark_mode=dark_mode)
+	return render_template("stock-list.html", 
+		stock_table=data, last_updated=last_updated, industries=get_all_industries(), 
+		active_tickers=active_tickers, page=page, max_page=max_page,
+		filter_industry=filter_industry, sort_col=sort_col, sort_dir=sort_dir, 
+		min_mkt_cap=min_mkt_cap_pow, dark_mode=dark_mode, page_btns=get_pagination_btns(page, max_page)
+	)
 
 @app.route("/industries", methods=["GET", "POST"])
 def industries_page():

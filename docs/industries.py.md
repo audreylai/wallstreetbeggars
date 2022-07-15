@@ -1,18 +1,35 @@
 # industries.py
 ## Table of contents
+### utility functions
 - `industry_exists()` - Checks if industry exists
 - `get_all_industries()` - Returns a list of all industry names
+
+
+### one industry: close pct / last close pct / accum close pct
 - `get_industry_avg_close_pct()` - Returns the average close pct of tickers in an industry per trading day
-- `get_industry_avg_close_pct_chartjs()` - Returns chartjs-formatted average close pct of tickers in an industry per trading day
+- `get_industry_accum_avg_close_pct()` - Returns the accumulated average close pct of tickers in an industry per trading day
+- `get_industry_avg_last_close_pct()` - Returns the average last close pct of tickers in an industry
+- `get_industry_tickers_last_close_pct()` - Returns the last close pct of tickers in an industry
+
+
+### all industries: close pct / last close pct / accum close pct
 - `get_all_industries_avg_close_pct()` - Returns the average close pct of stocks per industry per trading day
 - `get_all_industries_avg_last_close_pct()` - Returns the average last close pct of stocks per industry
+- `get_all_industries_accum_avg_close_pct()` - Returns the accumulated average close pct of stocks per industry per trading day
+
+
+### gainers/losers
 - `get_leading_industry()` - Returns the leading industry by average last close pct
-- `get_industry_tickers_last_close_pct()` - Returns the last close pct of tickers in an industry
 - `get_industry_tickers_gainers_losers()` - Returns the gainer and loser tickers in an industry
 - `get_industry_perf_distribution()` - Returns the performance distribution of tickers in an industry
 - `get_industries_gainers_losers_table()` - Returns the gainer and loser industries with additional information
-- `get_all_industries_avg_close_pct_chartjs()` - Returns chartjs-formatted average close pct of stocks per industry per trading day
+
+
+### chartjs functions
+- `get_industry_accum_avg_close_pct_chartjs()` - Returns chartjs-formatted average close pct of tickers in an industry per trading day
+- `get_all_industries_accum_avg_close_pct_chartjs()` - Returns chartjs-formatted accumulated average close pct of stocks per industry per trading day
 - `get_all_industries_avg_last_close_pct_chartjs()` - Returns chartjs-formatted average last close pct of stocks per industry
+
 
 ---
 ### `industry_exists(industry)`
@@ -72,22 +89,54 @@ Example:
 ```
 
 ---
-### `get_industry_avg_close_pct_chartjs(industry, period[, interval, precision])`
+### `get_industry_accum_avg_close_pct(industry, period)`
 Params:
 * industry (`str`)
 * period (`int`): Number of days from today
-* interval (`int`, default=`1`): Interval between trading days
-* precision (`int`, default=`4`): No. of decimal places to round to
 
-Returns: `Dict`
+Returns: `List[Dict]`
 
 Example:
 ```
->>> get_industry_avg_close_pct_chartjs("Banks", 60)
-{'close_pct': [{'x': 1652630400000, 'y': 0.0005583350472329421}, ...],
- 'industry': 'Banks',
- 'interval': 1,
- 'period': 60}
+>>> get_industry_accum_avg_close_pct("Banks", 60)
+[{'close_pct': 0.007412046859171212,
+  'date': datetime.datetime(2022, 5, 17, 0, 0)},
+ {'close_pct': -0.00028401225662665064,
+  'date': datetime.datetime(2022, 5, 18, 0, 0)},
+...
+  'date': datetime.datetime(2022, 7, 12, 0, 0)},
+ {'close_pct': -0.005898245182778927,
+  'date': datetime.datetime(2022, 7, 13, 0, 0)},
+ {'close_pct': -0.019597111249850325,
+  'date': datetime.datetime(2022, 7, 14, 0, 0)}]
+```
+
+---
+### `get_industry_avg_last_close_pct(industry)`
+Params:
+* industry (`str`)
+
+Returns: `float`
+
+Example:
+```
+>>> get_industry_avg_last_close_pct("Banks")
+-0.019597111249850325
+```
+
+---
+### `get_industry_tickers_last_close_pct(industry)`
+Params:
+* industry (`str`)
+
+Returns: `List[Dict]`
+
+Example:
+```
+>>> get_industry_tickers_last_close_pct("Banks")
+[{'close_pct': -0.023465724789903275, 'ticker': '0023-HK'},
+ {'close_pct': 0.001019352453379252, 'ticker': '0005-HK'},
+ {'close_pct': 0.0022641739755306922, 'ticker': '0011-HK'}]
 ```
 
 ---
@@ -138,6 +187,34 @@ Example:
 ```
 
 ---
+### `get_all_industries_accum_avg_close_pct(period)`
+Params:
+* period (`int`): Number of days from today
+
+Returns: `List[Dict]`
+
+Example:
+```
+>>> get_all_industries_accum_avg_close_pct(5)
+[{'data': [{'accum_close_pct': 0.001605510399257289,
+            'date': datetime.datetime(2022, 7, 11, 0, 0)},
+           {'accum_close_pct': 0.022807115792808023,
+            'date': datetime.datetime(2022, 7, 12, 0, 0)},
+           {'accum_close_pct': 0.023689434351059344,
+            'date': datetime.datetime(2022, 7, 13, 0, 0)},
+           {'accum_close_pct': 0.025720783931725555,
+            'date': datetime.datetime(2022, 7, 14, 0, 0)}],
+  'industry': 'Textiles & Clothing & Accessories'},
+ {'data': [{'accum_close_pct': 0.0022622643223422444,
+            'date': datetime.datetime(2022, 7, 11, 0, 0)}, ...],
+  'industry': 'Insurance'},
+...
+ {'data': [{'accum_close_pct': 0.0037530222671805008,
+            'date': datetime.datetime(2022, 7, 11, 0, 0)}, ...],
+  'industry': 'Telecommunication Services'}]
+```
+
+---
 ### `get_leading_industry()`
 Params: None
 
@@ -148,21 +225,6 @@ Example:
 >>> get_leading_industry()
 {'close_pct': 0.11111105745466787,
  'industry': 'Commercial & Professional Services'}
-```
-
----
-### `get_industry_tickers_last_close_pct(industry)`
-Params:
-* industry (`str`)
-
-Returns: `List[Dict]`
-
-Example:
-```
->>> get_industry_tickers_last_close_pct("Banks")
-[{'close_pct': -0.023465724789903275, 'ticker': '0023-HK'},
- {'close_pct': 0.001019352453379252, 'ticker': '0005-HK'},
- {'close_pct': 0.0022641739755306922, 'ticker': '0011-HK'}]
 ```
 
 ---
@@ -235,7 +297,7 @@ Example:
 ```
 
 ---
-### `get_all_industries_avg_close_pct_chartjs(period)`
+### `get_all_industries_accum_avg_close_pct_chartjs(period)`
 Params:
 * period (`int`)
 
@@ -243,7 +305,7 @@ Returns: `List[Dict]`
 
 Example:
 ```
->>> get_all_industries_avg_close_pct_chartjs(10)
+>>> get_all_industries_accum_avg_close_pct_chartjs(10)
 [{'borderColor': 'rgb(0, 191, 160, 0.7)',
   'borderWidth': 2.5,
   'data': [{'x': 1656950400000, 'y': -0.0254}, ...],
@@ -283,3 +345,23 @@ Example:
             ...
             'Food & Beverages',
             'Commercial & Professional Services']}
+```
+
+---
+### `get_industry_accum_avg_close_pct_chartjs(industry, period[, interval, precision])`
+Params:
+* industry (`str`)
+* period (`int`): Number of days from today
+* interval (`int`, default=`1`): Interval between trading days
+* precision (`int`, default=`4`): No. of decimal places to round to
+
+Returns: `Dict`
+
+Example:
+```
+>>> get_industry_avg_close_pct_chartjs("Banks", 60)
+{'accum_close_pct': [{'x': 1652630400000, 'y': 0.0005583350472329421}, ...],
+ 'industry': 'Banks',
+ 'interval': 1,
+ 'period': 60}
+```

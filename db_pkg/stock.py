@@ -232,3 +232,9 @@ def get_mkt_momentum(days=10) -> float:
 	return (V - Vx) / Vx
 
 
+def get_last_updated() -> datetime:
+	cursor = col_testing.aggregate([
+		{"$match": {"ticker": "^HSI"}},
+		{"$project": {"_id": 0, "last_updated": 1}}
+	])
+	return cursor.next()["last_updated"]

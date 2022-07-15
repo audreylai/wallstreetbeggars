@@ -14,6 +14,7 @@
 - `get_leading_index()` - Returns the index with highest last close pct
 - `get_mkt_direction()` - Returns the market direction (by taking last close pct of HSI)
 - `get_mkt_momentum()` - Returns the market momentum
+- `get_last_updated()` - Returns the time which the database was last built
 
 ---
 ### `ticker_exists(ticker)`
@@ -384,4 +385,16 @@ Example:
 ```
 >>> get_mkt_momentum()
 -0.880769655239599
+```
+
+---
+### `get_last_updated()`
+Params: None
+
+Returns: `datetime`
+
+Example:
+```
+>>> get_last_updated()
+datetime.datetime(2022, 7, 15, 1, 53, 22, 263000)
 ```

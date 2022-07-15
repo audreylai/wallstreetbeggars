@@ -7,6 +7,18 @@ def get_datetime_from_period(period):
 	return start_datetime, end_datetime
 
 
+def get_pagination_btns(page, max_page):
+	if max_page <= 5:
+		return [str(i) for i in range(1, max_page+1)]
+	else:
+		if page <= 3:
+			return [str(i) for i in range(1, page+2)] + ["...", str(max_page)]
+		elif page >= max_page - 2:
+			return ["1", "..."] + [str(i) for i in range(page-1, max_page+1)]
+		else:
+			return ["1", "...", str(page-1), str(page), str(page+1), "...", str(max_page)]
+
+
 def format_rules(hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules):
 	indicators_map = {
 		"sma10": "MA10",

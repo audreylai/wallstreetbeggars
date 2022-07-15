@@ -2,6 +2,7 @@ from db_pkg.build_db import *
 from db_pkg.user import *
 from db_pkg.industries import *
 from db_pkg.rules import *
+from db_pkg.utils import *
 from db_pkg.stock import *
 from db_pkg.news import *
 from db_pkg.cache import *
@@ -14,7 +15,7 @@ from timeit import default_timer as timer
 
 def test():
 	# return clear_all_cache()
-	return get_stock_info_all()
+	return get_all_industries_accum_avg_close_pct(5)
 
 pprint(test())
 
