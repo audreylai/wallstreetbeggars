@@ -60,8 +60,8 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 		"close", "close_pct"
 	]
 
-	volume_up_color = "rgba(215 85 65 0.4)"
-	volume_dn_color = "rgba(80 160 115 0.4)"
+	volume_up_color = "rgba(215, 85, 65, 0.4)"
+	volume_dn_color = "rgba(80, 160, 115, 0.4)"
 	accum_close_pct = 0
 
 	for c, row in enumerate(data):
