@@ -298,7 +298,7 @@ header %}
 
 	draw_charts();
 
-	$().ready(function () {
+	$('document').ready(function () {
 		$("#theme-toggle").bind('click', function () {
 			draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length + rules["miss_buy_rules"].length) * 100)
 			draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length + rules["miss_sell_rules"].length) * 100)

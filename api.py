@@ -31,7 +31,7 @@ def api_get_stock_data():
 	else:
 		return {}, 400
 
-	data = process_stock_data(raw, interval)
+	data = get_stock_data_chartjs(ticker, period)
 	data['ticker'], data['period'], data['interval'] = ticker, period, interval
 	data['start_date'], data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())
 	return json.dumps(data)
@@ -54,11 +54,10 @@ def api_get_stock_close_pct():
 	elif start_epoch and end_epoch:
 		start_datetime = datetime.fromtimestamp(start_epoch)
 		end_datetime = datetime.fromtimestamp(end_epoch)
-		raw = get_stock_data(ticker, start_datetime, end_datetime)
 	else:
 		return {}, 400
 
-	data = process_stock_data(raw, interval, include=['close_pct'])
+	data = get_stock_data_chartjs(ticker, period)
 	data['ticker'], data['period'], data['interval'] = ticker, period, interval
 	data['start_date'], data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())
 	return json.dumps(data)
@@ -73,16 +72,14 @@ def api_get_industry_close_pct():
 	interval = request.args.get("interval", type=int, default=1)
 
 	if period:
-		raw = get_industry_close_pct(industry, period=period)
 		start_datetime, end_datetime = utils.get_datetime_from_period(period)
 	elif start_epoch and end_epoch:
 		start_datetime = datetime.fromtimestamp(start_epoch)
 		end_datetime = datetime.fromtimestamp(end_epoch)
-		raw = get_industry_close_pct(industry, start_datetime=start_datetime, end_datetime=end_datetime)
 	else:
 		return {}, 400
 	
-	data = process_industry_avg(raw, interval)
+	data = get_industry_avg_close_pct_chartjs(industry, period)
 	data['industry'], data['period'], data['interval'] = industry, period, interval
 	data['start_date'], data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())
 	return json.dumps(data)

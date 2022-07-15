@@ -138,25 +138,30 @@
 					</svg>
 				</button>
 			</form>
-			{% for i in range(1, num_of_pages+1) %}
+
+			{% for btn in page_btns %}
 			<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
-				<input type="text" name="page" id="page" value="{{i}}" hidden>
+				<input type="text" name="page" id="page" value="{{ btn }}" hidden>
 				<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 				<input type="hidden" name="sort_col" value="{{ sort_col }}" />
 				<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
-				<button type="submit"
-					class="w-full px-4 py-2 text-base bg-white border-t border-b border-r dark:bg-zinc-900 dark:hover:bg-zinc-800 hover:bg-gray-100 dark:border-zinc-700 {% if page == i %}text-indigo-500 dark:text-indigo-400{%else%}text-gray-600 dark:text-zinc-300 text-gray-700{% endif %}">
-					{{i}}
+				<button type="submit" {% if btn == "..." %} disabled {% endif %}
+					class="w-full px-4 py-2 text-base bg-white border-t border-b border-r dark:bg-zinc-900 dark:hover:bg-zinc-800 hover:bg-gray-100 dark:border-zinc-700
+					{% if btn == page|string %}text-indigo-500 dark:text-indigo-400{% else %}text-gray-600 dark:text-zinc-300 text-gray-700{% endif %}
+					{% if btn == '...' %} dark:disabled:text-zinc-500 disabled:cursor-not-allowed {% endif %}"
+				>
+					{{ btn }}
 				</button>
 			</form>
 			{% endfor %}
+
 			<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 				<input type="text" name="page" id="page" value="{{page+1}}" hidden>
 				<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
 				<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 				<input type="hidden" name="sort_col" value="{{ sort_col }}" />
 				<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
-				<button type="submit" {% if (page+1)|int> num_of_pages %} disabled {% endif %}
+				<button type="submit" {% if (page+1)|int > max_page %} disabled {% endif %}
 					class="w-full p-4 text-base text-gray-600 bg-white border-t border-b border-r rounded-r-xl hover:bg-gray-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700 dark:disabled:text-zinc-500 disabled:cursor-not-allowed"
 					>
 					<svg width="9" fill="currentColor" height="8" class="" viewBox="0 0 1792 1792"
@@ -172,7 +177,6 @@
 </div>
 {% endblock %} {% block script %}
 <script>
-
 	function redrawTable(evt) {
 		const formData = new FormData(evt);
   	const params = Object.fromEntries(formData);
@@ -228,7 +232,7 @@
 	}
 
 	function update_stock_info() {
-		$.get("/stock-info/update")
+		$.get("/stock-info/update");
 	}
 
 </script>
