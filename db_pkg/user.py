@@ -1,4 +1,5 @@
 import pymongo
+from . import stock
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
@@ -25,7 +26,17 @@ def get_user_theme(username):
 	return col_users.find_one({"username": username}, {"_id": 0, "dark_mode": 1})["dark_mode"]
 
 def get_watchlist_tickers(username):
-	return col_users.find_one({"username": username}, {"_id": 0, "watchlist": 1})['watchlist']
+	cursor = col_users.find_one({"username": username}, {"_id": 0, "watchlist": 1})['watchlist']
+	return list(cursor)
 
 def add_watchlist(username, ticker):
 	col_users.update_one({"username": username}, {"$addToSet": { "watchlist": ticker }})
+
+def get_watchlist_data(username):
+	period = 60
+	watchlist_tickers = get_watchlist_tickers(username)
+	result = []
+	for ticker in watchlist_tickers:
+		info = stock.get_stock_info(ticker)
+		result.append({"ticker": ticker, "name" : info["name"], "price" : stock.get_last_stock_data(ticker)["close"], "change": stock.get_stock_data_chartjs(ticker, period=period, precision=2)['last_close_pct'], "mkt_cap": info['mkt_cap']})
+	return {"table": result, "last_updated": info["last_updated"]}

@@ -3,6 +3,8 @@ from typing import Dict, List
 import requests
 from bs4 import BeautifulSoup
 
+from . import cache
+
 
 def ticker_news_scraping(ticker) -> List[Dict]:
 	page = requests.get(f"https://www.etnet.com.hk/www/eng/stocks/realtime/quote.php?code={'0' + ticker[:4]}", headers={
@@ -24,7 +26,12 @@ def ticker_news_scraping(ticker) -> List[Dict]:
 	return out
 
 
-def scmp_scraping(limit=10) -> List[Dict]:
+def scmp_scraping(limit=10, use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("scmp_scraping", {"limit": limit})
+		if cache_res is not None:
+			return cache_res
+
 	page = requests.get("https://www.scmp.com/topics/hong-kong-stock-market")
 	soup = BeautifulSoup(page.content, "html.parser")
 	rows = list(soup.find_all("div", attrs={"class": "article-level"}))
@@ -42,5 +49,6 @@ def scmp_scraping(limit=10) -> List[Dict]:
 			})
 		except:
 			continue
-
+	
+	cache.store_cached_result("scmp_scraping", {"limit": limit}, out)
 	return out

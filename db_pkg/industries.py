@@ -1,216 +1,386 @@
-from datetime import datetime
-from typing import List
+from datetime import datetime, timedelta
 
+from typing import Dict, List, Tuple
 import pymongo
-
-from . import utils
+from pprint import pprint
+from . import stock, utils, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
-col_stock_data = db["stock_data"]
-col_stock_info = db["stock_info"]
+col_testing = db["testing"]
+
+last_trading_date = datetime(2022, 7, 14)
 
 
-def get_industry_stocks(industry, period, stock_params=[]):
-	ticker_list = []
-	for i in col_stock_info.find({"industry_x": industry}):
-		ticker_list.append(i["ticker"])
-	
-	out = {}
-	for ticker in ticker_list:
-		if not ticker.ticker_exists(ticker): continue
-		raw = ticker.get_stock_data(ticker, period)
-		data = ticker.process_stock_data(raw, 1, include=stock_params)
-		out[ticker] = data
-	
-	return out
-
-
-def get_industry_close_pct(industry, period=None, start_datetime=None, end_datetime=None):
-	ticker_list = []
-	for i in col_stock_info.find({"industry_x": industry}):
-		ticker_list.append(i["ticker"])
-
-	out = {}
-	for c, ticker in enumerate(ticker_list):
-		if period:
-			start_datetime, end_datetime = utils.get_datetime_from_period(period)
-
-		cursor = col_stock_data.aggregate([
-			{
-				"$match": {"ticker": ticker}
-			},
-			{
-				"$project": {
-					"data": {
-						"$filter": {
-							"input": "$data",
-							"as": "data",
-							"cond": {"$and": [
-								{"$gte": ["$$data.date", start_datetime]},
-								{"$lte": ["$$data.date", end_datetime]}
-							]}
-						}
-					}
-				}
-			}
-		])
-		res = [i for i in cursor if i["data"] is not None]
-		if len(res) == 0:
-			continue
-		res = res[0]["data"]
-
-		initial_close = None
-		for i in res:
-			if initial_close is None:
-				initial_close = i["close"]
-
-			if i["date"] not in out:
-				prev_date = None
-				for j in out.keys():
-					if j > i['date']:
-						break
-					prev_date = j
-
-				if prev_date is None:
-					out[i["date"]] = [0 for _ in range(c)]
-				else:
-					out[i["date"]] = out[j][:-1]
-
-			out[i["date"]].append((i["close"] - initial_close) / initial_close)
-
-		prev = 0.0
-		for k, v in out.items():
-			if len(out[k]) != c+1:
-				out[k].append(prev)
-			prev = v[-1]
-
-	return out
-
-
-def process_gainers_losers_industry(gainers, losers):
-	out = {
-		'gainers': [],
-		'losers': []
-	}
-
-	industry_details = {}
-
-	for industry in losers:
-		industry_stocks_last_close_pct = get_industry_stocks(industry[0], 60, stock_params=["last_close_pct"])
-		industry_stocks_last_close_pct = sorted(industry_stocks_last_close_pct.items(), key=lambda kv: kv[1]['last_close_pct'])
-		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
-		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
-
-		perf_distribution = [0 for _ in range(5)]
-		for ticker, change in industry_stocks_last_close_pct:
-			if change > 2: perf_distribution[4] += 1
-			elif change > 0: perf_distribution[3] += 1
-			elif change == 0: perf_distribution[2] += 1
-			elif change > -2: perf_distribution[1] += 1
-			else: perf_distribution[0] += 1
-		perf_distribution = list(map(lambda x: (x/sum(perf_distribution))*100, perf_distribution))
-
-		out["losers"].append({
-			"industry": industry[0],
-			"change": industry[1],
-			"top_ticker":  top_ticker,
-			"top_ticker_change": top_ticker_change,
-			"perf_distribution": perf_distribution
-		})
-		industry_details[industry[0]] = industry_stocks_last_close_pct
-
-	for industry in gainers:
-		industry_stocks_last_close_pct = get_industry_stocks(industry[0], 60, stock_params=["last_close_pct"])
-		industry_stocks_last_close_pct = sorted(industry_stocks_last_close_pct.items(), key=lambda kv: kv[1]['last_close_pct'], reverse=True)
-		industry_stocks_last_close_pct = [[i[0], i[1]['last_close_pct']] for i in industry_stocks_last_close_pct]
-		top_ticker, top_ticker_change = industry_stocks_last_close_pct[0]
-
-		perf_distribution = [0 for _ in range(5)]
-		for ticker, change in industry_stocks_last_close_pct:
-			if change > 2: perf_distribution[4] += 1
-			elif change > 0: perf_distribution[3] += 1
-			elif change == 0: perf_distribution[2] += 1
-			elif change > -2: perf_distribution[1] += 1
-			else: perf_distribution[0] += 1
-		perf_distribution = list(map(lambda x: (x/sum(perf_distribution))*100, perf_distribution))
-
-		out["gainers"].append({
-			"industry": industry[0],
-			"change": industry[1],
-			"top_ticker":  top_ticker,
-			"top_ticker_change": top_ticker_change,
-			"perf_distribution": perf_distribution
-		})
-		industry_details[industry[0]] = industry_stocks_last_close_pct
-	
-	return out, industry_details
+def industry_exists(industry) -> bool:
+	res = col_testing.count_documents({"industry": industry})
+	return res != 0
 
 
 def get_all_industries() -> List:
-	return col_stock_info.distinct("industry_x")
+	return col_testing.distinct("industry")
 
-# TODO: rewrite this hot garbage
-def get_all_industries_close_pct(period=None, limit=9):
-	all_industry_cmp = []
 
-	industry_list = get_all_industries()
+def get_industry_avg_close_pct(industry, period, use_cache=True) -> List[Dict]:
+	if not industry_exists(industry): return []
 
+	if use_cache:
+		cache_res = cache.get_cached_result("get_industry_avg_close_pct", {"industry": industry, "period": period})
+		if cache_res is not None:
+			return cache_res
+
+	start_datetime, end_datetime = utils.get_datetime_from_period(period)
+
+	cursor = col_testing.aggregate([
+		{"$match": {"industry": industry}},
+		{"$unwind": "$cdl_data"},
+		{"$match": {
+			"$and": [
+				{"cdl_data.date": {"$gte": start_datetime}},
+				{"cdl_data.date": {"$lte": end_datetime}}
+			]
+		}},
+		{"$group": {
+			"_id": "$cdl_data.date",
+			"close_pct": {"$avg": "$cdl_data.close_pct"}
+		}},
+		{"$project": {
+			"_id": 0,
+			"date": "$_id",
+			"close_pct": 1
+		}},
+		{"$sort": {
+			"date": pymongo.ASCENDING
+		}}
+	])
+
+	out = list(cursor)
+	cache.store_cached_result("get_industry_avg_close_pct", {"industry": industry, "period": period}, out)
+	return out
+
+
+def get_industry_accum_avg_close_pct(industry, period) -> List[Dict]:
+	data = get_industry_avg_close_pct(industry, period)
+
+	accum_close_pct = 0
+	out = []
+	for i in range(len(data)):
+		accum_close_pct += data[i]["close_pct"]
+		out.append({
+			"date": data[i]["date"],
+			"accum_close_pct": accum_close_pct
+		})
+	return out
+
+# WARN: this function will break, update last_trading date
+def get_industry_avg_last_close_pct(industry) -> float:
+	if not industry_exists(industry): return None
+
+	cursor = col_testing.aggregate([
+		{"$match": {"industry": industry}},
+		{"$unwind": "$cdl_data"},
+		{"$match": {
+			"cdl_data.date": {"$gte": last_trading_date}
+		}},
+		{"$group": {
+			"_id": "$industry",
+			"close_pct": {"$avg": "$cdl_data.close_pct"}
+		}},
+		{"$project": {
+			"_id": 0
+		}}
+	])
+	return cursor.next()["close_pct"]
+
+# WARN: this function will break, update last_trading date
+def get_industry_tickers_last_close_pct(industry, use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_industry_tickers_last_close_pct", {"industry": industry})
+		if cache_res is not None:
+			return cache_res
+
+	cursor = col_testing.aggregate([
+		{"$match": {"industry": industry}},
+		{"$project": {
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "cdl_data",
+					"cond": {
+						"$gte": ["$$cdl_data.date", last_trading_date]
+					}
+				}
+			},
+			"ticker": 1,
+			"close_pct": 1,
+			"_id": 0
+		}},
+		{"$unwind": "$cdl_data"},
+		{"$project": {
+			"ticker": 1,
+			"close_pct": "$cdl_data.close_pct"
+		}},
+		{"$sort": {
+			"close_pct": pymongo.ASCENDING
+		}}
+	])
+
+	out = list(cursor)
+	cache.store_cached_result("get_industry_tickers_last_close_pct", {"industry": industry}, out)
+	return out
+
+
+def get_all_industries_avg_close_pct(period, use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_all_industries_avg_close_pct", {"period": period})
+		if cache_res is not None:
+			return cache_res
+
+	start_datetime, end_datetime = utils.get_datetime_from_period(period)
+
+	cursor = col_testing.aggregate([
+		{"$match": {"type": "stock"}},
+		{"$project": {
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "cdl_data",
+					"cond": {"$and": [
+						{"$gte": ["$$cdl_data.date", start_datetime]},
+						{"$lte": ["$$cdl_data.date", end_datetime]}
+					]}
+				}
+			},
+			"industry": 1,
+			"_id": 0
+		}},
+		{"$unwind": "$cdl_data"},
+		{"$project": {
+			"industry": 1,
+			"date": "$cdl_data.date",
+			"close_pct": "$cdl_data.close_pct"
+		}},
+		{"$group": {
+			"_id": {
+				"industry": "$industry",
+				"date": "$date"	
+			},
+			"close_pct": {"$avg": "$close_pct"}
+		}},
+		{"$project": {
+			"_id": 0,
+			"date": "$_id.date",
+			"industry": "$_id.industry",
+			"close_pct": 1
+		}},
+		{"$sort": {
+			"date": pymongo.ASCENDING
+		}},
+		{"$group": {
+			"_id": "$industry",
+			"date": {"$push": "$date"},
+			"close_pct": {"$push": "$close_pct"}
+		}},
+		{"$project": {
+			"_id": 0,
+			"industry": "$_id",
+			"date": 1,
+			"close_pct": 1
+		}}
+	])
+
+	data = list(cursor)
+	out = []
+	for row in data:
+		out.append({
+			"industry": row["industry"],
+			"data": [{
+				"date": date,
+				"close_pct": close_pct
+			} for date, close_pct in zip(row["date"], row["close_pct"])]
+		})
+	
+	cache.store_cached_result("get_all_industries_avg_close_pct", {"period": period}, out)
+	return out
+
+# WARN: this function will break, update last_trading date
+def get_all_industries_avg_last_close_pct(use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_all_industries_avg_last_close_pct", {})
+		if cache_res is not None:
+			return cache_res
+
+	cursor = col_testing.aggregate([
+		{"$match": {"type": "stock"}},
+		{"$project": {
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "cdl_data",
+					"cond": {
+						"$gte": ["$$cdl_data.date", last_trading_date]
+					}
+				}
+			},
+			"industry": 1,
+			"_id": 0
+		}},
+		{"$unwind": "$cdl_data"},
+		{"$project": {
+			"industry": 1,
+			"close_pct": "$cdl_data.close_pct"
+		}},
+		{"$group": {
+			"_id": "$industry",
+			"close_pct": {"$avg": "$close_pct"}
+		}},
+		{"$project": {
+			"_id": 0,
+			"industry": "$_id",
+			"close_pct": 1
+		}},
+		{"$sort": {
+			"close_pct": pymongo.ASCENDING
+		}}
+	])
+
+	out = list(cursor)
+	cache.store_cached_result("get_all_industries_avg_last_close_pct", {}, out)
+	return out
+
+
+def get_all_industries_accum_avg_close_pct(period) -> List[Dict]:
+	data = get_all_industries_avg_close_pct(period)
+	out = []
+
+	for row in data:
+		industry = row["industry"]
+		industry_data = row["data"]
+
+		accum_close_pct = 0
+		tmp = []
+		for i in range(len(industry_data)):
+			accum_close_pct += industry_data[i]["close_pct"]
+			tmp.append({
+				"date": industry_data[i]["date"],
+				"accum_close_pct": accum_close_pct
+			})
+		out.append({
+			"industry": industry,
+			"data": tmp
+		})
+	return out
+
+
+def get_leading_industry() -> Dict:
+	data = get_all_industries_avg_last_close_pct()
+	return data[-1]
+
+# WARN: this function will break, update last_trading date
+def get_industry_tickers_gainers_losers(industry, limit=5) -> Tuple[List, List]:
+	data = get_industry_tickers_last_close_pct(industry)
+	gainers = list(filter(lambda x: x["close_pct"] > 0, data))
+	losers = list(filter(lambda x: x["close_pct"] < 0, data))
+
+	return gainers[::-1][:min(len(gainers), limit)], losers[:min(len(losers), limit)]
+
+# WARN: this function will break, update last_trading date
+def get_industry_perf_distribution(industry) -> List[int | None]:
+	if not industry_exists(industry): return [None for _ in range(5)]
+
+	data = get_industry_tickers_last_close_pct(industry)
+	out = [0, 0, 0, 0, 0] # <=-2, -2~0, 0, 0~2, >=2
+
+	for row in data:
+		if row["close_pct"] <= -2:
+			out[0] += 1
+		elif row["close_pct"] < 0:
+			out[1] += 1
+		elif row["close_pct"] == 0:
+			out[2] += 1
+		elif row["close_pct"] < 2:
+			out[3] += 1
+		else:
+			out[4] += 1
+	
+	out = [i/len(data) if len(data) != 0 else None for i in out] # convert to pct
+	return out
+
+# WARN: this function will break, update last_trading date
+def get_industries_gainers_losers_table(limit=5) -> Tuple[Dict, Dict]:
+	data = get_all_industries_avg_last_close_pct()
+	gainers = list(filter(lambda x: x["close_pct"] > 0, data))
+	losers = list(filter(lambda x: x["close_pct"] < 0, data))
+	gainers = gainers[::-1][:min(len(gainers), limit)]
+	losers = losers[:min(len(losers), limit)]
+
+	for i in range(len(gainers)):
+		industry = gainers[i]["industry"]
+		top_ticker, _ = get_industry_tickers_gainers_losers(industry, limit=1)
+		top_ticker = top_ticker[0]
+		gainers[i]["top_ticker"] = top_ticker
+		gainers[i]["perf_distribution"] = get_industry_perf_distribution(industry)
+	
+	for i in range(len(losers)):
+		industry = losers[i]["industry"]
+		_, bottom_ticker = get_industry_tickers_gainers_losers(industry, limit=1)
+		bottom_ticker = bottom_ticker[0]
+		losers[i]["bottom_ticker"] = bottom_ticker
+		losers[i]["perf_distribution"] = get_industry_perf_distribution(industry)
+
+	return gainers, losers
+
+
+def get_all_industries_accum_avg_close_pct_chartjs(period) -> List[Dict]:
 	alpha = 0.7
 	color_list = [
 		f"rgba(230, 0, 73, {alpha})", f"rgba(11, 180, 255, {alpha})", f"rgba(80, 233, 145, {alpha})",
 		f"rgba(230, 216, 0, {alpha})", f"rgba(155, 25, 245, {alpha})", f"rgba(255, 163, 0, {alpha})",
 		f"rgba(220, 10, 180, {alpha})", f"rgba(179, 212, 255, {alpha})", f"rgb(0, 191, 160, {alpha})"
 	]
-	
-	all_industry_last_cmp_raw = []
-	all_industry_last_cmp = []
+	industry_list = get_all_industries()[:9]
 
-	color_index = 0
+	out = []
 	for industry in industry_list:
-		data = process_industry_avg(get_industry_close_pct(industry, period=period))['close_pct']
-		color = color_list[color_index % len(color_list)]
-		color_index += 1
-
-		all_industry_cmp.append({
-			'label': industry,
-			'data': data,
-			'borderColor': color,
-			'fill': False,
-			'borderWidth': 2.5,
-			'tension': 0.4,
-			'pointBackgroundColor': color, 
-			'pointRadius': 2,
+		color = color_list.pop()
+		out.append({
+			"label": industry,
+			"data": get_industry_accum_avg_close_pct_chartjs(industry, period)["accum_close_pct"],
+			"borderColor": color,
+			"pointBackgroundColor": color,
+			"fill": False,
+			"borderWidth": 2.5,
+			"tension": 0.4,
+			"pointRadius": 2
 		})
-		
-		if len(data) > 2:
-			last_pct_change = (data[-1]['y'] - data[-2]['y']) / (1 + data[-2]['y'])
-			all_industry_last_cmp_raw.append([industry, last_pct_change])
+	return out
 
-	all_industry_last_cmp_raw = sorted(all_industry_last_cmp_raw, key=lambda x: x[1])
-	all_industry_last_cmp = {
-		'labels': [i[0] for i in all_industry_last_cmp_raw],
-		'data': [i[1]*100 for i in all_industry_last_cmp_raw],
-		'background_color': ['rgb(244, 63, 94)' if i[1] < 0 else 'rgb(16, 185, 129)' for i in all_industry_last_cmp_raw]
+# WARN: this function will break, update last_trading date
+def get_all_industries_avg_last_close_pct_chartjs() -> Dict:
+	data = get_all_industries_avg_last_close_pct()
+
+	return {
+		"labels": [row["industry"] for row in data],
+		"data": [row["close_pct"] for row in data],
+		"background_color": ["rgb(16 185 129)" if row["close_pct"] > 0 else "rgb(244 63 94)" for row in data]
 	}
-	print(all_industry_last_cmp)
-	return all_industry_cmp[:limit], all_industry_last_cmp
 
 
-def process_industry_avg(data, interval=1):
+def get_industry_accum_avg_close_pct_chartjs(industry, period, interval=1, precision=4) -> Dict:
+	data = get_industry_accum_avg_close_pct(industry, period)
 	out = {
-		'close_pct': []
+		"accum_close_pct": [],
+		"industry": industry, "period": period, "interval": interval
 	}
 
-	c = -1
-	for date, close_pct in data.items():
-		c += 1
-		if c % interval != 0:
-			continue
+	for c, row in enumerate(data):
+		if c % interval != 0: continue
 
-		out['close_pct'].append({
-			'x': datetime.timestamp(date) * 1000, # epoch in milliseconds
-			'y': sum(close_pct) / len(close_pct)
+		epoch_timestamp = int(datetime.timestamp(row["date"]) * 1000)
+
+		out["accum_close_pct"].append({
+			'x': epoch_timestamp,
+			'y': round(row["accum_close_pct"], precision)
 		})
-
+	
 	return out
