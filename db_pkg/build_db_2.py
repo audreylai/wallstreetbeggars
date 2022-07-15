@@ -63,7 +63,7 @@ def main():
 
 	
 	print('Step 3/4: Download stock data')
-	NUM_THREADS = 100
+	NUM_THREADS = 500
 	all_stock_data_df = yf.download(
 		tickers=' '.join(ticker_list).replace('-', '.'),
 		period="max", threads=NUM_THREADS, group_by="ticker"
