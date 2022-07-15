@@ -47,7 +47,8 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 	if not ticker_exists(ticker): return
 	data = get_stock_data(ticker, period)
 	out = {
-		"cdl": [], "close": [], "close_pct": [], "last_close": 0, "last_close_pct": 0,
+		"cdl": [], "close": [], "close_pct": [], "accum_close_pct": [], 
+		"last_close": 0, "last_close_pct": 0,
 		"sma10": [], "sma20": [], "sma50": [], "sma100": [], "sma250": [],
 		"rsi": [], "macd": [], "macd_ema": [], "macd_div": [],
 		"volume": [], "vol_color": [], "vol_sma20": [], "max_vol": 0,
@@ -61,6 +62,7 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 
 	volume_up_color = "rgba(215 85 65 0.4)"
 	volume_dn_color = "rgba(80 160 115 0.4)"
+	accum_close_pct = 0
 
 	for c, row in enumerate(data):
 		if c % interval != 0: continue
@@ -80,6 +82,12 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 				'x': epoch_timestamp,
 				'y': round(row[attr], precision)
 			})
+		
+		accum_close_pct += row["close_pct"]
+		out["accum_close_pct"].append({
+			'x': epoch_timestamp,
+			'y': round(accum_close_pct, precision)
+		})
 
 		out["max_vol"] = max(row["volume"], out["max_vol"])
 		
