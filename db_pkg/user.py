@@ -32,6 +32,9 @@ def get_watchlist_tickers(username):
 def add_watchlist(username, ticker):
 	col_users.update_one({"username": username}, {"$addToSet": { "watchlist": ticker }})
 
+def delete_watchlist(username, ticker):
+	col_users.update_one({"username": username}, {"$pull": { "watchlist": ticker }})
+
 def get_watchlist_data(username):
 	period = 60
 	watchlist_tickers = get_watchlist_tickers(username)

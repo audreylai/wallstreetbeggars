@@ -121,7 +121,10 @@ def watchlist():
 
 @app.route("/watchlist", methods=["POST"])
 def watchlist_add_ticker():
-	add_watchlist('test', request.values.get("ticker").replace('.', '-').upper())
+	if request.values.get("command") == "add":
+		add_watchlist('test', request.values.get("ticker").replace('.', '-').upper())
+	elif request.values.get("command") == "delete":
+		delete_watchlist('test', request.values.get("ticker").replace('.', '-').upper())
 	dark_mode = get_user_theme("test")
 	watchlist_data = get_watchlist_data('test')
 	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=watchlist_data['table'], last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"))
