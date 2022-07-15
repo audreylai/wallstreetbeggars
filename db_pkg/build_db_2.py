@@ -48,10 +48,10 @@ def main():
 	excel_df[['ticker', 'board_lot']] = excel_df[['ticker', 'board_lot']].apply(pd.to_numeric)
 
 	# drop unrelated rows
-	# df = df.drop(df[(df.ticker > 4000) & (df.ticker < 6030)].index)
-	# df = df.drop(df[(df.ticker > 6700) & (df.ticker < 6800)].index)
-	# df = df.drop(df[df.ticker > 10000].index)
-	excel_df.drop(excel_df[excel_df.ticker >= 1000].index, inplace=True)
+	excel_df.drop(excel_df[(excel_df.ticker > 4000) & (excel_df.ticker < 6030)].index, inplace=True)
+	excel_df.drop(excel_df[(excel_df.ticker > 6700) & (excel_df.ticker < 6800)].index, inplace=True)
+	excel_df.drop(excel_df[excel_df.ticker > 10000].index, inplace=True)
+	# excel_df.drop(excel_df[excel_df.ticker >= 1000].index, inplace=True)
 
 	# convert ticker format
 	ticker_list = []
@@ -73,7 +73,7 @@ def main():
 
 	
 	print('Step 3/4: Download stock data')
-	NUM_THREADS = 500
+	NUM_THREADS = 5000
 	all_stock_data_df = yf.download(
 		tickers=' '.join(ticker_list).replace('-', '.'),
 		period="max", threads=NUM_THREADS, group_by="ticker"

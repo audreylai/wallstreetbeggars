@@ -234,8 +234,8 @@ def get_mkt_momentum(days=10) -> float:
 	data = get_stock_data("^HSI", 60)
 
 	# momentum = (V - Vx) / Vx, where V = Latest price, Vx = Closing price x days ago
-	V = data[-1]["close_pct"]
-	Vx = data[-days]["close_pct"]
+	V = data[-1]["close"]
+	Vx = data[-days]["close"]
 	
 	return (V - Vx) / Vx
 
