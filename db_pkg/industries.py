@@ -21,7 +21,7 @@ def get_all_industries() -> List:
 	return col_testing.distinct("industry")
 
 
-def get_industry_avg_close_pct(industry, period, use_cache=False) -> List[Dict]:
+def get_industry_avg_close_pct(industry, period, use_cache=True) -> List[Dict]:
 	if not industry_exists(industry): return []
 
 	if use_cache:
@@ -348,8 +348,68 @@ def get_all_industries_avg_last_close_pct_chartjs() -> Dict:
 		"background_color": ["rgb(16 185 129)" if row["close_pct"] > 0 else "rgb(244 63 94)" for row in data]
 	}
 
-def help(start_date=datetime(2022, 7, 13)):
-	cursor = col_testing.aggregate([{"$match": {"type": "stock"}},
+
+def get_industry_accum_avg_close_pct(industry, period) -> List[Dict]:
+	start_datetime, end_datetime = utils.get_datetime_from_period(period)
+	accum_close_pct = 0
+
+	cursor = col_testing.aggregate([
+		{"$match": {"industry": industry}},
+		{"$unwind": "$cdl_data"},
+		{"$match": {
+			"$and": [
+				{"cdl_data.date": {"$gte": start_datetime}},
+				{"cdl_data.date": {"$lte": end_datetime}}
+			]
+		}},
+		{"$group": {
+			"_id": "$cdl_data.date",
+			"close_pct": {"$avg": "$cdl_data.close_pct"}
+		}},
+		{"$sort": {
+			"date": pymongo.ASCENDING
+		}},
+		{"$project": {
+			"close_pct": {
+				"$let": {
+					"vars": {
+						"accum_close_pct": {
+							{"$add": ["$$accum_close_pct", "$close_pct"]}
+						}
+					},
+					"in": "$$accum_close_pct"
+				}
+			}
+		}},
+		{"$sort": {
+			"date": pymongo.ASCENDING
+		}}
+
+		# {"$project": {
+		# 	"_id": 0,
+		# 	"date": "$_id",
+		# 	"close_pct": 1
+		# }},
+		# {"$group": {
+		# 	"_id": None,
+		# 	"close_pct": {"$sum": "$close_pct"}
+		# }},
+		# {"$project": {
+		# 	"_id": 0,
+		# 	"date": 1,
+		# 	"close_pct": 1
+		# }},
+		# {"$sort": {
+		# 	"date": pymongo.ASCENDING
+		# }}
+	])
+	return list(cursor)
+
+
+
+def audrey_needs_help(start_date=datetime(2022, 7, 13)):
+	cursor = col_testing.aggregate([
+		{"$match": {"type": "stock"}},
 		{"$project": {
 			"cdl_data": {
 				"$filter": {
