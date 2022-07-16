@@ -2,8 +2,10 @@ import json
 import os
 import re
 from math import ceil
+import numpy as np
 
-from flask import Flask, render_template, request, send_from_directory
+
+from flask import Flask, redirect, render_template, request, send_from_directory, url_for
 
 import api
 from db_pkg.industries import *
@@ -117,7 +119,12 @@ def rules_save():
 def watchlist():
 	dark_mode = get_user_theme("test")
 	watchlist_data = get_watchlist_data('test')
-	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=watchlist_data['table'], last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"))
+	table = watchlist_data['table']
+	average = [(key, np.mean([item[key] for item in table]))if key not in ['ticker', 'name'] else '-' for key in table[0]]
+	median = [(key, np.median([item[key] for item in table])) if key not in ['ticker', 'name'] else '-' for key in table[0]]
+	total = [(key, np.sum([item[key] for item in table])) if key not in ['ticker', 'name'] else '-' for key in table[0]]
+	print(average)
+	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"), average=average, median=median, total=total)
 
 @app.route("/watchlist", methods=["POST"])
 def watchlist_add_ticker():
@@ -125,9 +132,7 @@ def watchlist_add_ticker():
 		add_watchlist('test', request.values.get("ticker").replace('.', '-').upper())
 	elif request.values.get("command") == "delete":
 		delete_watchlist('test', request.values.get("ticker").replace('.', '-').upper())
-	dark_mode = get_user_theme("test")
-	watchlist_data = get_watchlist_data('test')
-	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=watchlist_data['table'], last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"))
+	return redirect(url_for('watchlist'))
 
 
 @app.route("/stock-list", methods=["GET", "POST"])
