@@ -9,7 +9,7 @@ client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
 col_testing = db["testing"]
 
-last_trading_date = datetime(2022, 7, 14)
+last_trading_date = datetime(2022, 7, 15)
 
 
 def industry_exists(industry) -> bool:

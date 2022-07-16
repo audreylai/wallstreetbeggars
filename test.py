@@ -15,7 +15,7 @@ from timeit import default_timer as timer
 
 def test():
 	# return clear_all_cache()
-	return get_all_industries_accum_avg_close_pct(5)
+	return get_all_industries()
 
 pprint(test())
 
