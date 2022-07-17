@@ -241,7 +241,8 @@ def get_mkt_momentum(days=10) -> float:
 	
 	return (V - Vx) / Vx
 
-def get_last_cdl_pattern(ticker):
+
+def get_ticker_last_cdl_pattern(ticker):
 	data = get_last_stock_data(ticker)
 	cdl_pattern = data["cdl_pattern"]
 
@@ -250,6 +251,17 @@ def get_last_cdl_pattern(ticker):
 		if (cdl_pattern & 2**i) >> i:
 			out.append(candle_names[i])
 	return out
+
+
+def get_ticker_matching_cdl_pattern(patterns) -> List[str]:
+	bin_ind = []
+	for pattern in patterns:
+		bin_ind.append(candle_names.index(pattern))
+
+	cursor = col_testing.find({"last_cdl_data.cdl_pattern": {"$bitsAllSet": bin_ind}}, {"_id": 0, "ticker": 1})
+	out = [i["ticker"] for i in list(cursor)]
+	return out
+
 
 def get_last_updated() -> datetime:
 	cursor = col_testing.aggregate([
