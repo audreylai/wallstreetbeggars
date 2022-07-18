@@ -1,10 +1,12 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %} {% block header %}<script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
+{% extends "base.html" %} {% block title %} Home {% endblock %} {% block header %}
+<script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
 <script src="{{url_for('static', filename='chartjs/chartjs.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs/chartjs-chart-financial.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs/chartjs-chart-treemap.js')}}"></script>
-<!-- <script src="{{url_for('static', filename='chartjs/chartjs-plugin-zoom.js')}}"></script> -->
 <script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
-<script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>{% endblock %} 
+<script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.0.2/css/glide.core.css"></link>
+{% endblock %} 
 {% block content %}
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
@@ -269,15 +271,15 @@
 				</div>
 			</div>
 			<div class="grid grid-cols-1 gap-x-4">
-				<div class="h-full p-4 overflow-y-scroll bg-white rounded-md shadow dark:bg-zinc-800">
+				<div class="h-full col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
 						<ion-icon name="newspaper-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Watchlist
 						</h2>
 					</div>
-					<div class="pt-4 h-96">
-						<table class="w-full">
+					<div class="pt-10">
+						<!-- <table class="w-full">
 							<thead>
 								<tr class="top-0 bg-white dark:bg-zinc-800">
 									<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
@@ -313,7 +315,62 @@
 								</tr>
 								{% endfor %}
 							</tbody>
-						</table>
+						</table> -->
+						<div class="glide multi1">
+							<div class="glide__track" data-glide-el="track">
+								<ul class="glide__slides">
+									{% for i in range(4) %}
+									<li class="glide__slide">
+										<div class="max-w-sm p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-zinc-900 dark:border-zinc-800">
+												<h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">HSBC HOLDINGS</h5>
+												<div class="flex items-baseline text-gray-800 dark:text-zinc-100">
+														<span class="text-5xl font-extrabold tracking-tight">0005.HK</span>
+														<span class="ml-1 text-xl font-normal text-red-500 dark:text-red-400">(SELL)</span>
+												</div>
+												<!-- List -->
+												<div class="my-7">
+													<p class="font-medium text-emerald-500">Buy</p>
+													<ul role="list" class="space-y-3">
+														<li class="flex space-x-3">
+																<!-- Icon -->
+																<svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-emerald-600 dark:text-emerald-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Check icon</title><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+																<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">RSI > 30</span>
+														</li>
+	
+														<li class="flex space-x-3 line-through decoration-gray-500">
+																<!-- Icon -->
+																<svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Check icon</title><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+																<span class="text-base font-normal leading-tight text-gray-500">MA20 > MA10</span>
+														</li>
+													</ul>
+												</div>
+												<div class="my-7">
+													<p class="font-medium text-rose-500">Sell</p>
+													<ul role="list" class="space-y-3">
+														<li class="flex space-x-3">
+																<!-- Icon -->
+																<svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-rose-600 dark:text-rose-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Check icon</title><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+																<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">RSI > 30</span>
+														</li>
+	
+														<li class="flex space-x-3 line-through decoration-gray-500">
+																<!-- Icon -->
+																<svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Check icon</title><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+																<span class="text-base font-normal leading-tight text-gray-500">MA20 > MA10</span>
+														</li>
+													</ul>
+												</div>
+												<form action="/rules" method="POST"><input hidden name="ticker" value="0005-HK"> <button type="submit" class="w-full px-5 text-sm font-medium text-center text-gray-700 dark:text-zinc-300">See more</button></form>
+										</div>
+								</li>
+									{% endfor %}
+								</ul>
+							</div>
+							<div class="glide__arrows" data-glide-el="controls">
+								<button class="absolute z-10 flex p-2 bg-gray-300 rounded-full left-12 top-1/2 glide__arrow dark:text-zinc-200 dark:bg-zinc-800" data-glide-dir="<"><ion-icon name="chevron-back-outline"></ion-icon></button>
+								<button class="absolute z-10 flex p-2 bg-gray-300 rounded-full right-12 top-1/2 glide__arrow dark:text-zinc-200 dark:bg-zinc-800" data-glide-dir=">"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -389,6 +446,9 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.0.2/glide.js"></script>
 <script>
 	// init chart + ctx
 	// init chart + ctx
@@ -710,5 +770,21 @@
 			setTimeout(() => {mkt_overview_chart.update()}, 500)
 		})
 	})
+
+	var glide = new Glide('.multi1', {
+		type: 'carousel',
+		perView: 3,
+		focusAt: 'center',
+		breakpoints: {
+			800: {
+				perView: 2
+			},
+			480: {
+				perView: 1
+			}
+		}
+	})
+	
+	glide.mount()
 </script>
 {% endblock %}

@@ -44,6 +44,8 @@ content %}
 			<thead>
 				<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
 					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+					</th>
+					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 						Ticker
 					</th>
 					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
@@ -66,6 +68,7 @@ content %}
 				{% for row in watchlist_data %}
 				<tr
 					class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300"></td>
 					{% for k,v in row.items() %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 						{% if k == "mkt_cap" %}
@@ -97,6 +100,7 @@ content %}
 				</tr>
 				{% endfor %}
 				<tr class="sticky bottom-0 bg-gray-300 border-t-2 border-gray-400 dark:border-zinc-500 dark:bg-zinc-800">
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">Average</td>
 					{% for row in average %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 						{% if row is string %}
@@ -115,6 +119,7 @@ content %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300"></td>
 				</tr>
 				<tr class="sticky bottom-0 bg-gray-300 dark:bg-zinc-800">
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">Median</td>
 					{% for row in median %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 						{% if row is string %}
@@ -133,6 +138,7 @@ content %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300"></td>
 				</tr>
 				<tr class="sticky bottom-0 bg-gray-300 dark:bg-zinc-800">
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">Total</td>
 					{% for row in total %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 						{% if row is string %}

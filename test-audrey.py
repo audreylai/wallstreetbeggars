@@ -6,4 +6,4 @@ from db_pkg.stock import *
 from db_pkg.news import *
 from db_pkg.cache import *
 
-help("Banks")
+save_rules_results(500)
