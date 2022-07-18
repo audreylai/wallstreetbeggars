@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Dict, List, Tuple
 
 import pymongo
+import talib as ta
 
 from . import industries, utils, cache
 
@@ -13,6 +14,7 @@ col_stock_info = db["stock_info"]
 col_rules_results = db["rules_results"]
 col_testing = db["testing"]
 
+candle_names = ta.get_function_groups()["Pattern Recognition"]
 
 def ticker_exists(ticker) -> bool:
 	res = col_testing.count_documents({"ticker": ticker})
@@ -238,6 +240,27 @@ def get_mkt_momentum(days=10) -> float:
 	Vx = data[-days]["close"]
 	
 	return (V - Vx) / Vx
+
+
+def get_ticker_last_cdl_pattern(ticker):
+	data = get_last_stock_data(ticker)
+	cdl_pattern = data["cdl_pattern"]
+
+	out = []
+	for i in range(61):
+		if (cdl_pattern & 2**i) >> i:
+			out.append(candle_names[i])
+	return out
+
+
+def get_ticker_matching_cdl_pattern(patterns) -> List[str]:
+	bin_ind = []
+	for pattern in patterns:
+		bin_ind.append(candle_names.index(pattern))
+
+	cursor = col_testing.find({"last_cdl_data.cdl_pattern": {"$bitsAllSet": bin_ind}}, {"_id": 0, "ticker": 1})
+	out = [i["ticker"] for i in list(cursor)]
+	return out
 
 
 def get_last_updated() -> datetime:

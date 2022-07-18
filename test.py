@@ -1,3 +1,5 @@
+from csscompressor import compress
+from numpy import empty
 from db_pkg.build_db import *
 from db_pkg.user import *
 from db_pkg.industries import *
@@ -6,24 +8,28 @@ from db_pkg.utils import *
 from db_pkg.stock import *
 from db_pkg.news import *
 from db_pkg.cache import *
-
+import talib as ta
+import pandas as pd
+from datetime import *
 # # from db_utils import *
 # # from utils import *
 # from pprint import pprint
 # # from threading_test import *
 from timeit import default_timer as timer
+candle_names = ta.get_function_groups()["Pattern Recognition"]
 
-def test():
-	# return clear_all_cache()
-	return get_all_industries()
 
-pprint(test())
+# def test():
+# 	# return clear_all_cache()
+# 	return get_all_industries()
 
-start = timer()
-test()
-end = timer()
+# pprint(test())
 
-print(f'{round((end - start)*1000, 3)}ms')
+# start = timer()
+# test()
+# end = timer()
+
+# print(f'{round((end - start)*1000, 3)}ms')
 
 # print(get_watchlist_rules_results('test'))
 # pprint(get_all_tickers())

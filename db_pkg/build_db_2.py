@@ -29,7 +29,7 @@ hsi_tickers = list(map(lambda x: x + '.HK', [
 	"0001", "0019", "0027", "0066", "0151", "0175", "0267", "0288", "0386", "0669", "0700", "0762", "0857",
 	"0883", "0941", "1044", "1088", "1093", "1177", "1928", "2018", "2313", "2319", "2382"
 ]))
-
+candle_names = ta.get_function_groups()["Pattern Recognition"]
 all_stock_data_dict = {}
 excel_df = None
 etnet_df = None
@@ -51,7 +51,7 @@ def main():
 	excel_df.drop(excel_df[(excel_df.ticker > 4000) & (excel_df.ticker < 6030)].index, inplace=True)
 	excel_df.drop(excel_df[(excel_df.ticker > 6700) & (excel_df.ticker < 6800)].index, inplace=True)
 	excel_df.drop(excel_df[excel_df.ticker > 10000].index, inplace=True)
-	# excel_df.drop(excel_df[excel_df.ticker >= 1000].index, inplace=True)
+	# excel_df.drop(excel_df[excel_df.ticker >= 10].index, inplace=True)
 
 	# convert ticker format
 	ticker_list = []
@@ -182,6 +182,25 @@ def insert_data():
 			df["rsi"] = ta.RSI(df.close, timeperiod=14)
 			df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df.close, fastperiod=12, slowperiod=26, signalperiod=9)
 			df['close_pct'] = df['close'].pct_change()
+
+			# cdl patterns
+			op, hi, lo, cl = df.open, df.high, df.low, df.close
+
+			# Cols for each pattern
+			for candle in candle_names:
+				df[candle] = getattr(ta, candle)(op, hi, lo, cl)
+			
+			df["cdl_pattern"] = [0 for _ in range(len(df))]
+			df.astype({'cdl_pattern': 'int64'})
+
+			for ind, row in df.iterrows():
+				cdl_res = 0
+				for candle in candle_names:
+					if row[candle] != 0:
+						cdl_res += 2**candle_names.index(candle)
+				df.loc[ind, "cdl_pattern"] = cdl_res
+
+			df.drop(columns=candle_names, inplace=True)
 
 			# date checking
 			df.dropna(inplace=True)
