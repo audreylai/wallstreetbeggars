@@ -177,11 +177,15 @@ def insert_data():
 			for sma_period in [10, 20, 50, 100, 250]:
 				df[f"sma{sma_period}"] = ta.SMA(df.close, timeperiod=sma_period)
 
-			# vol_sma20, rsi, macd, close_pct
+			# vol_sma20, rsi, macd, close_pct, obv, stoch
 			df["vol_sma20"] = ta.SMA(df.volume, timeperiod=20)
 			df["rsi"] = ta.RSI(df.close, timeperiod=14)
 			df["macd"], df["macd_ema"], df["macd_div"] = ta.MACD(df.close, fastperiod=12, slowperiod=26, signalperiod=9)
+			df["obv"] = ta.OBV(df.close, df.volume)
 			df['close_pct'] = df['close'].pct_change()
+			df["stoch_slowk"], df["stoch_slowd"] = ta.STOCH(df.high, df.low, df.close, fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)
+			df["stoch_fastk"], df["stoch_fastd"] = ta.STOCHF(df.high, df.low, df.close, fastk_period=5, fastd_period=3, fastd_matype=0)
+			df["bbands_upper"], df["bbands_middle"], df["bbands_lower"] = ta.BBANDS(df.close, timeperiod=5, nbdevup=2, nbdevdn=2, matype=0)
 
 			# cdl patterns
 			op, hi, lo, cl = df.open, df.high, df.low, df.close

@@ -18,6 +18,7 @@ from datetime import *
 from timeit import default_timer as timer
 candle_names = ta.get_function_groups()["Pattern Recognition"]
 
+# save_rules_results(limit=10)
 
 # def test():
 # 	# return clear_all_cache()

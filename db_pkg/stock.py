@@ -52,13 +52,18 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 		"cdl": [], "close": [], "close_pct": [], "accum_close_pct": [], 
 		"last_close": 0, "last_close_pct": 0,
 		"sma10": [], "sma20": [], "sma50": [], "sma100": [], "sma250": [],
-		"rsi": [], "macd": [], "macd_ema": [], "macd_div": [],
+		"rsi": [], "macd": [], "macd_ema": [], "macd_div": [], "obv": [], 
+		"stoch_slowk": [], "stoch_slowd": [], "stoch_fastk": [], "stoch_fastd": [], 
+		"bbands_upper": [], "bbands_middle": [], "bbands_lower": [],
 		"volume": [], "vol_color": [], "vol_sma20": [], "max_vol": 0,
 		"ticker": ticker, "period": period, "interval": interval
 	}
 	attrs = [
 		"sma10", "sma20", "sma50", "sma100", "sma250",
-		"rsi", "macd", "macd_div", "macd_ema", "volume", "vol_sma20",
+		"rsi", "macd", "macd_div", "macd_ema", "obv", 
+		"stoch_slowk", "stoch_slowd", "stoch_fastk", "stoch_fastd",
+		"bbands_upper", "bbands_middle", "bbands_lower", 
+		"volume", "vol_sma20",
 		"close", "close_pct"
 	]
 
