@@ -16,6 +16,8 @@ import talib as ta
 import yfinance as yf
 from bs4 import BeautifulSoup
 
+sys.setrecursionlimit(50)
+
 HSI_TICKERS = list(map(lambda x: x + '.HK', [
 	"0005", "0011", "0388", "0939", "1299", "1398", "2318", "2388", "2628", "3328", "3988", "0002", "0003",
 	"0006", "1038", "0012", "0016", "0017", "0083", "0101", "0688", "0823", "1109", "1113", "1997", "2007", 
@@ -46,7 +48,7 @@ class LOG_LEVEL():
 	FATAL = 4
 
 
-def log_msg(msg, level=LOG_LEVEL.DEBUG, lock=None):
+def log_msg(msg, level=LOG_LEVEL.DEBUG, lock=None, flush=False):
 	time = datetime.now().strftime("%H:%M:%S.%f")[:-3]
 
 	match level:
@@ -68,9 +70,9 @@ def log_msg(msg, level=LOG_LEVEL.DEBUG, lock=None):
 	
 	if lock is not None:
 		with lock:
-			print(f"{time} - {header}{colorama.Style.RESET_ALL} {f_msg}{colorama.Style.RESET_ALL}", flush=True)
+			print(f"{time} - {header}{colorama.Style.RESET_ALL} {f_msg}{colorama.Style.RESET_ALL}", flush=flush)
 	else:
-		print(f"{time} - {header}{colorama.Style.RESET_ALL} {f_msg}{colorama.Style.RESET_ALL}", flush=True)
+		print(f"{time} - {header}{colorama.Style.RESET_ALL} {f_msg}{colorama.Style.RESET_ALL}", flush=flush)
 
 
 def convert_name(name):
@@ -156,7 +158,8 @@ async def etnet_scraping():
 
 
 def mp_get_stock_info(ticker):
-	colorama.init()
+	if not str(type(sys.stdout)) == "<class 'colorama.ansitowin32.StreamWrapper'>":
+		colorama.init()
 
 	client = pymongo.MongoClient("mongodb://localhost:27017")
 	db = client["wallstreetbeggars"]
@@ -179,7 +182,7 @@ def mp_get_stock_info(ticker):
 			{"$set": {"_state": 1}}
 		])
 		end = timer()
-		log_msg(f"{ticker}{' '*(7-len(ticker))}: success (time elapsed: {round(end - start, 3)}s)", level=LOG_LEVEL.DEBUG, lock=lock)
+		log_msg(f"{ticker}{' '*(7-len(ticker))}: success (time elapsed: {'%.3f' % (end - start)}s)", level=LOG_LEVEL.DEBUG, lock=lock)
 
 	except Exception as e:
 		log_msg(f"{ticker}{' '*(7-len(ticker))}: {str(e)}", level=LOG_LEVEL.ERROR, lock=lock)
@@ -188,7 +191,9 @@ def mp_get_stock_info(ticker):
 def mp_calc_stock_data(data):
 	ticker, df = data
 
-	colorama.init()
+	if not str(type(sys.stdout)) == "<class 'colorama.ansitowin32.StreamWrapper'>":
+		colorama.init()
+
 	client = pymongo.MongoClient("mongodb://localhost:27017")
 	db = client["wallstreetbeggars"]
 	col_stock_data = db["stock_data"]
@@ -249,7 +254,7 @@ def mp_calc_stock_data(data):
 		])
 
 		end = timer()
-		log_msg(f"{ticker}{' '*(7-len(ticker))}: success (time elapsed: {round(end - start, 3)}s)", level=LOG_LEVEL.DEBUG, lock=lock)
+		log_msg(f"{ticker}{' '*(7-len(ticker))}: success (time elapsed: {'%.3f' % (end - start)}s)", level=LOG_LEVEL.DEBUG, lock=lock)
 	
 	except NoData:
 		log_msg(f"{ticker}{' '*(7-len(ticker))}: abort - no data detected", level=LOG_LEVEL.WARN, lock=lock)
@@ -284,7 +289,7 @@ async def main():
 	STOCK_INFO_PATH = f"./tmp/stock_info_{limit}.pickle"
 
 	if use_cache and os.path.exists(STOCK_INFO_PATH):
-		log_msg("Using cached stock info", level=LOG_LEVEL.DEBUG)
+		log_msg(f"Using cached stock info ({STOCK_INFO_PATH})", level=LOG_LEVEL.DEBUG)
 		stock_info_df = pd.read_pickle(STOCK_INFO_PATH)
 	else:
 		get_hkex_df_task = asyncio.create_task(get_hkex_df(limit))
@@ -297,7 +302,7 @@ async def main():
 		if use_cache: stock_info_df.to_pickle(STOCK_INFO_PATH)
 
 	end = timer()
-	log_msg(f"Time elapsed: {round(end - start, 3)}s\n", level=LOG_LEVEL.DEBUG)
+	log_msg(f"Time elapsed: {'%.3f' % (end - start)}s\n", level=LOG_LEVEL.DEBUG)
 	
 
 	# --------------------------------------------------
@@ -332,7 +337,7 @@ async def main():
 		if use_cache: index_stock_data_df.to_pickle(STOCK_DATA_INDEX_PATH)
 
 	end = timer()
-	log_msg(f"Time elapsed: {round(end - start, 3)}s\n", level=LOG_LEVEL.DEBUG)
+	log_msg(f"Time elapsed: {'%.3f' % (end - start)}s\n", level=LOG_LEVEL.DEBUG)
 
 
 	# --------------------------------------------------
@@ -361,7 +366,7 @@ async def main():
 	del stock_info_df
 
 	end = timer()
-	log_msg(f"Time elapsed: {round(end - start, 3)}s\n", level=LOG_LEVEL.DEBUG)
+	log_msg(f"Time elapsed: {'%.3f' % (end - start)}s\n", level=LOG_LEVEL.DEBUG)
 	
 
 	# --------------------------------------------------
@@ -373,7 +378,7 @@ async def main():
 	start = timer()
 	tickers = list(map(lambda x: x.replace('.', '-'), set(all_stock_data_df.columns.get_level_values(0))))
 
-	THREAD_COUNT = 16
+	THREAD_COUNT = 50
 	with mp.Pool(THREAD_COUNT, initializer=init_child, initargs=(lock, )) as pool:
 		pool.map(mp_get_stock_info, tickers)
 	
@@ -381,7 +386,7 @@ async def main():
 	log_msg(f"Dropped {cursor.deleted_count} documents ({col_stock_data.count_documents({})} remaining)", level=LOG_LEVEL.DEBUG)
 
 	end = timer()
-	log_msg(f"Time elapsed: {round(end - start, 3)}s\n", level=LOG_LEVEL.DEBUG)
+	log_msg(f"Time elapsed: {'%.3f' % (end - start)}s\n", level=LOG_LEVEL.DEBUG)
 
 
 	# --------------------------------------------------
@@ -400,7 +405,7 @@ async def main():
 	del all_stock_data_df
 	del index_stock_data_df
 
-	THREAD_COUNT = 16
+	THREAD_COUNT = 10
 	with mp.Pool(THREAD_COUNT, initializer=init_child, initargs=(lock, )) as pool:
 		pool.map(mp_calc_stock_data, stock_data_dfs)
 
@@ -414,7 +419,7 @@ async def main():
 	])
 
 	end = timer()
-	log_msg(f"Time elapsed: {round(end - start, 3)}s\n", level=LOG_LEVEL.DEBUG)
+	log_msg(f"Time elapsed: {'%.3f' % (end - start)}s\n", level=LOG_LEVEL.DEBUG)
 
 
 if __name__ == "__main__":
