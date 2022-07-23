@@ -16,8 +16,6 @@ import talib as ta
 import yfinance as yf
 from bs4 import BeautifulSoup
 
-sys.setrecursionlimit(50)
-
 HSI_TICKERS = list(map(lambda x: x + '.HK', [
 	"0005", "0011", "0388", "0939", "1299", "1398", "2318", "2388", "2628", "3328", "3988", "0002", "0003",
 	"0006", "1038", "0012", "0016", "0017", "0083", "0101", "0688", "0823", "1109", "1113", "1997", "2007", 
