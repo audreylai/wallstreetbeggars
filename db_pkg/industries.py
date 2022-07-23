@@ -7,18 +7,18 @@ from . import stock, utils, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
-col_testing = db["testing"]
+col_stock_data = db["stock_data"]
 
-last_trading_date = datetime(2022, 7, 15)
+last_trading_date = datetime(2022, 7, 22)
 
 
 def industry_exists(industry) -> bool:
-	res = col_testing.count_documents({"industry": industry})
+	res = col_stock_data.count_documents({"industry": industry})
 	return res != 0
 
 
 def get_all_industries() -> List:
-	return col_testing.distinct("industry")
+	return col_stock_data.distinct("industry")
 
 
 def get_industry_avg_close_pct(industry, period, use_cache=True) -> List[Dict]:
@@ -31,7 +31,7 @@ def get_industry_avg_close_pct(industry, period, use_cache=True) -> List[Dict]:
 
 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"industry": industry}},
 		{"$unwind": "$cdl_data"},
 		{"$match": {
@@ -76,7 +76,7 @@ def get_industry_accum_avg_close_pct(industry, period) -> List[Dict]:
 def get_industry_avg_last_close_pct(industry) -> float:
 	if not industry_exists(industry): return None
 
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"industry": industry}},
 		{"$unwind": "$cdl_data"},
 		{"$match": {
@@ -99,7 +99,7 @@ def get_industry_tickers_last_close_pct(industry, use_cache=True) -> List[Dict]:
 		if cache_res is not None:
 			return cache_res
 
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"industry": industry}},
 		{"$project": {
 			"cdl_data": {
@@ -138,7 +138,7 @@ def get_all_industries_avg_close_pct(period, use_cache=True) -> List[Dict]:
 
 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"type": "stock"}},
 		{"$project": {
 			"cdl_data": {
@@ -210,7 +210,7 @@ def get_all_industries_avg_last_close_pct(use_cache=True) -> List[Dict]:
 		if cache_res is not None:
 			return cache_res
 
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"type": "stock"}},
 		{"$project": {
 			"cdl_data": {

@@ -14,7 +14,6 @@ from db_pkg.rules import *
 from db_pkg.stock import *
 from db_pkg.user import *
 from db_pkg.utils import *
-from db_pkg import build_db_2
 
 app = Flask(__name__)
 
@@ -208,16 +207,15 @@ def stock_info():
 	
 	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics, news=news, dark_mode=dark_mode)
 
-@app.route("/stock-info/update", methods=["GET"])
-def update_stock_info():
-	build_db_2.main()
+# @app.route("/stock-info/update", methods=["GET"])
+# def update_stock_info():
+# 	build_db_2.main()
 
 # stock-analytics
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
 	dark_mode = get_user_theme("test")
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
-	start_datetime, end_datetime = get_datetime_from_period(180)
 
 	if not ticker_exists(ticker):
 		return render_template("404.html", dark_mode=dark_mode)
@@ -225,7 +223,6 @@ def stock_analytics():
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = get_rules_results(ticker).values()
 
 	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
-	stock_data['start_date'], stock_data['end_date'] = int(start_datetime.timestamp()), int(end_datetime.timestamp())
 	stock_info = get_stock_info(ticker)
 
 	return render_template("stock-analytics.html", stock_data=stock_data, stock_info=stock_info, industries=get_all_industries(), indexes=get_ticker_list(ticker_type='index'), dark_mode=dark_mode,

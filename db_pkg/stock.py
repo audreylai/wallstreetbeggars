@@ -9,15 +9,14 @@ from . import industries, utils, cache
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
 col_users = db["users"]
-col_stock_data = db["stock_data"]
-col_stock_info = db["stock_info"]
 col_rules_results = db["rules_results"]
-col_testing = db["testing"]
+col_stock_data = db["stock_data"]
 
 candle_names = ta.get_function_groups()["Pattern Recognition"]
 
+
 def ticker_exists(ticker) -> bool:
-	res = col_testing.count_documents({"ticker": ticker})
+	res = col_stock_data.count_documents({"ticker": ticker})
 	return res != 0
 
 
@@ -25,7 +24,7 @@ def get_stock_data(ticker, period) -> List[Dict] | None:
 	if not ticker_exists(ticker): return
 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 	
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"ticker": ticker}},
 		{"$project": {
 			"_id": 0,
@@ -74,7 +73,7 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 	for c, row in enumerate(data):
 		if c % interval != 0: continue
 
-		epoch_timestamp = int(datetime.timestamp(row['date']) * 1000)
+		epoch_timestamp = int(datetime.timestamp(row["date"]) * 1000)
 
 		out["cdl"].append({
 			'x': epoch_timestamp,
@@ -106,12 +105,16 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 	out["last_close"] = round(data[-1]["close"], precision)
 	out["last_close_pct"] = data[-1]["close_pct"]
 
+	out["start_date"], out["end_date"] = utils.get_datetime_from_period(period)
+	out["start_date"] = int(datetime.timestamp(out["start_date"]) * 1000)
+	out["end_date"] = int(datetime.timestamp(out["end_date"]) * 1000)
+
 	return out
 
 
 def get_stock_info(ticker) -> Dict | None:
 	if not ticker_exists(ticker): return None
-	return col_testing.find_one({"ticker": ticker}, {"_id": 0, "cdl_data": 0})
+	return col_stock_data.find_one({"ticker": ticker}, {"_id": 0, "cdl_data": 0})
 
 
 def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCENDING, min_mkt_cap=0, cols=[], use_cache=True):
@@ -133,7 +136,7 @@ def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCEND
 	}
 	if industry: query["industry"] = industry
 	
-	cursor = col_testing\
+	cursor = col_stock_data\
 		.find(query, {"_id": 0} | {k: 1 for k in cols})\
 		.sort([(sort_col, sort_dir), ("_id", 1)])\
 		.allow_disk_use(True)
@@ -145,13 +148,13 @@ def get_stock_info_all(industry=None, sort_col="ticker", sort_dir=pymongo.ASCEND
 
 def get_ticker_list(ticker_type=None) -> List:
 	if ticker_type is None:
-		return col_testing.distinct("ticker")
+		return col_stock_data.distinct("ticker")
 	else:
-		return col_testing.distinct("ticker", {"type": ticker_type})
+		return col_stock_data.distinct("ticker", {"type": ticker_type})
 
 
 def get_gainers_losers(limit=5) -> Tuple[List[str], List[str]]:
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"type": "stock"}},
 		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1}},
 		{"$sort": {"last_close_pct": pymongo.DESCENDING}},
@@ -159,7 +162,7 @@ def get_gainers_losers(limit=5) -> Tuple[List[str], List[str]]:
 	])
 	gainers = [i["ticker"] for i in cursor]
 
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"type": "stock"}},
 		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1}},
 		{"$sort": {"last_close_pct": pymongo.ASCENDING}},
@@ -172,7 +175,7 @@ def get_gainers_losers(limit=5) -> Tuple[List[str], List[str]]:
 def get_gainers_losers_table(limit=5) -> Tuple[List[Dict], List[Dict]]:
 	attrs = {"last_close": 1, "last_volume": 1, "mkt_cap": 1}
 
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"type": "stock"}},
 		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1, **attrs}},
 		{"$sort": {"last_close_pct": pymongo.DESCENDING}},
@@ -180,7 +183,7 @@ def get_gainers_losers_table(limit=5) -> Tuple[List[Dict], List[Dict]]:
 	])
 	gainers = list(cursor)
 
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"type": "stock"}},
 		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1, **attrs}},
 		{"$sort": {"last_close_pct": pymongo.ASCENDING}},
@@ -192,7 +195,7 @@ def get_gainers_losers_table(limit=5) -> Tuple[List[Dict], List[Dict]]:
 
 def get_hsi_tickers_table() -> List[Dict]:
 	attrs = {"last_close": 1, "last_close_pct": 1}
-	cursor = col_testing\
+	cursor = col_stock_data\
 		.find({"is_hsi_stock": True}, {"_id": 0, "ticker": 1, **attrs})\
 		.sort("ticker", pymongo.ASCENDING)
 
@@ -201,7 +204,7 @@ def get_hsi_tickers_table() -> List[Dict]:
 
 def get_last_stock_data(ticker) -> Dict | None:
 	if not ticker_exists(ticker): return None
-	return col_testing.find_one({"ticker": ticker}, {"_id": 0, "last_cdl_data": 1})["last_cdl_data"]
+	return col_stock_data.find_one({"ticker": ticker}, {"_id": 0, "last_cdl_data": 1})["last_cdl_data"]
 
 
 def get_mkt_overview_table(use_cache=True) -> List[Dict]:
@@ -210,7 +213,7 @@ def get_mkt_overview_table(use_cache=True) -> List[Dict]:
 		if cache_res is not None:
 			return cache_res
 
-	cursor = col_testing\
+	cursor = col_stock_data\
 		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
 		.limit(50).sort("last_volume", pymongo.DESCENDING)
 
@@ -239,7 +242,6 @@ def get_mkt_direction() -> float:
 
 def get_mkt_momentum(days=10) -> float:
 	data = get_stock_data("^HSI", 60)
-
 	# momentum = (V - Vx) / Vx, where V = Latest price, Vx = Closing price x days ago
 	V = data[-1]["close"]
 	Vx = data[-days]["close"]
@@ -253,23 +255,23 @@ def get_ticker_last_cdl_pattern(ticker):
 
 	out = []
 	for i in range(61):
-		if (cdl_pattern & 2**i) >> i:
+		if cdl_pattern & 2**i:
 			out.append(candle_names[i])
 	return out
 
 
-def get_ticker_matching_cdl_pattern(patterns) -> List[str]:
+def get_matching_cdl_pattern_tickers(patterns) -> List[str]:
 	bin_ind = []
 	for pattern in patterns:
 		bin_ind.append(candle_names.index(pattern))
 
-	cursor = col_testing.find({"last_cdl_data.cdl_pattern": {"$bitsAllSet": bin_ind}}, {"_id": 0, "ticker": 1})
+	cursor = col_stock_data.find({"last_cdl_data.cdl_pattern": {"$bitsAllSet": bin_ind}}, {"_id": 0, "ticker": 1})
 	out = [i["ticker"] for i in list(cursor)]
 	return out
 
 
 def get_last_updated() -> datetime:
-	cursor = col_testing.aggregate([
+	cursor = col_stock_data.aggregate([
 		{"$match": {"ticker": "^HSI"}},
 		{"$project": {"_id": 0, "last_updated": 1}}
 	])

@@ -1,76 +1,33 @@
-from csscompressor import compress
-from numpy import empty
-from db_pkg.build_db import *
-from db_pkg.user import *
-from db_pkg.industries import *
-from db_pkg.rules import *
-from db_pkg.utils import *
-from db_pkg.stock import *
-from db_pkg.news import *
-from db_pkg.cache import *
-import talib as ta
-import pandas as pd
+
 from datetime import *
 # # from db_utils import *
 # # from utils import *
 # from pprint import pprint
 # # from threading_test import *
 from timeit import default_timer as timer
-candle_names = ta.get_function_groups()["Pattern Recognition"]
 
-# save_rules_results(limit=10)
+import colorama
+import numpy as np
+import pandas as pd
+import talib as ta
 
-# def test():
-# 	# return clear_all_cache()
-# 	return get_all_industries()
+from db_pkg.cache import *
+from db_pkg.industries import *
+from db_pkg.news import *
+from db_pkg.rules import *
+from db_pkg.stock import *
+from db_pkg.user import *
+from db_pkg.utils import *
 
-# pprint(test())
+# candle_names = ta.get_function_groups()["Pattern Recognition"]
 
-# start = timer()
-# test()
-# end = timer()
+def test():
+	return get_stock_data_chartjs("0005-HK", 60, interval=1, precision=4)
 
-# print(f'{round((end - start)*1000, 3)}ms')
+pprint(test())
 
-# print(get_watchlist_rules_results('test'))
-# pprint(get_all_tickers())
+start = timer()
+test()
+end = timer()
 
-# def get_industry_accum_avg_close_pct(industry, period) -> List[Dict]:
-# 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
-# 	accum_close_pct = 0
-
-# 	cursor = col_testing.aggregate([
-# 		{"$match": {"industry": industry}},
-# 		{"$unwind": "$cdl_data"},
-# 		{"$match": {
-# 			"$and": [
-# 				{"cdl_data.date": {"$gte": start_datetime}},
-# 				{"cdl_data.date": {"$lte": end_datetime}}
-# 			]
-# 		}},
-# 		{"$group": {
-# 			"_id": "$cdl_data.date",
-# 			"close_pct": {"$avg": "$cdl_data.close_pct"}
-# 		}},
-# 		{"$sort": {
-# 			"date": pymongo.ASCENDING
-# 		}},
-# 		{"$project": {
-# 			"_id": 0,
-# 			"date": "$_id",
-# 			"close_pct": {
-# 				"$let": {
-# 					"vars": {
-# 						"accum_close_pct": {
-# 							"$ifNull": [{"$add": ["$$accum_close_pct", "$close_pct"]}, "$close_pct"]
-# 						}
-# 					},
-# 					"in": "$$accum_close_pct"
-# 				}
-# 			}
-# 		}},
-# 		{"$sort": {
-# 			"date": pymongo.ASCENDING
-# 		}}
-# 	])
-# 	return list(cursor)
+print(f"Time elapsed: {round(end - start, 3)}s\n")

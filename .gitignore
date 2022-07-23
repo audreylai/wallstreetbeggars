@@ -130,3 +130,5 @@ dmypy.json
 testing.ipynb
 
 node_modules/
+
+tmp/

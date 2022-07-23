@@ -18,7 +18,7 @@ def update_rules(username, buy, sell, cdl):
 		col_users.update_one({"username": username}, {"$set": {"buy": buy, "sell": sell}})
 
 
-def get_rules_results(ticker, cdl):
+def get_rules_results(ticker, cdl=False):
 	if cdl:
 		cursor = col_rules_results.find({"ticker": ticker}, {"_id": 0, "hit_cdl_buy_rules": 1, "hit_cdl_sell_rules": 1, "miss_cdl_buy_rules": 1, "miss_cdl_sell_rules": 1})
 	else:
@@ -30,12 +30,11 @@ def get_watchlist_rules_results(username):
 	ticker_list = user.get_watchlist_tickers(username)
 	out = {}
 	for ticker in ticker_list:
-		# print(ticker)
 		out[ticker] = get_rules_results(ticker)
 	return out
 
 
-def save_rules_results(limit=100):
+def save_rules_results(limit=10000, progress=True):
 	col_rules_results.delete_many({})
 
 	for i in range(limit):
@@ -76,4 +75,5 @@ def save_rules_results(limit=100):
 			'miss_cdl_sell_rules': miss_cdl_sell_rules
 		})
 		
-		print(ticker)
+		if progress:
+			print(ticker)
