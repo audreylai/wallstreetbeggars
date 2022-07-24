@@ -4,6 +4,8 @@ from typing import Dict, List, Tuple
 import pymongo
 import talib as ta
 
+from db_pkg.user import get_active_tickers
+
 from . import industries, utils, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
@@ -176,7 +178,7 @@ def get_gainers_losers_table(limit=5) -> Tuple[List[Dict], List[Dict]]:
 	attrs = {"last_close": 1, "last_volume": 1, "mkt_cap": 1}
 
 	cursor = col_stock_data.aggregate([
-		{"$match": {"type": "stock"}},
+		{"$match": {"type": "stock", "ticker": {"$in": get_active_tickers("test")}}},
 		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1, **attrs}},
 		{"$sort": {"last_close_pct": pymongo.DESCENDING}},
 		{"$limit": limit}
@@ -184,7 +186,7 @@ def get_gainers_losers_table(limit=5) -> Tuple[List[Dict], List[Dict]]:
 	gainers = list(cursor)
 
 	cursor = col_stock_data.aggregate([
-		{"$match": {"type": "stock"}},
+		{"$match": {"type": "stock", "ticker": {"$in": get_active_tickers("test")}}},
 		{"$project": {"_id": 0, "ticker": 1, "last_close_pct": 1, **attrs}},
 		{"$sort": {"last_close_pct": pymongo.ASCENDING}},
 		{"$limit": limit}
@@ -214,7 +216,7 @@ def get_mkt_overview_table(use_cache=True) -> List[Dict]:
 			return cache_res
 
 	cursor = col_stock_data\
-		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
+		.find({"type": "stock", "ticker": {"$in": get_active_tickers("test")}}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
 		.limit(50).sort("last_volume", pymongo.DESCENDING)
 
 	out = list(cursor)
