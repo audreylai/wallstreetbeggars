@@ -245,6 +245,7 @@
 	// prevent period updating when it is the same
 	var current_period = 180;
 	var current_interval = 1;
+	var chart_padding = 55;
 
 	// update cmp charts accordingly when period updates
 	var current_cmp_ticker = '0001-HK'
@@ -534,10 +535,11 @@
 			...misc_options,
 			scales: {
 				x: {
-					display: false,
+					display: true,
 					...x_scale_settings
 				},
 				y: {
+					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
 					display: true,
 					title: {
 						display: false,
@@ -622,6 +624,7 @@
 					...x_scale_settings
 				},
 				y: {
+					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
 					display: true,
 					title: {
 						display: false,
@@ -676,6 +679,7 @@
 					...x_scale_settings
 				},
 				y: {
+					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
 					display: true,
 					title: {
 						display: false,
@@ -719,10 +723,11 @@
 		options = {
 			scales: {
 				x: {
-					display: true,
+					display: false,
 					...x_scale_settings
 				},
 				y: {
+					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
 					display: true,
 					title: {
 						display: false,
@@ -849,6 +854,7 @@
 					...x_scale_settings
 				},
 				y: {
+					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
 					display: true,
 					ticks: {
 						autoSkip: true,
@@ -916,6 +922,7 @@
 					...x_scale_settings
 				},
 				y: {
+					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
 					display: true,
 					ticks: {
 						autoSkip: true,
@@ -975,10 +982,11 @@
 		options = {
 			scales: {
 				x: {
-					display: false,
+					display: true,
 					...x_scale_settings
 				},
 				y: {
+					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
 					display: true,
 					ticks: {
 						autoSkip: true,
