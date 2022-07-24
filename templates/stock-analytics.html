@@ -124,43 +124,59 @@
 					</div>
 					<div>
 						<h2 class="text-lg font-semibold dark:text-zinc-200">Chart layers</h2>
-						<div class="grid grid-cols-2">
+						<div class="grid grid-cols-4">
 							<div>
-								<input type="checkbox" onchange="toggle_layer('MA10',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<input type="checkbox" onchange="toggle_layer('MA10',this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
 								<span class="font-normal text-gray-700 dark:text-white">MA10</span>
 							</div>
 							<div>
-								<input type="checkbox" onchange="toggle_layer('MA20',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<input type="checkbox" onchange="toggle_layer('MA20',this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
 								<span class="font-normal text-gray-700 dark:text-white">MA20</span>
 							</div>
 							<div>
-								<input type="checkbox" onchange="toggle_layer('MA50',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<input type="checkbox" onchange="toggle_layer('MA50',this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
 								<span class="font-normal text-gray-700 dark:text-white">MA50</span>
 							</div>
 							<div>
-								<input type="checkbox" onchange="toggle_layer('MA100',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<input type="checkbox" onchange="toggle_layer('MA100',this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
 								<span class="font-normal text-gray-700 dark:text-white">MA100</span>
 							</div>
 							<div>
-								<input type="checkbox" onchange="toggle_layer('MA250',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<input type="checkbox" onchange="toggle_layer('MA250',this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
 								<span class="font-normal text-gray-700 dark:text-white">MA250</span>
 							</div>
 							<div>
-								<input type="checkbox" onchange="toggle_layer('Volume',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<input type="checkbox" onchange="toggle_layer('Volume',this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
 								<span class="font-normal text-gray-700 dark:text-white">Volume</span>
 							</div>
 							<div>
-								<input type="checkbox" onchange="toggle_layer('Bollinger Bands Middle',this.checked); toggle_layer('Bollinger Bands Lower',this.checked); toggle_layer('Bollinger Bands Upper',this.checked);" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" />
-								<span class="font-normal text-gray-700 dark:text-white">Bollinger Bands</span>
+								<input type="checkbox" onchange="toggle_layer('Bollinger Bands Middle',this.checked); toggle_layer('Bollinger Bands Lower',this.checked); toggle_layer('Bollinger Bands Upper',this.checked);" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" />
+								<span class="font-normal text-gray-700 dark:text-white">B. Bands</span>
 							</div>
 						</div>
 					</div>
 					<div>
 						<h2 class="text-lg font-semibold dark:text-zinc-200">Toggle charts</h2>
-						<div class="grid grid-cols-2">
+						<div class="grid grid-cols-4">
 							<div>
-								<input type="checkbox" name="checked-demo" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" />
+								<input type="checkbox" onchange="toggle_chart('rsi-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked/>
 								<span class="font-normal text-gray-700 dark:text-white">RSI</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_chart('macd-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked/>
+								<span class="font-normal text-gray-700 dark:text-white">MACD</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_chart('vol-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked/>
+								<span class="font-normal text-gray-700 dark:text-white">Volume</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_chart('obv-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked/>
+								<span class="font-normal text-gray-700 dark:text-white">OBV</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_chart('stoch-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked/>
+								<span class="font-normal text-gray-700 dark:text-white">Fast STC</span>
 							</div>
 						</div>
 					</div>
@@ -1073,6 +1089,11 @@
 		cdl_chart.data.datasets.filter(filter_dataset => filter_dataset.label == layer)[0].hidden = !visible;
 		cdl_chart.update();
 	}
+
+	function toggle_chart(chart, visibility) {
+		$(`#${chart}`).parent().toggle(visibility)
+	}
+
 
 	function draw_charts(stock_data) {
 		console.log(stock_data);

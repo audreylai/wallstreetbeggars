@@ -4,7 +4,6 @@ module.exports = {
   theme: {	
 		extend: {
 			backgroundImage: (theme) => ({
-				//check: "url('/static/dark-check.svg')",
 				check: "url('/static/check.svg')",
       }),
     },
