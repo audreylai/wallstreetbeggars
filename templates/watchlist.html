@@ -75,6 +75,8 @@ content %}
 						{{v|suffix}}
 						{% elif k == "change" or k == "price" %}
 						{{"%.2f" % (v*100)}}
+						{% elif k == "ticker" %}
+						{{v.replace("-", ".")}}
 						{% else %}
 						{{v}}
 						{% endif %}

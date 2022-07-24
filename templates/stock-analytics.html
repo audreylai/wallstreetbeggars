@@ -10,20 +10,20 @@
 	select:valid {
 		color: rgb(55 65 81);
 	}
+
 	.dark select:valid {
 		color: rgb(212 212 216);
 	}
 </style>
 {% endblock %} {% block content %}
-<div class="w-screen overflow-y-scroll bg-zinc-100 dark:bg-zinc-900">
-	<div class="flex flex-col h-screen px-6 pb-4">
-		<div class="sticky top-0 pt-4 pb-4 bg-zinc-100 dark:bg-zinc-900">
+<div class="flex flex-col w-screen h-screen bg-zinc-100 dark:bg-zinc-900">
+		<div class="sticky top-0 px-6 pt-4 pb-4 bg-zinc-100 dark:bg-zinc-900">
 			<div class="space-y-2 bg-zinc-100 dark:bg-zinc-900">
 				<div class="flex justify-between">
 					<div>
 						<div class="flex space-x-2">
 							<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-								{{ stock_info['ticker'] }}
+								{{ stock_info['ticker'].replace("-", ".") }}
 							</h2>
 							<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
 								{{ stock_info['name'] }}
@@ -31,19 +31,13 @@
 						</div>
 					</div>
 					<form action="/stock-analytics" method="POST" class="relative">
-						<div
-							class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500"
-						>
+						<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500">
 							<ion-icon name="search-outline" class="w-5 h-5"></ion-icon>
 						</div>
 						<input type="hidden" name="page" value="1" />
-						<input
-							type="text"
-							name="ticker"
-							value="{{ticker}}"
+						<input type="text" name="ticker" value="{{ticker}}"
 							class="flex-1 w-full px-3 py-1 pl-10 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-none text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-							placeholder="Search"
-						/>
+							placeholder="Search" />
 					</form>
 				</div>
 			</div>
@@ -68,125 +62,84 @@
 				{% endif %}
 			</div>
 		</div>
-		<div class="flex flex-col h-full space-y-4">
-			<div class="grid h-full grid-cols-3 space-x-4 overflow-y-auto">
-				<div class="flex flex-col h-full col-span-2 overflow-hidden">
-					<div class="flex-1 h-full space-y-4">
-						<div
-							class="flex flex-col h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-						>
-							<div class="h-1/3">
-								<canvas id="cdl-chart"></canvas>
-							</div>
-							<div class="h-1/5">
-								<canvas id="rsi-chart"></canvas>
-							</div>
-							<div class="h-1/4">
-								<canvas id="macd-chart"></canvas>
-							</div>
-							<div class="h-1/5">
-								<canvas id="volume-chart"></canvas>
-							</div>
-						</div>
+		<div class="overflow-y-scroll">
+			<div class="flex flex-col">
+				<div class="grid grid-cols-3 px-6 mb-4 space-x-4 h-96">
+					<div class="flex-col col-span-2 p-4 bg-white rounded-md shadow h-96 dark:bg-zinc-800">
+						<canvas id="cdl-chart"></canvas>
 					</div>
-				</div>
-				<div class="flex flex-col col-span-1 space-y-4">
-					<div
-						class="flex flex-col w-full p-4 bg-white rounded-md shadow h-fit dark:bg-zinc-800"
-					>
-						<div
-							class="inline-flex w-full my-1 rounded-md shadow-sm"
-							role="group"
-						>
-							<button
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
-							>
+					<div class="flex flex-col p-4 bg-white rounded-md shadow h-96 dark:bg-zinc-800">
+						<div class="inline-flex w-full my-1 rounded-md shadow-sm" role="group">
+							<button type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100">
 								Daily
 							</button>
-							<bu-full
-								onclick="update_period(90, 1);"
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-500 dark:focus:ring-indigo-500 dark:focus:text-white"
-							>
+							<bu-full onclick="update_period(90, 1);" type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-500 dark:focus:ring-indigo-500 dark:focus:text-white">
 								3m
 							</bu-full>
-							<button
-								onclick="update_period(180, 1);"
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
-							>
+							<button onclick="update_period(180, 1);" type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white">
 								6m
 							</button>
-							<button
-								onclick="update_period(360, 1);"
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
-							>
+							<button onclick="update_period(360, 1);" type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white">
 								1y
 							</button>
 						</div>
-						<div
-							class="inline-flex w-full my-1 rounded-md shadow-sm"
-							role="group"
-						>
-							<button
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
-							>
+						<div class="inline-flex w-full my-1 rounded-md shadow-sm" role="group">
+							<button type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100">
 								Weekly
 							</button>
-							<button
-								onclick="update_period(360, 7);"
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
-							>
+							<button onclick="update_period(360, 7);" type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white">
 								1y
 							</button>
-							<button
-								onclick="update_period(360*3, 7);"
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
-							>
+							<button onclick="update_period(360*3, 7);" type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white">
 								3y
 							</button>
-							<button
-								onclick="update_period(360*5, 7);"
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
-							>
+							<button onclick="update_period(360*5, 7);" type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white">
 								5y
 							</button>
 						</div>
-						<div
-							class="inline-flex w-full my-1 rounded-md shadow-sm"
-							role="group"
-						>
-							<button
-								type="button"
-								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100"
-							>
+						<div class="inline-flex w-full my-1 rounded-md shadow-sm" role="group">
+							<button type="button"
+								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100">
 								Monthly
 							</button>
-							<button
-								onclick="update_period(360*5, 30);"
-								type="button"
-								class="w-1/2 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
-							>
+							<button onclick="update_period(360*5, 30);" type="button"
+								class="w-1/2 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white">
 								5y
 							</button>
-							<button
-								onclick="update_period(360*10, 30);"
-								type="button"
-								class="w-1/2 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white"
-							>
+							<button onclick="update_period(360*10, 30);" type="button"
+								class="w-1/2 px-4 py-2 text-sm font-medium text-center bg-white border-t border-b border-r text-zinc-900 border-zinc-200 dark:text-zinc-300 rounded-r-md hover:bg-zinc-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:text-white dark:hover:bg-zinc-600 dark:focus:ring-indigo-500 dark:focus:text-white">
 								10y
 							</button>
 						</div>
 					</div>
-					<div
-						class="flex flex-col w-full h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800"
-					>
+				</div>
+				<div class="grid grid-cols-3 px-6 mb-4 space-x-4">
+					<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+						<div class="h-48">
+							<canvas id="rsi-chart"></canvas>
+						</div>
+						<div class="h-48">
+							<canvas id="macd-chart"></canvas>
+						</div>
+						<div class="h-48">
+							<canvas id="volume-chart"></canvas>
+						</div>
+						<div class="h-48">
+							<canvas id="obv-chart"></canvas>
+						</div>
+						<div class="h-48">
+							<canvas id="stoch-chart"></canvas>
+						</div>
+					</div>
+					<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 						<div class="h-1/2"><canvas id="strength-index-chart"></canvas></div>
 						<table>
 							<thead>
@@ -232,76 +185,60 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="grid grid-cols-3 px-6 mb-4 space-x-4 h-96">
-		<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-			<div class="flex flex-col justify-between space-y-2">
-				<h2 class="text-2xl font-semibold dark:text-zinc-200">
-					Stock Comparison
-				</h2>
-				<form
-					onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;"
-				>
-					<input
-						type="text"
-						id="ticker-cmp-txtbox"
-						class="h-full px-2 py-1 text-sm uppercase rounded-md bg-zinc-200 dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-						placeholder="Ticker..."
-						autocomplete="off"
-					/>
-				</form>
+			<div class="grid grid-cols-3 px-6 mb-4 space-x-4 h-96">
+			<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+				<div class="flex flex-col justify-between space-y-2">
+					<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						Stock Comparison
+					</h2>
+					<form onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;">
+						<input type="text" id="ticker-cmp-txtbox"
+							class="h-full px-2 py-1 text-sm uppercase rounded-md bg-zinc-200 dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+							placeholder="Ticker..." autocomplete="off" />
+					</form>
+				</div>
+				<div class="grow">
+					<canvas id="stock-comparison-chart" class="comparison-chart"></canvas>
+				</div>
 			</div>
-			<div class="grow">
-				<canvas id="stock-comparison-chart" class="comparison-chart"></canvas>
+			<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+				<div class="flex flex-col justify-between space-y-2">
+					<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						Industry Comparison
+					</h2>
+					<select required id="industry-cmp-txtbox"
+						class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+						onchange="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value)">
+						<option value="">Select an industry...</option>
+						{% for industry in industries %} {% if industry != None %}
+						<option value="{{industry}}">{{industry}}</option>
+						{% endif %} {% endfor %}
+					</select>
+				</div>
+				<div class="grow">
+					<canvas id="industry-comparison-chart" class="comparison-chart"></canvas>
+				</div>
 			</div>
-		</div>
-		<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-			<div class="flex flex-col justify-between space-y-2">
-				<h2 class="text-2xl font-semibold dark:text-zinc-200">
-					Industry Comparison
-				</h2>
-				<select
-					required
-					id="industry-cmp-txtbox"
-					class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-					onchange="draw_industry_cmp(stock_data, document.getElementById('industry-cmp-txtbox').value)"
-				>
-					<option value="">Select an industry...</option>
-					{% for industry in industries %} {% if industry != None %}
-					<option value="{{industry}}">{{industry}}</option>
-					{% endif %} {% endfor %}
-				</select>
+			<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+				<div class="flex flex-col justify-between space-y-2">
+					<h2 class="text-2xl font-semibold dark:text-zinc-200">
+						Index Comparison
+					</h2>
+					<select required id="index-cmp-txtbox"
+						class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+						onchange="draw_index_cmp(stock_data, document.getElementById('index-cmp-txtbox').value)">
+						<option value="">Select an index...</option>
+						{% for index in indexes %} {% if index != None %}
+						<option value="{{index}}">{{index}}</option>
+						{% endif %} {% endfor %}
+					</select>
+				</div>
+				<div class="grow">
+					<canvas id="index-comparison-chart" class="comparison-chart"></canvas>
+				</div>
 			</div>
-			<div class="grow">
-				<canvas
-					id="industry-comparison-chart"
-					class="comparison-chart"
-				></canvas>
-			</div>
-		</div>
-		<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-			<div class="flex flex-col justify-between space-y-2">
-				<h2 class="text-2xl font-semibold dark:text-zinc-200">
-					Index Comparison
-				</h2>
-				<select
-					required
-					id="index-cmp-txtbox"
-					class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-					onchange="draw_index_cmp(stock_data, document.getElementById('index-cmp-txtbox').value)"
-				>
-					<option value="">Select an index...</option>
-					{% for index in indexes %} {% if index != None %}
-					<option value="{{index}}">{{index}}</option>
-					{% endif %} {% endfor %}
-				</select>
-			</div>
-			<div class="grow">
-				<canvas id="index-comparison-chart" class="comparison-chart"></canvas>
 			</div>
 		</div>
-	</div>
 </div>
 {% endblock %} {% block script%} {% if stock_data %}
 <script>
@@ -323,6 +260,8 @@
 	var macd_chart = undefined;
 	var vol_chart = undefined;
 	var si_chart = undefined;
+	var obv_chart = undefined;
+	var stoch_chart = undefined;
 
 	const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
 	const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
@@ -332,6 +271,8 @@
 	const macd_ctx = document.getElementById('macd-chart').getContext('2d');
 	const vol_ctx = document.getElementById('volume-chart').getContext('2d');
 	const si_ctx = document.getElementById('strength-index-chart').getContext('2d');
+	const obv_ctx = document.getElementById('obv-chart').getContext('2d');
+	const stoch_ctx = document.getElementById('stoch-chart').getContext('2d');
 
 	async function draw_stock_cmp(data, other_ticker) {
 		period = data.period;
@@ -344,18 +285,19 @@
 			ticker: other_ticker.toUpperCase(),
 			period: period,
 			interval: interval
-		}, function(res) {
+		}, function (res) {
 			data2 = JSON.parse(res);
 		});
 
+
 		chart_data = {
 			datasets: [{
-				label: data.ticker,
+				label: data.ticker.replace("-", "."),
 				data: data.accum_close_pct,
 				borderColor: 'rgb(234, 63, 51)',
 				...line_chart_settings
 			}, {
-				label: data2.ticker,
+				label: data2.ticker.replace("-", "."),
 				data: data2.accum_close_pct,
 				borderColor: 'rgba(102, 126, 234)',
 				...line_chart_settings
@@ -407,13 +349,13 @@
 			industry: industry,
 			period: period,
 			interval: interval
-		}, function(res) {
+		}, function (res) {
 			data2 = JSON.parse(res);
 		});
 
 		chart_data = {
 			datasets: [{
-				label: data.ticker,
+				label: data.ticker.replace("-", "."),
 				data: data.accum_close_pct,
 				borderColor: 'rgb(234, 63, 51)',
 				...line_chart_settings
@@ -470,13 +412,13 @@
 			ticker: index,
 			period: period,
 			interval: interval
-		}, function(res) {
+		}, function (res) {
 			data2 = JSON.parse(res);
 		});
 
 		chart_data = {
 			datasets: [{
-				label: data.ticker,
+				label: data.ticker.replace("-", "."),
 				data: data.accum_close_pct,
 				borderColor: 'rgb(234, 63, 51)',
 				...line_chart_settings
@@ -560,10 +502,36 @@
 				data: data.volume,
 				backgroundColor: data.vol_color,
 				yAxisID: 'y1'
-			}]
+			},
+			{
+				label: 'Bollinger Bands Lower',
+				type: 'line',
+				data: data.bbands_middle,
+				borderColor: 'rgb(14 165 233)',
+				...line_chart_settings
+			},
+			{
+				label: 'Bollinger Bands Upper',
+				type: 'line',
+				data: data.bbands_upper,
+				borderColor: 'rgb(14 165 233)',
+				fill: false,
+				...line_chart_settings
+			},
+			{
+				...line_chart_settings,
+				label: 'Bollinger Bands Lower',
+				type: 'line',
+				data: data.bbands_lower,
+				borderColor: 'rgb(14 165 233)',
+				backgroundColor: "rgba(56, 189, 248, 0.1)",
+				fill: "-1",
+			}
+			]
 		}
 
 		options = {
+			...misc_options,
 			scales: {
 				x: {
 					display: false,
@@ -595,7 +563,19 @@
 					}
 				}
 			},
-			...misc_options
+			plugins: {
+				filler: {
+					propagate: false
+				},
+				legend: {
+					labels: {
+						filter: function(item, chart) {
+							if (["Bollinger Bands Upper", "Bollinger Bands Lower", "Bollinger Bands Middle"].indexOf(item.text) > -1) return false;
+							return true;
+						}
+					}
+				}
+			},
 		}
 
 		if (cdl_chart) {
@@ -619,16 +599,16 @@
 			}, {
 				label: '',
 				data: [
-					{'x': data.start_date, 'y': 30},
-					{'x': data.end_date, 'y': 30}
+					{ 'x': data.start_date, 'y': 30 },
+					{ 'x': data.end_date, 'y': 30 }
 				],
 				borderColor: 'rgba(112, 110, 122, 0.4)',
 				...line_chart_settings
 			}, {
 				label: '',
 				data: [
-					{'x': data.start_date, 'y': 70},
-					{'x': data.end_date, 'y': 70}
+					{ 'x': data.start_date, 'y': 70 },
+					{ 'x': data.end_date, 'y': 70 }
 				],
 				borderColor: 'rgba(112, 110, 122, 0.4)',
 				...line_chart_settings
@@ -771,7 +751,7 @@
 	}
 
 	function draw_si(type, pct) {
-		
+
 		if (type == 'buy') {
 			mainColor = "rgb(16 185 129)";
 			backgroundColor = [mainColor, dark ? "rgb(34 34 39)" : "rgb(229 231 235)"];
@@ -820,7 +800,7 @@
 							ctx = chart.ctx;
 
 						ctx.restore();
-						var fontSize = (height / 114).toFixed(2);
+						var fontSize = (height / 150).toFixed(2);
 						ctx.font = "bolder " + fontSize + "em sans-serif";
 						ctx.textBaseline = "middle";
 						ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
@@ -831,7 +811,7 @@
 
 						ctx.fillText(index, indexX, indexY);
 
-						fontSize = (height / 180).toFixed(2);
+						fontSize = (height / 270).toFixed(2);
 						ctx.font = "bold " + fontSize + "em sans-serif";
 						ctx.fillStyle = mainColor;
 
@@ -852,6 +832,176 @@
 		});
 	}
 
+	function draw_obv(data) {
+		chart_data = {
+			datasets: [{
+				label: 'OBV',
+				data: data.obv,
+				borderColor: 'rgb(245 158 11)',
+				...line_chart_settings
+			}]
+		}
+
+		options = {
+			scales: {
+				x: {
+					display: false,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+						callback: (val) => {
+							if (val < 0) return '-'+ add_suffix(val*-1)
+							return add_suffix(val)
+						}
+					},
+					...y_scale_settings
+				}
+			},
+			...misc_options
+		};
+
+		if (obv_chart) {
+			obv_chart.destroy();
+		}
+		
+		obv_chart = new Chart(obv_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+
+	}
+
+	function draw_slow_stoch(data) {
+		chart_data = {
+			datasets: [{
+				label: 'Slow %K',
+				data: data.stoch_slowk,
+				borderColor: 'rgb(6 182 212)',
+				...line_chart_settings
+			},
+			{
+				label: 'Slow %D',
+				data: data.stoch_slowd,
+				borderColor: 'rgb(244 63 94)',
+				...line_chart_settings
+			},
+			{
+				label: '',
+				data: [
+					{ 'x': data.start_date, 'y': 30 },
+					{ 'x': data.end_date, 'y': 30 }
+				],
+				borderColor: 'rgba(112, 110, 122, 0.4)',
+				...line_chart_settings
+			}, {
+				label: '',
+				data: [
+					{ 'x': data.start_date, 'y': 70 },
+					{ 'x': data.end_date, 'y': 70 }
+				],
+				borderColor: 'rgba(112, 110, 122, 0.4)',
+				...line_chart_settings
+			}]
+		}
+
+		options = {
+			scales: {
+				x: {
+					display: false,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20
+					},
+					...y_scale_settings
+				}
+			},
+			...misc_options
+		};
+
+		if (stoch_chart) {
+			stoch_chart.destroy();
+		}
+		
+		stoch_chart = new Chart(stoch_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+
+	}
+
+	function draw_fast_stoch(data) {
+		chart_data = {
+			datasets: [{
+				label: 'Fast %K',
+				data: data.stoch_fastk,
+				borderColor: 'rgb(6 182 212)',
+				...line_chart_settings
+			},
+			{
+				label: 'Fast %D',
+				data: data.stoch_fastd,
+				borderColor: 'rgb(244 63 94)',
+				...line_chart_settings
+			},
+			{
+				label: '',
+				data: [
+					{ 'x': data.start_date, 'y': 30 },
+					{ 'x': data.end_date, 'y': 30 }
+				],
+				borderColor: 'rgba(112, 110, 122, 0.4)',
+				...line_chart_settings
+			}, {
+				label: '',
+				data: [
+					{ 'x': data.start_date, 'y': 70 },
+					{ 'x': data.end_date, 'y': 70 }
+				],
+				borderColor: 'rgba(112, 110, 122, 0.4)',
+				...line_chart_settings
+			}]
+		}
+
+		options = {
+			scales: {
+				x: {
+					display: false,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20
+					},
+					...y_scale_settings
+				}
+			},
+			...misc_options
+		};
+
+		if (stoch_chart) {
+			stoch_chart.destroy();
+		}
+		
+		stoch_chart = new Chart(stoch_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+
+	}
+
 	var stock_data = {{ stock_data | tojson }};
 	var rules = {{ rules | tojson }}
 
@@ -863,6 +1013,8 @@
 		draw_rsi(stock_data);
 		draw_macd(stock_data);
 		draw_vol(stock_data);
+		draw_obv(stock_data);
+		draw_fast_stoch(stock_data);
 
 		draw_stock_cmp(stock_data, current_cmp_ticker);
 		draw_industry_cmp(stock_data, current_cmp_industry);
@@ -889,16 +1041,16 @@
 			ticker: ticker,
 			period: period,
 			interval: interval
-		}, function(res) {
+		}, function (res) {
 			stock_data = JSON.parse(res);
 			draw_charts(stock_data);
 		}).catch(error => console.log(error));
 	}
 
 	draw_charts(stock_data);
-	
-	$('document').ready(function() {
-		$("#theme-toggle").bind('click', function() {
+
+	$('document').ready(function () {
+		$("#theme-toggle").bind('click', function () {
 			if (rules["buy_pct"] > rules["sell_pct"]) {
 				draw_si('buy', rules["buy_pct"] * 100);
 			} else if (rules["buy_pct"] < rules["sell_pct"]) {

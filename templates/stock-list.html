@@ -107,7 +107,13 @@
 							<input type="hidden" name="ticker" value="{{row['ticker'].replace('.', '-')}}" />
 							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ v | suffix }}</a>
 						</form>
-						{% elif k != "_id" and k != "last_updated" %}
+					{% elif k == "ticker" %}
+					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+						<form action="{{ url_for('stock_info') }}" method="POST">
+							<input type="hidden" name="ticker" value="{{row['ticker'].replace('.', '-')}}" />
+							<a class="cursor-pointer" onclick="this.parentNode.submit()">{{v.replace("-", ".")}}</a>
+						</form>
+					{% elif k != "_id" and k != "last_updated" %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 						<form action="{{ url_for('stock_info') }}" method="POST">
 							<input type="hidden" name="ticker" value="{{row['ticker'].replace('.', '-')}}" />

@@ -4,7 +4,6 @@ import re
 from math import ceil
 import numpy as np
 
-
 from flask import Flask, redirect, render_template, request, send_from_directory, url_for
 
 import api
@@ -87,7 +86,6 @@ def rules():
 		"miss_sell_rules": miss_sell_rules
 	})
 
-
 @app.route("/rules/edit", methods=["GET", "POST"])
 def rules_edit():
 	dark_mode = get_user_theme("test")
@@ -168,7 +166,6 @@ def stock_list_page():
 @app.route("/industries", methods=["GET", "POST"])
 def industries_page():
 	dark_mode = get_user_theme("test")
-	industries_pct = get_all_industries_avg_last_close_pct()
 	table_data = get_industries_gainers_losers_table()
 	industries = get_all_industries()
 
@@ -182,6 +179,12 @@ def industries_page():
 
 	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industries=industries, industry_detail=industry_detail)
 
+@app.route("/industry/<industry>", methods=["GET", "POST"])
+def industry_page(industry):
+	dark_mode = get_user_theme("test")
+	if not industry_exists(industry):
+		return render_template("404.html", dark_mode=dark_mode), 404
+	return render_template("industry.html", industry=industry, dark_mode=dark_mode)
 
 # this should be an api
 @app.route("/update-active", methods=["POST"])
