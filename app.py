@@ -75,6 +75,13 @@ def rules():
 		return render_template("404.html", dark_mode=dark_mode), 404
 
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = get_rules_results(ticker).values()
+	# print(hit_buy_rules, miss_buy_rules)
+	hit_cdl_buy_rules, miss_cdl_buy_rules, hit_cdl_sell_rules, miss_cdl_sell_rules = get_rules_results(ticker, True).values()
+	hit_buy_rules  += hit_cdl_buy_rules
+	hit_sell_rules += hit_cdl_sell_rules
+	miss_buy_rules += miss_cdl_buy_rules
+	miss_sell_rules += miss_cdl_sell_rules
+	# print(hit_buy_rules, miss_buy_rules)
 
 	stock_info = get_stock_info(ticker)
 	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
@@ -100,11 +107,12 @@ def rules_edit():
 def cdl_edit():
 	dark_mode = get_user_theme("test")
 	rules = get_rules("test")
+	print(rules["cdl_buy"])
 	if request.method == "POST":
 		new_buy = json.loads(request.values.get('buy'))
 		new_sell = json.loads(request.values.get('sell'))
 		update_rules("test", new_buy, new_sell, cdl=True)
-	return render_template("cdl-rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
+	return render_template("cdl-rules-edit.html", dark_mode=dark_mode, cdl_buy=rules["cdl_buy"], cdl_sell=rules["cdl_sell"], candle_names=candle_names)
 
 
 @app.route("/rules/save", methods=["GET", "POST"])
