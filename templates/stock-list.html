@@ -47,7 +47,7 @@
 				<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
 					<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 						<input id="allcb" type="checkbox" name="active"
-							class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
+							class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
 					</th>
 					{% for k in stock_table[0] %}
 					{% if k != "_id" and k != "last_updated"%}
@@ -92,7 +92,7 @@
 					<td class="w-6 px-2 py-2 text-center text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 						<input type="checkbox" name="active" value="{{row['ticker']}}" onchange="update_active(this)" {% if
 							(row['ticker'] in active_tickers) %} checked {% endif %}
-							class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none form-tick bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
+							class="w-4 h-4 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-indigo-500 checked:border-transparent focus:outline-none" />
 					</td>
 					{% for k,v in row.items() %}{% if k == "board_lot" %}
 					<td class="px-2 py-2 text-right text-gray-700dark:border-zinc-700 dark:text-zinc-300">

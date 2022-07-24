@@ -17,58 +17,60 @@
 </style>
 {% endblock %} {% block content %}
 <div class="flex flex-col w-screen h-screen bg-zinc-100 dark:bg-zinc-900">
-		<div class="sticky top-0 px-6 pt-4 pb-4 bg-zinc-100 dark:bg-zinc-900">
-			<div class="space-y-2 bg-zinc-100 dark:bg-zinc-900">
-				<div class="flex justify-between">
-					<div>
-						<div class="flex space-x-2">
-							<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-								{{ stock_info['ticker'].replace("-", ".") }}
-							</h2>
-							<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
-								{{ stock_info['name'] }}
-							</p>
-						</div>
+	<div class="sticky top-0 px-6 pt-4 pb-4 bg-zinc-100 dark:bg-zinc-900">
+		<div class="space-y-2 bg-zinc-100 dark:bg-zinc-900">
+			<div class="flex justify-between">
+				<div>
+					<div class="flex space-x-2">
+						<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
+							{{ stock_info['ticker'].replace("-", ".") }}
+						</h2>
+						<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
+							{{ stock_info['name'] }}
+						</p>
 					</div>
-					<form action="/stock-analytics" method="POST" class="relative">
-						<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500">
-							<ion-icon name="search-outline" class="w-5 h-5"></ion-icon>
-						</div>
-						<input type="hidden" name="page" value="1" />
-						<input type="text" name="ticker" value="{{ticker}}"
-							class="flex-1 w-full px-3 py-1 pl-10 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-none text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-							placeholder="Search" />
-					</form>
 				</div>
-			</div>
-			<div class="flex items-center space-x-1">
-				<h2 class="mr-2 text-lg font-bold dark:text-zinc-300">
-					{{ "%.2f" % stock_data['last_close'] }}
-				</h2>
-				{% if stock_data['last_close_pct'] > 0 %}
-				<p class="font-semibold dark:text-emerald-500 text-emerald-600">
-					<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
-					+{{ "%.2f" %
-					(stock_data['last_close']*stock_data['last_close_pct']/100) }} (+{{
-					"%.2f" % stock_data['last_close_pct'] }}%)
-				</p>
-				{% else %}
-				<p class="font-semibold dark:text-rose-500 text-rose-600">
-					<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
-					{{ "%.2f" %
-					(stock_data['last_close']*stock_data['last_close_pct']/100) }} ({{
-					"%.2f" % stock_data['last_close_pct'] }}%)
-				</p>
-				{% endif %}
+				<form action="/stock-analytics" method="POST" class="relative">
+					<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500">
+						<ion-icon name="search-outline" class="w-5 h-5"></ion-icon>
+					</div>
+					<input type="hidden" name="page" value="1" />
+					<input type="text" name="ticker" value="{{ticker}}"
+						class="flex-1 w-full px-3 py-1 pl-10 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-none text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+						placeholder="Search" />
+				</form>
 			</div>
 		</div>
-		<div class="overflow-y-scroll">
-			<div class="flex flex-col">
-				<div class="grid grid-cols-3 px-6 mb-4 space-x-4 h-96">
-					<div class="flex-col col-span-2 p-4 bg-white rounded-md shadow h-96 dark:bg-zinc-800">
-						<canvas id="cdl-chart"></canvas>
-					</div>
-					<div class="flex flex-col p-4 bg-white rounded-md shadow h-96 dark:bg-zinc-800">
+		<div class="flex items-center space-x-1">
+			<h2 class="mr-2 text-lg font-bold dark:text-zinc-300">
+				{{ "%.2f" % stock_data['last_close'] }}
+			</h2>
+			{% if stock_data['last_close_pct'] > 0 %}
+			<p class="font-semibold dark:text-emerald-500 text-emerald-600">
+				<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
+				+{{ "%.2f" %
+				(stock_data['last_close']*stock_data['last_close_pct']/100) }} (+{{
+				"%.2f" % stock_data['last_close_pct'] }}%)
+			</p>
+			{% else %}
+			<p class="font-semibold dark:text-rose-500 text-rose-600">
+				<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
+				{{ "%.2f" %
+				(stock_data['last_close']*stock_data['last_close_pct']/100) }} ({{
+				"%.2f" % stock_data['last_close_pct'] }}%)
+			</p>
+			{% endif %}
+		</div>
+	</div>
+	<div class="overflow-y-scroll">
+		<div class="flex flex-col">
+			<div class="grid grid-cols-3 px-6 mb-4 space-x-4 h-96">
+				<div class="flex-col col-span-2 p-4 bg-white rounded-md shadow h-96 dark:bg-zinc-800">
+					<canvas id="cdl-chart"></canvas>
+				</div>
+				<div class="flex flex-col p-4 space-y-2 bg-white rounded-md shadow h-96 dark:bg-zinc-800">
+					<div class="flex flex-col">
+						<h2 class="text-lg font-semibold dark:text-zinc-200">Time period</h2>
 						<div class="inline-flex w-full my-1 rounded-md shadow-sm" role="group">
 							<button type="button"
 								class="w-1/4 px-4 py-2 text-sm font-medium text-center bg-gray-200 border cursor-default text-zinc-900 border-zinc-200 dark:border-zinc-600 disabled rounded-l-md dark:bg-zinc-700 dark:text-zinc-100">
@@ -120,78 +122,129 @@
 							</button>
 						</div>
 					</div>
-				</div>
-				<div class="grid grid-cols-3 px-6 mb-4 space-x-4">
-					<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-						<div class="h-48">
-							<canvas id="rsi-chart"></canvas>
-						</div>
-						<div class="h-48">
-							<canvas id="macd-chart"></canvas>
-						</div>
-						<div class="h-48">
-							<canvas id="volume-chart"></canvas>
-						</div>
-						<div class="h-48">
-							<canvas id="obv-chart"></canvas>
-						</div>
-						<div class="h-48">
-							<canvas id="stoch-chart"></canvas>
+					<div>
+						<h2 class="text-lg font-semibold dark:text-zinc-200">Chart layers</h2>
+						<div class="grid grid-cols-2">
+							<div>
+								<input type="checkbox" onchange="toggle_layer('MA10',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<span class="font-normal text-gray-700 dark:text-white">MA10</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_layer('MA20',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<span class="font-normal text-gray-700 dark:text-white">MA20</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_layer('MA50',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<span class="font-normal text-gray-700 dark:text-white">MA50</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_layer('MA100',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<span class="font-normal text-gray-700 dark:text-white">MA100</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_layer('MA250',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<span class="font-normal text-gray-700 dark:text-white">MA250</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_layer('Volume',this.checked)" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked />
+								<span class="font-normal text-gray-700 dark:text-white">Volume</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_layer('Bollinger Bands Middle',this.checked); toggle_layer('Bollinger Bands Lower',this.checked); toggle_layer('Bollinger Bands Upper',this.checked);" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" />
+								<span class="font-normal text-gray-700 dark:text-white">Bollinger Bands</span>
+							</div>
 						</div>
 					</div>
-					<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-						<div class="h-1/2"><canvas id="strength-index-chart"></canvas></div>
-						<table>
-							<thead>
-								<tr class="top-0 bg-white dark:bg-zinc-800">
-									<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Rule</th>
-									<th class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Hit/Miss</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% if rules["buy_pct"] > rules["sell_pct"] %}
-								{% for rule in rules['hit_buy_rules']%}
-								<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
-									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500">Hit</td>
-								</tr>
-								{% endfor %}
-								{% for rule in rules['miss_buy_rules']%}
-								<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
-									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">Miss</td>
-								</tr>
-								{% endfor %}
-								{% elif rules["buy_pct"] < rules["sell_pct"] %}
-								{% for rule in rules['hit_sell_rules']%}
-								<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
-									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500">Hit</td>
+					<div>
+						<h2 class="text-lg font-semibold dark:text-zinc-200">Toggle charts</h2>
+						<div class="grid grid-cols-2">
+							<div>
+								<input type="checkbox" name="checked-demo" class="w-3.5 h-3.5 bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" />
+								<span class="font-normal text-gray-700 dark:text-white">RSI</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="grid grid-cols-3 px-6 mb-4 space-x-4">
+				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="h-48">
+						<canvas id="rsi-chart"></canvas>
+					</div>
+					<div class="h-48">
+						<canvas id="macd-chart"></canvas>
+					</div>
+					<div class="h-48">
+						<canvas id="volume-chart"></canvas>
+					</div>
+					<div class="h-48">
+						<canvas id="obv-chart"></canvas>
+					</div>
+					<div class="h-48">
+						<canvas id="stoch-chart"></canvas>
+					</div>
+				</div>
+				<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+					<div class="h-1/2"><canvas id="strength-index-chart"></canvas></div>
+					<table>
+						<thead>
+							<tr class="top-0 bg-white dark:bg-zinc-800">
+								<th
+									class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Rule</th>
+								<th
+									class="font-bold text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Hit/Miss</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if rules["buy_pct"] > rules["sell_pct"] %}
+							{% for rule in rules['hit_buy_rules']%}
+							<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+								<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
+								<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500">Hit
+								</td>
+							</tr>
+							{% endfor %}
+							{% for rule in rules['miss_buy_rules']%}
+							<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+								<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
+								<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">Miss
+								</td>
+							</tr>
+							{% endfor %}
+							{% elif rules["buy_pct"] < rules["sell_pct"] %} {% for rule in rules['hit_sell_rules']%} <tr
+								class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+								<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
+								<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-emerald-500">Hit
+								</td>
 								</tr>
 								{% endfor %}
 								{% for rule in rules['miss_sell_rules']%}
 								<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 									<td class="w-6 px-2 py-2 text-center border-b dark:border-zinc-700 dark:text-zinc-300">{{rule}}</td>
-									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">Miss</td>
+									<td class="w-6 px-2 py-2 font-semibold text-center border-b dark:border-zinc-700 text-rose-500">Miss
+									</td>
 								</tr>
 								{% endfor %}
 								{% endif %}
-							</tbody>
-						</table>
-						<form class="mt-2 text-center cursor-pointer" action="{{ url_for('rules') }}" method="POST">
-							<input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
-							<a class="text-blue-500" onclick="this.parentNode.submit()">Show more</a>
-						</form>
-					</div>
+						</tbody>
+					</table>
+					<form class="mt-2 text-center cursor-pointer" action="{{ url_for('rules') }}" method="POST">
+						<input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
+						<a class="text-blue-500" onclick="this.parentNode.submit()">Show more</a>
+					</form>
 				</div>
 			</div>
-			<div class="grid grid-cols-3 px-6 mb-4 space-x-4 h-96">
+		</div>
+		<div class="grid grid-cols-3 px-6 mb-4 space-x-4 h-96">
 			<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 				<div class="flex flex-col justify-between space-y-2">
 					<h2 class="text-2xl font-semibold dark:text-zinc-200">
 						Stock Comparison
 					</h2>
-					<form onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;">
+					<form
+						onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;">
 						<input type="text" id="ticker-cmp-txtbox"
 							class="h-full px-2 py-1 text-sm uppercase rounded-md bg-zinc-200 dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
 							placeholder="Ticker..." autocomplete="off" />
@@ -237,8 +290,8 @@
 					<canvas id="index-comparison-chart" class="comparison-chart"></canvas>
 				</div>
 			</div>
-			</div>
 		</div>
+	</div>
 </div>
 {% endblock %} {% block script%} {% if stock_data %}
 <script>
@@ -505,7 +558,8 @@
 				yAxisID: 'y1'
 			},
 			{
-				label: 'Bollinger Bands Lower',
+				label: 'Bollinger Bands Middle',
+				hidden: true,
 				type: 'line',
 				data: data.bbands_middle,
 				borderColor: 'rgb(14 165 233)',
@@ -513,6 +567,7 @@
 			},
 			{
 				label: 'Bollinger Bands Upper',
+				hidden: true,
 				type: 'line',
 				data: data.bbands_upper,
 				borderColor: 'rgb(14 165 233)',
@@ -521,6 +576,7 @@
 			},
 			{
 				...line_chart_settings,
+				hidden: true,
 				label: 'Bollinger Bands Lower',
 				type: 'line',
 				data: data.bbands_lower,
@@ -539,7 +595,7 @@
 					...x_scale_settings
 				},
 				y: {
-					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
+					afterFit: (axis) => { axis.paddingLeft = chart_padding },
 					display: true,
 					title: {
 						display: false,
@@ -571,7 +627,7 @@
 				},
 				legend: {
 					labels: {
-						filter: function(item, chart) {
+						filter: function (item, chart) {
 							if (["Bollinger Bands Upper", "Bollinger Bands Lower", "Bollinger Bands Middle"].indexOf(item.text) > -1) return false;
 							return true;
 						}
@@ -624,7 +680,7 @@
 					...x_scale_settings
 				},
 				y: {
-					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
+					afterFit: (axis) => { axis.paddingLeft = chart_padding },
 					display: true,
 					title: {
 						display: false,
@@ -679,7 +735,7 @@
 					...x_scale_settings
 				},
 				y: {
-					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
+					afterFit: (axis) => { axis.paddingLeft = chart_padding },
 					display: true,
 					title: {
 						display: false,
@@ -727,7 +783,7 @@
 					...x_scale_settings
 				},
 				y: {
-					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
+					afterFit: (axis) => { axis.paddingLeft = chart_padding },
 					display: true,
 					title: {
 						display: false,
@@ -854,13 +910,13 @@
 					...x_scale_settings
 				},
 				y: {
-					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
+					afterFit: (axis) => { axis.paddingLeft = chart_padding },
 					display: true,
 					ticks: {
 						autoSkip: true,
 						autoSkipPadding: 20,
 						callback: (val) => {
-							if (val < 0) return '-'+ add_suffix(val*-1)
+							if (val < 0) return '-' + add_suffix(val * -1)
 							return add_suffix(val)
 						}
 					},
@@ -873,7 +929,7 @@
 		if (obv_chart) {
 			obv_chart.destroy();
 		}
-		
+
 		obv_chart = new Chart(obv_ctx, {
 			type: 'line',
 			data: chart_data,
@@ -922,7 +978,7 @@
 					...x_scale_settings
 				},
 				y: {
-					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
+					afterFit: (axis) => { axis.paddingLeft = chart_padding },
 					display: true,
 					ticks: {
 						autoSkip: true,
@@ -937,7 +993,7 @@
 		if (stoch_chart) {
 			stoch_chart.destroy();
 		}
-		
+
 		stoch_chart = new Chart(stoch_ctx, {
 			type: 'line',
 			data: chart_data,
@@ -986,7 +1042,7 @@
 					...x_scale_settings
 				},
 				y: {
-					afterFit: (axis)=> {axis.paddingLeft = chart_padding},
+					afterFit: (axis) => { axis.paddingLeft = chart_padding },
 					display: true,
 					ticks: {
 						autoSkip: true,
@@ -1001,7 +1057,7 @@
 		if (stoch_chart) {
 			stoch_chart.destroy();
 		}
-		
+
 		stoch_chart = new Chart(stoch_ctx, {
 			type: 'line',
 			data: chart_data,
@@ -1012,6 +1068,11 @@
 
 	var stock_data = {{ stock_data | tojson }};
 	var rules = {{ rules | tojson }}
+
+	function toggle_layer(layer, visible) {
+		cdl_chart.data.datasets.filter(filter_dataset => filter_dataset.label == layer)[0].hidden = !visible;
+		cdl_chart.update();
+	}
 
 	function draw_charts(stock_data) {
 		console.log(stock_data);
