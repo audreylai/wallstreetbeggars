@@ -22,9 +22,9 @@ from db_pkg.utils import *
 # candle_names = ta.get_function_groups()["Pattern Recognition"]
 
 def test():
-	return get_stock_data_chartjs("0005-HK", 60, interval=1, precision=4)
+	return save_rules_results(limit=100)
 
-pprint(test())
+# pprint(test())
 
 start = timer()
 test()

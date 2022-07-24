@@ -176,8 +176,7 @@ def mp_get_stock_info(ticker):
 			out["ex_dividend_date"] = datetime.fromtimestamp(out["ex_dividend_date"])
 
 		col_stock_data.update_one({"ticker": ticker}, [
-			{"$set": out},
-			{"$set": {"_state": 1}}
+			{"$set": out | {"_state": 1}},
 		])
 		end = timer()
 		log_msg(f"{ticker}{' '*(7-len(ticker))}: success (time elapsed: {'%.3f' % (end - start)}s)", level=LOG_LEVEL.DEBUG, lock=lock)
@@ -246,9 +245,10 @@ def mp_calc_stock_data(data):
 				"last_close": float(df.close.iloc[-1]),
 				"last_close_pct": float(df.close_pct.iloc[-1]),
 				"last_cdl_data": cdl_data[-1],
-				"type": "index" if ticker[0] == "^" else "stock"
-			}},
-			{"$set": {"_state": 2}}
+				"type": "index" if ticker[0] == "^" else "stock",
+				"is_hsi_stock": ticker in HSI_TICKERS,
+				"_state": 2
+			}}
 		])
 
 		end = timer()
