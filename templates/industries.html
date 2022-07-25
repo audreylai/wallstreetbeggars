@@ -250,6 +250,13 @@
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['last_close_pct']*100) }}%</a>
 									</form>
 								</td>
+								{% elif row['last_close_pct'] == 0 %}
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-400">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">0.00%</a>
+									</form>
+								</td>
 								{% else %}
 								<td class="px-2 py-2 dark:border-zinc-700 text-rose-500">
 									<form action="{{ url_for("stock_info") }}" method="POST">
@@ -269,6 +276,13 @@
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row['last_si'] }}</a>
+									</form>
+								</td>
+								{% elif row['last_si'] == 0 %}
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-400">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">0.00</a>
 									</form>
 								</td>
 								{% else %}

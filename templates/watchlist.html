@@ -74,7 +74,7 @@ content %}
 						{% if k == "mkt_cap" %}
 						{{v|suffix}}
 						{% elif k == "change" %}
-						{{"%.2f" % (v*100)}}
+						{{("%.2f" % (v*100))+"%"}}
 						{% elif k  == "price" %}
 						{{"%.2f" % v}}
 						{% elif k == "ticker" %}
@@ -87,6 +87,10 @@ content %}
 						{% if v > 0 %}
 						<td class="px-2 py-2 text-emerald-500 dark:text-emerald-400 dark:border-zinc-700">
 							{{"%.2f" % v}}
+						</td>
+						{% elif v == 0 %}
+						<td class="px-2 py-2 text-gray-700 dark:text-zinc-400 dark:border-zinc-700">
+							0.00
 						</td>
 						{% else %}
 						<td class="px-2 py-2 text-rose-500 dark:text-rose-400 dark:border-zinc-700">

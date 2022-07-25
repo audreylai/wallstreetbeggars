@@ -47,6 +47,6 @@ def get_watchlist_data(username):
 			"price" : stock.get_last_stock_data(ticker)["close"],
 			"change": stock.get_stock_data_chartjs(ticker, period=period, precision=2)['last_close_pct'],
 			"mkt_cap": info['mkt_cap'],
-			"last_si": rules.get_stock_last_si(ticker)[-1]['si']
+			"last_si": rules.get_ticker_last_si(ticker)
 		})
 	return {"table": result, "last_updated": info["last_updated"]}

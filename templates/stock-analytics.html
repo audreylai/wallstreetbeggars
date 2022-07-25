@@ -995,15 +995,16 @@
 		options = {
 			scales: {
 				x: {
-					display: false,
+					display: true,
 					...x_scale_settings
 				},
 				y: {
 					afterFit: (axis) => { axis.paddingLeft = chart_padding },
 					display: true,
+					min: 0,
+					max: 100,
 					ticks: {
-						autoSkip: true,
-						autoSkipPadding: 20
+						stepSize: 20
 					},
 					...y_scale_settings
 				}
@@ -1059,7 +1060,7 @@
 		options = {
 			scales: {
 				x: {
-					display: true,
+					display: false,
 					...x_scale_settings
 				},
 				y: {
