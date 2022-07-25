@@ -171,12 +171,16 @@
 								<span class="font-normal text-gray-700 dark:text-white">Volume</span>
 							</div>
 							<div>
-								<input type="checkbox" onchange="toggle_chart('obv-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked/>
+								<input type="checkbox" onchange="toggle_chart('obv-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none"/>
 								<span class="font-normal text-gray-700 dark:text-white">OBV</span>
 							</div>
 							<div>
-								<input type="checkbox" onchange="toggle_chart('stoch-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none" checked/>
+								<input type="checkbox" onchange="toggle_chart('fast-stoch-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none"/>
 								<span class="font-normal text-gray-700 dark:text-white">Fast STC</span>
+							</div>
+							<div>
+								<input type="checkbox" onchange="toggle_chart('slow-stoch-chart', this.checked)" class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none"/>
+								<span class="font-normal text-gray-700 dark:text-white">Slow STC</span>
 							</div>
 						</div>
 					</div>
@@ -197,7 +201,10 @@
 						<canvas id="obv-chart" class="volume-chart"></canvas>
 					</div>
 					<div class="h-48">
-						<canvas id="stoch-chart"></canvas>
+						<canvas id="fast-stoch-chart"></canvas>
+					</div>
+					<div class="h-48">
+						<canvas id="slow-stoch-chart"></canvas>
 					</div>
 				</div>
 				<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
@@ -331,7 +338,8 @@
 	var vol_chart = undefined;
 	var si_chart = undefined;
 	var obv_chart = undefined;
-	var stoch_chart = undefined;
+	var fast_stoch_chart = undefined;
+	var slow_stoch_chart = undefined;
 
 	const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
 	const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
@@ -342,7 +350,8 @@
 	const vol_ctx = document.getElementById('volume-chart').getContext('2d');
 	const si_ctx = document.getElementById('strength-index-chart').getContext('2d');
 	const obv_ctx = document.getElementById('obv-chart').getContext('2d');
-	const stoch_ctx = document.getElementById('stoch-chart').getContext('2d');
+	const fast_stoch_ctx = document.getElementById('fast-stoch-chart').getContext('2d');
+	const slow_stoch_ctx = document.getElementById('slow-stoch-chart').getContext('2d');
 
 	async function draw_stock_cmp(data, other_ticker) {
 		period = data.period;
@@ -1002,11 +1011,11 @@
 			...misc_options
 		};
 
-		if (stoch_chart) {
-			stoch_chart.destroy();
+		if (slow_stoch_chart) {
+			slow_stoch_chart.destroy();
 		}
 
-		stoch_chart = new Chart(stoch_ctx, {
+		slow_stoch_chart = new Chart(slow_stoch_ctx, {
 			type: 'line',
 			data: chart_data,
 			options: options
@@ -1067,11 +1076,11 @@
 			...misc_options
 		};
 
-		if (stoch_chart) {
-			stoch_chart.destroy();
+		if (fast_stoch_chart) {
+			fast_stoch_chart.destroy();
 		}
 
-		stoch_chart = new Chart(stoch_ctx, {
+		fast_stoch_chart = new Chart(fast_stoch_ctx, {
 			type: 'line',
 			data: chart_data,
 			options: options
@@ -1093,6 +1102,10 @@
 
 
 	function draw_charts(stock_data) {
+		toggle_chart("slow-stoch-chart");
+		toggle_chart("fast-stoch-chart");
+		toggle_chart("obv-chart");
+		
 		console.log(stock_data);
 		console.log(rules);
 
@@ -1102,6 +1115,7 @@
 		draw_vol(stock_data);
 		draw_obv(stock_data);
 		draw_fast_stoch(stock_data);
+		draw_slow_stoch(stock_data)
 
 		draw_stock_cmp(stock_data, current_cmp_ticker);
 		draw_industry_cmp(stock_data, current_cmp_industry);

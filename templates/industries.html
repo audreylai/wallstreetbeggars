@@ -6,153 +6,157 @@
 			Industries
 		</h1>
 		<div class="grid grid-cols-2 gap-x-4">
-			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<div class="space-y-2">
 				<div class="flex items-center space-x-1">
 					<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 					<h2 class="text-2xl font-semibold dark:text-zinc-200">
 						Donors
 					</h2>
 				</div>
-				<table class="w-full">
-					<thead>
-						<tr class="top-0 bg-white dark:bg-zinc-800">
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Industry
-							</th>
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Change
-							</th>
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Top Ticker
-							</th>
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Distribution
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for row in table_data[0][:5] %}
-						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['top_ticker']['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
-								</form>
-							</td>
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['top_ticker']['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
-								</form>
-							</td>
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker']["ticker"] }}
-										{% if row['top_ticker']['close_pct'] > 0 %}
-										<span class="text-emerald-500">({{ "%.2f" % (row['top_ticker']['close_pct']*100) }}%)</span>
-										{% else %}
-										<span class="text-rose-500">({{ "%.2f" % (row['top_ticker']['close_pct']*100) }}%)</span>
-										{% endif %}
-									</a>
-								</form>
-							</td>
-							<td class="items-center w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<div class="flex w-full h-2 mt-3 overflow-hidden rounded-lg">
-									<div class="h-full text-xs text-center text-white bg-rose-500"
-										style="width: {{row['perf_distribution'][0]*100}}%;"></div>
-									<div class="h-full text-xs text-center text-white bg-rose-400"
-										style="width: {{row['perf_distribution'][1]*100}}%;"></div>
-									<div class="h-full text-xs text-center text-white bg-gray-300 dark:bg-zinc-300"
-										style="width: {{row['perf_distribution'][2]*100}}%;"></div>
-									<div class="h-full text-xs text-center text-white bg-emerald-400"
-										style="width: {{row['perf_distribution'][3]*100}}%;"></div>
-									<div class="h-full text-xs text-center text-white bg-emerald-500"
-										style="width: {{row['perf_distribution'][4]*100}}%;"></div>
-								</div>
-							</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="overflow-y-scroll rounded-xl">
+					<table class="w-full">
+						<thead>
+							<tr class="top-0 bg-white dark:bg-zinc-800">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Industry
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Change
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Top Ticker
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Distribution
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in table_data[0][:5] %}
+							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['top_ticker']['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
+									</form>
+								</td>
+								<td class="px-2 py-2700 text-emerald-500">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['top_ticker']['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
+									</form>
+								</td>
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker']["ticker"] }}
+											{% if row['top_ticker']['close_pct'] > 0 %}
+											<span class="text-emerald-500">({{ "%.2f" % (row['top_ticker']['close_pct']*100) }}%)</span>
+											{% else %}
+											<span class="text-rose-500">({{ "%.2f" % (row['top_ticker']['close_pct']*100) }}%)</span>
+											{% endif %}
+										</a>
+									</form>
+								</td>
+								<td class="items-center w-6 px-2 py-2 text-left dark:text-zinc-300">
+									<div class="flex w-full h-2 mt-3 overflow-hidden rounded-lg">
+										<div class="h-full text-xs text-center text-white bg-rose-500"
+											style="width: {{row['perf_distribution'][0]*100}}%;"></div>
+										<div class="h-full text-xs text-center text-white bg-rose-400"
+											style="width: {{row['perf_distribution'][1]*100}}%;"></div>
+										<div class="h-full text-xs text-center text-white bg-gray-300 dark:bg-zinc-300"
+											style="width: {{row['perf_distribution'][2]*100}}%;"></div>
+										<div class="h-full text-xs text-center text-white bg-emerald-400"
+											style="width: {{row['perf_distribution'][3]*100}}%;"></div>
+										<div class="h-full text-xs text-center text-white bg-emerald-500"
+											style="width: {{row['perf_distribution'][4]*100}}%;"></div>
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
-			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<div class="space-y-2">
 				<div class="flex items-center space-x-1">
-					<ion-icon name="trending-down-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+					<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 					<h2 class="text-2xl font-semibold dark:text-zinc-200">
 						Beggars
 					</h2>
 				</div>
-				<table class="w-full">
-					<thead>
-						<tr class="top-0 bg-white dark:bg-zinc-800">
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Industry
-							</th>
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Change
-							</th>
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Top Ticker
-							</th>
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Distribution
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for row in table_data[1][:5] %}
-						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['bottom_ticker']['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
-								</form>
-							</td>
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['bottom_ticker']['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
-								</form>
-							</td>
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['bottom_ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['bottom_ticker']['ticker'] }}
-										{% if row['bottom_ticker']['close_pct'] > 0 %}
-										<span class="text-emerald-500">({{ "%.2f" % (row['bottom_ticker']['close_pct']*100) }}%)</span>
-										{% else %}
-										<span class="text-rose-500">({{ "%.2f" % (row['bottom_ticker']['close_pct']*100) }}%)</span>
-										{% endif %}
-									</a>
-								</form>
-							</td>
-							<td class="items-center w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<div class="flex w-full h-2 mt-3 overflow-hidden rounded-lg">
-									<div class="h-full text-xs text-center text-white bg-rose-500"
-										style="width: {{row['perf_distribution'][0]*100}}%;"></div>
-									<div class="h-full text-xs text-center text-white bg-rose-400"
-										style="width: {{row['perf_distribution'][1]*100}}%;"></div>
-									<div class="h-full text-xs text-center text-white bg-gray-300 dark:bg-zinc-300"
-										style="width: {{row['perf_distribution'][2]*100}}%;"></div>
-									<div class="h-full text-xs text-center text-white bg-emerald-400"
-										style="width: {{row['perf_distribution'][3]*100}}%;"></div>
-									<div class="h-full text-xs text-center text-white bg-emerald-500"
-										style="width: {{row['perf_distribution'][4]*100}}%;"></div>
-								</div>
-							</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="overflow-y-scroll rounded-xl">
+					<table class="w-full">
+						<thead>
+							<tr class="top-0 bg-white dark:bg-zinc-800">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Industry
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Change
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Bottom Ticker
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Distribution
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in table_data[1][:5] %}
+							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['bottom_ticker']['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
+									</form>
+								</td>
+								<td class="px-2 py-2700 text-emerald-500">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['bottom_ticker']['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
+									</form>
+								</td>
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['bottom_ticker']["ticker"] }}
+											{% if row['bottom_ticker']['close_pct'] > 0 %}
+											<span class="text-emerald-500">({{ "%.2f" % (row['bottom_ticker']['close_pct']*100) }}%)</span>
+											{% else %}
+											<span class="text-rose-500">({{ "%.2f" % (row['bottom_ticker']['close_pct']*100) }}%)</span>
+											{% endif %}
+										</a>
+									</form>
+								</td>
+								<td class="items-center w-6 px-2 py-2 text-left dark:text-zinc-300">
+									<div class="flex w-full h-2 mt-3 overflow-hidden rounded-lg">
+										<div class="h-full text-xs text-center text-white bg-rose-500"
+											style="width: {{row['perf_distribution'][0]*100}}%;"></div>
+										<div class="h-full text-xs text-center text-white bg-rose-400"
+											style="width: {{row['perf_distribution'][1]*100}}%;"></div>
+										<div class="h-full text-xs text-center text-white bg-gray-300 dark:bg-zinc-300"
+											style="width: {{row['perf_distribution'][2]*100}}%;"></div>
+										<div class="h-full text-xs text-center text-white bg-emerald-400"
+											style="width: {{row['perf_distribution'][3]*100}}%;"></div>
+										<div class="h-full text-xs text-center text-white bg-emerald-500"
+											style="width: {{row['perf_distribution'][4]*100}}%;"></div>
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -177,53 +181,55 @@
 		<div id="industry_detail">
 			{% if industry_detail|length != 0 %}
 			{% for industry, table_data in industry_detail.items() %}
-			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<div class="space-y-2">
 				<div class="flex items-center space-x-1">
 					<h2 class="text-2xl font-semibold dark:text-zinc-200">
 						{{industry}}
 					</h2>
 				</div>
-				<table class="w-full">
-					<thead>
-						<tr class="top-0 bg-white dark:bg-zinc-800">
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Ticker
-							</th>
-							<th
-								class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Change
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for row in table_data %}
-						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'] }}</a>
-								</form>
-							</td>
-							{% if row['close_pct'] > 0 %}
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
-								</form>
-							</td>
-							{% else %}
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
-								</form>
-							</td>
-							{% endif %}
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="overflow-y-scroll rounded-xl">
+					<table class="w-full">
+						<thead>
+							<tr class="top-0 bg-white dark:bg-zinc-800">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Ticker
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Change
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in table_data %}
+							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'] }}</a>
+									</form>
+								</td>
+								{% if row['close_pct'] > 0 %}
+								<td class="px-2 py-2 text-emerald-500">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
+									</form>
+								</td>
+								{% else %}
+								<td class="px-2 py-2 dark:border-zinc-700 text-rose-500">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
+									</form>
+								</td>
+								{% endif %}
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
 			{% endfor %}
 			{% else %}
