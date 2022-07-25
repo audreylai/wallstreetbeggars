@@ -125,11 +125,7 @@ def watchlist():
 	dark_mode = get_user_theme("test")
 	watchlist_data = get_watchlist_data('test')
 	table = watchlist_data['table']
-	average = [(key, np.mean([item[key] for item in table]))if key not in ['ticker', 'name'] else '-' for key in table[0]]
-	median = [(key, np.median([item[key] for item in table])) if key not in ['ticker', 'name'] else '-' for key in table[0]]
-	total = [(key, np.sum([item[key] for item in table])) if key not in ['ticker', 'name'] else '-' for key in table[0]]
-	print(average)
-	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"), average=average, median=median, total=total)
+	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"))
 
 @app.route("/watchlist", methods=["POST"])
 def watchlist_add_ticker():

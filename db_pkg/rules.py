@@ -32,6 +32,8 @@ def get_watchlist_rules_results(username):
 	out = {}
 	for ticker in ticker_list:
 		out[ticker] = get_rules_results(ticker)
+		out[ticker]['name'] = stock.get_stock_info(ticker)['name']
+		out[ticker]['last_si'] = get_historical_si(ticker)[-1]
 	return out
 
 

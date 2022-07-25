@@ -73,8 +73,10 @@ content %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 						{% if k == "mkt_cap" %}
 						{{v|suffix}}
-						{% elif k == "change" or k == "price" %}
+						{% elif k == "change" %}
 						{{"%.2f" % (v*100)}}
+						{% elif k == "price" %}
+						{{"%.2f" % v}}
 						{% elif k == "ticker" %}
 						{{v.replace("-", ".")}}
 						{% else %}
@@ -101,63 +103,6 @@ content %}
 					</td>
 				</tr>
 				{% endfor %}
-				<tr class="sticky bottom-0 bg-gray-300 border-t-2 border-gray-400 dark:border-zinc-500 dark:bg-zinc-800">
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">Average</td>
-					{% for row in average %}
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
-						{% if row is string %}
-							{{row}}
-						{% else %}
-							{% if row[0] == "mkt_cap" %}
-								{{row[1]|suffix}}
-							{% elif row[0] == "change" or row[0] == "price" %}
-								{{"%.2f" % row[1]}}
-							{% else %}
-								{{row[1]}} help
-							{% endif %}
-						{% endif %}
-					</td>
-					{% endfor %}
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300"></td>
-				</tr>
-				<tr class="sticky bottom-0 bg-gray-300 dark:bg-zinc-800">
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">Median</td>
-					{% for row in median %}
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
-						{% if row is string %}
-							{{row}}
-						{% else %}
-							{% if row[0] == "mkt_cap" %}
-								{{row[1]|suffix}}
-							{% elif row[0] == "change" or row[0] == "price" %}
-								{{"%.2f" % row[1]}}
-							{% else %}
-								{{row[1]}} help
-							{% endif %}
-						{% endif %}
-					</td>
-					{% endfor %}
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300"></td>
-				</tr>
-				<tr class="sticky bottom-0 bg-gray-300 dark:bg-zinc-800">
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">Total</td>
-					{% for row in total %}
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
-						{% if row is string %}
-							{{row}}
-						{% else %}
-							{% if row[0] == "mkt_cap" %}
-								{{row[1]|suffix}}
-							{% elif row[0] == "change" or row[0] == "price" %}
-								{{"%.2f" % row[1]}}
-							{% else %}
-								{{row[1]}} help
-							{% endif %}
-						{% endif %}
-					</td>
-					{% endfor %}
-					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300"></td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
