@@ -75,23 +75,19 @@ def rules():
 		return render_template("404.html", dark_mode=dark_mode), 404
 
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = get_rules_results(ticker).values()
-	# print(hit_buy_rules, miss_buy_rules)
 	hit_cdl_buy_rules, miss_cdl_buy_rules, hit_cdl_sell_rules, miss_cdl_sell_rules = get_rules_results(ticker, True).values()
 	hit_buy_rules  += hit_cdl_buy_rules
 	hit_sell_rules += hit_cdl_sell_rules
 	miss_buy_rules += miss_cdl_buy_rules
 	miss_sell_rules += miss_cdl_sell_rules
-	# print(hit_buy_rules, miss_buy_rules)
 
-	stock_info = get_stock_info(ticker)
-	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
-
-	return render_template("rules.html", stock_info=stock_info, stock_data=stock_data, dark_mode=dark_mode, rules={
+	return render_template("rules.html", dark_mode=dark_mode, rules={
 		"hit_buy_rules": hit_buy_rules,
 		"hit_sell_rules": hit_sell_rules,
 		"miss_buy_rules": miss_buy_rules,
 		"miss_sell_rules": miss_sell_rules
-	})
+	}, stock_info=get_stock_info(ticker), stock_data=get_stock_data_chartjs(ticker, 180), si_data=get_historical_si_chartjs(ticker))
+
 
 @app.route("/rules/edit", methods=["GET", "POST"])
 def rules_edit():
@@ -102,6 +98,7 @@ def rules_edit():
 		new_sell = json.loads(request.values.get('sell'))
 		update_rules("test", new_buy, new_sell, cdl=False)
 	return render_template("rules-edit.html", dark_mode=dark_mode, buy=rules["buy"], sell=rules["sell"])
+
 
 @app.route("/cdl/edit", methods=["GET", "POST"])
 def cdl_edit():

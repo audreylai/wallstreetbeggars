@@ -44,8 +44,16 @@ USERS_DB = {
   "username": "test",
   "active": ["%04d-HK" % i for i in range(1, 100)],
   "dark_mode": True,
-  "buy": ["MA10 ≤ MA100", "MA20 ≤ MA50", "RSI ≤ 30"],
-  "sell": ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"],
+  "buy": [
+	"MA10 ≥ MA20", "MA10 ≥ MA50", "MA20 ≥ MA50", "MA20 ≥ MA100", "MA50 ≥ MA100", "MA50 ≥ MA100", "MA100 ≥ MA250",
+	"RSI ≥ 50", "RSI ≥ 60", "RSI ≥ 70", "RSI ≥ 80", "RSI ≥ 90",
+	"MACD ≥ 0", "MACD ≥ 0.5", "MACD ≥ 1", "MACD ≥ 1.5", "MACD ≥ 2"
+  ],
+  "sell": [
+	"MA10 ≤ MA20", "MA10 ≤ MA50", "MA20 ≤ MA50", "MA20 ≤ MA100", "MA50 ≤ MA100", "MA50 ≤ MA100", "MA100 ≤ MA250",
+	"RSI ≤ 50", "RSI ≤ 40", "RSI ≤ 30", "RSI ≤ 20", "RSI ≤ 10",
+	"MACD ≤ 0", "MACD ≤ -0.5", "MACD ≤ -1", "MACD ≤ -1.5", "MACD ≤ -2"
+  ],
   "watchlist": ["%04d-HK" % i for i in range(1, 10)],
   "cdl_buy": ["CDLHIGHWAVE", "CDLHIKKAKE"],
   "cdl_sell": ["CDLSPINNINGTOP"]

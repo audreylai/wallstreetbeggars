@@ -87,7 +87,7 @@ def save_historical_si(limit=10000, period=60, progress=True):
 	
 	user_rules = get_rules("test")
 	parsed_buy, parsed_sell = utils.parse_rules(user_rules["buy"], user_rules["sell"])
-	cdl_buy, cdl_sell = user_rules["cdl_buy"], user_rules["cdl_sell"]
+	# cdl_buy, cdl_sell = user_rules["cdl_buy"], user_rules["cdl_sell"]
 
 	for i in range(limit):
 		ticker = "%04d-HK" % i
@@ -136,4 +136,3 @@ def get_historical_si_chartjs(ticker, period=60, interval=1, precision=4):
 		})
 
 	return out
-

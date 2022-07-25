@@ -139,7 +139,7 @@ const misc_options = {
 							return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(2) + '%'; // add %, round 2dp
 						} else if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
 							return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
-						} else if (['Volume', 'RSI', 'MACD', 'EMA', 'Divergence', 'Fast %K', 'Fast %D', 'Slow %K', 'Slow %D'].includes(context.dataset.label)) { // MA labels
+						} else if (['Volume', 'RSI', 'MACD', 'EMA', 'Divergence', 'Fast %K', 'Fast %D', 'Slow %K', 'Slow %D', 'SI'].includes(context.dataset.label)) { // MA labels
 							return context.dataset.label + ': ' + context.parsed.y.toFixed(3);
 						}
 					} else if (context.dataset.type == 'candlestick') {
