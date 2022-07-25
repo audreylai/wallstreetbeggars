@@ -25,16 +25,18 @@ function round_stock_value(num) {
 }
 
 function add_suffix(num, precision=3) {
+	prefix = num >= 0 ? '': '-'
+	num = Math.abs(num)
 	if (num < 10**3) {
 		return num.toFixed(0);
 	} else if (num < 10**6) {
-		return (num/10**3).toPrecision(precision) + 'K';
+		return prefix + (num/10**3).toPrecision(precision) + 'K';
 	} else if (num < 10**9) {
-		return (num/10**6).toPrecision(precision) + 'M';
+		return prefix + (num/10**6).toPrecision(precision) + 'M';
 	} else if (num < 10**12) {
-		return (num/10**9).toPrecision(precision) + 'B';
+		return prefix + (num/10**9).toPrecision(precision) + 'B';
 	} else {
-		return (num/10**12).toPrecision(precision) + 'T';
+		return prefix + (num/10**12).toPrecision(precision) + 'T';
 	}
 }
 
@@ -59,7 +61,7 @@ const x_scale_settings = {
 	},
 	ticks: {
 		autoSkip: true,
-		autoSkipPadding: 80,
+		autoSkipPadding: 50,
 		maxRotation: 0,
 		minRotation: 0
 	},
@@ -131,16 +133,14 @@ const misc_options = {
 			callbacks: {
 				label: function(context) {
 					if (typeof context.parsed.y == 'number' && context.dataset.label) {
-						if ($(context.chart.ctx.canvas).attr('id') == 'volume-chart' || context.dataset.label == 'Volume') { // Volume label
+						if ($(context.chart.ctx.canvas).hasClass('volume-chart')) { // Volume label
 							return context.dataset.label + ': ' + context.parsed.y.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
 						} else if ($(context.chart.ctx.canvas).hasClass('comparison-chart')) { // comparison charts
 							return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(2) + '%'; // add %, round 2dp
 						} else if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
 							return context.dataset.label + ': ' + round_stock_value(context.parsed.y);
-						} else if (['Volume', 'RSI', 'MACD', 'EMA', 'Divergence'].includes(context.dataset.label)) { // MA labels
+						} else if (['Volume', 'RSI', 'MACD', 'EMA', 'Divergence', 'Fast %K', 'Fast %D', 'Slow %K', 'Slow %D'].includes(context.dataset.label)) { // MA labels
 							return context.dataset.label + ': ' + context.parsed.y.toFixed(3);
-						} else { // default
-							return context.dataset.label + ': ' + add_suffix(context.parsed.y);
 						}
 					} else if (context.dataset.type == 'candlestick') {
 						return 'O: ' + round_stock_value(context.parsed.o) +
@@ -225,9 +225,9 @@ const cursorpos_plugin = {
 
 		if ($(chart.ctx.canvas).hasClass('comparison-chart')) {
 			y_val = (y_val * 100).toFixed(2) + '%';
-		} else if ($(chart.ctx.canvas).attr('id') == 'volume-chart') {
+		} else if ($(chart.ctx.canvas).hasClass('volume-chart')) {
 			y_val = add_suffix(y_val);
-		} else if ($(chart.ctx.canvas).attr('id') == 'macd-chart' || $(chart.ctx.canvas).attr('id') == 'rsi-chart') {
+		} else if (['macd-chart', 'rsi-chart', 'stoch-chart'].includes($(chart.ctx.canvas).attr('id'))) {
 			y_val = y_val.toFixed(3);
 		} else {
 			y_val = round_stock_value(y_val)
