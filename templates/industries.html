@@ -120,7 +120,7 @@
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['industry'] }}</a>
 									</form>
 								</td>
-								<td class="px-2 py-2700 text-emerald-500">
+								<td class="px-2 py-2700 text-rose-500">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['bottom_ticker']['ticker'] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>

@@ -15,9 +15,15 @@
 		<form onsubmit="redrawTable(this); return false;" class="flex items-center space-x-2">
 			<p class="text-gray-700 dark:text-zinc-300">Minimum Market Cap:</p>
 			<div class="flex flex-col p-2 mb-3.5 w-80 space-y-1">
-				<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{min_mkt_cap}}"
+				<input type="hidden" class="filter-industry" name="filter_industry" value="{{ filter_industry }}" />
+				<input type="hidden" name="sort_col" value="{{ sort_col }}" />
+				<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
+				<input id="minmax-range" name="min_mkt_cap" type="range" min="6" max="12" value="{{ min_mkt_cap }}"
 					class="h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-					onchange="edit_mkt_cap(this)" 
+					onchange="
+						selected_min_mkt_cap = $(this).val();
+						$(`input[name='min_mkt_cap']`).each(function() {this.value = selected_min_mkt_cap});
+						redrawTable(this.form); return false;"
 				/>
 				<ul class="flex justify-between w-full px-[10px] dark:text-zinc-400 text-gray-600">
 					<li class="relative flex justify-center"><span class="absolute">1M</span></li>
@@ -31,9 +37,16 @@
 			</div>
 		</form>
 		<form>
+			<input type="hidden" class="min-mkt-cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
+			<input type="hidden" name="sort_col" value="{{ sort_col }}" />
+			<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
 			<select id="industry-filter"
 				class="block px-2 py-1 text-sm text-gray-700 bg-gray-200 rounded-md placeholder:normal-case dark:text-zinc-300 dark:bg-zinc-800 placeholder:text-gray-400 dark:placeholder:text-zinc-500"
-				name="filter_industry" onchange="redrawTable(this.form); return false;">
+				name="filter_industry" onchange="
+					selected_industry = $(this).val();
+					$(`input[name='filter_industry']`).each(function() {this.value = selected_industry});
+					redrawTable(this.form); return false;"
+			>
 				<option value="" {% if filter_industry=="" %} selected {% endif %}>All industries</option>
 				{% for industry in industries %}
 				<option value="{{industry}}" {% if filter_industry==industry %} selected {% endif %}>{{industry}}</option>
@@ -57,8 +70,8 @@
 								{% if sort_col != k %}
 								<button type="submit">{{ k | convert_colname }}</button>
 								{% endif %}
-								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
-								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
+								<input type="hidden" class="filter-industry" name="filter_industry" value="{{ filter_industry }}" />
+								<input type="hidden" class="min-mkt-cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 								<input type="hidden" name="sort_col" value="{{ k }}" />
 								{% if sort_col == k and sort_dir == 1 %}
 								<input type="hidden" name="sort_dir" value="desc" />
@@ -69,8 +82,8 @@
 								{% endif %}
 							</form>
 							<form method="POST" action="{{ url_for('stock_list_page') }}" onsubmit="redrawTable(this); return false;">
-								<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
-								<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
+								<input type="hidden" class="filter-industry" name="filter_industry" value="{{ filter_industry }}" />
+								<input type="hidden" class="min-mkt-cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 								<input type="hidden" name="sort_col" value="{{ k }}" />
 								{% if sort_col == k and sort_dir == -1 %}
 								<input type="hidden" name="sort_dir" value="asc" />
@@ -130,8 +143,8 @@
 		<div class="flex items-center" id="pagination-btns">
 			<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 				<input type="text" name="page" id="page" value="{{page-1}}" hidden>
-				<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
-				<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
+				<input type="hidden" class="filter-industry" name="filter_industry" value="{{ filter_industry }}" />
+				<input type="hidden" class="min-mkt-cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 				<input type="hidden" name="sort_col" value="{{ sort_col }}" />
 				<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
 				<button type="submit" {% if (page - 1)|int < 1 %} disabled {% endif %}
@@ -148,7 +161,8 @@
 			{% for btn in page_btns %}
 			<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 				<input type="text" name="page" id="page" value="{{ btn }}" hidden>
-				<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
+				<input type="hidden" class="filter-industry" name="filter_industry" value="{{ filter_industry }}" />
+				<input type="hidden" class="min-mkt-cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 				<input type="hidden" name="sort_col" value="{{ sort_col }}" />
 				<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
 				<button type="submit" {% if btn == "..." %} disabled {% endif %}
@@ -163,8 +177,8 @@
 
 			<form action="{{ url_for('stock_list_page') }}" method="POST" onsubmit="redrawTable(this); return false;">
 				<input type="text" name="page" id="page" value="{{page+1}}" hidden>
-				<input type="hidden" name="filter_industry" value="{{ filter_industry }}" />
-				<input type="hidden" class="min_mkt_cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
+				<input type="hidden" class="filter-industry" name="filter_industry" value="{{ filter_industry }}" />
+				<input type="hidden" class="min-mkt-cap" name="min_mkt_cap" value="{{ min_mkt_cap }}" />
 				<input type="hidden" name="sort_col" value="{{ sort_col }}" />
 				<input type="hidden" name="sort_dir" value="{{ sort_dir }}" />
 				<button type="submit" {% if (page+1)|int > max_page %} disabled {% endif %}
@@ -185,7 +199,7 @@
 <script>
 	function redrawTable(evt) {
 		const formData = new FormData(evt);
-  	const params = Object.fromEntries(formData);
+  		const params = Object.fromEntries(formData);
 		
 		$.post("/stock-list", params, function (data) {
 			$("#table").html($(data).find("table"))
