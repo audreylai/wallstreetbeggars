@@ -19,7 +19,7 @@ def industry_exists(industry) -> bool:
 	return res != 0
 
 
-def get_industry_tickers_stock_data(industry, period=60) -> List[Dict]:
+def get_industry_tickers_close_pct(industry, period=60) -> List[Dict]:
 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 	cursor = col_stock_data.aggregate([
 		{"$match": {"industry": industry}},
@@ -34,7 +34,13 @@ def get_industry_tickers_stock_data(industry, period=60) -> List[Dict]:
 						{"$lte": ["$$cdl_data.date", end_datetime]}
 					]}
 				}
-			}
+			},
+			"ticker": 1
+		}},
+		{"$project": {
+			"cdl_data.date": 1,
+			"cdl_data.close_pct": 1,
+			"ticker": 1
 		}},
 		{"$sort": {
 			"ticker": pymongo.ASCENDING
@@ -433,4 +439,40 @@ def get_industry_accum_avg_close_pct_chartjs(industry, period, interval=1, preci
 			'y': round(row["accum_close_pct"], precision)
 		})
 	
+	return out
+
+
+def get_industry_tickers_accum_close_pct_chartjs(industry, period=60, precision=4) -> List[Dict]:
+	alpha = 0.7
+	color_list = [
+		f"rgba(230, 0, 73, {alpha})", f"rgba(11, 180, 255, {alpha})", f"rgba(80, 233, 145, {alpha})",
+		f"rgba(230, 216, 0, {alpha})", f"rgba(155, 25, 245, {alpha})", f"rgba(255, 163, 0, {alpha})",
+		f"rgba(220, 10, 180, {alpha})", f"rgba(179, 212, 255, {alpha})", f"rgb(0, 191, 160, {alpha})"
+	]
+	data = get_industry_tickers_close_pct(industry, period)[:9]
+
+	out = []
+	for row in data:
+		color = color_list.pop()
+		tmp = {
+			"label": row["ticker"],
+			"data": [],
+			"borderColor": color,
+			"pointBackgroundColor": color,
+			"fill": False,
+			"borderWidth": 2.5,
+			"tension": 0.4,
+			"pointRadius": 2
+		}
+		
+		accum_close_pct = 0
+		for i in row["cdl_data"]:
+			epoch_timestamp = int(datetime.timestamp(i["date"]) * 1000)
+			accum_close_pct += i["close_pct"]
+			tmp["data"].append({
+				'x': epoch_timestamp,
+				'y': round(accum_close_pct, precision)
+			})
+		out.append(tmp)
+
 	return out

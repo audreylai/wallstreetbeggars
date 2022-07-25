@@ -28,8 +28,8 @@ def home():
 		"hscc_chartjs": get_stock_data_chartjs("^HSCC", period),
 		"hsce_chartjs": get_stock_data_chartjs("^HSCE", period),
 
-		'mkt_overview_data': 		[{k: v for k, v in d.items() if k != 'last_close_pct'} for d in mkt_overview_data],
-		'mkt_overview_last_close_pct': [x["last_close_pct"] for x in mkt_overview_data],
+		'mkt_overview_data': [{k: v for k, v in d.items() if k != 'last_close_pct'} for d in mkt_overview_data],
+		'mkt_overview_last_close_pct': [i["last_close_pct"] for i in mkt_overview_data],
 		'all_industry_cmp': get_all_industries_accum_avg_close_pct_chartjs(period),
 		'all_industry_last_cmp': get_all_industries_avg_last_close_pct_chartjs()
 	}
@@ -171,16 +171,18 @@ def industries_page():
 	table_data = get_industries_gainers_losers_table()
 	industries = get_all_industries()
 
-	industry_detail = {"Banks": get_industry_tickers_info("Banks")}
 	if request.method == "POST":
 		if industry_exists(request.values.get("industry_detail")):
 			industry = request.values.get("industry_detail")
 			industry_detail = {industry: get_industry_tickers_info(industry)}
+			chart_data = get_industry_tickers_accum_close_pct_chartjs(industry, period=60)
 		else:
 			industry_detail = {}
-		print(industry_detail)
+	else:
+		industry_detail = {"Banks": get_industry_tickers_info("Banks")}
+		chart_data = get_industry_tickers_accum_close_pct_chartjs("Banks", period=60)
 
-	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industries=industries, industry_detail=industry_detail)
+	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, chart_data=chart_data, industries=industries, industry_detail=industry_detail)
 
 
 @app.route("/industry/<industry>", methods=["GET", "POST"])

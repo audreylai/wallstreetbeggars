@@ -431,7 +431,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.0.2/glide.js"></script>
 <script>
 	// init chart + ctx
-	// init chart + ctx
 	var hscc_index_chart = undefined;
 	var hsce_index_chart = undefined;
 	var hsi_index_chart = undefined;
@@ -531,10 +530,10 @@
 					}
 				},
 				labels: {
-					color:  dark ? 'rgb(212 212 216)' : 'rgb(75, 85, 99)',
-          font: {
+					color: dark ? 'rgb(212 212 216)' : 'rgb(75, 85, 99)',
+					  font: {
 						family: 'sans-serif',
-            size: (ctx) => {
+						 size: (ctx) => {
 							a = -0.0001930;
 							b = 0.1858;
 							c = -5.888;
@@ -542,7 +541,7 @@
 							return Math.max(a * x**2 + b * x + c, 10.5);
 						},
 						weight: 'lighter'
-          },
+					},
 					display: true,
 					position: 'top',
 					padding: (ctx) => {
@@ -555,7 +554,7 @@
 						}
 					}
 				}
-				// borderColor: "rgba(255,255,255, 1)"
+				// borderColor: "rgba(255, 255, 255, 1)"
 			}]
 		}
 

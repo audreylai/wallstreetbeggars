@@ -50,7 +50,7 @@ def test():
 	# col_users.insert_one(USERS_DB)
 	# save_rules_results(limit=100)
 	# save_historical_si(limit=100, period=180)
-	pprint(get_industry_tickers_info("Banks"))
+	pprint(get_industry_tickers_accum_close_pct_chartjs("Banks"))
 
 # pprint(test())
 

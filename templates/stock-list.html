@@ -207,7 +207,6 @@
 		})
 	}
 
-
 	$("#table-wrapper").on('change', "#allcb", function () {
 		console.log("hello")
 		$('tbody tr td input[type="checkbox"]').prop(
@@ -254,6 +253,5 @@
 	function update_stock_info() {
 		$.get("/stock-info/update");
 	}
-
 </script>
 {% endblock %}

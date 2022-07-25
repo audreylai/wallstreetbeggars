@@ -1,4 +1,9 @@
-{% extends "base.html" %} {% block title %} Industries {% endblock %}
+{% extends "base.html" %} {% block title %} Industries {% endblock %} {% block header %}
+<script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
+<script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>
+{% endblock %} 
 {% block content %}
 <div class="flex flex-col w-screen h-screen px-6 py-4 space-y-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
 	<div class="space-y-2">
@@ -294,6 +299,17 @@
 			{% endif %}
 		</div>
 	</div>
+	<div class="grid grid-cols-1 gap-x-4">
+		<div class="col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+			<div class="flex items-center space-x-1">
+				<ion-icon name="compass-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+				<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
+					Ticker comparison
+				</h2>
+			</div>
+			<div class="h-96"><canvas id="industry-tickers-cmp-chart" class="comparison-chart"></canvas></div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 {% block script %}
@@ -305,6 +321,70 @@
 		$.post("/industries", params, function (data) {
 			$("#industry_detail").html($(data).find("#industry_detail"))
 		})
+
+		$.get('/api/get_industry_tickers_accum_close_pct', {
+			industry: params.industry_detail,
+			period: 60
+		}, function (res) {
+			chart_data = JSON.parse(res);
+			draw_chart(chart_data);
+		}).catch(error => console.log(error));
 	}
+
+	var chart = undefined;
+
+	const ctx = document.getElementById('industry-tickers-cmp-chart').getContext('2d');
+
+	function draw_chart(data) {
+		chart_data = {
+			datasets: data
+		}
+
+		options = {
+			...misc_options,
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings,
+					type: 'timeseries',
+					time: {
+						unit: 'day',
+						tooltipFormat: 'DD'
+					}
+				},
+				y: {
+					display: true,
+					min: -0.2,
+					max: 0.2,
+					title: {
+						display: false,
+						text: '% change'
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+						callback: (val) => (Math.round(val * 100) + '%')
+					},
+					...y_scale_settings
+				},
+			},
+			interaction: {
+				mode: 'point',
+				intersect: false,
+			}
+		}
+
+		if (chart) {
+			chart.destroy();
+		}
+
+		chart = new Chart(ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	draw_chart({{ chart_data | tojson }})
 </script>
 {% endblock %}
