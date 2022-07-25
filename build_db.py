@@ -16,6 +16,14 @@ import talib as ta
 import yfinance as yf
 from bs4 import BeautifulSoup
 
+from db_pkg.cache import *
+from db_pkg.industries import *
+from db_pkg.news import *
+from db_pkg.rules import *
+from db_pkg.stock import *
+from db_pkg.user import *
+from db_pkg.utils import *
+
 HSI_TICKERS = list(map(lambda x: x + '-HK', [
 	"0005", "0011", "0388", "0939", "1299", "1398", "2318", "2388", "2628", "3328", "3988", "0002", "0003",
 	"0006", "1038", "0012", "0016", "0017", "0083", "0101", "0688", "0823", "1109", "1113", "1997", "2007", 
@@ -31,6 +39,17 @@ STOCK_INFO_COLS = [
 ]
 
 CDL_PATTERNS = ta.get_function_groups()["Pattern Recognition"]
+
+USERS_DB = {
+  "username": "test",
+  "active": ["%04d-HK" % i for i in range(1, 100)],
+  "dark_mode": True,
+  "buy": ["MA10 ≤ MA100", "MA20 ≤ MA50", "RSI ≤ 30"],
+  "sell": ["MA10 ≥ MA20", "MA20 ≥ MA50", "RSI ≥ 70"],
+  "watchlist": ["%04d-HK" % i for i in range(1, 10)],
+  "cdl_buy": ["CDLHIGHWAVE", "CDLHIKKAKE"],
+  "cdl_sell": ["CDLSPINNINGTOP"]
+}
 
 
 class InvalidDF(Exception): pass
@@ -274,18 +293,20 @@ async def main():
 	colorama.init()
 	lock = mp.Lock()
 
+	use_cache = True
+	limit = 100
+	if not isinstance(limit, int) and limit != "ALL":
+		raise Exception(f"limit must be an integer or 'ALL' (currently {str(limit)})")
+
 	# --------------------------------------------------
 	# Step 1: 
 	# - download hkex list of securities
 	# - scrape etnet data
 	# --------------------------------------------------
-	log_msg("Step 1/5: HKEX list of securities + etnet.com.hk stock information", level=LOG_LEVEL.INFO)
+	log_msg("Step 1/6: HKEX list of securities + etnet.com.hk stock information", level=LOG_LEVEL.INFO)
 	start = timer()
-
-	use_cache = True
-	limit = 100
+	
 	STOCK_INFO_PATH = f"./tmp/stock_info_{limit}.pickle"
-
 	if use_cache and os.path.exists(STOCK_INFO_PATH):
 		log_msg(f"Using cached stock info ({STOCK_INFO_PATH})", level=LOG_LEVEL.DEBUG)
 		stock_info_df = pd.read_pickle(STOCK_INFO_PATH)
@@ -307,7 +328,7 @@ async def main():
 	# Step 2: 
 	# - download yfinance stock data
 	# --------------------------------------------------
-	log_msg("Step 2/5: yfinance stock data", level=LOG_LEVEL.INFO)
+	log_msg("Step 2/6: yfinance stock data", level=LOG_LEVEL.INFO)
 	start = timer()
 
 	STOCK_DATA_PATH = f"./tmp/stock_data_{limit}.pickle"
@@ -340,18 +361,22 @@ async def main():
 
 	# --------------------------------------------------
 	# Step 3: 
-	# - initialize databases
+	# - initialize databases (stock_data, cache, users)
 	# --------------------------------------------------
-	log_msg("Step 3/5: initialize databases", level=LOG_LEVEL.INFO)
+	log_msg("Step 3/6: initialize databases", level=LOG_LEVEL.INFO)
 	start = timer()
 
 	client = pymongo.MongoClient("mongodb://localhost:27017")
 	db = client["wallstreetbeggars"]
 	col_stock_data = db["stock_data"]
 	col_cache = db["cache"]
+	col_users = db["users"]
 
 	col_stock_data.delete_many({})
 	col_cache.delete_many({})
+	col_users.delete_many({})
+
+	col_users.insert_one(USERS_DB)
 
 	stock_info_df.reset_index(inplace=True)
 	stock_info_df["_state"] = np.zeros(len(stock_info_df), dtype=int)
@@ -372,7 +397,7 @@ async def main():
 	# - download yfinance stock info
 	# - insert into stock data db
 	# --------------------------------------------------
-	log_msg("Step 4/5: yfinance stock info", level=LOG_LEVEL.INFO)
+	log_msg("Step 4/6: yfinance stock info", level=LOG_LEVEL.INFO)
 	start = timer()
 	tickers = list(map(lambda x: x.replace('.', '-'), set(all_stock_data_df.columns.get_level_values(0))))
 
@@ -393,7 +418,7 @@ async def main():
 	# - compute candlestick patterns
 	# - compute indicators (SMA, RSI, MACD, etc)
 	# --------------------------------------------------
-	log_msg("Step 5/5: pattern/indicator calculations", level=LOG_LEVEL.INFO)
+	log_msg("Step 5/6: pattern/indicator calculations", level=LOG_LEVEL.INFO)
 	start = timer()
 	stock_data_dfs = []
 	for ticker in tickers:
@@ -415,6 +440,23 @@ async def main():
 		{"$unset": "_state"},
 		{"$set": {"last_updated": now}}
 	])
+
+	end = timer()
+	log_msg(f"Time elapsed: {'%.3f' % (end - start)}s\n", level=LOG_LEVEL.DEBUG)
+
+
+	# --------------------------------------------------
+	# Step 6: 
+	# - 
+	# --------------------------------------------------
+	log_msg("Step 6/6: save rules results + historical si", level=LOG_LEVEL.INFO)
+	start = timer()
+	if limit != "ALL":
+		save_rules_results(limit=limit, progress=False)
+		save_historical_si(limit=limit, progress=False)
+	else:
+		save_rules_results(progress=False)
+		save_historical_si(progress=False)
 
 	end = timer()
 	log_msg(f"Time elapsed: {'%.3f' % (end - start)}s\n", level=LOG_LEVEL.DEBUG)

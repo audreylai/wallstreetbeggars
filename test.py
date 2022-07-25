@@ -22,7 +22,7 @@ from db_pkg.utils import *
 # candle_names = ta.get_function_groups()["Pattern Recognition"]
 
 def test():
-	return clear_all_cache(), save_rules_results(100)
+	return save_historical_si(100)
 
 # pprint(test())
 

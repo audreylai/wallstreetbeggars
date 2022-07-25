@@ -49,6 +49,7 @@ def get_stock_data(ticker, period) -> List[Dict] | None:
 def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | None:
 	if not ticker_exists(ticker): return
 	data = get_stock_data(ticker, period)
+	if data is None: return
 	out = {
 		"cdl": [], "close": [], "close_pct": [], "accum_close_pct": [], 
 		"last_close": 0, "last_close_pct": 0,

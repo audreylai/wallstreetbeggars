@@ -171,6 +171,7 @@ def stock_list_page():
 		min_mkt_cap=min_mkt_cap_pow, dark_mode=dark_mode, page_btns=get_pagination_btns(page, max_page)
 	)
 
+
 @app.route("/industries", methods=["GET", "POST"])
 def industries_page():
 	dark_mode = get_user_theme("test")
@@ -187,12 +188,14 @@ def industries_page():
 
 	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, industries=industries, industry_detail=industry_detail)
 
+
 @app.route("/industry/<industry>", methods=["GET", "POST"])
 def industry_page(industry):
 	dark_mode = get_user_theme("test")
 	if not industry_exists(industry):
 		return render_template("404.html", dark_mode=dark_mode), 404
 	return render_template("industry.html", industry=industry, dark_mode=dark_mode)
+
 
 # this should be an api
 @app.route("/update-active", methods=["POST"])
