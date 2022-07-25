@@ -42,7 +42,7 @@ def get_stock_data(ticker, period) -> List[Dict] | None:
 			}
 		}}
 	])
-	data = cursor.next()['cdl_data']
+	data = cursor.next()["cdl_data"]
 	return data
 
 

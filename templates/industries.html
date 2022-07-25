@@ -197,7 +197,23 @@
 								</th>
 								<th
 									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Name
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Price
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 									Change
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Market Cap
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Strength Index
 								</th>
 							</tr>
 						</thead>
@@ -210,18 +226,51 @@
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'] }}</a>
 									</form>
 								</td>
-								{% if row['close_pct'] > 0 %}
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['name'] }}</a>
+									</form>
+								</td>
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row['last_close'] }}</a>
+									</form>
+								</td>
+								{% if row['last_close_pct'] > 0 %}
 								<td class="px-2 py-2 text-emerald-500">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['last_close_pct']*100) }}%</a>
 									</form>
 								</td>
 								{% else %}
 								<td class="px-2 py-2 dark:border-zinc-700 text-rose-500">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['close_pct']*100) }}%</a>
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row['last_close_pct']*100) }}%</a>
+									</form>
+								</td>
+								{% endif %}
+								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['mkt_cap'] | suffix }}</a>
+									</form>
+								</td>
+								{% if row['last_si'] > 0 %}
+								<td class="px-2 py-2 text-emerald-500">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row['last_si'] }}</a>
+									</form>
+								</td>
+								{% else %}
+								<td class="px-2 py-2 dark:border-zinc-700 text-rose-500">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row['last_si'] }}</a>
 									</form>
 								</td>
 								{% endif %}

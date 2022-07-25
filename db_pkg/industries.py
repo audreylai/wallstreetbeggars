@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Tuple
 import pymongo
 from pprint import pprint
-from . import stock, utils, cache
+
+from db_pkg.rules import get_ticker_last_si
+from . import utils, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
@@ -15,6 +17,54 @@ last_trading_date = datetime(2022, 7, 22)
 def industry_exists(industry) -> bool:
 	res = col_stock_data.count_documents({"industry": industry})
 	return res != 0
+
+
+def get_industry_tickers_stock_data(industry, period=60) -> List[Dict]:
+	start_datetime, end_datetime = utils.get_datetime_from_period(period)
+	cursor = col_stock_data.aggregate([
+		{"$match": {"industry": industry}},
+		{"$project": {
+			"_id": 0,
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "cdl_data",
+					"cond": {"$and": [
+						{"$gte": ["$$cdl_data.date", start_datetime]},
+						{"$lte": ["$$cdl_data.date", end_datetime]}
+					]}
+				}
+			}
+		}},
+		{"$sort": {
+			"ticker": pymongo.ASCENDING
+		}}
+	])
+	return list(cursor)
+
+
+def get_industry_tickers_info(industry) -> List[Dict]:
+	cursor = col_stock_data.aggregate([
+		{"$match": {"industry": industry}},
+		{"$project": {
+			"_id": 0,
+			"ticker": 1,
+			"name": 1,
+			"last_close": 1,
+			"last_close_pct": 1,
+			"mkt_cap": 1,
+			"last_volume": 1
+
+		}},
+		{"$sort": {
+			"ticker": pymongo.ASCENDING
+		}}
+	])
+	out = list(cursor)
+	for i in range(len(out)):
+		ticker = out[i]["ticker"]
+		out[i]["last_si"] = get_ticker_last_si(ticker)
+	return out
 
 
 def get_all_industries() -> List:

@@ -12,7 +12,7 @@ def get_rules(username):
 	return col_users.find_one({"username": username}, {"_id": 0, "buy": 1, "sell": 1, "cdl_buy": 1, "cdl_sell": 1})
 
 
-def update_rules(username, buy, sell, cdl):
+def update_rules(username, buy, sell, cdl=False):
 	if cdl:
 		col_users.update_one({"username": username}, {"$set": {"cdl_buy": buy, "cdl_sell": sell}})
 	else:
@@ -33,7 +33,7 @@ def get_watchlist_rules_results(username):
 	for ticker in ticker_list:
 		out[ticker] = get_rules_results(ticker)
 		out[ticker]['name'] = stock.get_stock_info(ticker)['name']
-		out[ticker]['last_si'] = get_historical_si(ticker)[-1]
+		out[ticker]['last_si'] = get_ticker_si(ticker)[-1]
 	return out
 
 
@@ -114,13 +114,33 @@ def save_historical_si(limit=10000, period=60, progress=True):
 			print(ticker)
 
 
-def get_historical_si(ticker, period=60):
+def get_ticker_last_si(ticker):
 	if not stock.ticker_exists(ticker): return
-	return col_historical_si.find_one({"ticker": ticker}, {"_id": 0, "si_data": 1})["si_data"]
+	return get_ticker_si(ticker)[-1]["si"]
+
+
+def get_ticker_si(ticker, period=60):
+	start_datetime, end_datetime = utils.get_datetime_from_period(period)
+	cursor = col_historical_si.aggregate([
+		{"$match": {"ticker": ticker}},
+		{"$unwind": "$si_data"},
+		{"$match": {
+			"$and": [
+				{"si_data.date": {"$gte": start_datetime}},
+				{"si_data.date": {"$lte": end_datetime}}
+			]
+		}},
+		{"$project": {
+			"_id": 0,
+			"date": "$si_data.date",
+			"si": "$si_data.si",
+		}}
+	])
+	return list(cursor)
 	
 
-def get_historical_si_chartjs(ticker, period=60, interval=1, precision=4):
-	data = get_historical_si(ticker, period)
+def get_ticker_si_chartjs(ticker, period=60, interval=1, precision=4):
+	data = get_ticker_si(ticker, period)
 	if data is None: return
 
 	out = {

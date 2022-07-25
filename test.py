@@ -1,5 +1,6 @@
 
 from datetime import *
+from filecmp import clear_cache
 # # from db_utils import *
 # # from utils import *
 # from pprint import pprint
@@ -41,14 +42,15 @@ USERS_DB = {
 }
 
 def test():
-	client = pymongo.MongoClient("mongodb://localhost:27017")
-	db = client["wallstreetbeggars"]
-	col_users = db["users"]
+	# client = pymongo.MongoClient("mongodb://localhost:27017")
+	# db = client["wallstreetbeggars"]
+	# col_users = db["users"]
 
-	col_users.delete_many({})
-	col_users.insert_one(USERS_DB)
-	save_rules_results(limit=100)
-	save_historical_si(limit=100, period=180)
+	# col_users.delete_many({})
+	# col_users.insert_one(USERS_DB)
+	# save_rules_results(limit=100)
+	# save_historical_si(limit=100, period=180)
+	pprint(get_industry_tickers_info("Banks"))
 
 # pprint(test())
 

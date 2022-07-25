@@ -35,7 +35,7 @@ STOCK_INFO_COLS = [
 	"sector", "country", "website", "totalCash",
 	"totalDebt", "totalRevenue", "totalCashPerShare", "financialCurrency",
 	"shortName", "longName", "exchangeTimezoneName", "quoteType", "logo_url",
-	"previousClose", "bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
+	"bid", "ask", "beta", "trailingPE", "trailingEps", "dividendRate", "exDividendDate"
 ]
 
 CDL_PATTERNS = ta.get_function_groups()["Pattern Recognition"]

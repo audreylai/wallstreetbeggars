@@ -41,6 +41,12 @@ def get_watchlist_data(username):
 	result = []
 	for ticker in watchlist_tickers:
 		info = stock.get_stock_info(ticker)
-		last_si = rules.get_historical_si(ticker)[-1]['si']
-		result.append({"ticker": ticker, "name" : info["name"], "price" : stock.get_last_stock_data(ticker)["close"], "change": stock.get_stock_data_chartjs(ticker, period=period, precision=2)['last_close_pct'], "mkt_cap": info['mkt_cap'], "last_si":last_si})
+		result.append({
+			"ticker": ticker,
+			"name": info["name"],
+			"price" : stock.get_last_stock_data(ticker)["close"],
+			"change": stock.get_stock_data_chartjs(ticker, period=period, precision=2)['last_close_pct'],
+			"mkt_cap": info['mkt_cap'],
+			"last_si": rules.get_stock_last_si(ticker)[-1]['si']
+		})
 	return {"table": result, "last_updated": info["last_updated"]}

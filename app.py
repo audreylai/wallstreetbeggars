@@ -86,7 +86,7 @@ def rules():
 		"hit_sell_rules": hit_sell_rules,
 		"miss_buy_rules": miss_buy_rules,
 		"miss_sell_rules": miss_sell_rules
-	}, stock_info=get_stock_info(ticker), stock_data=get_stock_data_chartjs(ticker, 180), si_data=get_historical_si_chartjs(ticker))
+	}, stock_info=get_stock_info(ticker), stock_data=get_stock_data_chartjs(ticker, 180), si_data=get_ticker_si_chartjs(ticker))
 
 
 @app.route("/rules/edit", methods=["GET", "POST"])
@@ -171,10 +171,11 @@ def industries_page():
 	table_data = get_industries_gainers_losers_table()
 	industries = get_all_industries()
 
-	industry_detail = {"Banks": get_industry_tickers_last_close_pct("Banks")}
+	industry_detail = {"Banks": get_industry_tickers_info("Banks")}
 	if request.method == "POST":
 		if industry_exists(request.values.get("industry_detail")):
-			industry_detail = {request.values.get("industry_detail"): get_industry_tickers_last_close_pct(request.values.get("industry_detail"))}
+			industry = request.values.get("industry_detail")
+			industry_detail = {industry: get_industry_tickers_info(industry)}
 		else:
 			industry_detail = {}
 		print(industry_detail)
