@@ -310,11 +310,66 @@
 			<div class="h-96"><canvas id="industry-tickers-cmp-chart" class="comparison-chart"></canvas></div>
 		</div>
 	</div>
+	<div class="grid grid-cols-3 gap-x-4 h-96">
+		<div class="col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800 h-96">
+			<div class="flex flex-col justify-between space-y-2">
+				<h2 class="text-2xl font-semibold dark:text-zinc-200">
+					Stock Comparison
+				</h2>
+				<form
+					onsubmit="draw_stock_cmp(industry_data, document.getElementById('ticker-cmp-txtbox').value); return false;">
+					<input type="text" id="ticker-cmp-txtbox"
+						class="h-full px-2 py-1 text-sm uppercase rounded-md bg-zinc-200 dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+						placeholder="Ticker..." autocomplete="off" />
+				</form>
+			</div>
+			<div class="grow">
+				<canvas id="stock-comparison-chart" class="comparison-chart"></canvas>
+			</div>
+		</div>
+		<div class="col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800 h-96">
+			<div class="flex flex-col justify-between space-y-2">
+				<h2 class="text-2xl font-semibold dark:text-zinc-200">
+					Industry Comparison
+				</h2>
+				<select required id="industry-cmp-txtbox"
+					class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+					onchange="draw_industry_cmp(industry_data, document.getElementById('industry-cmp-txtbox').value)">
+					<option value="">Select an industry...</option>
+					{% for industry in industries %} {% if industry != None %}
+					<option value="{{industry}}">{{industry}}</option>
+					{% endif %} {% endfor %}
+				</select>
+			</div>
+			<div class="grow">
+				<canvas id="industry-comparison-chart" class="comparison-chart"></canvas>
+			</div>
+		</div>
+		<div class="col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800 h-96">
+			<div class="flex flex-col justify-between space-y-2">
+				<h2 class="text-2xl font-semibold dark:text-zinc-200">
+					Index Comparison
+				</h2>
+				<select required id="index-cmp-txtbox"
+					class="h-full px-2 py-1 text-sm rounded-md text-zinc-400 bg-zinc-200 dark:text-zinc-500 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+					onchange="draw_index_cmp(industry_data, document.getElementById('index-cmp-txtbox').value)">
+					<option value="">Select an index...</option>
+					{% for index in indexes %} {% if index != None %}
+					<option value="{{index}}">{{index}}</option>
+					{% endif %} {% endfor %}
+				</select>
+			</div>
+			<div class="grow">
+				<canvas id="index-comparison-chart" class="comparison-chart"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
 </div>
 {% endblock %}
 {% block script %}
 <script>
-	function filter_industry(evt) {
+	async function filter_industry(evt) {
 		const formData = new FormData(evt);
 		const params = Object.fromEntries(formData);
 
@@ -322,20 +377,40 @@
 			$("#industry_detail").html($(data).find("#industry_detail"))
 		})
 
-		$.get('/api/get_industry_tickers_accum_close_pct', {
+		await $.get('/api/get_industry_tickers_accum_close_pct', {
 			industry: params.industry_detail,
 			period: 60
 		}, function (res) {
-			chart_data = JSON.parse(res);
-			draw_chart(chart_data);
+			industry_tickers_data = JSON.parse(res);
 		}).catch(error => console.log(error));
+
+		await $.get('/api/get_industry_close_pct', {
+			industry: params.industry_detail,
+			period: 60
+		}, function (res) {
+			industry_data = JSON.parse(res);
+		}).catch(error => console.log(error));
+
+		draw_charts(industry_data, industry_tickers_data);
 	}
 
-	var chart = undefined;
+	var current_industry = 'Banks'
 
-	const ctx = document.getElementById('industry-tickers-cmp-chart').getContext('2d');
+	var current_cmp_ticker = '0001-HK'
+	var current_cmp_industry = 'Properties'
+	var current_cmp_index = '^HSI'
 
-	function draw_chart(data) {
+	var industry_tickers_cmp_chart = undefined;
+	var stock_cmp_chart = undefined;
+	var industry_cmp_chart = undefined;
+	var index_cmp_chart = undefined;
+
+	const industry_tickers_cmp_ctx = document.getElementById('industry-tickers-cmp-chart').getContext('2d');
+	const stock_cmp_ctx = document.getElementById('stock-comparison-chart').getContext('2d');
+	const industry_cmp_ctx = document.getElementById('industry-comparison-chart').getContext('2d');
+	const index_cmp_ctx = document.getElementById('index-comparison-chart').getContext('2d');
+
+	function draw_industry_tickers_cmp(data) {
 		chart_data = {
 			datasets: data
 		}
@@ -374,17 +449,210 @@
 			}
 		}
 
-		if (chart) {
-			chart.destroy();
+		if (industry_tickers_cmp_chart) {
+			industry_tickers_cmp_chart.destroy();
 		}
 
-		chart = new Chart(ctx, {
+		industry_tickers_cmp_chart = new Chart(industry_tickers_cmp_ctx, {
 			type: 'line',
 			data: chart_data,
 			options: options
 		});
 	}
 
-	draw_chart({{ chart_data | tojson }})
+	async function draw_stock_cmp(data, other_ticker) {
+		current_cmp_ticker = other_ticker;
+
+		let data2 = undefined;
+
+		await $.get('/api/get_stock_close_pct', {
+			ticker: other_ticker.toUpperCase(),
+			period: 60
+		}, function (res) {
+			data2 = JSON.parse(res);
+		});
+
+		chart_data = {
+			datasets: [{
+				label: data.industry,
+				data: data.accum_close_pct,
+				borderColor: 'rgb(234, 63, 51)',
+				...line_chart_settings
+			}, {
+				label: data2.ticker.replace("-", "."),
+				data: data2.accum_close_pct,
+				borderColor: 'rgba(102, 126, 234)',
+				...line_chart_settings
+			}]
+		};
+
+		options = {
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: '% change'
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+						callback: (val) => (Math.round(val * 100) + '%')
+					},
+					...y_scale_settings
+				}
+			},
+			...misc_options
+		};
+
+		if (stock_cmp_chart) {
+			stock_cmp_chart.destroy();
+		}
+
+		stock_cmp_chart = new Chart(stock_cmp_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	async function draw_industry_cmp(data, industry) {
+		current_cmp_industry = industry;
+
+		let data2 = undefined;
+
+		await $.get('/api/get_industry_close_pct', {
+			industry: industry,
+			period: 60
+		}, function (res) {
+			data2 = JSON.parse(res);
+		});
+
+		chart_data = {
+			datasets: [{
+				label: data.industry,
+				data: data.accum_close_pct,
+				borderColor: 'rgb(234, 63, 51)',
+				...line_chart_settings
+			}, {
+				label: data2.industry,
+				data: data2.accum_close_pct,
+				borderColor: 'rgba(102, 126, 234)',
+				...line_chart_settings
+			}]
+		}
+
+		options = {
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: '% change'
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+						callback: (val) => (Math.round(val * 100) + '%')
+					},
+					...y_scale_settings
+				},
+			},
+			...misc_options
+		}
+
+		if (industry_cmp_chart) {
+			industry_cmp_chart.destroy();
+		}
+
+		industry_cmp_chart = new Chart(industry_cmp_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	async function draw_index_cmp(data, index) {
+		current_cmp_index = index;
+
+		let data2 = undefined;
+
+		await $.get('/api/get_stock_close_pct', {
+			ticker: index,
+			period: 60
+		}, function (res) {
+			data2 = JSON.parse(res);
+		});
+
+		chart_data = {
+			datasets: [{
+				label: data.industry,
+				data: data.accum_close_pct,
+				borderColor: 'rgb(234, 63, 51)',
+				...line_chart_settings
+			}, {
+				label: data2.ticker,
+				data: data2.accum_close_pct,
+				borderColor: 'rgba(102, 126, 234)',
+				...line_chart_settings
+			}]
+		};
+
+		options = {
+			scales: {
+				x: {
+					display: true,
+					...x_scale_settings
+				},
+				y: {
+					display: true,
+					title: {
+						display: false,
+						text: '% change'
+					},
+					ticks: {
+						autoSkip: true,
+						autoSkipPadding: 20,
+						callback: (val) => (Math.round(val * 100) + '%')
+					},
+					...y_scale_settings
+				}
+			},
+			...misc_options
+		};
+
+		if (index_cmp_chart) {
+			index_cmp_chart.destroy();
+		}
+
+		index_cmp_chart = new Chart(index_cmp_ctx, {
+			type: 'line',
+			data: chart_data,
+			options: options
+		});
+	}
+
+	function draw_charts(industry_data, industry_tickers_data) {
+		console.log(industry_data);
+
+		draw_stock_cmp(industry_data, current_cmp_ticker);
+		draw_industry_cmp(industry_data, current_cmp_industry);
+		draw_index_cmp(industry_data, current_cmp_index);
+		draw_industry_tickers_cmp(industry_tickers_data);
+	}
+
+	{% if chart_data %}
+	var industry_data = {{ chart_data.industry_close_pct | tojson }};
+	var industry_tickers_data = {{ chart_data.industry_tickers | tojson }};
+	draw_charts(industry_data, industry_tickers_data);
+	{% endif %}
 </script>
 {% endblock %}

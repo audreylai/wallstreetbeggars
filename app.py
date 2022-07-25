@@ -117,12 +117,14 @@ def rules_save():
 	save_rules_results(limit=500)
 	return '', 200
 
+
 @app.route("/watchlist", methods=["GET"])
 def watchlist():
 	dark_mode = get_user_theme("test")
 	watchlist_data = get_watchlist_data('test')
 	table = watchlist_data['table']
 	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"))
+
 
 @app.route("/watchlist", methods=["POST"])
 def watchlist_add_ticker():
@@ -175,22 +177,25 @@ def industries_page():
 		if industry_exists(request.values.get("industry_detail")):
 			industry = request.values.get("industry_detail")
 			industry_detail = {industry: get_industry_tickers_info(industry)}
-			chart_data = get_industry_tickers_accum_close_pct_chartjs(industry, period=60)
 		else:
 			industry_detail = {}
+		chart_data = None
 	else:
 		industry_detail = {"Banks": get_industry_tickers_info("Banks")}
-		chart_data = get_industry_tickers_accum_close_pct_chartjs("Banks", period=60)
+		chart_data = {
+			"industry_close_pct": get_industry_accum_avg_close_pct_chartjs("Banks", period=60),
+			"industry_tickers": get_industry_tickers_accum_close_pct_chartjs("Banks", period=60)
+		}
 
-	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, chart_data=chart_data, industries=industries, industry_detail=industry_detail)
+	return render_template("industries.html", dark_mode=dark_mode, table_data=table_data, chart_data=chart_data, industries=industries, industry_detail=industry_detail, indexes=get_ticker_list(ticker_type='index'),)
 
 
-@app.route("/industry/<industry>", methods=["GET", "POST"])
-def industry_page(industry):
-	dark_mode = get_user_theme("test")
-	if not industry_exists(industry):
-		return render_template("404.html", dark_mode=dark_mode), 404
-	return render_template("industry.html", industry=industry, dark_mode=dark_mode)
+# @app.route("/industry/<industry>", methods=["GET", "POST"])
+# def industry_page(industry):
+# 	dark_mode = get_user_theme("test")
+# 	if not industry_exists(industry):
+# 		return render_template("404.html", dark_mode=dark_mode), 404
+# 	return render_template("industry.html", industry=industry, dark_mode=dark_mode)
 
 
 # this should be an api
