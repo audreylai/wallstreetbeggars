@@ -562,6 +562,14 @@ video {
   pointer-events: none;
 }
 
+.visible {
+  visibility: visible;
+}
+
+.\!visible {
+  visibility: visible !important;
+}
+
 .static {
   position: static;
 }
@@ -767,22 +775,16 @@ video {
   height: 50%;
 }
 
-.h-1\/3 {
-  height: 33.333333%;
+.h-3\.5 {
+  height: 0.875rem;
 }
 
-.h-1\/5 {
-  height: 20%;
+.h-3 {
+  height: 0.75rem;
 }
 
-.h-1\/4 {
-  height: 25%;
-}
-
-.h-fit {
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
+.h-48 {
+  height: 12rem;
 }
 
 .h-4 {
@@ -843,8 +845,20 @@ video {
   width: 50%;
 }
 
+.w-3\.5 {
+  width: 0.875rem;
+}
+
+.w-3 {
+  width: 0.75rem;
+}
+
 .w-80 {
   width: 20rem;
+}
+
+.w-2 {
+  width: 0.5rem;
 }
 
 .max-w-sm {
@@ -914,6 +928,10 @@ video {
 
 .grid-rows-2 {
   grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.grid-rows-3 {
+  grid-template-rows: repeat(3, minmax(0, 1fr));
 }
 
 .flex-row {
@@ -1046,10 +1064,6 @@ video {
 
 .overflow-hidden {
   overflow: hidden;
-}
-
-.overflow-y-auto {
-  overflow-y: auto;
 }
 
 .overflow-y-scroll {
@@ -1758,6 +1772,11 @@ input[type='range']::-webkit-slider-thumb {
 
 .checked\:border-transparent:checked {
   border-color: transparent;
+}
+
+.checked\:bg-blue-500:checked {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
 }
 
 .checked\:bg-indigo-500:checked {

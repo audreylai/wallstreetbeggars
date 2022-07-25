@@ -15,7 +15,7 @@ header %}
 				<div>
 					<div class="flex space-x-2">
 						<h2 class="text-2xl font-black uppercase dark:text-zinc-100">
-							{{ stock_info['ticker'] }}
+							{{ stock_info['ticker'].replace("-", ".") }}
 						</h2>
 						<p class="self-end pb-1 dark:text-zinc-400 text-zinc-500 text-md">
 							{{ stock_info['name'] }}

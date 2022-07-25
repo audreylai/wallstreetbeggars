@@ -283,7 +283,7 @@ async def main():
 	start = timer()
 
 	use_cache = True
-	limit = 100
+	limit = "ALL"
 	STOCK_INFO_PATH = f"./tmp/stock_info_{limit}.pickle"
 
 	if use_cache and os.path.exists(STOCK_INFO_PATH):
