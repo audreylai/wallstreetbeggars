@@ -927,6 +927,10 @@ video {
   flex-grow: 0;
 }
 
+.table-fixed {
+  table-layout: fixed;
+}
+
 .border-separate {
   border-collapse: separate;
 }
@@ -2330,8 +2334,4 @@ input[type='range']::-webkit-slider-thumb {
   .xl\:rounded-lg {
     border-radius: 0.5rem;
   }
-}
-
-.table-fixed {
-	table-layout: fixed
 }

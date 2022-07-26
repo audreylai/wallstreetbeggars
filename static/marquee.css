@@ -17,15 +17,15 @@
 }
 
 .marquee .marquee-two{
-  animation: marquee 30s linear 2.5s infinite;
+  animation: marquee 30s linear 7.55s infinite;
 }
 
 .marquee .marquee-three{
-  animation: marquee 30s linear 5s infinite
+  animation: marquee 30s linear 15.1s infinite
 }
 
 .marquee .marquee-four{
-  animation: marquee 30s linear 7.5s infinite
+  animation: marquee 30s linear 22.6s infinite
 }
 
 .marquee-list:hover {
