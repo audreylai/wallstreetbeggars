@@ -19,128 +19,48 @@
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Buy Rules</h2>
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<table class="w-full">
-					<thead>
-						<tr>
-							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-								<p class="mx-7">CDL</p>
-							</th>
-							<th
-								class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-							</th>
-						</tr>
-					</thead>
-					<tbody col="1">
-						<tr class="text-center text-gray-700 dark:text-zinc-200">
-							<div class="relative w-full group autocomplete-wrapper">
-								<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-									<p>help</p>
-								</td>
-								<div class="relative w-full group autocomplete-wrapper">
-								<td class="p-4 border-b-2 dark:border-zinc-500">
-									<div class="flex items-center justify-end">
-										<button type="button"
-											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-											onclick="edit_row($(this), true);">
-											<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
-										</button>
-		
-										<button type="button"
-											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-											onclick="edit_row($(this), false);">
-											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-										</button>
-		
-										<button type="button"
-											class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-											onclick="delete_row($(this));">
-											<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-										</button>
-									</div>
-								</td>
-						</tr>
-					</tbody>
+				<table class="w-full table-fixed" id="buy-table">
+					{% for i in range(cdl_patterns|length // 3 + 1) %}
+					<tr class="text-sm text-gray-700 dark:text-zinc-200">
+						{% if i*3 < cdl_patterns|length %}<td>
+							<input {% if cdl_patterns[i*3] in cdl_buy %}checked{% endif %} type="checkbox" id="{{ 'buy_' + cdl_patterns[i*3] }}" cdl="{{ cdl_patterns[i*3] }}">
+							<label for="{{ 'buy_' + cdl_patterns[i*3] }}">{{cdl_patterns[i*3]}}</label>
+						</td>{% endif %}
+						{% if i*3+1 < cdl_patterns|length %}<td>
+							<input {% if cdl_patterns[i*3+1] in cdl_buy %}checked{% endif %} type="checkbox" id="{{ 'buy_' + cdl_patterns[i*3+1] }}" cdl="{{ cdl_patterns[i*3+1] }}">
+							<label for="{{ 'buy_' + cdl_patterns[i*3+1] }}">{{cdl_patterns[i*3+1]}}</label>
+						</td>{% endif %}
+						{% if i*3+2 < cdl_patterns|length %}<td>
+							<input {% if cdl_patterns[i*3+2] in cdl_buy %}checked{% endif %} type="checkbox" id="{{ 'buy_' + cdl_patterns[i*3+2] }}" cdl="{{ cdl_patterns[i*3+2] }}">
+							<label for="{{ 'buy_' + cdl_patterns[i*3+2] }}">{{cdl_patterns[i*3+2]}}</label>
+						</td>{% endif %}
+					</tr>
+					{% endfor %}
 				</table>
 			</div>
 		</div>
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Sell Rules</h2>
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<table class="w-full">
-					<thead>
-						<tr>
-							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-								<p class="mx-7">CDL</p>
-							</th>
-							<th
-								class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
-							</th>
-						</tr>
-					</thead>
-					<tbody col="2">
-						<tr class="text-center text-gray-700 dark:text-zinc-200">
-							<div class="relative w-full group autocomplete-wrapper">
-								<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-									<p>help</p>
-								</td>
-								<div class="relative w-full group autocomplete-wrapper">
-								<td class="p-4 border-b-2 dark:border-zinc-500">
-									<div class="flex items-center justify-end">
-										<button type="button"
-											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-											onclick="edit_row($(this), true);">
-											<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
-										</button>
-		
-										<button type="button"
-											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-											onclick="edit_row($(this), false);">
-											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-										</button>
-		
-										<button type="button"
-											class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-											onclick="delete_row($(this));">
-											<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-										</button>
-									</div>
-								</td>
-						</tr>
-					</tbody>
+				<table class="w-full table-fixed" id="sell-table">
+					{% for i in range(cdl_patterns|length // 3 + 1) %}
+					<tr class="text-sm text-gray-700 dark:text-zinc-200">
+						{% if i*3 < cdl_patterns|length %}<td>
+							<input {% if cdl_patterns[i*3] in cdl_sell %}checked{% endif %} type="checkbox" id="{{ 'sell_' + cdl_patterns[i*3] }}" cdl="{{ cdl_patterns[i*3] }}">
+							<label for="{{ 'sell_' + cdl_patterns[i*3] }}">{{cdl_patterns[i*3]}}</label>
+						</td>{% endif %}
+						{% if i*3+1 < cdl_patterns|length %}<td>
+							<input {% if cdl_patterns[i*3+1] in cdl_sell %}checked{% endif %} type="checkbox" id="{{ 'sell_' + cdl_patterns[i*3+1] }}" cdl="{{ cdl_patterns[i*3+1] }}">
+							<label for="{{ 'sell_' + cdl_patterns[i*3+1] }}">{{cdl_patterns[i*3+1]}}</label>
+						</td>{% endif %}
+						{% if i*3+2 < cdl_patterns|length %}<td>
+							<input {% if cdl_patterns[i*3+2] in cdl_sell %}checked{% endif %} type="checkbox" id="{{ 'sell_' + cdl_patterns[i*3+2] }}" cdl="{{ cdl_patterns[i*3+2] }}">
+							<label for="{{ 'sell_' + cdl_patterns[i*3+2] }}">{{cdl_patterns[i*3+2]}}</label>
+						</td>{% endif %}
+					</tr>
+					{% endfor %}
 				</table>
 			</div>
-		</div>
-	</div>
-	<div class="grid grid-cols-2">
-		<div class="flex p-4 space-x-2">
-			<div class="relative w-full group autocomplete-wrapper">
-				<input
-					class="block w-full px-3 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-				</ul>
-			</div>
-			<button type="button"
-				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-				onclick="add_row($(this), 1);">
-				Add
-			</button>
-		</div>
-		<div class="flex p-4 space-x-2">
-			<div class="relative w-full group autocomplete-wrapper">
-				<input
-					class="block w-full px-3 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-				</ul>
-			</div>
-			<button type="button"
-				class="px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-				onclick="add_row($(this), 2);">
-				Add
-			</button>
 		</div>
 	</div>
 	<div class="grid grid-cols-1">
@@ -153,163 +73,24 @@
 	</div>
 </div>
 <script>
-	const options = ["MA10", "MA20", "MA50", "MA100", "MA250", "RSI"];
-
-	$(".allcb").change(function () {
-		$(this).parents('table').find("input[type='checkbox']").prop(
-			"checked",
-			$(this).prop("checked")
-		);
-	});
-
-	function is_valid_input(input) {
-		return (!isNaN(input) || options.includes(input)) && input != '';
-	}
-
-	function delete_row(btn) {
-		btn.parents('tr').fadeOut(100, function () {
-			$(this).remove();
-			update_table();
-		})
-	}
-
-	function edit_row(btn, enable_editing) {
-		row = btn.parents('tr');
-
-		var1_div = row.find('.var1');
-
-		row.find('.confirm-btn').toggleClass('hidden');
-		row.find('.edit-btn').toggleClass('hidden');
-		if (enable_editing) {
-			dropdown_var = $(`
-				<div class="relative w-full group autocomplete-wrapper">
-					<input class="block w-full px-3 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300 invalid:border-pink-500 focus:ring-1 focus:invalid:border-pink-500 focus:invalid:ring-pink-500" />
-					<ul tabindex="0"
-						class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-					</ul>
-				</div>`
-			);
-
-			let var1_clone = dropdown_var.clone()
-			$(var1_clone).find("input").val($(var1_div).text().trim())
-
-			var1_div.empty().append(var1_clone);
-
-		} else {
-			var1_txt = var1_div.find('input').val();
-
-			var1_div.empty().text(var1_txt);
-			update_table()
-		}
-	}
-
-	function add_row(btn, col) {
-		selects = btn.parent().find('select');
-
-		row = $(`
-			<tr class="text-center text-gray-700 dark:text-zinc-200">
-				<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-					<p></p>
-				</td>
-				<td class="p-4 border-b-2 dark:border-zinc-500">
-					<div class="flex items-center justify-end">
-						<button type="button"
-							class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-							onclick="edit_row($(this), true);">
-							<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
-						</button>
-
-						<button type="button"
-							class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-							onclick="edit_row($(this), false);">
-							<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-						</button>
-
-						<button type="button"
-							class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-							onclick="delete_row($(this));">
-							<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-						</button>
-					</div>
-				</td>
-			</tr>
-		`);
-
-		row.find('.var1 p').text($(btn).parent().find(".term-input").eq(0).val())
-
-		$(btn).parent().find(".term-input").eq(0).val("")
-
-		$('tbody[col=' + col + ']').append(row);
-		update_table();
-	}
-
 	function update_table() {
 		let buyrow = []
 		let sellrow = []
-		$('tbody[col=1]').each(function () {
-			$(this).find('tr').each(function () {
-				let val1 = $(this).find('td.var1').text().trim();
-				buyrow.push(val1);
+		$("#buy-table").each(function () {
+			$(this).find("input").each(function () {
+				if (this.checked) {buyrow.push($(this).attr("cdl"))};
 			});
 		});
-		$('tbody[col=2]').each(function () {
-			$(this).find('tr').each(function () {
-				let val1 = $(this).find('td.var1').text().trim();
-				sellrow.push(val1);
+		$("#sell-table").each(function () {
+			$(this).find("input").each(function () {
+				if (this.checked) {sellrow.push($(this).attr("cdl"))};
 			});
 		});
-		console.log({ buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) })
 		$.post("/cdl/edit", { buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) })
 	}
 
-	function suggestion_onlick(evt) {
-		el = $(evt);
-		el.parents().closest(".autocomplete-wrapper").children().closest("input").val(el.children()[0].innerHTML);
-		[var1, var2] = el.parents('tr').find('input');
-		
-		var1.dispatchEvent(new Event('change', {bubbles: true}));
-	}
-
-	$(document).on('input focus', ".term-input", function(e) {
-		let finalOptions = []
-		for (i in options) {
-			let option = options[i];
-			if (option.includes(e.target.value.toUpperCase())) {
-				let li = $(`
-					<li tabindex="0" id="listbox-item-0" role="option" class="relative py-2 pl-3 text-gray-900 cursor-default select-none hover:cursor-pointer hover:bg-indigo-500 hover:text-white pr-9"
-					onclick='suggestion_onlick(this)'
-					>
-						<span class="block ml-3 font-normal truncate">${option}</span>
-					</li>
-				`)
-				finalOptions.push(li);
-			}
-		}
-		$(this).parent().find(".autocomplete").empty()
-		for (j in finalOptions) {
-			$(this).parent().find(".autocomplete").append(finalOptions[j])
-		}
-		let element = $(this).parent().find(".autocomplete")[0];
-		console.log(window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight)
-		if (window.innerHeight - element.getBoundingClientRect().bottom > element.scrollHeight) {
-			$(this).parent().find(".autocomplete").addClass("bottom-12")
-		}
-	});
-
-	/* $('table').on('input change', 'tr', function(e) {
-		[var1, var2] = $(e.currentTarget).find('input');
-		if (is_valid_input($(var1).val()) && is_valid_input($(var2).val())) {
-			console.log($(e.currentTarget).find('.confirm-btn').prop('disabled', false));
-		} else {
-			console.log($(e.currentTarget).find('.confirm-btn').prop('disabled', true));
-		}
-
-		el = $(e.target);
-		if (is_valid_input(el.val())) {
-			el[0].setCustomValidity('');
-		} else {
-			el[0].setCustomValidity('Invalid input.');
-		}
-	}); */
+	$("table").on("change", "input", function() {
+		update_table();
+	})
 </script>
 {% endblock %}

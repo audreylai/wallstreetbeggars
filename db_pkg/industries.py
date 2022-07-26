@@ -11,12 +11,41 @@ client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
 col_stock_data = db["stock_data"]
 
-last_trading_date = datetime(2022, 7, 22)
-
 
 def industry_exists(industry) -> bool:
 	res = col_stock_data.count_documents({"industry": industry})
 	return res != 0
+
+
+def get_last_trading_date(use_cache=True):
+	if use_cache:
+		cache_res = cache.get_cached_result("get_last_trading_date", {})
+		if cache_res is not None:
+			return cache_res
+
+	cursor = col_stock_data.aggregate([
+		{"$match": {"ticker": "^HSI"}},
+		{"$project": {
+			"_id": 0,
+			"cdl_data": {
+				"$filter": {
+					"input": "$cdl_data",
+					"as": "item",
+					"cond": {
+						"$eq": ["$$item.date", {"$max": "$cdl_data.date"}]
+					}
+				}
+			},
+			"ticker": 1
+		}},
+		{"$project": {
+			"date": "$cdl_data.date"
+		}}
+	])
+
+	out = list(cursor)[0]["date"]
+	cache.store_cached_result("get_last_trading_date", {}, out)
+	return out
 
 
 def get_industry_tickers_close_pct(industry, period=60) -> List[Dict]:
@@ -28,10 +57,10 @@ def get_industry_tickers_close_pct(industry, period=60) -> List[Dict]:
 			"cdl_data": {
 				"$filter": {
 					"input": "$cdl_data",
-					"as": "cdl_data",
+					"as": "item",
 					"cond": {"$and": [
-						{"$gte": ["$$cdl_data.date", start_datetime]},
-						{"$lte": ["$$cdl_data.date", end_datetime]}
+						{"$gte": ["$$item.date", start_datetime]},
+						{"$lte": ["$$item.date", end_datetime]}
 					]}
 				}
 			},
@@ -136,7 +165,7 @@ def get_industry_avg_last_close_pct(industry) -> float:
 		{"$match": {"industry": industry}},
 		{"$unwind": "$cdl_data"},
 		{"$match": {
-			"cdl_data.date": {"$gte": last_trading_date}
+			"cdl_data.date": {"$gte": get_last_trading_date()}
 		}},
 		{"$group": {
 			"_id": "$industry",
@@ -163,7 +192,7 @@ def get_industry_tickers_last_close_pct(industry, use_cache=True) -> List[Dict]:
 					"input": "$cdl_data",
 					"as": "cdl_data",
 					"cond": {
-						"$gte": ["$$cdl_data.date", last_trading_date]
+						"$gte": ["$$cdl_data.date", get_last_trading_date()]
 					}
 				}
 			},
@@ -274,7 +303,7 @@ def get_all_industries_avg_last_close_pct(use_cache=True) -> List[Dict]:
 					"input": "$cdl_data",
 					"as": "cdl_data",
 					"cond": {
-						"$gte": ["$$cdl_data.date", last_trading_date]
+						"$gte": ["$$cdl_data.date", get_last_trading_date()]
 					}
 				}
 			},

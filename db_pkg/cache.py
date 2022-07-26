@@ -18,16 +18,20 @@ def store_cached_result(fn_name, params, data):
 	col_cache.delete_many({"fn_name": fn_name} | param_query)
 	col_cache.insert_one({
 		"fn_name": fn_name,
+		"date": datetime.timestamp(datetime.now()),
 		"data": json.dumps(data, ensure_ascii=False, default=json_util.default)
 	} | param_query)
 
 
-def get_cached_result(fn_name, params):
+def get_cached_result(fn_name, params, period=1):
 	param_query = {"param_"+k: json.dumps(v, ensure_ascii=False, default=json_util.default) for k, v in params.items()}
-
-	res = col_cache.find_one({"fn_name": fn_name} | param_query, {"_id": 0, "data": 1})
-	if res is None: return None
-	return json.loads(res["data"], object_hook=json_util.object_hook)
+	min_date = datetime.timestamp(datetime.now() - timedelta(days=period))
+	res = list(col_cache\
+		.find({"fn_name": fn_name, "date": {"$gte": min_date}} | param_query, {"_id": 0, "data": 1})\
+		.sort([("date", pymongo.DESCENDING)])\
+		.limit(1))
+	if len(res) == 0: return None
+	return json.loads(res[0]["data"], object_hook=json_util.object_hook)
 
 
 def clear_all_cache():

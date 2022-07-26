@@ -1,6 +1,7 @@
 import asyncio
 import multiprocessing as mp
 import os
+import pickle as pkl
 import signal
 import sys
 import traceback
@@ -73,7 +74,7 @@ class LOG_LEVEL():
 	FATAL = 4
 
 
-def log_msg(msg, level=LOG_LEVEL.DEBUG, lock=None, flush=False):
+def log_msg(msg, level=LOG_LEVEL.DEBUG, lock=None, flush=False) -> None:
 	time = datetime.now().strftime("%H:%M:%S.%f")[:-3]
 
 	match level:
@@ -100,7 +101,7 @@ def log_msg(msg, level=LOG_LEVEL.DEBUG, lock=None, flush=False):
 		print(f"{time} - {header}{colorama.Style.RESET_ALL} {f_msg}{colorama.Style.RESET_ALL}", flush=flush)
 
 
-def convert_name(name):
+def convert_name(name) -> str:
 	out = ''
 	prev_isupper = False
 	for char in name:
@@ -118,7 +119,7 @@ def init_child(lock_):
 	signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 
-def suffix_to_int(num_str):
+def suffix_to_int(num_str) -> float:
 	num_str = num_str.replace(',', '')
 	if len(num_str) == 0: return None
 	if num_str[-1] in "KMB":
@@ -129,7 +130,7 @@ def suffix_to_int(num_str):
 		return float(num_str)
 
 
-async def get_hkex_df(limit="ALL"):
+async def get_hkex_df(limit="ALL") -> pd.DataFrame:
 	df = pd.read_excel("https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx", usecols=[0, 1, 2, 4], thousands=',')
 	df = df.iloc[2:] # remove first 2 unrelated rows
 	df.columns.values[:4] = ["ticker", "name", "category", "board_lot"]
@@ -147,7 +148,7 @@ async def get_hkex_df(limit="ALL"):
 	return df
 
 
-async def etnet_scraping():
+async def etnet_scraping() -> pd.DataFrame:
 	page = requests.get("https://www.etnet.com.hk/www/eng/stocks/industry_adu.php")
 	soup = BeautifulSoup(page.content, "html.parser")
 	rows = list(soup.find_all("tr", attrs={"valign": "top"}))
@@ -182,7 +183,7 @@ async def etnet_scraping():
 	return df
 
 
-def mp_get_stock_info(ticker):
+def mp_get_stock_info(ticker) -> Dict | None:
 	if not str(type(sys.stdout)) == "<class 'colorama.ansitowin32.StreamWrapper'>":
 		colorama.init()
 
@@ -207,6 +208,8 @@ def mp_get_stock_info(ticker):
 		])
 		end = timer()
 		log_msg(f"{ticker}{' '*(7-len(ticker))}: success (time elapsed: {'%.3f' % (end - start)}s)", level=LOG_LEVEL.DEBUG, lock=lock)
+
+		return out
 
 	except Exception as e:
 		log_msg(f"{ticker}{' '*(7-len(ticker))}: {str(e)}", level=LOG_LEVEL.ERROR, lock=lock)
@@ -304,7 +307,7 @@ async def main():
 	use_cache = True
 	limit = 100
 	if not isinstance(limit, int) and limit != "ALL":
-		raise Exception(f"limit must be an integer or 'ALL' (currently {str(limit)})")
+		raise Exception(f"limit must be an integer or \"ALL\" (currently \"{str(limit)})\"")
 
 	# --------------------------------------------------
 	# Step 1: 
@@ -316,7 +319,7 @@ async def main():
 	
 	STOCK_INFO_PATH = f"./tmp/stock_info_{limit}.pickle"
 	if use_cache and os.path.exists(STOCK_INFO_PATH):
-		log_msg(f"Using cached stock info ({STOCK_INFO_PATH})", level=LOG_LEVEL.DEBUG)
+		log_msg(f"Using cached stock info ({STOCK_INFO_PATH})", level=LOG_LEVEL.WARN)
 		stock_info_df = pd.read_pickle(STOCK_INFO_PATH)
 	else:
 		get_hkex_df_task = asyncio.create_task(get_hkex_df(limit))
@@ -343,7 +346,7 @@ async def main():
 	STOCK_DATA_INDEX_PATH = f"./tmp/stock_data_index.pickle"
 
 	if use_cache and os.path.exists(STOCK_DATA_PATH):
-		log_msg(f"Using cached stock data ({STOCK_DATA_PATH})", level=LOG_LEVEL.DEBUG)
+		log_msg(f"Using cached stock data ({STOCK_DATA_PATH})", level=LOG_LEVEL.WARN)
 		all_stock_data_df = pd.read_pickle(STOCK_DATA_PATH)
 	else:
 		tickers_str = ' '.join(list(stock_info_df.index)).replace('-', '.')
@@ -354,7 +357,7 @@ async def main():
 
 	# index stock data
 	if use_cache and os.path.exists(STOCK_DATA_INDEX_PATH):
-		log_msg(f"Using cached stock data ({STOCK_DATA_INDEX_PATH})", level=LOG_LEVEL.DEBUG)
+		log_msg(f"Using cached stock data ({STOCK_DATA_INDEX_PATH})", level=LOG_LEVEL.WARN)
 		index_stock_data_df = pd.read_pickle(STOCK_DATA_INDEX_PATH)
 	else:
 		tickers_str = "^HSI ^HSCC ^HSCE"
@@ -409,9 +412,31 @@ async def main():
 	start = timer()
 	tickers = list(map(lambda x: x.replace('.', '-'), set(all_stock_data_df.columns.get_level_values(0))))
 
-	THREAD_COUNT = 50
-	with mp.Pool(THREAD_COUNT, initializer=init_child, initargs=(lock, )) as pool:
-		pool.map(mp_get_stock_info, tickers)
+	YF_STOCK_INFO_PATH = f"./tmp/yf_stock_info_{limit}.pickle"
+	if use_cache and os.path.exists(YF_STOCK_INFO_PATH):
+		log_msg(f"Using cached yfinance stock info ({YF_STOCK_INFO_PATH})", level=LOG_LEVEL.WARN)
+
+		with open(YF_STOCK_INFO_PATH, "rb") as fo:
+			data = pkl.load(fo)
+			for ticker in tickers:
+				col_stock_data.update_one({"ticker": ticker}, [
+					{"$set": data[ticker] | {"_state": 1}},
+				])
+
+	else:
+		THREAD_COUNT = 50
+		with mp.Pool(THREAD_COUNT, initializer=init_child, initargs=(lock, )) as pool:
+			res = pool.map(mp_get_stock_info, tickers)
+
+		if use_cache:
+			out = {}
+			
+			for ticker, data in zip(tickers, res):
+				out[ticker] = data
+
+			with open(YF_STOCK_INFO_PATH, "wb") as fo:
+				pkl.dump(out, fo)
+
 	
 	cursor = col_stock_data.delete_many({"_state": {"$ne": 1}})
 	log_msg(f"Dropped {cursor.deleted_count} documents ({col_stock_data.count_documents({})} remaining)", level=LOG_LEVEL.DEBUG)
@@ -455,7 +480,7 @@ async def main():
 
 	# --------------------------------------------------
 	# Step 6: 
-	# - 
+	# - save rules results and historical si data to db
 	# --------------------------------------------------
 	log_msg("Step 6/6: save rules results + historical si", level=LOG_LEVEL.INFO)
 	start = timer()

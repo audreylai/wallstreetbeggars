@@ -4,9 +4,7 @@ from typing import Dict, List, Tuple
 import pymongo
 import talib as ta
 
-from . import user
-
-from . import industries, utils, cache
+from . import user, utils, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
@@ -14,7 +12,7 @@ col_users = db["users"]
 col_rules_results = db["rules_results"]
 col_stock_data = db["stock_data"]
 
-candle_names = ta.get_function_groups()["Pattern Recognition"]
+CDL_PATTERNS = ta.get_function_groups()["Pattern Recognition"]
 
 
 def ticker_exists(ticker) -> bool:
@@ -22,8 +20,14 @@ def ticker_exists(ticker) -> bool:
 	return res != 0
 
 
-def get_stock_data(ticker, period) -> List[Dict] | None:
+def get_stock_data(ticker, period, use_cache=True) -> List[Dict] | None:
 	if not ticker_exists(ticker): return
+
+	if use_cache:
+		cache_res = cache.get_cached_result("get_stock_data", {"ticker": ticker, "period": period})
+		if cache_res is not None:
+			return cache_res
+
 	start_datetime, end_datetime = utils.get_datetime_from_period(period)
 	
 	cursor = col_stock_data.aggregate([
@@ -42,11 +46,15 @@ def get_stock_data(ticker, period) -> List[Dict] | None:
 			}
 		}}
 	])
-	data = cursor.next()["cdl_data"]
-	return data
+	cursor = list(cursor)
+	if len(cursor) == 0: return
+
+	out = cursor[0]["cdl_data"]
+	cache.store_cached_result("get_stock_data", {"ticker": ticker, "period": period}, out)
+	return out
 
 
-def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | None:
+def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | None:		
 	if not ticker_exists(ticker): return
 	data = get_stock_data(ticker, period)
 	if data is None: return
@@ -175,7 +183,12 @@ def get_gainers_losers(limit=5) -> Tuple[List[str], List[str]]:
 	return gainers, losers
 
 
-def get_gainers_losers_table(limit=5) -> Tuple[List[Dict], List[Dict]]:
+def get_gainers_losers_table(limit=5, use_cache=True) -> Tuple[List[Dict], List[Dict]]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_gainers_losers_table", {"limit": limit})
+		if cache_res is not None:
+			return cache_res
+	
 	attrs = {"last_close": 1, "last_volume": 1, "mkt_cap": 1}
 
 	cursor = col_stock_data.aggregate([
@@ -193,16 +206,25 @@ def get_gainers_losers_table(limit=5) -> Tuple[List[Dict], List[Dict]]:
 		{"$limit": limit}
 	])
 	losers = list(cursor)
+
+	cache.store_cached_result("get_gainers_losers_table", {"limit": limit}, (gainers, losers))
 	return gainers, losers
 
 
-def get_hsi_tickers_table() -> List[Dict]:
+def get_hsi_tickers_table(use_cache=True) -> List[Dict]:
+	if use_cache:
+		cache_res = cache.get_cached_result("get_hsi_tickers_table", {})
+		if cache_res is not None:
+			return cache_res
+
 	attrs = {"last_close": 1, "last_close_pct": 1}
 	cursor = col_stock_data\
 		.find({"is_hsi_stock": True}, {"_id": 0, "ticker": 1, **attrs})\
 		.sort("ticker", pymongo.ASCENDING)
-
-	return list(cursor)
+	out = list(cursor)
+	
+	cache.store_cached_result("get_hsi_tickers_table", {}, out)
+	return out
 
 
 def get_last_stock_data(ticker) -> Dict | None:
@@ -259,14 +281,14 @@ def get_ticker_last_cdl_pattern(ticker):
 	out = []
 	for i in range(61):
 		if cdl_pattern & 2**i:
-			out.append(candle_names[i])
+			out.append(CDL_PATTERNS[i])
 	return out
 
 
 def get_matching_cdl_pattern_tickers(patterns) -> List[str]:
 	bin_ind = []
 	for pattern in patterns:
-		bin_ind.append(candle_names.index(pattern))
+		bin_ind.append(CDL_PATTERNS.index(pattern))
 
 	cursor = col_stock_data.find({"last_cdl_data.cdl_pattern": {"$bitsAllSet": bin_ind}}, {"_id": 0, "ticker": 1})
 	out = [i["ticker"] for i in list(cursor)]

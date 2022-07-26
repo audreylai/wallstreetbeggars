@@ -104,12 +104,11 @@ def rules_edit():
 def cdl_edit():
 	dark_mode = get_user_theme("test")
 	rules = get_rules("test")
-	print(rules["cdl_buy"])
 	if request.method == "POST":
-		new_buy = json.loads(request.values.get('buy'))
-		new_sell = json.loads(request.values.get('sell'))
+		new_buy = json.loads(request.values.get("buy"))
+		new_sell = json.loads(request.values.get("sell"))
 		update_rules("test", new_buy, new_sell, cdl=True)
-	return render_template("cdl-rules-edit.html", dark_mode=dark_mode, cdl_buy=rules["cdl_buy"], cdl_sell=rules["cdl_sell"], candle_names=candle_names)
+	return render_template("cdl-rules-edit.html", dark_mode=dark_mode, cdl_buy=rules["cdl_buy"], cdl_sell=rules["cdl_sell"], cdl_patterns=CDL_PATTERNS)
 
 
 @app.route("/rules/save", methods=["GET", "POST"])
