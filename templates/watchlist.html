@@ -71,7 +71,7 @@ content %}
 					{% for k,v in row.items() %}
 					{% if k == "last_si" %}
 						{% if v > 0 %}
-						<td class="px-2 py-2 text-emerald-500 dark:text-emerald-400 dark:border-zinc-700">
+						<td class="px-2 py-2 text-emerald-500 dark:border-zinc-700">
 							{{"%.2f" % v}}
 						</td>
 						{% elif v == 0 %}
@@ -79,13 +79,13 @@ content %}
 							0.00
 						</td>
 						{% else %}
-						<td class="px-2 py-2 text-rose-500 dark:text-rose-400 dark:border-zinc-700">
+						<td class="px-2 py-2 text-rose-500 dark:border-zinc-700">
 							{{"%.2f" % v}}
 						</td>
 						{% endif %}
 					{% elif k == "change" %}
 						{% if v > 0 %}
-						<td class="px-2 py-2 text-emerald-500 dark:text-emerald-400 dark:border-zinc-700">
+						<td class="px-2 py-2 text-emerald-500 dark:border-zinc-700">
 							{{("%.2f" % (v*100))+"%"}}
 						</td>
 						{% elif v == 0 %}
@@ -93,7 +93,7 @@ content %}
 							0.00%
 						</td>
 						{% else %}
-						<td class="px-2 py-2 text-rose-500 dark:text-rose-400 dark:border-zinc-700">
+						<td class="px-2 py-2 text-rose-500 dark:border-zinc-700">
 							{{("%.2f" % (v*100))+"%"}}
 						</td>
 						{% endif %}

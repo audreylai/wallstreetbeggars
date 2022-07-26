@@ -200,7 +200,7 @@
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 								<form action="{{ url_for("stock_info") }}" method="POST">
 									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"] }}</a>
+									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"].replace("-", ".") }}</a>
 								</form>
 							</td>
 							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
@@ -265,7 +265,7 @@
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"] }}</a>
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"].replace("-", ".") }}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
@@ -380,7 +380,7 @@
 							</div>
 							<div class="absolute z-10 inline-flex list-none -translate-x-1/2 glide__bullets bottom-8 left-1/2" data-glide-el="controls[nav]">
 								{% for i in range(watchlist_rules_data.keys()|length) %}
-								<button class="w-2 h-2 mx-1 transition-all rounded-full glide__bullet focus:border-2 hover:border-2 hover:active:bg-zinc-700/50 bg-zinc-700 active:bg-zinc-100 focus:bg-zinc-700/50" data-glide-dir="={{i}}"></button>
+								<button class="w-2 h-2 mx-1 transition-all bg-gray-300 border-gray-400 rounded-full glide__bullet dark:border-zinc-200 focus:border-2 hover:border-2 hover:active:bg-gray-300/50 dark:hover:active:bg-zinc-700/50 dark:bg-zinc-700 dark:active:bg-zinc-100 active:bg-gray-100 dark:focus:bg-zinc-700/50 focus:bg-gray-300/50" data-glide-dir="={{i}}"></button>
 								{% endfor %}
 							</div>
 						</div>

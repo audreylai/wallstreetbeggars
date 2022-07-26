@@ -58,12 +58,9 @@ header %}
 			{% endif %}
 		</div>
 	</div>
-	<div class="grid grid-cols-2 h-1/2 gap-x-4">
+	<div class="grid items-center grid-cols-3 h-1/2">
 		<div><canvas id="buy-index-chart"></canvas></div>
-		<div><canvas id="sell-index-chart"></canvas></div>
-	</div>
-	<div class="grid grid-cols-2 gap-x-4">
-		<div class="overflow-y-scroll rounded-md h-fit">
+		<div class="h-full overflow-y-scroll rounded-md">
 			<table class="w-full">
 				<thead>
 					<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
@@ -99,7 +96,10 @@ header %}
 				</tbody>
 			</table>
 		</div>
-		<div class="overflow-y-scroll rounded-md h-fit">
+	</div>
+	<div class="grid items-center grid-cols-3 h-1/2">
+		<div><canvas id="sell-index-chart"></canvas></div>
+		<div class="h-full overflow-y-scroll rounded-md">
 			<table class="w-full">
 				<thead>
 					<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
@@ -137,7 +137,7 @@ header %}
 		</div>
 	</div>
 	<div class="grid h-full grid-cols-1 gap-x-4">
-		<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+		<div class="p-4 bg-white rounded-md shadow h-96 dark:bg-zinc-800">
 			<canvas id="historical-si-chart"></canvas>
 		</div>
 	</div>
