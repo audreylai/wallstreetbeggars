@@ -4,9 +4,7 @@ from typing import Dict, List, Tuple
 import pymongo
 import talib as ta
 
-from . import user
-
-from . import industries, utils, cache
+from . import user, utils, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
@@ -14,7 +12,7 @@ col_users = db["users"]
 col_rules_results = db["rules_results"]
 col_stock_data = db["stock_data"]
 
-candle_names = ta.get_function_groups()["Pattern Recognition"]
+CDL_PATTERNS = ta.get_function_groups()["Pattern Recognition"]
 
 
 def ticker_exists(ticker) -> bool:
@@ -283,14 +281,14 @@ def get_ticker_last_cdl_pattern(ticker):
 	out = []
 	for i in range(61):
 		if cdl_pattern & 2**i:
-			out.append(candle_names[i])
+			out.append(CDL_PATTERNS[i])
 	return out
 
 
 def get_matching_cdl_pattern_tickers(patterns) -> List[str]:
 	bin_ind = []
 	for pattern in patterns:
-		bin_ind.append(candle_names.index(pattern))
+		bin_ind.append(CDL_PATTERNS.index(pattern))
 
 	cursor = col_stock_data.find({"last_cdl_data.cdl_pattern": {"$bitsAllSet": bin_ind}}, {"_id": 0, "ticker": 1})
 	out = [i["ticker"] for i in list(cursor)]

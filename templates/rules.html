@@ -168,9 +168,13 @@ header %}
 			
 					if (!chartArea) {return}
 					gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-					gradient.addColorStop(0.25, 'rgba(244, 63, 94)');
-					gradient.addColorStop(0.5, 'rgb(185,150,49)');
-					gradient.addColorStop(0.75, 'rgba(16, 185, 129)');
+					// gradient.addColorStop(0.25, 'rgba(244, 63, 94)');
+					// gradient.addColorStop(0.5, 'rgb(185,150,49)');
+					// gradient.addColorStop(0.75, 'rgba(16, 185, 129)');
+					gradient.addColorStop(0.0, 'rgba(244, 63, 94)');
+					gradient.addColorStop(0.5, 'rgba(244, 63, 94)');
+					gradient.addColorStop(0.5, 'rgba(16, 185, 129)');
+					gradient.addColorStop(1, 'rgba(16, 185, 129)');
 
 					return gradient;
 				},

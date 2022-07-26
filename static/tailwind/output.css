@@ -2235,3 +2235,7 @@ input[type='range']::-webkit-slider-thumb {
     border-radius: 0.5rem;
   }
 }
+
+.table-fixed {
+	table-layout: fixed
+}

@@ -667,7 +667,7 @@
 					},
 					ticks: {
 						autoSkip: true,
-						callback: (val) => (Math.round(val*100) + '%')
+						callback: val => (val*100).toPrecision(1) + '%'
 					},
 					/* min: -2,
 					max: 2 */
