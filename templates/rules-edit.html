@@ -11,64 +11,64 @@
 %}
 <div class="flex flex-col w-screen h-screen px-6 py-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
 	<div class="inline-flex mb-4 border-b-2 border-gray-300 dark:border-zinc-800 w-fit">
-		<a class="px-3 py-1 text-sm text-gray-600 bg-gray-300 rounded-tl-lg rounded-tr-lg dark:bg-zinc-800 dark:text-zinc-400" href="/rules/edit">Technical Indicators</a>
-		<a class="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-tl-lg rounded-tr-lg dark:bg-zinc-900 dark:text-zinc-500" href="/cdl/edit">Candlestick</a>
+		<a class="px-3 py-1 text-sm text-gray-600 bg-gray-300 rounded-tl-lg rounded-tr-lg dark:bg-zinc-800 dark:text-zinc-400"
+			href="/rules/edit">Technical Indicators</a>
+		<a class="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-tl-lg rounded-tr-lg dark:bg-zinc-900 dark:text-zinc-500"
+			href="/cdl/edit">Candlestick</a>
 	</div>
 	<div class="grid grid-cols-2 gap-x-4">
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Buy Rules</h2>
-			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<table class="w-full">
+			<div class="rounded-md">
+				<table class="w-full border-separate rounded-md border-spacing-0">
 					<thead>
-						<tr>
-							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+						<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
+							<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Var 1</p>
 							</th>
 							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+								class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Operator</p>
-
 							</th>
 							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+								class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Var 2</p>
 							</th>
 							<th
-								class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+								class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 							</th>
 						</tr>
 					</thead>
 					<tbody col="1">
 						{% for rule in buy %}
-						<tr class="text-center text-gray-700 dark:text-zinc-200">
-							<div class="relative w-full group autocomplete-wrapper">
-								<td class="p-4 border-b-2 dark:border-zinc-500 var1">
+						<tr
+							class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var1">
 									<p>{{rule.split(" ")[0]}}</p>
 								</td>
-								</<div class="relative w-full group autocomplete-wrapper">
-								<td class="p-4 border-b-2 dark:border-zinc-500 op">
+							</div>
+								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 op">
 									<p>{{rule.split(" ")[1]}}</p>
 								</td>
-								<td class="p-4 border-b-2 dark:border-zinc-500 var2">
+								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var2">
 									<p>{{rule.split(" ")[2]}}</p>
 								</td>
-								<td class="p-4 border-b-2 dark:border-zinc-500">
+								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 									<div class="flex items-center justify-end">
 										<button type="button"
-											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white edit-btn"
 											onclick="edit_row($(this), true);">
 											<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 										</button>
 
 										<button type="button"
-											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white confirm-btn"
 											onclick="edit_row($(this), false);">
 											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
 										</button>
 
 										<button type="button"
-											class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white delete-btn"
 											onclick="delete_row($(this));">
 											<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
 										</button>
@@ -107,16 +107,19 @@
 					<tbody col="2">
 						{% for rule in sell %}
 						<tr class="text-center text-gray-700 dark:text-zinc-200">
-							<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-								<p>{{rule.split(" ")[0]}}</p>
-							</td>
-							</<div class="relative w-full group autocomplete-wrapper">
+							<div class="relative w-full group autocomplete-wrapper">
+								<td class="p-4 border-b-2 dark:border-zinc-500 var1">
+									<p>{{rule.split(" ")[0]}}</p>
+								</td>
+							</div>
 							<td class="p-4 border-b-2 dark:border-zinc-500 op">
 								<p>{{rule.split(" ")[1]}}</p>
 							</td>
+							<div class="relative w-full group autocomplete-wrapper">
 							<td class="p-4 border-b-2 dark:border-zinc-500 var2">
 								<p>{{rule.split(" ")[2]}}</p>
 							</td>
+							</div>
 							<td class="p-4 border-b-2 dark:border-zinc-500">
 								<div class="flex items-center justify-end">
 									<button type="button"
@@ -240,7 +243,7 @@
 		row.find('.edit-btn').toggleClass('hidden');
 		if (enable_editing) {
 			dropdown_var = $(`
-				<div class="relative w-full group autocomplete-wrapper">
+				<div class="relative group autocomplete-wrapper">
 					<input class="block w-full px-3 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-300 invalid:border-pink-500 focus:ring-1 focus:invalid:border-pink-500 focus:invalid:ring-pink-500" />
 					<ul tabindex="0"
 						class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
@@ -376,11 +379,11 @@
 		for (j in finalOptions) {
 			$(this).parent().find(".autocomplete").append(finalOptions[j])
 		}
-		let element = $(this).parent().find(".autocomplete")[0];
+		/* let element = $(this).parent().find(".autocomplete")[0];
 		console.log(window.innerHeight - element.getBoundingClientRect().bottom < element.scrollHeight)
 		if (window.innerHeight - element.getBoundingClientRect().bottom > element.scrollHeight) {
 			$(this).parent().find(".autocomplete").addClass("bottom-12")
-		}
+		}*/
 	});
 
 	$('table').on('input change', 'tr', function (e) {

@@ -1,0 +1,39 @@
+.marquee {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+.marquee div {
+  position: absolute;
+  width: 100%;
+  left: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.marquee .marquee-one{
+  animation: marquee 30s linear 0s infinite;
+}
+
+.marquee .marquee-two{
+  animation: marquee 30s linear 2.5s infinite;
+}
+
+.marquee .marquee-three{
+  animation: marquee 30s linear 5s infinite
+}
+
+.marquee .marquee-four{
+  animation: marquee 30s linear 7.5s infinite
+}
+
+.marquee-list:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% { left: 100%; }
+  50% { left: -100%; }
+  100% {left: -100%}
+}

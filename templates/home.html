@@ -5,32 +5,58 @@
 <script src="{{url_for('static', filename='chartjs/chartjs-chart-treemap.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='marquee.css') }}"></link>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.0.2/css/glide.core.css"></link>
 {% endblock %} 
 {% block content %}
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
 		<div class="space-y-2">
-			<div class="flex items-center px-3 py-1 text-gray-800 bg-white rounded-full dark:bg-zinc-800 dark:text-zinc-100">
-				<marquee
-					class="w-full"
-					onmouseover="this.stop();"
-					onmouseout="this.start();"
-					scrollamount="6"
-				>
-					<div class="flex w-full space-x-8 text-sm">
+				<div class="px-3 py-1 text-gray-800 bg-white rounded-full h-7 marquee dark:bg-zinc-800 dark:text-zinc-100">
+					<div class="marquee-one">
 						{% for i in marquee_data %}
-						<div class="space-x-0.5 font-light">
-							<span>{{ i['ticker'] }}</span>
-							{% if i['last_close_pct'] > 0 %}
-							<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
-							{% else %}
-							<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
-							{% endif %}
-						</div>
+							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
+								{% if i['last_close_pct'] > 0 %}
+								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+								{% else %}
+								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
+								{% endif %}
+							</p>
 						{% endfor %}
 					</div>
-				</marquee>
+					<div class="marquee-two">
+						{% for i in marquee_data %}
+							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
+								{% if i['last_close_pct'] > 0 %}
+								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+								{% else %}
+								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
+								{% endif %}
+							</p>
+						{% endfor %}
+					</div>
+					<div class="marquee-three">
+						{% for i in marquee_data %}
+							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
+								{% if i['last_close_pct'] > 0 %}
+								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+								{% else %}
+								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
+								{% endif %}
+							</p>
+						{% endfor %}
+					</div>
+					<div class="marquee-four">
+						{% for i in marquee_data %}
+							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
+								{% if i['last_close_pct'] > 0 %}
+								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+								{% else %}
+								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
+								{% endif %}
+							</p>
+						{% endfor %}
+					</div>
 			</div>
 			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
 				Dashboard
