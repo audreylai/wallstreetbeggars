@@ -8,8 +8,7 @@
   position: absolute;
   width: 100%;
   left: 100%;
-  display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 .marquee .marquee-one{
@@ -17,15 +16,15 @@
 }
 
 .marquee .marquee-two{
-  animation: marquee 30s linear 7.55s infinite;
+  animation: marquee 30s linear 7.5s infinite;
 }
 
 .marquee .marquee-three{
-  animation: marquee 30s linear 15.1s infinite
+  animation: marquee 30s linear 15s infinite;
 }
 
 .marquee .marquee-four{
-  animation: marquee 30s linear 22.6s infinite
+  animation: marquee 30s linear 22.5s infinite;
 }
 
 .marquee-list:hover {

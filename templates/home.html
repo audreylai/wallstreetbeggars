@@ -12,8 +12,8 @@
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
 		<div class="space-y-2">
-				<div class="px-3 py-1 text-gray-800 bg-white rounded-full h-7 marquee dark:bg-zinc-800 dark:text-zinc-100">
-					<div class="marquee-one">
+				<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full h-7 marquee dark:bg-zinc-800 dark:text-zinc-100">
+					<div class="grid grid-flow-col grid-rows-1 marquee-one">
 						{% for i in marquee_data %}
 							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
@@ -21,10 +21,9 @@
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
-							</p>
 						{% endfor %}
 					</div>
-					<div class="marquee-two">
+					<div class="grid grid-flow-col grid-rows-1 marquee-two">
 						{% for i in marquee_data %}
 							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
@@ -32,10 +31,9 @@
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
-							</p>
 						{% endfor %}
 					</div>
-					<div class="marquee-three">
+					<div class="grid grid-flow-col grid-rows-1 marquee-three">
 						{% for i in marquee_data %}
 							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
@@ -43,10 +41,9 @@
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
-							</p>
 						{% endfor %}
 					</div>
-					<div class="marquee-four">
+					<div class="grid grid-flow-col grid-rows-1 marquee-four">
 						{% for i in marquee_data %}
 							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
@@ -54,7 +51,6 @@
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
-							</p>
 						{% endfor %}
 					</div>
 			</div>
@@ -693,7 +689,7 @@
 					},
 					ticks: {
 						autoSkip: true,
-						callback: val => (val*100).toPrecision(1) + '%'
+						callback: (val) => (Math.round(val*100) + '%')
 					},
 					/* min: -2,
 					max: 2 */
