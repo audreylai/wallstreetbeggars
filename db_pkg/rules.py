@@ -1,6 +1,6 @@
 import pymongo
 from datetime import datetime
-from . import user, utils, stock
+from . import user, utils, stock, cache
 
 client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["wallstreetbeggars"]
@@ -27,13 +27,20 @@ def get_rules_results(ticker, cdl=False):
 	return cursor.next()
 
 
-def get_watchlist_rules_results(username):
+def get_watchlist_rules_results(username, use_cache=True):
+	if use_cache:
+		cache_res = cache.get_cached_result("get_watchlist_rules_results", {"username": username})
+		if cache_res is not None:
+			return cache_res
+
 	ticker_list = user.get_watchlist_tickers(username)
 	out = {}
 	for ticker in ticker_list:
 		out[ticker] = get_rules_results(ticker)
 		out[ticker]['name'] = stock.get_stock_info(ticker)['name']
 		out[ticker]['last_si'] = get_ticker_si(ticker)[-1]
+
+	cache.store_cached_result("get_watchlist_rules_results", {"username": username}, out)
 	return out
 
 
