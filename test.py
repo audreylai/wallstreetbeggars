@@ -16,9 +16,9 @@ from db_pkg.utils import *
 
 
 def test():
-	clear_all_cache()
+	return
 
-# pprint(test())
+pprint(test())
 
 start = timer()
 test()
