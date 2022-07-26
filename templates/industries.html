@@ -18,7 +18,7 @@
 						Donors
 					</h2>
 				</div>
-				<div class="overflow-y-scroll rounded-xl">
+				<div class="overflow-y-scroll rounded-md">
 					<table class="w-full">
 						<thead>
 							<tr class="top-0 bg-white dark:bg-zinc-800">
@@ -57,7 +57,7 @@
 								</td>
 								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
+										<input type="hidden" name="ticker" value="{{ row['top_ticker']["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker']["ticker"] }}
 											{% if row['top_ticker']['close_pct'] > 0 %}
 											<span class="text-emerald-500">({{ "%.2f" % (row['top_ticker']['close_pct']*100) }}%)</span>
@@ -94,7 +94,7 @@
 						Beggars
 					</h2>
 				</div>
-				<div class="overflow-y-scroll rounded-xl">
+				<div class="overflow-y-scroll rounded-md">
 					<table class="w-full">
 						<thead>
 							<tr class="top-0 bg-white dark:bg-zinc-800">
@@ -192,7 +192,7 @@
 						{{industry}}
 					</h2>
 				</div>
-				<div class="overflow-y-scroll rounded-xl">
+				<div class="overflow-y-scroll rounded-md">
 					<table class="w-full">
 						<thead>
 							<tr class="top-0 bg-white dark:bg-zinc-800">
@@ -303,7 +303,7 @@
 			{% else %}
 			<div class="px-8 py-4">
 				<div
-					class="flex items-center w-full border-8 border-gray-200 border-dashed rounded-xl dark:border-zinc-700 h-96">
+					class="flex items-center w-full border-8 border-gray-200 border-dashed rounded-md dark:border-zinc-700 h-96">
 					<div class="w-full space-y-2 text-center text-gray-300 dark:text-zinc-700">
 						<h2 class="text-4xl font-bold">No data available</h2>
 						<ion-icon name="server-outline" class="w-24 h-24"></ion-icon>

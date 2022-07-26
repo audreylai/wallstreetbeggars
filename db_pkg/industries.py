@@ -43,7 +43,7 @@ def get_last_trading_date(use_cache=True):
 		}}
 	])
 
-	out = list(cursor)[0]["date"]
+	out = cursor.next()["date"][0]
 	cache.store_cached_result("get_last_trading_date", {}, out)
 	return out
 
