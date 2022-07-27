@@ -18,9 +18,12 @@
 							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
 								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+								{% elif i['last_close_pct'] == 0 %}
+								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
+							</p>
 						{% endfor %}
 					</div>
 					<div class="grid grid-flow-col grid-rows-1 marquee-two">
@@ -28,9 +31,12 @@
 							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
 								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+								{% elif i['last_close_pct'] == 0 %}
+								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
+							</p>
 						{% endfor %}
 					</div>
 					<div class="grid grid-flow-col grid-rows-1 marquee-three">
@@ -38,9 +44,12 @@
 							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
 								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+								{% elif i['last_close_pct'] == 0 %}
+								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
+							</p>
 						{% endfor %}
 					</div>
 					<div class="grid grid-flow-col grid-rows-1 marquee-four">
@@ -48,9 +57,12 @@
 							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
 								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+								{% elif i['last_close_pct'] == 0 %}
+								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
+							</p>
 						{% endfor %}
 					</div>
 			</div>

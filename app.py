@@ -215,28 +215,18 @@ def stock_info():
 
 	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
 	stock_info = get_stock_info(ticker)
-	# statistics = {key.upper() if (key[-1] == "0" or key == "rsi" or key == "obv") else key.capitalize(): get_last_stock_data(ticker)[key] for key in ["volume", "sma10", "sma20", "sma50", "sma100", "sma250", "rsi", "obv", "macd", "macd_ema", "macd_div", "stoch_slowk", "stoch_slowd", "stoch_fastk", "stoch_fastd", "bbands_upper", "bbands_middle", "bbands_lower"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key.replace("_", " "))[1:].lower(): stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
-	statistics = {key: get_last_stock_data(ticker)[key] for key in ["volume", "sma10", "sma20", "sma50", "sma100", "sma250", "rsi", "obv", "macd", "macd_ema", "macd_div", "stoch_slowk", "stoch_slowd", "stoch_fastk", "stoch_fastd", "bbands_upper", "bbands_middle", "bbands_lower"]}
-	new_statistics = {}
-	for key in statistics:
-		if (key[-1] == "0" or key in ["rsi", "obv", "macd"]):
-			new_statistics[key.upper()] = statistics[key]
-		elif "_" in key:
-			sliced_key = key.split("_")
-			if sliced_key[0] == "macd":
-				new_statistics[" ".join(i.upper() for i in sliced_key)] = statistics[key]
-			elif sliced_key[0] == "bbands":
-				sliced_key[0] = "Bohringer Bands"
-				print(sliced_key)
-				new_statistics[" ".join(i if sliced_key.index(i) == 0 else i.capitalize() for i in sliced_key)] = statistics[key]
-			else:
-				sliced_key[0] = "Stochastic"
-				new_statistics[" ".join(i.capitalize() if sliced_key.index(i) == 0 else i[0:1].upper() + i[1:len(i)-1] + i[-1].upper() for i in sliced_key)] = statistics[key]
-		else:
-			new_statistics[key.capitalize()] = statistics[key]
+
+	last_stock_data = get_last_stock_data(ticker)
+	stats = {k: last_stock_data[k] for k in [
+		"volume", "sma10", "sma20", "sma50", "sma100", "sma250",
+		"rsi", "macd", "macd_ema", "macd_div", "obv",
+		"bbands_upper", "bbands_middle", "bbands_lower",
+		"stoch_slowk", "stoch_slowd", "stoch_fastk", "stoch_fastd"
+	]}
+
 	news = ticker_news_scraping(ticker)
 	
-	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=new_statistics, news=news, dark_mode=dark_mode)
+	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, stats=stats, news=news, dark_mode=dark_mode)
 
 # @app.route("/stock-info/update", methods=["GET"])
 # def update_stock_info():
@@ -278,7 +268,7 @@ app.register_blueprint(api.bp)
 # template filters
 @app.template_filter('epoch_convert')
 def timectime(s):
-	return datetime.fromtimestamp(datetime.timestamp(s)).strftime('%d/%m/%y')
+	return datetime.fromtimestamp(s).strftime('%d/%m/%y')
 
 @app.template_filter('get_theme')
 def get_theme(username):
@@ -286,29 +276,58 @@ def get_theme(username):
 
 @app.template_filter('convert_colname')
 def convert_colname(name):
-	if name == 'ticker':
-		return 'Ticker'
-	elif name == 'name':
-		return 'Name'
-	elif name == 'board_lot':
-		return 'Board Lot'
-	elif name == 'industry':
-		return 'Industry'
-	elif name == 'mkt_cap':
-		return 'Market Cap'
+	def camel_to_words(name):
+		next_isupper = True
+		out = ""
+		for char in name:
+			if char == "_":
+				out += " "
+				next_isupper = True
+				continue
+
+			if next_isupper:
+				out += char.upper()
+				next_isupper = False
+			else:
+				out += char
+		return out
+
+	# special cases
+	map = {
+		"rsi": "RSI",
+		"mkt_cap": "Market Cap"
+	}
+
+	if name.startswith("stoch"):
+		stoch_type = name[6:]
+		stoch_type = stoch_type[0].upper() + stoch_type[1:-1] + " %" + stoch_type[-1].upper()
+		return f"Stochastic {stoch_type}"
+	elif name.startswith("bbands"):
+		bbands_type = name[7:]
+		bbands_type = bbands_type[0] + bbands_type[1:]
+		return f"B. Bands ({bbands_type})"
+	elif name.startswith("sma"):
+		return f"SMA({name[3:]})"
+	elif name.startswith("macd") or name in ["obv", "rsi"]:
+		return name.upper().replace('_', ' ')
+	elif name in map:
+		return map[name]
 	else:
-		return name
+		return camel_to_words(name)
+	
 
 @app.template_filter('suffix')
 def add_suffix(num):
+	prefix = "" if num >= 0 else "-"
+	num = abs(num)
 	if num < 10**3:
-		return "%.2f" % (num)
+		return prefix + "%.2f" % (num)
 	elif num < 10**6:
-		return "%.2f" % (num / 10**3) + 'K'
+		return prefix + "%.2f" % (num / 10**3) + 'K'
 	elif num < 10**9:
-		return "%.2f" % (num / 10**6) + 'M'
+		return prefix + "%.2f" % (num / 10**6) + 'M'
 	else:
-		return "%.2f" % (num / 10**9) + 'B'
+		return prefix + "%.2f" % (num / 10**9) + 'B'
 
 @app.template_filter('format_json')
 def format_json(data):

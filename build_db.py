@@ -484,12 +484,13 @@ async def main():
 	# --------------------------------------------------
 	log_msg("Step 6/6: save rules results + historical si", level=LOG_LEVEL.INFO)
 	start = timer()
-	if limit != "ALL":
-		save_rules_results(limit=limit, progress=False)
-		save_historical_si(limit=limit, progress=False)
-	else:
+	if limit == "ALL":
 		save_rules_results(progress=False)
 		save_historical_si(progress=False)
+	else:
+		save_rules_results(limit=limit, progress=False)
+		save_historical_si(limit=limit, progress=False)
+		
 
 	end = timer()
 	log_msg(f"Time elapsed: {'%.3f' % (end - start)}s\n", level=LOG_LEVEL.DEBUG)

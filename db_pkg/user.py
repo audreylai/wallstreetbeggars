@@ -25,15 +25,19 @@ def update_user_theme(username, theme):
 def get_user_theme(username):
 	return col_users.find_one({"username": username}, {"_id": 0, "dark_mode": 1})["dark_mode"]
 
+
 def get_watchlist_tickers(username):
 	cursor = col_users.find_one({"username": username}, {"_id": 0, "watchlist": 1})['watchlist']
 	return list(cursor)
 
+
 def add_watchlist(username, ticker):
 	col_users.update_one({"username": username}, {"$addToSet": { "watchlist": ticker }})
 
+
 def delete_watchlist(username, ticker):
 	col_users.update_one({"username": username}, {"$pull": { "watchlist": ticker }})
+
 
 def get_watchlist_data(username):
 	period = 60
@@ -41,6 +45,7 @@ def get_watchlist_data(username):
 	result = []
 	for ticker in watchlist_tickers:
 		info = stock.get_stock_info(ticker)
+		if info is None: continue
 		result.append({
 			"ticker": ticker,
 			"name": info["name"],

@@ -65,6 +65,9 @@ header %}
 				<thead>
 					<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
 						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							#
+						</th>
+						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 							Rule
 						</th>
 						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
@@ -73,24 +76,33 @@ header %}
 					</tr>
 				</thead>
 				<tbody>
+					{% set ix = namespace(value=1) %}
 					{% for rule in rules['hit_buy_rules']%}
 					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							{{ix.value}}
+						</td>
 						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
 							{{rule}}
 						</td>
 						<td class="px-2 py-2 font-semibold text-center text-emerald-500">
 							Hit
 						</td>
+						{% set ix.value = ix.value + 1 %}
 					</tr>
 					{% endfor %}
 					{% for rule in rules['miss_buy_rules']%}
 					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							--
+						</td>
 						<td class="px-2 py-2 text-center text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 							{{rule}}
 						</td>
 						<td class="px-2 py-2 font-semibold text-center text-rose-500">
 							Miss
 						</td>
+						{% set ix.value = ix.value + 1 %}
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -104,6 +116,9 @@ header %}
 				<thead>
 					<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
 						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							#
+						</th>
+						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 							Rule
 						</th>
 						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
@@ -112,24 +127,33 @@ header %}
 					</tr>
 				</thead>
 				<tbody>
+					{% set ix = namespace(value=1) %}
 					{% for rule in rules['hit_sell_rules']%}
 					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							{{ix.value}}
+						</td>
 						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
 							{{rule}}
 						</td>
 						<td class="px-2 py-2 font-semibold text-center text-emerald-500">
 							Hit
 						</td>
+						{% set ix.value = ix.value + 1 %}
 					</tr>
 					{% endfor %}
 					{% for rule in rules['miss_sell_rules']%}
 					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							--
+						</td>
 						<td class="px-2 py-2 text-center text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 							{{rule}}
 						</td>
 						<td class="px-2 py-2 font-semibold text-center text-rose-500">
 							Miss
 						</td>
+						{% set ix.value = ix.value + 1 %}
 					</tr>
 					{% endfor %}
 				</tbody>
