@@ -215,11 +215,28 @@ def stock_info():
 
 	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
 	stock_info = get_stock_info(ticker)
-	statistics = {key: get_last_stock_data(ticker)[key] for key in ["close", "volume", "sma10", "sma20", "sma50", "rsi"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key)[1:].lower(): stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
-
+	# statistics = {key.upper() if (key[-1] == "0" or key == "rsi" or key == "obv") else key.capitalize(): get_last_stock_data(ticker)[key] for key in ["volume", "sma10", "sma20", "sma50", "sma100", "sma250", "rsi", "obv", "macd", "macd_ema", "macd_div", "stoch_slowk", "stoch_slowd", "stoch_fastk", "stoch_fastd", "bbands_upper", "bbands_middle", "bbands_lower"]} | {re.sub('([A-Z])', r' \1', key)[:1].upper() + re.sub('([A-Z])', r' \1', key.replace("_", " "))[1:].lower(): stock_info[key] for key in ["previous_close", "market_cap", "bid", "ask", "beta", "trailing_pe", "trailing_eps", "dividend_rate", "ex_dividend_date"] if key in stock_info}
+	statistics = {key: get_last_stock_data(ticker)[key] for key in ["volume", "sma10", "sma20", "sma50", "sma100", "sma250", "rsi", "obv", "macd", "macd_ema", "macd_div", "stoch_slowk", "stoch_slowd", "stoch_fastk", "stoch_fastd", "bbands_upper", "bbands_middle", "bbands_lower"]}
+	new_statistics = {}
+	for key in statistics:
+		if (key[-1] == "0" or key in ["rsi", "obv", "macd"]):
+			new_statistics[key.upper()] = statistics[key]
+		elif "_" in key:
+			sliced_key = key.split("_")
+			if sliced_key[0] == "macd":
+				new_statistics[" ".join(i.upper() for i in sliced_key)] = statistics[key]
+			elif sliced_key[0] == "bbands":
+				sliced_key[0] = "Bohringer Bands"
+				print(sliced_key)
+				new_statistics[" ".join(i if sliced_key.index(i) == 0 else i.capitalize() for i in sliced_key)] = statistics[key]
+			else:
+				sliced_key[0] = "Stochastic"
+				new_statistics[" ".join(i.capitalize() if sliced_key.index(i) == 0 else i[0:1].upper() + i[1:len(i)-1] + i[-1].upper() for i in sliced_key)] = statistics[key]
+		else:
+			new_statistics[key.capitalize()] = statistics[key]
 	news = ticker_news_scraping(ticker)
 	
-	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=statistics, news=news, dark_mode=dark_mode)
+	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, statistics=new_statistics, news=news, dark_mode=dark_mode)
 
 # @app.route("/stock-info/update", methods=["GET"])
 # def update_stock_info():
@@ -261,7 +278,7 @@ app.register_blueprint(api.bp)
 # template filters
 @app.template_filter('epoch_convert')
 def timectime(s):
-	return datetime.fromtimestamp(s).strftime('%d/%m/%y')
+	return datetime.fromtimestamp(datetime.timestamp(s)).strftime('%d/%m/%y')
 
 @app.template_filter('get_theme')
 def get_theme(username):
