@@ -13,9 +13,9 @@
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
 		<div class="space-y-2">
 				<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full h-7 marquee dark:bg-zinc-800 dark:text-zinc-100">
-					<div class="grid grid-flow-col grid-rows-1 marquee-one">
+					<ul class="grid grid-flow-col grid-rows-1 marquee-one">
 						{% for i in marquee_data %}
-							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
+							<li class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
 								{% if i['last_close_pct'] > 0 %}
 								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
 								{% elif i['last_close_pct'] == 0 %}
@@ -23,48 +23,9 @@
 								{% else %}
 								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
 								{% endif %}
-							</p>
+							</li>
 						{% endfor %}
-					</div>
-					<div class="grid grid-flow-col grid-rows-1 marquee-two">
-						{% for i in marquee_data %}
-							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
-								{% if i['last_close_pct'] > 0 %}
-								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
-								{% elif i['last_close_pct'] == 0 %}
-								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
-								{% else %}
-								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
-								{% endif %}
-							</p>
-						{% endfor %}
-					</div>
-					<div class="grid grid-flow-col grid-rows-1 marquee-three">
-						{% for i in marquee_data %}
-							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
-								{% if i['last_close_pct'] > 0 %}
-								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
-								{% elif i['last_close_pct'] == 0 %}
-								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
-								{% else %}
-								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
-								{% endif %}
-							</p>
-						{% endfor %}
-					</div>
-					<div class="grid grid-flow-col grid-rows-1 marquee-four">
-						{% for i in marquee_data %}
-							<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
-								{% if i['last_close_pct'] > 0 %}
-								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
-								{% elif i['last_close_pct'] == 0 %}
-								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
-								{% else %}
-								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
-								{% endif %}
-							</p>
-						{% endfor %}
-					</div>
+					</ul>
 			</div>
 			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
 				Dashboard
@@ -810,5 +771,41 @@
 	})
 	
 	glide.mount()
+
+	jQuery.fn.liScroll = function(settings) {
+		settings = jQuery.extend({
+			travelocity: 0.2
+			}, settings);		
+			return this.each(function(){
+					var $strip = jQuery(this);
+					var stripHeight = 1;
+					$strip.find("li").each(function(i){
+						stripHeight += jQuery(this, i).outerWidth(true); // thanks to Michael Haszprunar and Fabien Volpi
+					});
+					var $mask = $strip.wrap("<div class='mask'></div>");
+					var $tickercontainer = $strip.parent().wrap("<div class='tickercontainer'></div>");								
+					var containerHeight = $strip.parent().parent().width();	//a.k.a. 'mask' width 	
+					$strip.width(stripHeight);			
+					var totalTravel = stripHeight;
+					var defTiming = totalTravel/settings.travelocity;	// thanks to Scott Waye		
+					function scrollnews(spazio, tempo){
+					$strip.animate({left: '-='+ spazio}, tempo, "linear", function(){$strip.css("left", containerHeight); scrollnews(totalTravel, defTiming);});
+					}
+					scrollnews(totalTravel, defTiming);				
+					$strip.hover(function(){
+						jQuery(this).stop();
+					},
+					function(){
+						var offset = jQuery(this).offset();
+						var residualSpace = offset.top + stripHeight;
+						var residualTime = residualSpace/settings.travelocity;
+						scrollnews(residualSpace, residualTime);
+					});			
+			});	
+	};
+	
+	$(function(){
+		$(".marquee-one").liScroll();
+	});
 </script>
 {% endblock %}

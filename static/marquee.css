@@ -4,35 +4,18 @@
 	position: relative;
 }
 
-.marquee div {
+.marquee .mask {
   position: absolute;
-  width: 100%;
-  left: 100%;
-  justify-content: space-evenly;
+  overflow: hidden;
 }
 
-.marquee .marquee-one{
-  animation: marquee 30s linear 0s infinite;
+.marquee ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+  position: relative;
 }
 
-.marquee .marquee-two{
-  animation: marquee 30s linear 7.5s infinite;
-}
-
-.marquee .marquee-three{
-  animation: marquee 30s linear 15s infinite;
-}
-
-.marquee .marquee-four{
-  animation: marquee 30s linear 22.5s infinite;
-}
-
-.marquee-list:hover {
-  animation-play-state: paused;
-}
-
-@keyframes marquee {
-  0% { left: 100%; }
-  50% { left: -100%; }
-  100% {left: -100%}
+.marquee ul li {
+  padding: 0px 10px;
 }
