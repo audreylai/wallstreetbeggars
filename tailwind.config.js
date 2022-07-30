@@ -1,3 +1,5 @@
+const fractionWidths = require("tailwindcss-fraction-widths");
+
 module.exports = {
   content: ["./templates/**/*.{html,js,css}"],
   darkMode: "class",
@@ -8,5 +10,5 @@ module.exports = {
       }),
     },
   },
-  plugins: [],
+  plugins: [fractionWidths(8)],
 };
