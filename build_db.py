@@ -309,6 +309,8 @@ async def main():
 	if not isinstance(limit, int) and limit != "ALL":
 		raise Exception(f"limit must be an integer or \"ALL\" (currently \"{str(limit)})\"")
 
+	if use_cache: os.makedirs("./tmp", exist_ok=True)
+
 	# --------------------------------------------------
 	# Step 1: 
 	# - download hkex list of securities

@@ -12,20 +12,20 @@
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
 		<div class="space-y-2">
-				<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full h-7 marquee dark:bg-zinc-800 dark:text-zinc-100">
-					<ul class="grid grid-flow-col grid-rows-1 marquee-one">
-						{% for i in marquee_data %}
-							<li class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
-								{% if i['last_close_pct'] > 0 %}
-								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
-								{% elif i['last_close_pct'] == 0 %}
-								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
-								{% else %}
-								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
-								{% endif %}
-							</li>
-						{% endfor %}
-					</ul>
+			<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full h-7 marquee dark:bg-zinc-800 dark:text-zinc-100">
+				<ul class="grid grid-flow-col grid-rows-1 marquee-one">
+					{% for i in marquee_data %}
+						<li class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '.HK') }}
+							{% if i['last_close_pct'] > 0 %}
+							<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+							{% elif i['last_close_pct'] == 0 %}
+							<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
+							{% else %}
+							<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
 			</div>
 			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
 				Dashboard
@@ -422,11 +422,29 @@
 				</div>
 				<div class="h-full col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex items-center space-x-1">
-						<ion-icon name="help-circle-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
+						<ion-icon name="cash-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
-							???
+							Forex
 						</h2>
 					</div>
+					<table class="w-full text-gray-800 dark:text-zinc-100">
+						<thead>
+							<tr>
+								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Currency</th>
+								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Buy</th>
+								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Sell</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in forex_data %}
+							<tr class="text-gray-600 bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100 dark:text-zinc-300 hover:text-gray-800">
+								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["currency"]}}</td>
+								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["buy"]}}</td>
+								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["sell"]}}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
