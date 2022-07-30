@@ -5,30 +5,33 @@
 <script src="{{url_for('static', filename='chartjs/chartjs-chart-treemap.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs/chartjs-adapter-luxon.js')}}"></script>
 <script src="{{url_for('static', filename='chartjs-utils.js')}}"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='marquee.css') }}"></link>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.0.2/css/glide.core.css"></link>
-{% endblock %} 
+<link rel="stylesheet" href="{{ url_for('static', filename='marquee.css') }}">
+</link>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.0.2/css/glide.core.css">
+</link>
+{% endblock %}
 {% block content %}
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
 		<div class="flex flex-col space-y-2">
-				<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full marquee-wrapper h-7 dark:bg-zinc-800 dark:text-zinc-100">
-							<ul class="grid hidden grid-flow-col grid-rows-1 marquee-one">
-								{% for i in marquee_data %}
-									<li>
-										<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
-											{% if i['last_close_pct'] > 0 %}
-											<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
-											{% elif i['last_close_pct'] == 0 %}
-											<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
-											{% else %}
-											<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
-											{% endif %}
-										</p>
-									</li>
-								{% endfor %}
-							</ul>
-				</div>
+			<div
+				class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full marquee-wrapper h-7 dark:bg-zinc-800 dark:text-zinc-100">
+				<ul class="grid hidden grid-flow-col grid-rows-1 marquee-one">
+					{% for i in marquee_data %}
+					<li>
+						<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
+							{% if i['last_close_pct'] > 0 %}
+							<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+							{% elif i['last_close_pct'] == 0 %}
+							<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
+							{% else %}
+							<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
+							{% endif %}
+						</p>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
 			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
 				Dashboard
 			</h1>
@@ -40,15 +43,17 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Market Direction
 						</h3>
-							{% if card_data["mkt_direction"] < 0 %}
-							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bearish</h2>
+						{% if card_data["mkt_direction"] < 0 %} <h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">
+							Bearish</h2>
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % card_data["mkt_direction"]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+								{{"%.2f" % card_data["mkt_direction"]}}%<ion-icon name="arrow-down-outline" class="align-middle">
+								</ion-icon>
 							</h4>
 							{% else %}
 							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % card_data["mkt_direction"]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+								{{"%.2f" % card_data["mkt_direction"]}}%<ion-icon name="arrow-up-outline" class="align-middle">
+								</ion-icon>
 							</h4>
 							{% endif %}
 					</div>
@@ -58,14 +63,16 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Leading Index
 						</h3>
-						<h2 class="text-3xl font-semibold text-gray-800 uppercase dark:text-zinc-100">{{card_data["leading_index"]["index"][1:]}}</h2>
-							{% if card_data["leading_index"]["close_pct"] < 0 %}
-							<h4 class="font-light text-rose-500">
-							{{"%.2f" % card_data['leading_index']["close_pct"]}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+						<h2 class="text-3xl font-semibold text-gray-800 uppercase dark:text-zinc-100">
+							{{card_data["leading_index"]["index"][1:]}}</h2>
+						{% if card_data["leading_index"]["close_pct"] < 0 %} <h4 class="font-light text-rose-500">
+							{{"%.2f" % card_data['leading_index']["close_pct"]}}%<ion-icon name="arrow-down-outline"
+								class="align-middle"></ion-icon>
 							</h4>
 							{% else %}
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % card_data["leading_index"]["close_pct"]}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+								{{"%.2f" % card_data["leading_index"]["close_pct"]}}%<ion-icon name="arrow-up-outline"
+									class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
 					</div>
@@ -76,21 +83,24 @@
 							Leading Industry
 						</h3>
 						<div class="relative group">
-							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">{{card_data['leading_industry']['industry'] | truncate(15)}}</h2>
+							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">
+								{{card_data['leading_industry']['industry'] | truncate(15)}}</h2>
 							<div class="absolute flex-col items-center hidden mb-6 bottom-2 group-hover:flex">
-								<span class="relative z-10 p-2 text-xs leading-none whitespace-no-wrap rounded-lg shadow-lg text-zinc-200 bg-zinc-900">{{card_data['leading_industry']['industry']}}</span>
+								<span
+									class="relative z-10 p-2 text-xs leading-none whitespace-no-wrap rounded-lg shadow-lg text-zinc-200 bg-zinc-900">{{card_data['leading_industry']['industry']}}</span>
 								<div class="w-3 h-3 -mt-2 rotate-45 bg-zinc-900"></div>
 							</div>
 						</div>
-						{% if card_data['leading_industry']['close_pct'] < 0 %}
-						<h4 class="font-light text-rose-500">
-						{{"%.2f" % (card_data['leading_industry']['close_pct']*100)}}%<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
-						</h4>
-						{% else %}
-						<h4 class="font-light text-emerald-500">
-						{{"%.2f" % (card_data['leading_industry']['close_pct']*100)}}%<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
-						</h4>
-						{% endif %}
+						{% if card_data['leading_industry']['close_pct'] < 0 %} <h4 class="font-light text-rose-500">
+							{{"%.2f" % (card_data['leading_industry']['close_pct']*100)}}%<ion-icon name="arrow-down-outline"
+								class="align-middle"></ion-icon>
+							</h4>
+							{% else %}
+							<h4 class="font-light text-emerald-500">
+								{{"%.2f" % (card_data['leading_industry']['close_pct']*100)}}%<ion-icon name="arrow-up-outline"
+									class="align-middle"></ion-icon>
+							</h4>
+							{% endif %}
 					</div>
 				</div>
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
@@ -98,15 +108,16 @@
 						<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">
 							Market Momentum
 						</h3>
-							{% if card_data['mkt_momentum'] < 0%}
-							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bearish</h2>
+						{% if card_data['mkt_momentum'] < 0%} <h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">
+							Bearish</h2>
 							<h4 class="font-light text-rose-500">
-							{{"%.2f" % card_data['mkt_momentum']}}<ion-icon name="arrow-down-outline" class="align-middle"></ion-icon>
+								{{"%.2f" % card_data['mkt_momentum']}}<ion-icon name="arrow-down-outline" class="align-middle">
+								</ion-icon>
 							</h4>
 							{% else %}
 							<h2 class="text-3xl font-semibold text-gray-800 dark:text-zinc-100">Bullish</h2>
 							<h4 class="font-light text-emerald-500">
-							{{"%.2f" % card_data['mkt_momentum']}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
+								{{"%.2f" % card_data['mkt_momentum']}}<ion-icon name="arrow-up-outline" class="align-middle"></ion-icon>
 							</h4>
 							{% endif %}
 					</div>
@@ -114,7 +125,7 @@
 			</div>
 			<div class="grid grid-cols-3 gap-x-4">
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							HSI Index
@@ -123,7 +134,7 @@
 					<div class="h-96"><canvas id="hsi-index-chart"></canvas></div>
 				</div>
 				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							HSCC Index
@@ -132,7 +143,7 @@
 					<div class="h-96"><canvas id="hscc-index-chart"></canvas></div>
 				</div>
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="bar-chart-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-medium text-gray-700 dark:text-zinc-200">
 							HSCE Index
@@ -143,72 +154,79 @@
 			</div>
 			<div class="grid grid-cols-2 gap-x-4">
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Donors
 						</h2>
 					</div>
 					<table class="w-full">
-					<thead>
-						<tr class="top-0 bg-white dark:bg-zinc-800">
-							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Ticker
-							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Price
-							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Change
-							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Volume
-							</th>
-							<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
-								Market Cap
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for row in table_data["gainers"] %}
-						<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"].replace("-", ".") }}</a>
-								</form>
-							</td>
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row["last_close"] }}</a>
-								</form>
-							</td>
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row["last_close_pct"]*100) }}%</a>
-								</form>
-							</td>
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["last_volume"] | suffix }}</a>
-								</form>
-							</td>
-							<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
-								<form action="{{ url_for("stock_info") }}" method="POST">
-									<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-									<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["mkt_cap"] | suffix }}</a>
-								</form>
-							</td>
-						</tr>
-						{% endfor %}
-					</tbody>
+						<thead>
+							<tr class="top-0 bg-white dark:bg-zinc-800">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Ticker
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Price
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Change
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Volume
+								</th>
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Market Cap
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in table_data["gainers"] %}
+							<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
+								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"].replace("-", ".")
+											}}</a>
+									</form>
+								</td>
+								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row["last_close"] }}</a>
+									</form>
+								</td>
+								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row["last_close_pct"]*100)
+											}}%</a>
+									</form>
+								</td>
+								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["last_volume"] | suffix }}</a>
+									</form>
+								</td>
+								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
+									<form action="{{ url_for("stock_info") }}" method="POST">
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["mkt_cap"] | suffix }}</a>
+									</form>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
 					</table>
 				</div>
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="trending-down-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Beggars
@@ -217,19 +235,24 @@
 					<table class="w-full">
 						<thead>
 							<tr class="top-0 bg-white dark:bg-zinc-800">
-								<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 									Ticker
 								</th>
-								<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 									Price
 								</th>
-								<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 									Change
 								</th>
-								<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 									Volume
 								</th>
-								<th class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+								<th
+									class="w-6 px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 									Market Cap
 								</th>
 							</tr>
@@ -239,31 +262,33 @@
 							<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"].replace("-", ".") }}</a>
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"].replace("-", ".")
+											}}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row["last_close"] }}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
-										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row["last_close_pct"]*100) }}%</a>
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row["last_close_pct"]*100)
+											}}%</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["last_volume"] | suffix }}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["mkt_cap"] | suffix }}</a>
 									</form>
 								</td>
@@ -275,7 +300,7 @@
 			</div>
 			<div class="grid grid-cols-1 gap-x-4">
 				<div class="h-full col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="newspaper-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Watchlist
@@ -288,74 +313,108 @@
 									{% for ticker, data in watchlist_rules_data.items() %}
 									<li class="glide__slide">
 										<div class="p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-zinc-900 dark:border-zinc-800">
-												<h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-zinc-400">{{data['name']}}</h5>
-												<div class="flex items-baseline text-gray-800 dark:text-zinc-100">
-														<span class="text-5xl font-extrabold tracking-tight">{{ticker.replace('-','.')}}</span>
-														{% if data['last_si']['si'] > 0 %}
-														<span class="ml-1 text-xl font-normal text-emerald-500 dark:text-emerald-400">(SI {{"%.2f" % data['last_si']['si']}})</span>
-														{% else %}
-														<span class="ml-1 text-xl font-normal text-rose-500 dark:text-rose-400">(SI {{"%.2f" % data['last_si']['si']}})</span>
-														{% endif %}
-												</div>
-												<!-- List -->
-												<div class="my-7">
-													<p class="font-medium text-emerald-500">Buy</p>
-													<ul role="list" class="space-y-3">
-														{% for hit_buy_rule in data['hit_buy_rules'][:3] %}
-														<li class="flex space-x-3">
-																<!-- Icon -->
-																<svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-emerald-600 dark:text-emerald-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Check icon</title><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-																<span class="text-base font-normal leading-tight text-gray-500 dark:text-zinc-400">{{hit_buy_rule}}</span>
-														</li>
-														{% endfor %}
-														
-														{% for miss_buy_rule in data['miss_buy_rules'][:3-data['hit_buy_rules'][:3]|length] %}
-														<li class="flex space-x-3 line-through decoration-gray-500">
-																<!-- Icon -->
-																<ion-icon name="close-circle" class="flex-shrink-0 w-5 h-5 text-gray-400 dark:text-zinc-500"></ion-icon>
-																<span class="text-base font-normal leading-tight text-gray-500">{{miss_buy_rule}}</span>
-														</li>
-														{% endfor%}
-														{% if data['miss_buy_rules']|length + data['hit_buy_rules']|length -4 > 0 %}
-														<p class="text-gray-400 dark:text-zinc-500">+{{data['miss_buy_rules']|length + data['hit_buy_rules']|length -4}} more</p>
-														{% endif %}
-													</ul>
-												</div>
-												<div class="my-7">
-													<p class="font-medium text-rose-500">Sell</p>
-													<ul role="list" class="space-y-3">
-														{% for hit_sell_rule in data['hit_sell_rules'][:3] %}
-														<li class="flex space-x-3">
-																<!-- Icon -->
-																<svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-rose-600 dark:text-rose-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Check icon</title><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-																<span class="text-base font-normal leading-tight text-gray-500 dark:text-zinc-400">{{hit_sell_rule}}</span>
-														</li>
-														{% endfor %}
-														{% for miss_sell_rule in data['miss_sell_rules'][:3-data['hit_sell_rules'][:3]|length] %}
-														<li class="flex space-x-3 line-through decoration-gray-500">
-																<!-- Icon -->
-																<ion-icon name="close-circle" class="flex-shrink-0 w-5 h-5 text-gray-400 dark:text-zinc-500"></ion-icon>
-																<span class="text-base font-normal leading-tight text-gray-500">{{miss_sell_rule}}</span>
-														</li>
-														{% endfor %}
-														{% if data['miss_sell_rules']|length + data['hit_sell_rules']|length -4 > 0 %}
-														<p class="text-gray-400 dark:text-zinc-500">+{{data['miss_sell_rules']|length + data['hit_sell_rules']|length -4}} more</p>
-														{% endif %}
-													</ul>
-												</div>
-												<form action="/rules" method="POST"><input hidden name="ticker" value="0005-HK"> <button type="submit" class="w-full px-5 text-sm font-medium text-center text-gray-700 dark:text-zinc-300">See more</button></form>
+											<h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-zinc-400">{{data['name']}}</h5>
+											<div class="flex items-baseline text-gray-800 dark:text-zinc-100">
+												<span class="text-5xl font-extrabold tracking-tight">{{ticker.replace('-','.')}}</span>
+												{% if data['last_si']['si'] > 0 %}
+												<span class="ml-1 text-xl font-normal text-emerald-500 dark:text-emerald-400">(SI {{"%.2f" %
+													data['last_si']['si']}})</span>
+												{% else %}
+												<span class="ml-1 text-xl font-normal text-rose-500 dark:text-rose-400">(SI {{"%.2f" %
+													data['last_si']['si']}})</span>
+												{% endif %}
+											</div>
+											<!-- List -->
+											<div class="my-7">
+												<p class="font-medium text-emerald-500">Buy</p>
+												<ul role="list" class="space-y-3">
+													{% for hit_buy_rule in data['hit_buy_rules'][:3] %}
+													<li class="flex space-x-3">
+														<!-- Icon -->
+														<svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-emerald-600 dark:text-emerald-500"
+															fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+															<title>Check icon</title>
+															<path fill-rule="evenodd"
+																d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+																clip-rule="evenodd"></path>
+														</svg>
+														<span
+															class="text-base font-normal leading-tight text-gray-500 dark:text-zinc-400">{{hit_buy_rule}}</span>
+													</li>
+													{% endfor %}
+
+													{% for miss_buy_rule in data['miss_buy_rules'][:3-data['hit_buy_rules'][:3]|length] %}
+													<li class="flex space-x-3 line-through decoration-gray-500">
+														<!-- Icon -->
+														<ion-icon name="close-circle"
+															class="flex-shrink-0 w-5 h-5 text-gray-400 dark:text-zinc-500"></ion-icon>
+														<span class="text-base font-normal leading-tight text-gray-500">{{miss_buy_rule}}</span>
+													</li>
+													{% endfor%}
+													{% if data['miss_buy_rules']|length + data['hit_buy_rules']|length -4 > 0 %}
+													<p class="text-gray-400 dark:text-zinc-500">+{{data['miss_buy_rules']|length +
+														data['hit_buy_rules']|length -4}} more</p>
+													{% endif %}
+												</ul>
+											</div>
+											<div class="my-7">
+												<p class="font-medium text-rose-500">Sell</p>
+												<ul role="list" class="space-y-3">
+													{% for hit_sell_rule in data['hit_sell_rules'][:3] %}
+													<li class="flex space-x-3">
+														<!-- Icon -->
+														<svg aria-hidden="true" class="flex-shrink-0 w-5 h-5 text-rose-600 dark:text-rose-500"
+															fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+															<title>Check icon</title>
+															<path fill-rule="evenodd"
+																d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+																clip-rule="evenodd"></path>
+														</svg>
+														<span
+															class="text-base font-normal leading-tight text-gray-500 dark:text-zinc-400">{{hit_sell_rule}}</span>
+													</li>
+													{% endfor %}
+													{% for miss_sell_rule in data['miss_sell_rules'][:3-data['hit_sell_rules'][:3]|length] %}
+													<li class="flex space-x-3 line-through decoration-gray-500">
+														<!-- Icon -->
+														<ion-icon name="close-circle"
+															class="flex-shrink-0 w-5 h-5 text-gray-400 dark:text-zinc-500"></ion-icon>
+														<span class="text-base font-normal leading-tight text-gray-500">{{miss_sell_rule}}</span>
+													</li>
+													{% endfor %}
+													{% if data['miss_sell_rules']|length + data['hit_sell_rules']|length -4 > 0 %}
+													<p class="text-gray-400 dark:text-zinc-500">+{{data['miss_sell_rules']|length +
+														data['hit_sell_rules']|length -4}} more</p>
+													{% endif %}
+												</ul>
+											</div>
+											<form action="/rules" method="POST"><input hidden name="ticker" value="0005-HK"> <button
+													type="submit"
+													class="w-full px-5 text-sm font-medium text-center text-gray-700 dark:text-zinc-300">See
+													more</button></form>
 										</div>
-								</li>
-								{% endfor %}
+									</li>
+									{% endfor %}
 								</ul>
 							</div>
 							<div class="glide__arrows" data-glide-el="controls">
-								<button class="absolute z-10 flex p-2 bg-gray-300 rounded-full left-12 top-1/2 glide__arrow dark:text-zinc-200 dark:bg-zinc-800" data-glide-dir="<"><ion-icon name="chevron-back-outline"></ion-icon></button>
-								<button class="absolute z-10 flex p-2 bg-gray-300 rounded-full right-12 top-1/2 glide__arrow dark:text-zinc-200 dark:bg-zinc-800" data-glide-dir=">"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+								<button
+									class="absolute z-10 flex p-2 bg-gray-300 rounded-full left-12 top-1/2 glide__arrow dark:text-zinc-200 dark:bg-zinc-800"
+									data-glide-dir="<">
+									<ion-icon name="chevron-back-outline"></ion-icon>
+								</button>
+								<button
+									class="absolute z-10 flex p-2 bg-gray-300 rounded-full right-12 top-1/2 glide__arrow dark:text-zinc-200 dark:bg-zinc-800"
+									data-glide-dir=">">
+									<ion-icon name="chevron-forward-outline"></ion-icon>
+								</button>
 							</div>
-							<div class="absolute z-10 inline-flex list-none -translate-x-1/2 glide__bullets bottom-8 left-1/2" data-glide-el="controls[nav]">
+							<div class="absolute z-10 inline-flex list-none -translate-x-1/2 glide__bullets bottom-8 left-1/2"
+								data-glide-el="controls[nav]">
 								{% for i in range(watchlist_rules_data.keys()|length) %}
-								<button class="w-2 h-2 mx-1 transition-all bg-gray-300 border-gray-400 rounded-full glide__bullet dark:border-zinc-200 focus:border-2 hover:border-2 hover:active:bg-gray-300/50 dark:hover:active:bg-zinc-700/50 dark:bg-zinc-700 dark:active:bg-zinc-100 active:bg-gray-100 dark:focus:bg-zinc-700/50 focus:bg-gray-300/50" data-glide-dir="={{i}}"></button>
+								<button
+									class="w-2 h-2 mx-1 transition-all bg-gray-300 border-gray-400 rounded-full glide__bullet dark:border-zinc-200 focus:border-2 hover:border-2 hover:active:bg-gray-300/50 dark:hover:active:bg-zinc-700/50 dark:bg-zinc-700 dark:active:bg-zinc-100 active:bg-gray-100 dark:focus:bg-zinc-700/50 focus:bg-gray-300/50"
+									data-glide-dir="={{i}}"></button>
 								{% endfor %}
 							</div>
 						</div>
@@ -364,7 +423,7 @@
 			</div>
 			<div class="grid grid-cols-1 gap-x-4">
 				<div class="h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="camera-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Market Overview
@@ -375,7 +434,7 @@
 			</div>
 			<div class="grid grid-cols-3 gap-x-4">
 				<div class="col-span-3 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="compass-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Industry Rotations
@@ -387,7 +446,7 @@
 
 			<div class="grid grid-cols-3 gap-x-4">
 				<div class="col-span-3 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="podium-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Industry Performance
@@ -399,7 +458,7 @@
 
 			<div class="grid grid-cols-3 h-96 gap-x-4">
 				<div class="h-full col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="newspaper-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							News
@@ -408,22 +467,29 @@
 					<table class="w-full text-gray-800 dark:text-zinc-100">
 						<thead>
 							<tr>
-								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Time</th>
-								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Title</th>
+								<th
+									class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Time</th>
+								<th
+									class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Title</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for row in news %}
-							<tr class="text-gray-600 bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100 dark:text-zinc-300 hover:text-gray-800">
+							<tr
+								class="text-gray-600 bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100 dark:text-zinc-300 hover:text-gray-800">
 								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["time"]}}</td>
-								<td class="px-2 py-2 text-left border-b dark:border-zinc-700"><a class="underline hover:text-blue-400 dark:hover:text-blue-500" href="{{row['link']}}">{{row["title"]}}</a></td>
+								<td class="px-2 py-2 text-left border-b dark:border-zinc-700"><a
+										class="underline hover:text-blue-400 dark:hover:text-blue-500"
+										href="{{row['link']}}">{{row["title"]}}</a></td>
 							</tr>
 							{% endfor %}
 						</tbody>
 					</table>
 				</div>
 				<div class="h-full col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="flex items-center space-x-1">
+					<div class="flex items-center space-x-2">
 						<ion-icon name="cash-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 						<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 							Forex
@@ -432,14 +498,21 @@
 					<table class="w-full text-gray-800 dark:text-zinc-100">
 						<thead>
 							<tr>
-								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Currency</th>
-								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Buy</th>
-								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Sell</th>
+								<th
+									class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Currency</th>
+								<th
+									class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Buy</th>
+								<th
+									class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+									Sell</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for row in forex_data %}
-							<tr class="text-gray-600 bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100 dark:text-zinc-300 hover:text-gray-800">
+							<tr
+								class="text-gray-600 bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100 dark:text-zinc-300 hover:text-gray-800">
 								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["currency"]}}</td>
 								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["buy"]}}</td>
 								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["sell"]}}</td>
@@ -550,21 +623,21 @@
 				backgroundColor: (ctx) => {
 					tmp = last_close_pct[ctx.dataIndex];
 					if (tmp < 0) {
-						return dark ? `rgba(244, 63, 94, ${Math.min(-tmp*5, 0.5)})` : `rgba(225, 29, 72, ${Math.min(-tmp*20, 0.75)})`;
+						return dark ? `rgba(244, 63, 94, ${Math.min(-tmp * 5, 0.5)})` : `rgba(225, 29, 72, ${Math.min(-tmp * 20, 0.75)})`;
 					} else {
-						return dark ? `rgba(16, 185, 129, ${Math.min(tmp*5, 0.5)})`: `rgba(5, 150, 105, ${Math.min(tmp*20, 0.75)})`;
+						return dark ? `rgba(16, 185, 129, ${Math.min(tmp * 5, 0.5)})` : `rgba(5, 150, 105, ${Math.min(tmp * 20, 0.75)})`;
 					}
 				},
 				labels: {
 					color: dark ? 'rgb(212 212 216)' : 'rgb(75, 85, 99)',
-					  font: {
+					font: {
 						family: 'sans-serif',
-						 size: (ctx) => {
+						size: (ctx) => {
 							a = -0.0001930;
 							b = 0.1858;
 							c = -5.888;
 							x = Math.min(ctx.element.width, 480);
-							return Math.max(a * x**2 + b * x + c, 10.5);
+							return Math.max(a * x ** 2 + b * x + c, 10.5);
 						},
 						weight: 'lighter'
 					},
@@ -693,7 +766,7 @@
 					},
 					ticks: {
 						autoSkip: true,
-						callback: (val) => (Math.round(val*100) + '%')
+						callback: (val) => (Math.round(val * 100) + '%')
 					},
 					/* min: -2,
 					max: 2 */
@@ -725,9 +798,9 @@
 					titleColor: "rgba(255, 255, 255, 0.7)",
 					bodyColor: "rgba(255, 255, 255, 0.7)",
 					callbacks: {
-						label: function(context) {
+						label: function (context) {
 							if (typeof context.parsed.y == 'number' && context.label) {
-								return context.label + ': ' + (context.parsed.y*100).toFixed(2) + '%';
+								return context.label + ': ' + (context.parsed.y * 100).toFixed(2) + '%';
 							}
 							return '';
 						}
@@ -759,7 +832,7 @@
 	}
 
 	data = {{ chart_data | tojson }};
-	
+
 	draw_index(data.hsi_chartjs, hsi_index_ctx, hsi_index_chart, [102, 126, 234]);
 	draw_index(data.hscc_chartjs, hscc_index_ctx, hscc_index_chart, [234, 102, 126]);
 	draw_index(data.hsce_chartjs, hsce_index_ctx, hsce_index_chart, [126, 234, 102]);
@@ -769,10 +842,10 @@
 	draw_all_industry_last_cmp(data.all_industry_last_cmp);
 
 	$('document').ready(() => {
-		setTimeout(() => {mkt_overview_chart.update()}, 500)
-		$("#theme-toggle").bind('click', function() {
+		setTimeout(() => { mkt_overview_chart.update() }, 500)
+		$("#theme-toggle").bind('click', function () {
 			draw_mkt_overview(data.mkt_overview_data, data.mkt_overview_last_close_pct);
-			setTimeout(() => {mkt_overview_chart.update()}, 500)
+			setTimeout(() => { mkt_overview_chart.update() }, 500)
 		})
 	})
 
@@ -789,44 +862,44 @@
 			}
 		}
 	})
-	
+
 	glide.mount()
 
-	jQuery.fn.liScroll = function(settings) {
+	jQuery.fn.liScroll = function (settings) {
 		settings = jQuery.extend({
 			travelocity: 0.1
-			}, settings);		
-			return this.each(function(){
-					$(".marquee-one").removeClass("hidden")
-					var $strip = jQuery(this);
-					var stripHeight = 1;
-					$strip.find("li").each(function(i){
-						stripHeight += jQuery(this, i).outerWidth(true); // thanks to Michael Haszprunar and Fabien Volpi
-					});
-					var $mask = $strip.wrap("<div class='mask'></div>");
-					var $tickercontainer = $strip.parent().wrap("<div class='tickercontainer'></div>");								
-					var containerHeight = $strip.parent().parent().width();	//a.k.a. 'mask' width 	
-					$strip.width(stripHeight);			
-					var totalTravel = stripHeight;
-					var defTiming = totalTravel/settings.travelocity;	// thanks to Scott Waye		
-					function scrollnews(spazio, tempo){
-					$strip.animate({left: '-='+ spazio}, tempo, "linear", function(){$strip.css("left", containerHeight); scrollnews(totalTravel, defTiming);});
-					}
-					scrollnews(totalTravel, defTiming);				
-					$strip.hover(function(){
-						jQuery(this).stop();
-					},
-					function(){
-						var offset = jQuery(this).offset();
-						var residualSpace = offset.top + stripHeight;
-						var residualTime = residualSpace/settings.travelocity;
-						scrollnews(residualSpace, residualTime);
-					});			
-			});	
+		}, settings);
+		return this.each(function () {
+			$(".marquee-one").removeClass("hidden")
+			var $strip = jQuery(this);
+			var stripHeight = 1;
+			$strip.find("li").each(function (i) {
+				stripHeight += jQuery(this, i).outerWidth(true); // thanks to Michael Haszprunar and Fabien Volpi
+			});
+			var $mask = $strip.wrap("<div class='mask'></div>");
+			var $tickercontainer = $strip.parent().wrap("<div class='tickercontainer'></div>");
+			var containerHeight = $strip.parent().parent().width();	//a.k.a. 'mask' width 	
+			$strip.width(stripHeight);
+			var totalTravel = stripHeight;
+			var defTiming = totalTravel / settings.travelocity;	// thanks to Scott Waye		
+			function scrollnews(spazio, tempo) {
+				$strip.animate({ left: '-=' + spazio }, tempo, "linear", function () { $strip.css("left", containerHeight); scrollnews(totalTravel, defTiming); });
+			}
+			scrollnews(totalTravel, defTiming);
+			$strip.hover(function () {
+				jQuery(this).stop();
+			},
+				function () {
+					var offset = jQuery(this).offset();
+					var residualSpace = offset.top + stripHeight;
+					var residualTime = residualSpace / settings.travelocity;
+					scrollnews(residualSpace, residualTime);
+				});
+		});
 	};
-	
-	$(function(){
-		$(".marquee-one").liScroll();	
+
+	$(function () {
+		$(".marquee-one").liScroll();
 	});
 </script>
 {% endblock %}

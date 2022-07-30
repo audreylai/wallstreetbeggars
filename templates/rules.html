@@ -60,7 +60,7 @@ header %}
 	</div>
 	<div class="grid items-center grid-cols-3 h-1/2">
 		<div><canvas id="buy-index-chart"></canvas></div>
-		<div class="h-full overflow-y-scroll rounded-md">
+		<div class="h-full mr-2 overflow-y-scroll rounded-md">
 			<table class="w-full">
 				<thead>
 					<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
@@ -159,7 +159,7 @@ header %}
 	</div>
 	<div class="grid items-center grid-cols-3 h-1/2">
 		<div><canvas id="sell-index-chart"></canvas></div>
-		<div class="h-full overflow-y-scroll rounded-md">
+		<div class="h-full mr-2 overflow-y-scroll rounded-md">
 			<table class="w-full">
 				<thead>
 					<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
@@ -256,8 +256,14 @@ header %}
 			</table>
 		</div>
 	</div>
-	<div class="grid h-full grid-cols-1 gap-x-4">
-		<div class="p-4 bg-white rounded-md shadow h-96 dark:bg-zinc-800">
+	<div class="w-full p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+		<div class="flex items-center space-x-2 text-gray-700 dark:text-zinc-200">
+			<ion-icon name="pulse-outline"></ion-icon>
+			<h2 class="text-2xl font-semibold">
+				Historial SI
+			</h2>
+		</div>
+		<div class="h-96">
 			<canvas id="historical-si-chart"></canvas>
 		</div>
 	</div>
