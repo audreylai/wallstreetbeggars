@@ -19,10 +19,10 @@
 	<div class="grid grid-cols-2 gap-x-4">
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Buy Rules</h2>
-			<div class="rounded-md">
+			<div class="overflow-y-scroll rounded-md">
 				<table class="w-full border-separate rounded-md border-spacing-0">
 					<thead>
-						<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
+						<tr class="bg-gray-200 dark:bg-zinc-800">
 							<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Var 1</p>
 							</th>
@@ -46,7 +46,6 @@
 								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var1">
 									<p>{{rule.split(" ")[0]}}</p>
 								</td>
-							</div>
 								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 op">
 									<p>{{rule.split(" ")[1]}}</p>
 								</td>
@@ -82,65 +81,60 @@
 		</div>
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Sell Rules</h2>
-			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<table class="w-full">
+			<div class="overflow-y-scroll rounded-md">
+				<table class="w-full border-separate rounded-md border-spacing-0">
 					<thead>
-						<tr>
-							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+						<tr class="bg-gray-200 dark:bg-zinc-800">
+							<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Var 1</p>
 							</th>
 							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+								class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Operator</p>
-
 							</th>
 							<th
-								class="py-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+								class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Var 2</p>
 							</th>
 							<th
-								class="p-4 font-semibold text-gray-900 border-b-2 dark:border-zinc-500 whitespace-nowrap dark:text-zinc-100">
+								class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 							</th>
 						</tr>
 					</thead>
 					<tbody col="2">
 						{% for rule in sell %}
-						<tr class="text-center text-gray-700 dark:text-zinc-200">
-							<div class="relative w-full group autocomplete-wrapper">
-								<td class="p-4 border-b-2 dark:border-zinc-500 var1">
+						<tr
+							class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var1">
 									<p>{{rule.split(" ")[0]}}</p>
 								</td>
-							</div>
-							<td class="p-4 border-b-2 dark:border-zinc-500 op">
-								<p>{{rule.split(" ")[1]}}</p>
-							</td>
-							<div class="relative w-full group autocomplete-wrapper">
-							<td class="p-4 border-b-2 dark:border-zinc-500 var2">
-								<p>{{rule.split(" ")[2]}}</p>
-							</td>
-							</div>
-							<td class="p-4 border-b-2 dark:border-zinc-500">
-								<div class="flex items-center justify-end">
-									<button type="button"
-										class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-										onclick="edit_row($(this), true);">
-										<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
-									</button>
+								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 op">
+									<p>{{rule.split(" ")[1]}}</p>
+								</td>
+								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var2">
+									<p>{{rule.split(" ")[2]}}</p>
+								</td>
+								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+									<div class="flex items-center justify-end">
+										<button type="button"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white edit-btn"
+											onclick="edit_row($(this), true);">
+											<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+										</button>
 
-									<button type="button"
-										class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-										onclick="edit_row($(this), false);">
-										<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-									</button>
+										<button type="button"
+											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white confirm-btn"
+											onclick="edit_row($(this), false);">
+											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
+										</button>
 
-									<button type="button"
-										class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-										onclick="delete_row($(this));">
-										<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-									</button>
-								</div>
-							</td>
+										<button type="button"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white delete-btn"
+											onclick="delete_row($(this));">
+											<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+										</button>
+									</div>
+								</td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -284,40 +278,42 @@
 		selects = btn.parent().find('select');
 
 		row = $(`
-			<tr class="text-center text-gray-700 dark:text-zinc-200">
-				<td class="p-4 border-b-2 dark:border-zinc-500 var1">
-					<p></p>
-				</td>
-				<td class="p-4 border-b-2 dark:border-zinc-500 op">
-					<p></p>
-				</td>
-				<td class="p-4 border-b-2 dark:border-zinc-500 var2">
-					<p></p>
-				</td>
-				<td class="p-4 border-b-2 dark:border-zinc-500">
-					<div class="flex items-center justify-end">
-						<button type="button"
-							class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-blue-600 rounded-md shadow-md edit-btn hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-							onclick="edit_row($(this), true);">
-							<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
-						</button>
-
-						<button type="button"
-							class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-green-600 rounded-md shadow-md confirm-btn disabled:opacity-75 disabled:cursor-not-allowed hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-							onclick="edit_row($(this), false);">
-							<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
-						</button>
-
-						<button type="button"
-							class="inline-flex items-center p-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-md shadow-md delete-btn bg-rose-600 hover:bg-rose-700 focus:ring-rose-500 focus:ring-offset-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-							onclick="delete_row($(this));">
-							<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
-						</button>
+				<tr
+					class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var1">
+							<p></p>
+						</td>
 					</div>
-				</td>
-			</tr>
-		`);
+						<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 op">
+							<p></p>
+						</td>
+						<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var2">
+							<p></p>
+						</td>
+						<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+							<div class="flex items-center justify-end">
+								<button type="button"
+									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white edit-btn"
+									onclick="edit_row($(this), true);">
+									<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
+								</button>
 
+								<button type="button"
+									class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white confirm-btn"
+									onclick="edit_row($(this), false);">
+									<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
+								</button>
+
+								<button type="button"
+									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white delete-btn"
+									onclick="delete_row($(this));">
+									<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
+								</button>
+							</div>
+						</td>
+					</tr>
+		`);
+		
 		row.find('.var1 p').text($(btn).parent().find(".term-input").eq(0).val())
 		row.find('.op p').text(selects.eq(0).val());
 		row.find('.var2 p').text($(btn).parent().find(".term-input").eq(1).val());

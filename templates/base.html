@@ -5,13 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %} | WSB</title>
-    <link
+    <!-- <link
       rel="stylesheet"
       href="{{ url_for('static', filename='tailwind/output.css') }}"
-    />
+    /> -->
+		<script src="https://cdn.tailwindcss.com"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     {% block header %}{% endblock %}
 		<script>
+			tailwind.config = {
+				content: ["./templates/**/*.{html,js,css}"],
+				darkMode: "class",
+				theme: {	
+					extend: {
+						backgroundImage: (theme) => ({
+							check: "url('/static/check.svg')",
+						}),
+					},
+				},
+				plugins: [],
+			}
 			let dark = ("{{dark_mode}}" == "True");
 			if (dark) {
 				document.documentElement.classList.add('dark');
@@ -46,41 +59,6 @@
       type="text/css"
       href="{{url_for('static', filename='scrollbar.css')}}"
     />
-    <script>
-      /*
-      let vh = window.innerHeight * 0.01;
-      console.log(vh);
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
-      window.addEventListener("resize", () => {
-        // We execute the same script as before
-        let vh = window.innerHeight * 0.01;
-        console.log(vh);
-        document.documentElement.style.setProperty("--vh", `${vh}px`);
-      });
-
-      Chart.plugins.register({
-        afterDatasetsDraw: function (chart) {
-          if (chart.tooltip._active && chart.tooltip._active.length) {
-            var activePoint = chart.tooltip._active[0],
-              ctx = chart.ctx,
-              y_axis = chart.scales["y-axis-0"],
-              x = activePoint.tooltipPosition().x,
-              topY = y_axis.top,
-              bottomY = y_axis.bottom;
-            // draw line
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(x, topY);
-            ctx.lineTo(x, bottomY);
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = "#07C";
-            ctx.stroke();
-            ctx.restore();
-          }
-        },
-      });
-	  */
-    </script>
     <style>
       .h-screen {
         height: 100vh;
