@@ -1,21 +1,22 @@
-.marquee {
-	width: 100%;
+.marquee-wrapper {
 	overflow: hidden;
 	position: relative;
 }
 
-.marquee .mask {
-  position: absolute;
+.marquee-wrapper .mask {
+	width: 1184px;
+  position: relative;
   overflow: hidden;
 }
 
-.marquee ul {
+.marquee-wrapper ul {
   list-style:none;
   margin:0;
   padding:0;
-  position: relative;
+	position: relative;
+
 }
 
-.marquee ul li {
+.marquee-wrapper ul li {
   padding: 0px 10px;
 }

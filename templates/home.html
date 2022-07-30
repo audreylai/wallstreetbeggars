@@ -11,22 +11,24 @@
 {% block content %}
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
-		<div class="space-y-2">
-				<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full h-7 marquee dark:bg-zinc-800 dark:text-zinc-100">
-					<ul class="grid grid-flow-col grid-rows-1 marquee-one">
-						{% for i in marquee_data %}
-							<li class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
-								{% if i['last_close_pct'] > 0 %}
-								<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
-								{% elif i['last_close_pct'] == 0 %}
-								<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
-								{% else %}
-								<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
-								{% endif %}
-							</li>
-						{% endfor %}
-					</ul>
-			</div>
+		<div class="flex flex-col space-y-2">
+				<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full marquee-wrapper h-7 dark:bg-zinc-800 dark:text-zinc-100">
+							<ul class="grid hidden grid-flow-col grid-rows-1 marquee-one">
+								{% for i in marquee_data %}
+									<li>
+										<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
+											{% if i['last_close_pct'] > 0 %}
+											<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
+											{% elif i['last_close_pct'] == 0 %}
+											<span class="text-gray-700 dark:text-zinc-400">0.00%</span>
+											{% else %}
+											<span class="text-rose-500">{{"%.2f" % i['last_close_pct']}}%</span>
+											{% endif %}
+										</p>
+									</li>
+								{% endfor %}
+							</ul>
+				</div>
 			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
 				Dashboard
 			</h1>
@@ -285,7 +287,7 @@
 								<ul class="glide__slides">
 									{% for ticker, data in watchlist_rules_data.items() %}
 									<li class="glide__slide">
-										<div class="max-w-sm p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-zinc-900 dark:border-zinc-800">
+										<div class="p-4 bg-white border rounded-lg shadow-md sm:p-8 dark:bg-zinc-900 dark:border-zinc-800">
 												<h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-zinc-400">{{data['name']}}</h5>
 												<div class="flex items-baseline text-gray-800 dark:text-zinc-100">
 														<span class="text-5xl font-extrabold tracking-tight">{{ticker.replace('-','.')}}</span>
@@ -774,9 +776,10 @@
 
 	jQuery.fn.liScroll = function(settings) {
 		settings = jQuery.extend({
-			travelocity: 0.2
+			travelocity: 0.1
 			}, settings);		
 			return this.each(function(){
+					$(".marquee-one").removeClass("hidden")
 					var $strip = jQuery(this);
 					var stripHeight = 1;
 					$strip.find("li").each(function(i){
@@ -805,7 +808,7 @@
 	};
 	
 	$(function(){
-		$(".marquee-one").liScroll();
+		$(".marquee-one").liScroll();	
 	});
 </script>
 {% endblock %}
