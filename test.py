@@ -8,7 +8,7 @@ import talib as ta
 
 from db_pkg.cache import *
 from db_pkg.industries import *
-from db_pkg.news import *
+from db_pkg.scrape import *
 from db_pkg.rules import *
 from db_pkg.stock import *
 from db_pkg.user import *
