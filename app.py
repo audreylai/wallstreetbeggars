@@ -8,7 +8,7 @@ from flask import Flask, redirect, render_template, request, send_from_directory
 
 import api
 from db_pkg.industries import *
-from db_pkg.news import *
+from db_pkg.scrape import *
 from db_pkg.rules import *
 from db_pkg.stock import *
 from db_pkg.user import *
@@ -51,11 +51,29 @@ def home():
 	watchlist_rules_data = get_watchlist_rules_results('test')
 	news = scmp_scraping(5)
 
+	forex_data = [
+		{"currency": "CNY / HKD", "buy": 1.1640, "sell": 1.1641},
+		{"currency": "AUD / HKD", "buy": 5.4865, "sell": 5.4852},
+		{"currency": "EUR / HKD", "buy": 8.0272, "sell": 8.0282},
+		{"currency": "GBP / HKD", "buy": 9.5550, "sell": 9.5624},
+		{"currency": "JPY / HKD", "buy": 0.0589, "sell": 0.0589},
+		{"currency": "KRW / HKD", "buy": 0.0060, "sell": 0.0060},
+		{"currency": "TWD / HKD", "buy": 0.2615, "sell": 0.2616},
+		{"currency": "THB / HKD", "buy": 0.2165, "sell": 0.2165},
+		{"currency": "CAD / HKD", "buy": 6.1343, "sell": 6.1349},
+		{"currency": "CHF / HKD", "buy": 8.2474, "sell": 8.2499},
+		{"currency": "NZD / HKD", "buy": 4.9365, "sell": 4.9373},
+		{"currency": "SEK / HKD", "buy": 0.7737, "sell": 0.7739},
+		{"currency": "SGD / HKD", "buy": 5.6885, "sell": 5.6894},
+		{"currency": "USD / HKD", "buy": 7.8491, "sell": 7.8513}
+	]
+
 	return render_template("home.html",
 		chart_data=chart_data,
 		card_data=card_data,
 		table_data=table_data,
 		marquee_data=marquee_data,
+		forex_data=forex_data,
 		watchlist_rules_data=watchlist_rules_data,
 		news=news, dark_mode=dark_mode
 	)
@@ -76,16 +94,16 @@ def rules():
 
 	hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules = get_rules_results(ticker).values()
 	hit_cdl_buy_rules, miss_cdl_buy_rules, hit_cdl_sell_rules, miss_cdl_sell_rules = get_rules_results(ticker, True).values()
-	hit_buy_rules  += hit_cdl_buy_rules
-	hit_sell_rules += hit_cdl_sell_rules
-	miss_buy_rules += miss_cdl_buy_rules
-	miss_sell_rules += miss_cdl_sell_rules
 
 	return render_template("rules.html", dark_mode=dark_mode, rules={
 		"hit_buy_rules": hit_buy_rules,
 		"hit_sell_rules": hit_sell_rules,
 		"miss_buy_rules": miss_buy_rules,
-		"miss_sell_rules": miss_sell_rules
+		"miss_sell_rules": miss_sell_rules,
+		"hit_cdl_buy_rules": hit_cdl_buy_rules,
+		"hit_cdl_sell_rules": hit_cdl_sell_rules,
+		"miss_cdl_buy_rules": miss_cdl_buy_rules,
+		"miss_cdl_sell_rules": miss_cdl_sell_rules
 	}, stock_info=get_stock_info(ticker), stock_data=get_stock_data_chartjs(ticker, 180), si_data=get_ticker_si_chartjs(ticker))
 
 
@@ -294,7 +312,6 @@ def convert_colname(name):
 
 	# special cases
 	map = {
-		"rsi": "RSI",
 		"mkt_cap": "Market Cap"
 	}
 

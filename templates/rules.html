@@ -108,6 +108,54 @@ header %}
 				</tbody>
 			</table>
 		</div>
+		<div class="h-full overflow-y-scroll rounded-md">
+			<table class="w-full">
+				<thead>
+					<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
+						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							#
+						</th>
+						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							Rule
+						</th>
+						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							Hit/Miss
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% set ix = namespace(value=1) %}
+					{% for rule in rules['hit_cdl_buy_rules']%}
+					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							{{ix.value}}
+						</td>
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							{{rule}}
+						</td>
+						<td class="px-2 py-2 font-semibold text-center text-emerald-500">
+							Hit
+						</td>
+						{% set ix.value = ix.value + 1 %}
+					</tr>
+					{% endfor %}
+					{% for rule in rules['miss_cdl_buy_rules']%}
+					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							--
+						</td>
+						<td class="px-2 py-2 text-center text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+							{{rule}}
+						</td>
+						<td class="px-2 py-2 font-semibold text-center text-rose-500">
+							Miss
+						</td>
+						{% set ix.value = ix.value + 1 %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<div class="grid items-center grid-cols-3 h-1/2">
 		<div><canvas id="sell-index-chart"></canvas></div>
@@ -143,6 +191,54 @@ header %}
 					</tr>
 					{% endfor %}
 					{% for rule in rules['miss_sell_rules']%}
+					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							--
+						</td>
+						<td class="px-2 py-2 text-center text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
+							{{rule}}
+						</td>
+						<td class="px-2 py-2 font-semibold text-center text-rose-500">
+							Miss
+						</td>
+						{% set ix.value = ix.value + 1 %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="h-full overflow-y-scroll rounded-md">
+			<table class="w-full">
+				<thead>
+					<tr class="sticky top-0 bg-gray-200 dark:bg-zinc-800">
+						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							#
+						</th>
+						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							Rule
+						</th>
+						<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
+							Hit/Miss
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% set ix = namespace(value=1) %}
+					{% for rule in rules['hit_cdl_sell_rules']%}
+					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							{{ix.value}}
+						</td>
+						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
+							{{rule}}
+						</td>
+						<td class="px-2 py-2 font-semibold text-center text-emerald-500">
+							Hit
+						</td>
+						{% set ix.value = ix.value + 1 %}
+					</tr>
+					{% endfor %}
+					{% for rule in rules['miss_cdl_sell_rules']%}
 					<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 						<td class="px-2 py-2 text-center text-gray-700 dark:text-zinc-300">
 							--
@@ -391,8 +487,14 @@ header %}
 
 	function draw_charts() {
 		draw_historical_si(si_data);
-		draw_buy(rules["hit_buy_rules"].length / (rules["hit_buy_rules"].length + rules["miss_buy_rules"].length) * 100);
-		draw_sell(rules["hit_sell_rules"].length / (rules["hit_sell_rules"].length + rules["miss_sell_rules"].length) * 100);
+
+		hit_buy_count = rules["hit_buy_rules"].length + rules["hit_cdl_buy_rules"].length
+		miss_buy_count = rules["miss_buy_rules"].length + rules["miss_cdl_buy_rules"].length
+		draw_buy(hit_buy_count / (hit_buy_count + miss_buy_count) * 100);
+
+		hit_sell_count = rules["hit_sell_rules"].length + rules["hit_cdl_sell_rules"].length
+		miss_sell_count = rules["miss_sell_rules"].length + rules["miss_cdl_sell_rules"].length
+		draw_sell(hit_sell_count / (hit_sell_count + miss_sell_count) * 100);
 	}
 
 	draw_charts();

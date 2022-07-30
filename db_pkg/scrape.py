@@ -52,3 +52,26 @@ def scmp_scraping(limit=10, use_cache=True) -> List[Dict]:
 	
 	cache.store_cached_result("scmp_scraping", {"limit": limit}, out)
 	return out
+
+
+def hkd_exchange_rate_scraping() -> List[Dict]:
+    page = requests.get("https://www.etnet.com.hk/www/eng/stocks/realtime/index.php")
+    soup = BeautifulSoup(page.content, "html.parser")
+    table = list(soup.find_all("div", attrs={"class": "DivLeftGridC2"}))[1]
+    
+    exchange_rates = []
+    even_rows = table.find_all("tr", attrs={"class": "evenRow"})
+    odd_rows = table.find_all("tr", attrs={"class": "oddRow"})
+    rows = even_rows + odd_rows
+    for row in rows:
+        content = row.find_all("td")
+        if "HKD" in content[0].get_text(): # To avoid adding the USD exchange rates and other stuff
+            exchange_rates.append({
+                "currency": content[0].get_text(),
+                "buy": content[1].get_text(),
+                "sell": content[2].get_text()
+            })
+
+    del exchange_rates[-1] # Remove the dup. USD/HKD from the USD exchange rates table
+    return exchange_rates
+    
