@@ -19,7 +19,7 @@
 				<ul class="grid hidden grid-flow-col grid-rows-1 marquee-one">
 					{% for i in marquee_data %}
 					<li>
-						<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '') }}
+						<p class="text-sm font-light space-x-0.5 whitespace-nowrap">{{ i['ticker'].replace("-HK", '.HK') }}
 							{% if i['last_close_pct'] > 0 %}
 							<span class="text-emerald-500">+{{"%.2f" % i['last_close_pct']}}%</span>
 							{% elif i['last_close_pct'] == 0 %}

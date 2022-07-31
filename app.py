@@ -51,22 +51,7 @@ def home():
 	watchlist_rules_data = get_watchlist_rules_results('test')
 	news = scmp_scraping(5)
 
-	forex_data = [
-		{"currency": "CNY / HKD", "buy": 1.1640, "sell": 1.1641},
-		{"currency": "AUD / HKD", "buy": 5.4865, "sell": 5.4852},
-		{"currency": "EUR / HKD", "buy": 8.0272, "sell": 8.0282},
-		{"currency": "GBP / HKD", "buy": 9.5550, "sell": 9.5624},
-		{"currency": "JPY / HKD", "buy": 0.0589, "sell": 0.0589},
-		{"currency": "KRW / HKD", "buy": 0.0060, "sell": 0.0060},
-		{"currency": "TWD / HKD", "buy": 0.2615, "sell": 0.2616},
-		{"currency": "THB / HKD", "buy": 0.2165, "sell": 0.2165},
-		{"currency": "CAD / HKD", "buy": 6.1343, "sell": 6.1349},
-		{"currency": "CHF / HKD", "buy": 8.2474, "sell": 8.2499},
-		{"currency": "NZD / HKD", "buy": 4.9365, "sell": 4.9373},
-		{"currency": "SEK / HKD", "buy": 0.7737, "sell": 0.7739},
-		{"currency": "SGD / HKD", "buy": 5.6885, "sell": 5.6894},
-		{"currency": "USD / HKD", "buy": 7.8491, "sell": 7.8513}
-	]
+	forex_data = hkd_exchange_rate_scraping()
 
 	return render_template("home.html",
 		chart_data=chart_data,
@@ -317,12 +302,12 @@ def convert_colname(name):
 
 	if name.startswith("stoch"):
 		stoch_type = name[6:]
-		stoch_type = stoch_type[0].upper() + stoch_type[1:-1] + " %" + stoch_type[-1].upper()
-		return f"Stochastic {stoch_type}"
+		stoch_type = stoch_type[0].upper() + stoch_type[1:-1]
+		return f"{stoch_type} STC %{name[-1].upper()}"
 	elif name.startswith("bbands"):
 		bbands_type = name[7:]
 		bbands_type = bbands_type[0] + bbands_type[1:]
-		return f"B. Bands ({bbands_type})"
+		return f"Bollinger ({bbands_type})"
 	elif name.startswith("sma"):
 		return f"SMA({name[3:]})"
 	elif name.startswith("macd") or name in ["obv", "rsi"]:
