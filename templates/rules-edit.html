@@ -21,7 +21,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="grid grid-cols-1 w-1/6">
+		<div class="grid grid-cols-1 w-1/6 h-1/2 pt-5">
 			<button type="button" id="update-db-button"
 				class=" mx-4 py-2 px-3 text-base font-semiboldtext-center text-white transition duration-10 ease-in bg-gray-600 rounded-lg shadow-md hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 				onclick="$('#update-db-loading').show(); $('#update-db-button').hide(); $.get('/rules/save', function(res) {$('#update-db-loading').hide(); $('#update-db-button').show(); $('#update-db-button').text('Success');})">
