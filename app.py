@@ -126,15 +126,33 @@ def watchlist():
 	dark_mode = get_user_theme("test")
 	watchlist_data = get_watchlist_data('test')
 	table = watchlist_data['table']
-	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"))
+	return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"), error_msg=None, ticker="")
 
 
 @app.route("/watchlist", methods=["POST"])
 def watchlist_add_ticker():
+	ticker = request.values.get("ticker")
+
 	if request.values.get("command") == "add":
-		add_watchlist('test', request.values.get("ticker").replace('.', '-').upper())
+		formatted_ticker =  f"{ticker}-HK" if len(ticker) == 4 else ticker.replace(".", "-").upper()
+
+		dark_mode = get_user_theme("test")
+		watchlist_data = get_watchlist_data('test')
+		table = watchlist_data['table']
+		error_msg = None
+		watchlist_tickers = get_watchlist_tickers('test')
+
+		if ticker in watchlist_tickers:
+			error_msg = "Ticker in watchlist already!"
+			return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"), error_msg=error_msg, ticker=ticker)
+		elif not ticker_exists(formatted_ticker):
+			error_msg = "Ticker not found"
+			return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"), error_msg=error_msg, ticker=ticker)
+		
+		add_watchlist('test', formatted_ticker)
 	elif request.values.get("command") == "delete":
-		delete_watchlist('test', request.values.get("ticker").replace('.', '-').upper())
+		delete_watchlist('test', ticker)
+	
 	return redirect(url_for('watchlist'))
 
 

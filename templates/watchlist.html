@@ -14,17 +14,18 @@ content %}
 			</p>
 		</div>
 		<div class="flex items-end">
-			<button onclick="showAdd(this)"
+			<button onclick="showAdd()"
+				id="add-button"
 				class="flex items-center px-2 py-2 mb-4 text-sm text-gray-100 bg-gray-500 rounded dark:bg-zinc-700"
 				type="button">
 				<ion-icon name="add-outline" class="w-4 h-4"></ion-icon>
 				<p>Add Ticker</p>
 			</button>
-			<form onsubmit="return addTicker(this);" class="hidden" id="add-form" method="POST" action="/watchlist">
-				<div class="flex items-center mb-4 space-x-2">
+			<form onsubmit="return onAdd(event);" class="hidden" id="add-form" method="POST" action="/watchlist">
+				<div class="flex items-center {% if error_msg == None %} mb-4 {% endif %} space-x-2">
 					<input name="ticker"
-						class="flex-1 w-full px-3 py-1 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-non500 text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-						type="text" />
+						class="flex-1 w-full px-3 py-1 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-non500 text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent {% if error_msg != None %} ring-2 ring-rose-500 {% endif %}"
+						type="text" value="{{ticker}}"/>
 					<input
 							name="command"
 							value="add"
@@ -35,7 +36,7 @@ content %}
 						Add
 					</button>
 				</div>
-				<p class="hidden mt-0.5 ml-1 text-xs text-rose-500" id="error-msg">Invalid ticker!</p>
+				<p class="mt-0.5 ml-1 text-xs text-rose-500 {% if error_msg == None %} hidden {% endif %}" id="error-msg">{{error_msg}}</p>
 			</form>
 		</div>
 	</div>
@@ -67,7 +68,7 @@ content %}
 			</thead>
 			<tbody>
 				{% for row in watchlist_data %}
-				<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+				<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 					{% for k,v in row.items() %}
 					{% if k == "last_si" %}
 						{% if v > 0 %}
@@ -138,19 +139,18 @@ content %}
 </div>
 {% endblock %} {% block script %}
 <script>
-	function showAdd(evt) {
+	function showAdd() {
 		$("#add-form").removeClass("hidden");
-		$(evt).addClass("hidden");
+		$("#add-button").addClass("hidden");
+	}
+	
+	var is_error = ("{{error_msg}}" != "None");
+	if (is_error) {
+		showAdd();
 	}
 
-	function addTicker(evt) {
-		const formData = new FormData(evt);
-		const params = Object.fromEntries(formData);
-		params.ticker = params.ticker.toUpperCase();
-		if (!params.ticker.includes("-HK") && !params.ticker.includes(".HK")) {
-			$("input[name='ticker']").addClass("ring-2 ring-rose-500")
-			$("#error-msg").removeClass("hidden")
-			$("#error-msg").siblings().removeClass("mb-4")
+	function onAdd(e) {
+		if ($(e).find("input[name='ticker']").val() == ""){
 			return false;
 		}
 	}

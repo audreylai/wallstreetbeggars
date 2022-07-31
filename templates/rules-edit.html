@@ -38,8 +38,8 @@
 		</div>
 	</div>
 	<div class="grid grid-cols-2 mb-2">
-	<h2 class="sticky top-0 text-2xl font-semibold dark:text-zinc-100 ">Buy Rules</h2>
-	<h2 class="sticky top-0 text-2xl font-semibold dark:text-zinc-100 ">Sell Rules</h2>
+	<h2 class="sticky top-0 text-2xl font-semibold text-gray-900 dark:text-zinc-100">Buy Rules</h2>
+	<h2 class="sticky top-0 text-2xl font-semibold text-gray-900 dark:text-zinc-100">Sell Rules</h2>
 	</div>
 	<div class="grid grid-cols-2 gap-x-4 h-4/6">
 			<div class="overflow-y-scroll rounded-md">
@@ -65,7 +65,7 @@
 					<tbody col="1">
 						{% for rule in buy %}
 						<tr
-							class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+							class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var1">
 									<p>{{rule.split(" ")[0]}}</p>
 								</td>
@@ -78,19 +78,19 @@
 								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 									<div class="flex items-center justify-end">
 										<button type="button"
-											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center edit-btn"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-blue-500 edit-btn"
 											onclick="edit_row($(this), true);">
 											<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 										</button>
 
 										<button type="button"
-											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center confirm-btn"
+											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center confirm-btn text-emerald-500"
 											onclick="edit_row($(this), false);">
 											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
 										</button>
 
 										<button type="button"
-											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center delete-btn"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-rose-500 delete-btn"
 											onclick="delete_row($(this));">
 											<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
 										</button>
@@ -124,7 +124,7 @@
 					<tbody col="2">
 						{% for rule in sell %}
 						<tr
-							class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+							class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var1">
 									<p>{{rule.split(" ")[0]}}</p>
 								</td>
@@ -137,19 +137,19 @@
 								<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 									<div class="flex items-center justify-end">
 										<button type="button"
-											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center edit-btn"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-blue-500 edit-btn"
 											onclick="edit_row($(this), true);">
 											<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 										</button>
 
 										<button type="button"
-											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center confirm-btn"
+											class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center confirm-btn text-emerald-500"
 											onclick="edit_row($(this), false);">
 											<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
 										</button>
 
 										<button type="button"
-											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center delete-btn"
+											class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-rose-500 delete-btn"
 											onclick="delete_row($(this));">
 											<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
 										</button>
@@ -161,55 +161,59 @@
 				</table>
 			</div>
 	</div>
-	<div class="grid grid-cols-2">
-		<div class="flex p-4 space-x-2">
-			<div class="relative w-2/6 group autocomplete-wrapper">
-				<input
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-				</ul>
-			</div>
-			<select
-				class="block w-1/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
-				<option value="≤">≤</option>
-				<option value="≥">≥</option>
-			</select>
-			<div class="relative w-2/6 group autocomplete-wrapper">
-				<input
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-				</ul>
+	<div class="grid grid-cols-2 gap-x-4">
+		<div class="flex py-4 space-x-2">
+			<div class="flex w-full space-x-2">
+				<div class="relative w-3/8 group autocomplete-wrapper">
+					<input
+						class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+					<ul tabindex="0"
+						class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+					</ul>
+				</div>
+				<select
+					class="block px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w-2/8 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
+					<option value="≤">≤</option>
+					<option value="≥">≥</option>
+				</select>
+				<div class="relative w-3/8 group autocomplete-wrapper">
+					<input
+						class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+					<ul tabindex="0"
+						class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+					</ul>
+				</div>
 			</div>
 			<button type="button"
-				class="flex items-center px-2.5 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-zinc-800 hover:bg-zinc-700 focus:ring-zinc-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+				class="flex w-fit items-center px-2.5 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-indigo-800 hover:bg-zinc-700 focus:ring-zinc-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 				onclick="add_row($(this), 1);">
 				<ion-icon name="add-outline" class="w-6 h-6"></ion-icon>
 			</button>
 		</div>
-		<div class="flex p-4 space-x-2">
-			<div class="relative w-2/6 group autocomplete-wrapper">
-				<input
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-				</ul>
-			</div>
-			<select
-				class="block w-1/6 px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
-				<option value="≤">≤</option>
-				<option value="≥">≥</option>
-			</select>
-			<div class="relative w-2/6 group autocomplete-wrapper">
-				<input
-					class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
-				<ul tabindex="0"
-					class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
-				</ul>
+		<div class="flex py-4 space-x-2">
+			<div class="flex w-full space-x-2">
+				<div class="relative w-3/8 group autocomplete-wrapper">
+					<input
+						class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+					<ul tabindex="0"
+						class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+					</ul>
+				</div>
+				<select
+					class="block px-2 py-1 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm w-2/8 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300">
+					<option value="≤">≤</option>
+					<option value="≥">≥</option>
+				</select>
+				<div class="relative w-3/8 group autocomplete-wrapper">
+					<input
+						class="block w-full px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm term-input focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-300" />
+					<ul tabindex="0"
+						class="absolute z-10 hidden py-1 mt-1 overflow-y-scroll text-base bg-white rounded-md shadow-lg autocomplete max-h-56 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm w-fit group-focus-within:block">
+					</ul>
+				</div>
 			</div>
 			<button type="button"
-				class="flex items-center px-2.5 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-zinc-800 hover:bg-zinc-700 focus:ring-zinc-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+				class="flex w-fit items-center px-2.5 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-indigo-800 hover:bg-zinc-700 focus:ring-zinc-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 				onclick="add_row($(this), 2);">
 				<ion-icon name="add-outline" class="w-6 h-6"></ion-icon>
 			</button>
@@ -290,7 +294,7 @@
 
 		row = $(`
 				<tr
-					class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+					class="text-center odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 						<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300 var1">
 							<p></p>
 						</td>
@@ -304,19 +308,19 @@
 						<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 							<div class="flex items-center justify-end">
 								<button type="button"
-									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white edit-btn"
+									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-blue-500 edit-btn"
 									onclick="edit_row($(this), true);">
 									<ion-icon class="w-5 h-5" name="create-outline"></ion-icon>
 								</button>
 
 								<button type="button"
-									class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center text-white confirm-btn"
+									class="inline-flex items-center hidden p-2 mr-2 text-base font-semibold text-center confirm-btn text-emerald-500"
 									onclick="edit_row($(this), false);">
 									<ion-icon class="w-5 h-5" name="checkbox-outline"></ion-icon>
 								</button>
 
 								<button type="button"
-									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-white delete-btn"
+									class="inline-flex items-center p-2 mr-2 text-base font-semibold text-center text-rose-500 delete-btn"
 									onclick="delete_row($(this));">
 									<ion-icon class="w-5 h-5" name="close-outline"></ion-icon>
 								</button>

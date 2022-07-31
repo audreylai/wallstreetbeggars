@@ -13,7 +13,7 @@
 {% block content %}
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
-		<div class="flex flex-col space-y-2">
+		<div>
 			<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full marquee-wrapper h-7 dark:bg-zinc-800 dark:text-zinc-100">
 				<ul class="grid hidden grid-flow-col grid-rows-1 marquee-one">
 					{% for i in marquee_data %}
@@ -31,11 +31,11 @@
 					{% endfor %}
 				</ul>
 			</div>
+		</div>
+		<div class="space-y-4 overflow-y-scroll">
 			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
 				Dashboard
 			</h1>
-		</div>
-		<div class="space-y-4 overflow-y-scroll">
 			<div class="grid h-32 grid-cols-4 gap-x-4">
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex flex-col">

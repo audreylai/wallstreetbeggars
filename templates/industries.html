@@ -13,7 +13,6 @@
 		<div class="grid grid-cols-2 gap-x-4">
 			<div class="space-y-2">
 				<div class="flex items-center space-x-1">
-					<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 					<h2 class="text-2xl font-semibold dark:text-zinc-200">
 						Donors
 					</h2>
@@ -42,7 +41,7 @@
 						</thead>
 						<tbody>
 							{% for row in table_data[0][:5] %}
-							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['top_ticker']['ticker'] }}">
@@ -89,7 +88,6 @@
 			</div>
 			<div class="space-y-2">
 				<div class="flex items-center space-x-1">
-					<ion-icon name="trending-up-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 					<h2 class="text-2xl font-semibold dark:text-zinc-200">
 						Beggars
 					</h2>
@@ -118,7 +116,7 @@
 						</thead>
 						<tbody>
 							{% for row in table_data[1][:5] %}
-							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['bottom_ticker']['ticker'] }}">
@@ -224,7 +222,7 @@
 						</thead>
 						<tbody>
 							{% for row in table_data %}
-							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+							<tr class="odd:bg-gray-200/20 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
@@ -316,7 +314,6 @@
 	<div class="grid grid-cols-1 gap-x-4">
 		<div class="flex flex-col col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 			<div class="flex items-center space-x-1">
-				<ion-icon name="compass-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 				<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 					Ticker comparison
 				</h2>

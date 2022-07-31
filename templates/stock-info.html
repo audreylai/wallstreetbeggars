@@ -56,7 +56,7 @@
 	</div>
 	<div class="grid h-full grid-cols-2 gap-4 overflow-y-scroll">
 		<div class="flex flex-col col-span-1 space-y-4">
-			<div class="grid grid-cols-3 grid-rows-2 gap-6 p-6 bg-white rounded-md shadow dark:bg-zinc-800">
+			<div class="grid grid-cols-3 grid-rows-2 gap-4 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 				<!-- {% for i in range(6) %}
 				<div class="flex flex-col">
 					<h3 class="text-lg font-light text-gray-500 dark:text-zinc-500">Market Cap</h3>
@@ -88,7 +88,7 @@
 					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["quote_type"] }}</h2>
 				</div>
 			</div>
-			<div class="p-6 bg-white rounded-md shadow grow grow-1 dark:bg-zinc-800">
+			<div class="p-4 bg-white rounded-md shadow grow grow-1 dark:bg-zinc-800">
 				<div class="flex items-center space-x-1">
 					<ion-icon name="newspaper-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 					<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
@@ -113,7 +113,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="flex flex-col col-span-1 p-4 bg-white rounded-md shadow dark:bg-zinc-800 dark:text-zinc-300 text-sm">
+		<div class="flex flex-col col-span-1 p-4 text-sm bg-white rounded-md shadow dark:bg-zinc-800 dark:text-zinc-300">
 			<div class="grow"><canvas id="chart"></canvas></div>
 			<div class="grid grid-flow-row grid-cols-{{(10//-4)*-1}} gap-x-8">
 				{% for k, v in stats.items()  %}
