@@ -16,13 +16,15 @@
 		<a class="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-tl-lg rounded-tr-lg dark:bg-zinc-900 dark:text-zinc-500"
 			href="/cdl/edit">Candlestick</a>
 	</div>
-	<div class="grid grid-cols-2 gap-x-4">
-		<div class="space-y-2">
-			<h2 class="text-2xl font-semibold dark:text-zinc-100">Buy Rules</h2>
+	<div class="grid grid-cols-2 mb-2">
+	<h2 class="sticky top-0 text-2xl font-semibold dark:text-zinc-100 ">Buy Rules</h2>
+	<h2 class="sticky top-0 text-2xl font-semibold dark:text-zinc-100 ">Sell Rules</h2>
+	</div>
+	<div class="grid grid-cols-2 gap-x-4 h-4/6">
 			<div class="overflow-y-scroll rounded-md">
 				<table class="w-full border-separate rounded-md border-spacing-0">
 					<thead>
-						<tr class="bg-gray-200 dark:bg-zinc-800">
+						<tr class="sticky top-0 z-10 bg-gray-200 dark:bg-zinc-800">
 							<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Var 1</p>
 							</th>
@@ -78,13 +80,10 @@
 					</tbody>
 				</table>
 			</div>
-		</div>
-		<div class="space-y-2">
-			<h2 class="text-2xl font-semibold dark:text-zinc-100">Sell Rules</h2>
 			<div class="overflow-y-scroll rounded-md">
 				<table class="w-full border-separate rounded-md border-spacing-0">
 					<thead>
-						<tr class="bg-gray-200 dark:bg-zinc-800">
+						<tr class="sticky top-0 z-10 bg-gray-200 dark:bg-zinc-800">
 							<th class="py-2 font-bold text-gray-800 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 								<p class="mx-7">Var 1</p>
 							</th>
@@ -140,7 +139,6 @@
 					</tbody>
 				</table>
 			</div>
-		</div>
 	</div>
 	<div class="grid grid-cols-2">
 		<div class="flex p-4 space-x-2">

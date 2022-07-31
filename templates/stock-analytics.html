@@ -187,7 +187,7 @@
 				</div>
 			</div>
 			<div class="grid grid-cols-3 px-6 mb-4 space-x-4">
-				<div class="col-span-2 p-4 bg-white rounded-md shadow dark:bg-zinc-800">
+				<div class="h-full col-span-2 p-4 overflow-y-scroll bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="h-48">
 						<canvas id="rsi-chart"></canvas>
 					</div>
@@ -207,8 +207,9 @@
 						<canvas id="slow-stoch-chart"></canvas>
 					</div>
 				</div>
-				<div class="flex flex-col p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-					<div class="h-1/2"><canvas id="strength-index-chart"></canvas></div>
+				<div class="flex flex-col h-0 min-h-full p-4 bg-white rounded-md shadow dark:bg-zinc-800 ">
+					<div class="h-72"><canvas id="strength-index-chart"></canvas></div>
+					<div class="h-full overflow-y-scroll">
 						<table class="w-full">
 							<thead>
 								<tr class="top-0 bg-white dark:bg-zinc-800">
@@ -253,6 +254,7 @@
 									{% endif %}
 							</tbody>
 						</table>
+					</div>
 					<form class="mt-2 text-center cursor-pointer" action="{{ url_for('rules') }}" method="POST">
 						<input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
 						<a class="text-blue-500" onclick="this.parentNode.submit()">Show more</a>

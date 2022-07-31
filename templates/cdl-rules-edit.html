@@ -9,7 +9,6 @@
 </style>
 {% endblock %}{% block content
 %}
-
 <div class="flex flex-col w-screen h-screen px-6 py-4 overflow-y-scroll bg-gray-100 dark:bg-zinc-900">
 	<div class="inline-flex mb-4 border-b-2 border-gray-300 dark:border-zinc-800 w-fit">
 		<a class="px-3 py-1 text-sm text-gray-700 bg-gray-100 rounded-tl-lg rounded-tr-lg dark:bg-zinc-900 dark:text-zinc-500"
@@ -21,7 +20,7 @@
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Buy Rules</h2>
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<ul class="grid w-full grid-cols-3">
+				<ul class="grid w-full grid-cols-3 space-y-2">
 					{% for i in range(cdl_patterns|length) %}
 					<li class="text-sm text-gray-700 dark:text-zinc-200">
 						<input {% if cdl_patterns[i] in cdl_buy %}checked{% endif %} type="checkbox"
@@ -36,7 +35,7 @@
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Sell Rules</h2>
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<ul class="grid w-full grid-cols-3">
+				<ul class="grid w-full grid-cols-3 space-y-2">
 					{% for i in range(cdl_patterns|length) %}
 					<li class="text-sm text-gray-700 dark:text-zinc-200">
 						<input {% if cdl_patterns[i] in cdl_sell %}checked{% endif %} type="checkbox"
