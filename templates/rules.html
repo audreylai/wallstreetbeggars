@@ -22,8 +22,8 @@ header %}
 						</p>
 					</div>
 				</div>
-				<div class="flex space-x-2">
-					<button>help</button>
+				<div class="flex">
+					<button type="button" onclick="location.href='{{ url_for('rules_edit') }}';" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-5 mb-2 dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-800">Edit</button>
 					<form action="/rules" method="POST" class="relative">
 						<div
 							class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500"
@@ -270,7 +270,6 @@ header %}
 			<canvas id="historical-si-chart"></canvas>
 		</div>
 	</div>
-	<a href="{{ url_for('rules_edit') }}" class="text-blue-500">Edit Rules</a>
 </div>
 {% endblock %} {% block script %}
 <script>
