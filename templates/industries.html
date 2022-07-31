@@ -192,10 +192,10 @@
 						{{industry}}
 					</h2>
 				</div>
-				<div class="overflow-y-scroll rounded-md {% if industry_detail.items()|length > 10 %}h-96{% endif %}">
+				<div class="overflow-y-scroll rounded-md {% if table_data|length > 10 %} h-96 {% endif %}">
 					<table class="w-full">
 						<thead>
-							<tr class="top-0 bg-white dark:bg-zinc-800">
+							<tr class="sticky top-0 bg-white dark:bg-zinc-800">
 								<th
 									class="w-6 px-2 py-2 text-left text-gray-900 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">
 									Ticker
@@ -388,7 +388,7 @@
 		const params = Object.fromEntries(formData);
 
 		$.post("/industries", params, function (data) {
-			$("#industry_detail").html($(data).find("#industry_detail"))
+			$("#industry_detail").html($(data).find("#industry_detail").html())
 		})
 
 		await $.get('/api/get_industry_tickers_accum_close_pct', {
