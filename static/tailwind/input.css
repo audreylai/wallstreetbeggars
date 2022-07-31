@@ -4,9 +4,9 @@
 
 
 ::-webkit-scrollbar {
-  /* @apply w-2; */
 	@apply hidden;
 }
+
 
 input[type='range']::-webkit-slider-thumb {
 	@apply w-4 h-4;

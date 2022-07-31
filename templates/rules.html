@@ -22,21 +22,24 @@ header %}
 						</p>
 					</div>
 				</div>
-				<form action="/rules" method="POST" class="relative">
-					<div
-						class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500"
-					>
-						<ion-icon name="search-outline" class="w-5 h-5"></ion-icon>
-					</div>
-					<input type="hidden" name="page" value="1" />
-					<input
-						type="text"
-						name="ticker"
-						value="{{ticker}}"
-						class="flex-1 w-full px-3 py-1 pl-10 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-none text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-						placeholder="Search"
-					/>
-				</form>
+				<div class="flex space-x-2">
+					<button>help</button>
+					<form action="/rules" method="POST" class="relative">
+						<div
+							class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500"
+						>
+							<ion-icon name="search-outline" class="w-5 h-5"></ion-icon>
+						</div>
+						<input type="hidden" name="page" value="1" />
+						<input
+							type="text"
+							name="ticker"
+							value="{{ticker}}"
+							class="flex-1 w-full px-3 py-1 pl-10 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-none text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+							placeholder="Search"
+						/>
+					</form>
+				</div>
 			</div>
 		</div>
 		<div class="flex items-center space-x-1">
