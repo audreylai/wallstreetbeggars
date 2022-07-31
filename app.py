@@ -116,7 +116,8 @@ def cdl_edit():
 
 @app.route("/rules/save", methods=["GET", "POST"])
 def rules_save():
-	save_rules_results(limit=500)
+	save_rules_results(limit=10000)
+	save_historical_si(limit=10000)
 	return '', 200
 
 

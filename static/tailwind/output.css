@@ -2179,6 +2179,14 @@ input[type='range']::-webkit-slider-thumb {
   background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }
 
+.dark .dark\:bg-zinc-800\/50 {
+  background-color: rgb(39 39 42 / 0.5);
+}
+
+.dark .dark\:bg-zinc-800\/10 {
+  background-color: rgb(39 39 42 / 0.1);
+}
+
 .dark .dark\:text-zinc-100 {
   --tw-text-opacity: 1;
   color: rgb(244 244 245 / var(--tw-text-opacity));
