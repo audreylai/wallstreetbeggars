@@ -260,7 +260,7 @@ header %}
 		<div class="flex items-center space-x-2 text-gray-700 dark:text-zinc-200">
 			<ion-icon name="pulse-outline"></ion-icon>
 			<h2 class="text-2xl font-semibold">
-				Historial SI
+				Historical Strength Index
 			</h2>
 		</div>
 		<div class="h-96">
@@ -494,12 +494,12 @@ header %}
 	function draw_charts() {
 		draw_historical_si(si_data);
 
-		hit_buy_count = rules["hit_buy_rules"].length + rules["hit_cdl_buy_rules"].length
-		miss_buy_count = rules["miss_buy_rules"].length + rules["miss_cdl_buy_rules"].length
+		hit_buy_count = rules["hit_buy_rules"].length
+		miss_buy_count = rules["miss_buy_rules"].length
 		draw_buy(hit_buy_count / (hit_buy_count + miss_buy_count) * 100);
 
-		hit_sell_count = rules["hit_sell_rules"].length + rules["hit_cdl_sell_rules"].length
-		miss_sell_count = rules["miss_sell_rules"].length + rules["miss_cdl_sell_rules"].length
+		hit_sell_count = rules["hit_sell_rules"].length
+		miss_sell_count = rules["miss_sell_rules"].length
 		draw_sell(hit_sell_count / (hit_sell_count + miss_sell_count) * 100);
 	}
 
