@@ -234,6 +234,9 @@ def update_active():
 def stock_info():
 	dark_mode = get_user_theme("test")
 	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
+	print(ticker)
+	if not ticker_exists(ticker):
+		return render_template("404.html", dark_mode=dark_mode), 404
 
 	stock_data = get_stock_data_chartjs(ticker=ticker, period=180)
 	stock_info = get_stock_info(ticker)

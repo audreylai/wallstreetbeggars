@@ -64,15 +64,14 @@ def get_industry_tickers_close_pct(industry, period=60) -> List[Dict]:
 					]}
 				}
 			},
-			"ticker": 1
+			"ticker": 1,
+			"mkt_cap": 1
 		}},
+		{"$sort": {"mkt_cap": pymongo.DESCENDING}},
 		{"$project": {
 			"cdl_data.date": 1,
 			"cdl_data.close_pct": 1,
 			"ticker": 1
-		}},
-		{"$sort": {
-			"ticker": pymongo.ASCENDING
 		}}
 	])
 	return list(cursor)
@@ -157,7 +156,7 @@ def get_industry_accum_avg_close_pct(industry, period) -> List[Dict]:
 		})
 	return out
 
-# WARN: this function will break, update last_trading date
+
 def get_industry_avg_last_close_pct(industry) -> float:
 	if not industry_exists(industry): return None
 
@@ -177,7 +176,7 @@ def get_industry_avg_last_close_pct(industry) -> float:
 	])
 	return cursor.next()["close_pct"]
 
-# WARN: this function will break, update last_trading date
+
 def get_industry_tickers_last_close_pct(industry, use_cache=True) -> List[Dict]:
 	if use_cache:
 		cache_res = cache.get_cached_result("get_industry_tickers_last_close_pct", {"industry": industry})
@@ -288,7 +287,7 @@ def get_all_industries_avg_close_pct(period, use_cache=True) -> List[Dict]:
 	cache.store_cached_result("get_all_industries_avg_close_pct", {"period": period}, out)
 	return out
 
-# WARN: this function will break, update last_trading date
+
 def get_all_industries_avg_last_close_pct(use_cache=True) -> List[Dict]:
 	if use_cache:
 		cache_res = cache.get_cached_result("get_all_industries_avg_last_close_pct", {})
@@ -361,7 +360,7 @@ def get_leading_industry() -> Dict:
 	data = get_all_industries_avg_last_close_pct()
 	return data[-1]
 
-# WARN: this function will break, update last_trading date
+
 def get_industry_tickers_gainers_losers(industry, limit=5) -> Tuple[List, List]:
 	data = get_industry_tickers_last_close_pct(industry)
 	gainers = list(filter(lambda x: x["close_pct"] > 0, data))
@@ -369,7 +368,7 @@ def get_industry_tickers_gainers_losers(industry, limit=5) -> Tuple[List, List]:
 
 	return gainers[::-1][:min(len(gainers), limit)], losers[:min(len(losers), limit)]
 
-# WARN: this function will break, update last_trading date
+
 def get_industry_perf_distribution(industry) -> List[int | None]:
 	if not industry_exists(industry): return [None for _ in range(5)]
 
@@ -391,7 +390,7 @@ def get_industry_perf_distribution(industry) -> List[int | None]:
 	out = [i/len(data) if len(data) != 0 else None for i in out] # convert to pct
 	return out
 
-# WARN: this function will break, update last_trading date
+
 def get_industries_gainers_losers_table(limit=5) -> Tuple[Dict, Dict]:
 	data = get_all_industries_avg_last_close_pct()
 	gainers = list(filter(lambda x: x["close_pct"] > 0, data))
@@ -416,6 +415,30 @@ def get_industries_gainers_losers_table(limit=5) -> Tuple[Dict, Dict]:
 	return gainers, losers
 
 
+def get_all_industries_total_mkt_cap():
+	cursor = col_stock_data.aggregate([
+		{"$match": {"type": "stock"}},
+		{"$project": {
+			"_id": 0,
+			"industry": 1,
+			"mkt_cap": 1
+		}},
+		{"$group": {
+			"_id": "$industry",
+			"mkt_cap": {"$sum": "$mkt_cap"}
+		}},
+		{"$project": {
+			"_id": 0,
+			"industry": "$_id",
+			"mkt_cap": 1
+		}},
+		{"$sort": {
+			"mkt_cap": pymongo.DESCENDING
+		}}
+	])
+	return list(cursor)
+
+
 def get_all_industries_accum_avg_close_pct_chartjs(period) -> List[Dict]:
 	alpha = 0.7
 	color_list = [
@@ -423,8 +446,7 @@ def get_all_industries_accum_avg_close_pct_chartjs(period) -> List[Dict]:
 		f"rgba(230, 216, 0, {alpha})", f"rgba(155, 25, 245, {alpha})", f"rgba(255, 163, 0, {alpha})",
 		f"rgba(220, 10, 180, {alpha})", f"rgba(179, 212, 255, {alpha})", f"rgb(0, 191, 160, {alpha})"
 	]
-	industry_list = get_all_industries()[:9]
-
+	industry_list = [i["industry"] for i in get_all_industries_total_mkt_cap()[:9]]
 	out = []
 	for industry in industry_list:
 		color = color_list.pop()
@@ -440,7 +462,7 @@ def get_all_industries_accum_avg_close_pct_chartjs(period) -> List[Dict]:
 		})
 	return out
 
-# WARN: this function will break, update last_trading date
+
 def get_all_industries_avg_last_close_pct_chartjs() -> Dict:
 	data = get_all_industries_avg_last_close_pct()
 

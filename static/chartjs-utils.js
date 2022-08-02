@@ -134,7 +134,7 @@ const misc_options = {
 				label: function(context) {
 					if (typeof context.parsed.y == 'number' && context.dataset.label) {
 						if ($(context.chart.ctx.canvas).hasClass('volume-chart')) { // Volume label
-							return context.dataset.label + ': ' + context.parsed.y.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // thousand-separated commas
+							return context.dataset.label + ': ' + Math.round(context.parsed.y).toLocaleString(); // thousand-separated commas
 						} else if ($(context.chart.ctx.canvas).hasClass('comparison-chart')) { // comparison charts
 							return context.dataset.label + ': ' + (100*context.parsed.y).toFixed(2) + '%'; // add %, round 2dp
 						} else if (['MA10', 'MA20', 'MA50', 'MA100', 'MA250'].includes(context.dataset.label)) { // MA labels
@@ -227,7 +227,7 @@ const cursorpos_plugin = {
 			y_val = (y_val * 100).toFixed(2) + '%';
 		} else if ($(chart.ctx.canvas).hasClass('volume-chart')) {
 			y_val = add_suffix(y_val);
-		} else if (['macd-chart', 'rsi-chart', 'stoch-chart'].includes($(chart.ctx.canvas).attr('id'))) {
+		} else if (['macd-chart', 'rsi-chart', 'stoch-chart', 'historical-si-chart'].includes($(chart.ctx.canvas).attr('id'))) {
 			y_val = y_val.toFixed(3);
 		} else {
 			y_val = round_stock_value(y_val)

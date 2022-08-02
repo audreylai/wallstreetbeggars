@@ -268,7 +268,7 @@ header %}
 				Historical Strength Index
 			</h2>
 		</div>
-		<div class="h-96">
+		<div class="h-72">
 			<canvas id="historical-si-chart"></canvas>
 		</div>
 	</div>
@@ -318,23 +318,32 @@ header %}
 			scales: {
 				x: {
 					display: true,
-					...x_scale_settings
+					...x_scale_settings,
+					time: {
+						unit: 'day',
+						tooltipFormat: 'DD'
+					},
 				},
 				y: {
 					display: true,
 					title: {
 						display: false,
-						text: 'SI'
+						text: "SI"
 					},
 					min: -1,
 					max: 1,
 					ticks: {
-						stepSize: 20
+						stepSize: 0.2
 					},
 					...y_scale_settings
 				}
 			},
-			...misc_options
+			...misc_options,
+			plugins: {
+				legend: {
+					display: false
+				}
+			}
 		};
 
 		if (historical_si_chart) {
@@ -342,7 +351,7 @@ header %}
 		}
 
 		historical_si_chart = new Chart(historical_si_ctx, {
-			type: 'line',
+			type: "line",
 			data: chart_data,
 			options: options
 		});

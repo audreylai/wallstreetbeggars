@@ -39,17 +39,22 @@
 		</div>
 		<div class="flex items-center space-x-1">
 			<h2 class="mr-2 text-lg font-bold dark:text-zinc-300">
-				{{ "%.2f" % stock_data['last_close'] }}
+				{{ "%.2f" % stock_data["last_close"] }}
 			</h2>
-			{% if stock_data['last_close_pct'] > 0 %}
+			{% if stock_data["last_close_pct"] > 0 %}
 			<p class="font-semibold dark:text-emerald-500 text-emerald-600">
 				<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
-				+{{ "%.2f" % (stock_data['last_close']*stock_data['last_close_pct']/100) }} (+{{ "%.2f" % stock_data['last_close_pct'] }}%)
+				{{ "%.2f" % (stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} (+{{ "%.2f" % stock_data["last_close_pct"] }}%)
+			</p>
+			{% elif stock_data["last_close_pct"] == 0 %}
+			<p class="font-semibold dark:text-zinc-400 text-gray-700">
+				<ion-icon name="remove-outline" class="align-middle"></ion-icon>
+				{{ "%.2f" % (stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} (0.00%)
 			</p>
 			{% else %}
 			<p class="font-semibold dark:text-rose-500 text-rose-600">
 				<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
-				{{ "%.2f" % (stock_data['last_close']*stock_data['last_close_pct']/100) }} ({{ "%.2f" % stock_data['last_close_pct'] }}%)
+				{{ "%.2f" % -(stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} ({{ "%.2f" % stock_data["last_close_pct"] }}%)
 			</p>
 			{% endif %}
 		</div>
