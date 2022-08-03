@@ -13,7 +13,7 @@
 {% block content %}
 <div class="w-screen bg-zinc-100 dark:bg-zinc-900">
 	<div class="flex flex-col h-screen gap-4 px-6 py-4">
-		<div>
+		<div class="flex flex-col space-y-2">
 			<div class="px-3 py-1 overflow-hidden text-gray-800 bg-white rounded-full marquee-wrapper h-7 dark:bg-zinc-800 dark:text-zinc-100">
 				<ul class="grid hidden grid-flow-col grid-rows-1 marquee-one">
 					{% for i in marquee_data %}
@@ -31,11 +31,11 @@
 					{% endfor %}
 				</ul>
 			</div>
-		</div>
-		<div class="space-y-4 overflow-y-scroll">
 			<h1 class="text-2xl font-black text-gray-800 dark:text-zinc-100">
 				Dashboard
 			</h1>
+		</div>
+		<div class="space-y-4 overflow-y-scroll">
 			<div class="grid h-32 grid-cols-4 gap-x-4">
 				<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 					<div class="flex flex-col">
@@ -189,33 +189,33 @@
 							<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"].replace("-", ".")
 											}}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row["last_close"] }}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-emerald-500">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row["last_close_pct"]*100)
 											}}%</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["last_volume"] | suffix }}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["mkt_cap"] | suffix }}</a>
 									</form>
 								</td>
@@ -261,33 +261,33 @@
 							<tr class="bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100">
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["ticker"].replace("-", ".")
 											}}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % row["last_close"] }}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 text-rose-500">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ "%.2f" % (row["last_close_pct"]*100)
 											}}%</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["last_volume"] | suffix }}</a>
 									</form>
 								</td>
 								<td class="w-6 px-2 py-2 text-left border-b dark:border-zinc-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row[" ticker"] }}">
+										<input type="hidden" name="ticker" value="{{ row["ticker"] }}">
 										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row["mkt_cap"] | suffix }}</a>
 									</form>
 								</td>
@@ -305,7 +305,7 @@
 							Watchlist
 						</h2>
 					</div>
-					<div class="pt-2">
+					<div class="pt-10">
 						<div class="glide multi1">
 							<div class="glide__track" data-glide-el="track">
 								<ul class="glide__slides">

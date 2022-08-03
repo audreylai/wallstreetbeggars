@@ -70,7 +70,7 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 	}
 	attrs = [
 		"sma10", "sma20", "sma50", "sma100", "sma250",
-		"rsi", "macd", "macd_div", "macd_ema", "obv", 
+		"rsi", "macd", "macd_div", "macd_ema",
 		"stoch_slowk", "stoch_slowd", "stoch_fastk", "stoch_fastd",
 		"bbands_upper", "bbands_middle", "bbands_lower", 
 		"volume", "vol_sma20",
@@ -80,6 +80,7 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 	volume_up_color = "rgba(215, 85, 65, 0.4)"
 	volume_dn_color = "rgba(80, 160, 115, 0.4)"
 	accum_close_pct = 0
+	first_obv = None
 
 	for c, row in enumerate(data):
 		if c % interval != 0: continue
@@ -112,7 +113,13 @@ def get_stock_data_chartjs(ticker, period, interval=1, precision=4) -> Dict | No
 			out["vol_color"].append(volume_up_color)
 		else:
 			out["vol_color"].append(volume_dn_color)
-	
+
+		if first_obv is None: first_obv = row["obv"]
+		out["obv"].append({
+			'x': epoch_timestamp,
+			'y': round(row["obv"] - first_obv, precision)
+		})
+
 	out["last_close"] = round(data[-1]["close"], precision)
 	out["last_close_pct"] = data[-1]["close_pct"]
 

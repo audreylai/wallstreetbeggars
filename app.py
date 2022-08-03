@@ -7,6 +7,7 @@ import numpy as np
 from flask import Flask, redirect, render_template, request, send_from_directory, url_for
 
 import api
+from db_pkg.cache import clear_all_cache
 from db_pkg.industries import *
 from db_pkg.scrape import *
 from db_pkg.rules import *
@@ -134,7 +135,7 @@ def watchlist_add_ticker():
 	ticker = request.values.get("ticker")
 
 	if request.values.get("command") == "add":
-		formatted_ticker =  f"{ticker}-HK" if len(ticker) == 4 else ticker.replace(".", "-").upper()
+		formatted_ticker = f"{ticker.rjust(4, '0')}-HK" if len(ticker) < 4 else ticker.replace(".", "-").upper()
 
 		dark_mode = get_user_theme("test")
 		watchlist_data = get_watchlist_data('test')
@@ -233,8 +234,8 @@ def update_active():
 @app.route("/stock-info", methods=["POST", "GET"])
 def stock_info():
 	dark_mode = get_user_theme("test")
-	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
-	print(ticker)
+	ticker = request.values.get("ticker", type=str, default="0005-HK")
+	ticker = f"{ticker.rjust(4, '0')}-HK" if len(ticker) < 4 else ticker.replace(".", "-").upper()
 	if not ticker_exists(ticker):
 		return render_template("404.html", dark_mode=dark_mode), 404
 
@@ -243,8 +244,8 @@ def stock_info():
 
 	last_stock_data = get_last_stock_data(ticker)
 	stats = {k: last_stock_data[k] for k in [
-		"volume", "sma10", "sma20", "sma50", "sma100", "sma250",
-		"rsi", "macd", "macd_ema", "macd_div", "obv",
+		"close", "volume", "sma10", "sma20", "sma50", "sma100", "sma250",
+		"rsi", "macd", "macd_ema", "macd_div",
 		"bbands_upper", "bbands_middle", "bbands_lower",
 		"stoch_slowk", "stoch_slowd", "stoch_fastk", "stoch_fastd"
 	]}
@@ -261,8 +262,8 @@ def stock_info():
 @app.route("/stock-analytics", methods=["GET", "POST"])
 def stock_analytics():
 	dark_mode = get_user_theme("test")
-	ticker = request.values.get("ticker", type=str, default='0005-HK').upper().replace(".", "-")
-
+	ticker = request.values.get("ticker", type=str, default="0005-HK")
+	ticker = f"{ticker.rjust(4, '0')}-HK" if len(ticker) < 4 else ticker.replace(".", "-").upper()
 	if not ticker_exists(ticker):
 		return render_template("404.html", dark_mode=dark_mode)
 
@@ -281,6 +282,12 @@ def stock_analytics():
 			"sell_pct": len(hit_sell_rules) / (len(hit_sell_rules) + len(miss_sell_rules))
 		}
 	)
+
+
+@app.route("/clear_cache")
+def clear_cache():
+	clear_all_cache()
+	return redirect(url_for("home"))
 
 @app.errorhandler(404)
 def page_not_found(e):
