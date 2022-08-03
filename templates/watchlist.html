@@ -14,8 +14,7 @@ content %}
 			</p>
 		</div>
 		<div class="flex items-end">
-			<button onclick="showAdd()"
-				id="add-button"
+			<button onclick="showAdd()" id="add-button"
 				class="flex items-center px-2 py-2 mb-4 text-sm text-gray-100 bg-gray-500 rounded dark:bg-zinc-700"
 				type="button">
 				<ion-icon name="add-outline" class="w-4 h-4"></ion-icon>
@@ -25,18 +24,15 @@ content %}
 				<div class="flex items-center {% if error_msg == None %} mb-4 {% endif %} space-x-2">
 					<input name="ticker"
 						class="flex-1 w-full px-3 py-1 text-base uppercase bg-white border border-transparent rounded-lg shadow-sm appearance-non500 text-zinc-700 placeholder-zinc-400 border-zinc-300 dark:text-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 placeholder:normal-case focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent {% if error_msg != None %} ring-2 ring-rose-500 {% endif %}"
-						type="text" value="{{ticker}}"/>
-					<input
-							name="command"
-							value="add"
-							hidden
-						/>
+						type="text" value="{{ticker}}" />
+					<input name="command" value="add" hidden />
 					<button type="submit"
 						class="px-3 py-1 text-base font-semibold text-center text-white transition duration-200 ease-in rounded-lg shadow-md bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2">
 						Add
 					</button>
 				</div>
-				<p class="mt-0.5 ml-1 text-xs text-rose-500 {% if error_msg == None %} hidden {% endif %}" id="error-msg">{{error_msg}}</p>
+				<p class="mt-0.5 ml-1 text-xs text-rose-500 {% if error_msg == None %} hidden {% endif %}" id="error-msg">
+					{{error_msg}}</p>
 			</form>
 		</div>
 	</div>
@@ -68,7 +64,8 @@ content %}
 			</thead>
 			<tbody>
 				{% for row in watchlist_data %}
-				<tr class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
+				<tr
+					class="odd:bg-gray-200/10 even:bg-gray-200 dark:even:bg-zinc-800/50 dark:odd:bg-zinc-800/10 dark:hover:bg-zinc-700 hover:bg-gray-300">
 					{% for k,v in row.items() %}
 					{% if k == "last_si" %}
 						{% if v > 0 %}
@@ -134,16 +131,8 @@ content %}
 					{% endfor %}
 					<td class="px-2 py-2 text-gray-700 dark:border-zinc-700 dark:text-zinc-300">
 						<form onsubmit="return deleteTicker(this);" id="del-form" method="POST" action="/watchlist">
-							<input
-								name="ticker"
-								value="{{row['ticker']}}"
-								hidden
-							/>
-							<input
-								name="command"
-								value="delete"
-								hidden
-							/>
+							<input name="ticker" value="{{row['ticker']}}" hidden />
+							<input name="command" value="delete" hidden />
 							<button onclick="">
 								<ion-icon name="close-outline" class="w-5 h-5"></ion-icon>
 							</button>
@@ -161,14 +150,14 @@ content %}
 		$("#add-form").removeClass("hidden");
 		$("#add-button").addClass("hidden");
 	}
-	
+
 	var is_error = ("{{error_msg}}" != "None");
 	if (is_error) {
 		showAdd();
 	}
 
 	function onAdd(e) {
-		if ($(e).find("input[name='ticker']").val() == ""){
+		if ($(e).find("input[name='ticker']").val() == "") {
 			return false;
 		}
 	}

@@ -50,7 +50,7 @@ def home():
 	
 	marquee_data = get_hsi_tickers_table()
 	watchlist_rules_data = get_watchlist_rules_results('test')
-	news = scmp_scraping(5)
+	news = scmp_scraping(12)
 
 	forex_data = hkd_exchange_rate_scraping()
 
@@ -111,6 +111,7 @@ def cdl_edit():
 	if request.method == "POST":
 		new_buy = json.loads(request.values.get("buy"))
 		new_sell = json.loads(request.values.get("sell"))
+		print(new_buy, new_sell)
 		update_rules("test", new_buy, new_sell, cdl=True)
 	return render_template("cdl-rules-edit.html", dark_mode=dark_mode, cdl_buy=rules["cdl_buy"], cdl_sell=rules["cdl_sell"], cdl_patterns=CDL_PATTERNS)
 
@@ -135,7 +136,7 @@ def watchlist_add_ticker():
 	ticker = request.values.get("ticker")
 
 	if request.values.get("command") == "add":
-		formatted_ticker = f"{ticker.rjust(4, '0')}-HK" if len(ticker) < 4 else ticker.replace(".", "-").upper()
+		ticker = f"{ticker.rjust(4, '0')}-HK" if len(ticker) < 4 else ticker.replace(".", "-").upper()
 
 		dark_mode = get_user_theme("test")
 		watchlist_data = get_watchlist_data('test')
@@ -146,11 +147,11 @@ def watchlist_add_ticker():
 		if ticker in watchlist_tickers:
 			error_msg = "Ticker in watchlist already!"
 			return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"), error_msg=error_msg, ticker=ticker)
-		elif not ticker_exists(formatted_ticker):
+		elif not ticker_exists(ticker):
 			error_msg = "Ticker not found"
 			return render_template("watchlist.html", dark_mode=dark_mode, watchlist_data=table, last_updated=watchlist_data['last_updated'].strftime("%d/%m/%Y"), error_msg=error_msg, ticker=ticker)
 		
-		add_watchlist('test', formatted_ticker)
+		add_watchlist('test', ticker)
 	elif request.values.get("command") == "delete":
 		delete_watchlist('test', ticker)
 	

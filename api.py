@@ -12,10 +12,9 @@ bp = Blueprint('app', __name__)
 
 @bp.route('/api/get_stock_data', methods=['GET'])
 def api_get_stock_data():
-	ticker = request.args.get('ticker', type=str, default='0005-HK').upper().replace(".", "-")
+	ticker = request.args.get('ticker', type=str, default='0005-HK').replace(".", "-").upper()
 	period = request.args.get("period", type=int, default=60)
 	interval = request.args.get("interval", type=int, default=1)
-
 	if not ticker_exists(ticker):
 		return {}, 400
 
@@ -25,14 +24,15 @@ def api_get_stock_data():
 
 @bp.route('/api/get_stock_close_pct', methods=['GET'])
 def api_get_stock_close_pct():
-	ticker = request.args.get('ticker', type=str, default='0005-HK').upper().replace(".", "-")
+	ticker = request.args.get('ticker', type=str, default='0005-HK')
+	formatted_ticker = f"{ticker.rjust(4, '0')}-HK" if len(ticker) <= 4 and ticker[0] != "^" else ticker.replace(".", "-").upper()
 	period = request.args.get("period", type=int, default=60)
 	interval = request.args.get("interval", type=int, default=1)
 
-	if not ticker_exists(ticker):
+	if not ticker_exists(formatted_ticker):
 		return {}, 400
 
-	data = get_stock_data_chartjs(ticker, period, interval)
+	data = get_stock_data_chartjs(formatted_ticker, period, interval)
 	return json.dumps(data)
 
 

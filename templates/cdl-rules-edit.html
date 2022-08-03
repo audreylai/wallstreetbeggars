@@ -23,11 +23,11 @@
 		</div>
 		<div class="grid w-32 grid-cols-1">
 			<button type="button" id="update-db-button"
-				class="w-full px-3 py-2 text-sm font-semibold text-white transition ease-in bg-gray-600 rounded-lg dark:bg-zinc-800 dark:hover:bg-zinc-700 font-semiboldtext-center duration-10 hover:bg-gray-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+				class="w-full px-3 py-2 text-sm font-semibold text-center text-white transition ease-in bg-gray-500 rounded-lg dark:bg-zinc-700 dark:hover:bg-zinc-600 duration-10 hover:bg-gray-600 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 				onclick="$('#update-db-loading').show(); $('#update-db-button').hide(); $.get('/rules/save', function(res) {$('#update-db-loading').hide(); $('#update-db-button').show(); $('#update-db-button').text('Success');})">
 				Update
 			</button>
-			<button disabled type="button" id="update-db-loading" class="hidden w-full px-3 py-2 text-sm font-semibold text-white transition ease-in bg-gray-600 rounded-lg dark:bg-zinc-800 dark:hover:bg-zinc-700 font-semiboldtext-center duration-10 hover:bg-gray-700 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+			<button disabled type="button" id="update-db-loading" class="hidden w-full px-3 py-2 text-sm font-semibold text-center text-white transition ease-in bg-gray-500 rounded-lg dark:bg-zinc-700 dark:hover:bg-zinc-600 duration-10 hover:bg-gray-600 focus:ring-emerald-500 focus:ring-offset-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
 			>
 				<svg role="status" class="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
@@ -41,7 +41,7 @@
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Buy Rules</h2>
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<ul class="grid w-full grid-cols-3 space-y-2">
+				<ul class="grid w-full grid-cols-3 space-y-2" id="buy-list">
 					{% for i in range(cdl_patterns|length) %}
 					<li class="text-sm text-gray-700 dark:text-zinc-200">
 						<input {% if cdl_patterns[i] in cdl_buy %}checked{% endif %} type="checkbox"
@@ -56,7 +56,7 @@
 		<div class="space-y-2">
 			<h2 class="text-2xl font-semibold dark:text-zinc-100">Sell Rules</h2>
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
-				<ul class="grid w-full grid-cols-3 space-y-2">
+				<ul class="grid w-full grid-cols-3 space-y-2" id="sell-list">
 					{% for i in range(cdl_patterns|length) %}
 					<li class="text-sm text-gray-700 dark:text-zinc-200">
 						<input {% if cdl_patterns[i] in cdl_sell %}checked{% endif %} type="checkbox"
@@ -74,12 +74,12 @@
 	function update_table() {
 		let buyrow = []
 		let sellrow = []
-		$("#buy-table").each(function () {
+		$("#buy-list").each(function () {
 			$(this).find("input").each(function () {
 				if (this.checked) { buyrow.push($(this).attr("cdl")) };
 			});
 		});
-		$("#sell-table").each(function () {
+		$("#sell-list").each(function () {
 			$(this).find("input").each(function () {
 				if (this.checked) { sellrow.push($(this).attr("cdl")) };
 			});
@@ -87,7 +87,7 @@
 		$.post("/cdl/edit", { buy: JSON.stringify(buyrow), sell: JSON.stringify(sellrow) })
 	}
 
-	$("table").on("change", "input", function () {
+	$("ul").on("change", "input", function () {
 		update_table();
 	})
 </script>

@@ -47,7 +47,7 @@
 				{{ "%.2f" % (stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} (+{{ "%.2f" % stock_data["last_close_pct"] }}%)
 			</p>
 			{% elif stock_data["last_close_pct"] == 0 %}
-			<p class="font-semibold dark:text-zinc-400 text-gray-700">
+			<p class="font-semibold text-gray-700 dark:text-zinc-400">
 				<ion-icon name="remove-outline" class="align-middle"></ion-icon>
 				{{ "%.2f" % (stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} (0.00%)
 			</p>
@@ -93,36 +93,38 @@
 					<h2 class="text-2xl font-semibold dark:text-zinc-300">{{ stock_info["quote_type"] }}</h2>
 				</div>
 			</div>
-			<div class="p-4 bg-white rounded-md shadow grow grow-1 dark:bg-zinc-800">
+			<div class="h-full p-4 bg-white rounded-md shadow grow grow-1 dark:bg-zinc-800">
 				<div class="flex items-center space-x-1">
 					<ion-icon name="newspaper-outline" class="w-5 h-5 text-zinc-500"></ion-icon>
 					<h2 class="text-2xl font-semibold text-gray-700 dark:text-zinc-200">
 						News
 					</h2>
 				</div>
-				<table class="w-full text-gray-800 dark:text-zinc-100">
-					<thead>
-						<tr>
-							<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Time</th>
-							<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Title</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for row in news %}
-						<tr class="text-gray-600 bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100 dark:text-zinc-300 hover:text-gray-800">
-							<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["time"]}}</td>
-							<td class="px-2 py-2 text-left border-b dark:border-zinc-700"><a class="underline hover:text-blue-400 dark:hover:text-blue-500" href="{{row['link']}}">{{row["title"]}}</a></td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="overflow-y-scroll h-[22rem]">
+					<table class="w-full text-gray-800 dark:text-zinc-100">
+						<thead>
+							<tr>
+								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Time</th>
+								<th class="px-2 py-2 text-left text-gray-700 border-b-2 dark:text-zinc-200 dark:border-zinc-700 whitespace-nowrap">Title</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in news %}
+							<tr class="text-gray-600 bg-white dark:bg-zinc-800 dark:hover:bg-zinc-700 hover:bg-gray-100 dark:text-zinc-300 hover:text-gray-800">
+								<td class="px-2 py-2 text-left border-b dark:border-zinc-700">{{row["time"]}}</td>
+								<td class="px-2 py-2 text-left border-b dark:border-zinc-700"><a class="underline hover:text-blue-400 dark:hover:text-blue-500" href="{{row['link']}}">{{row["title"]}}</a></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 		<div class="flex flex-col col-span-1 p-4 text-sm bg-white rounded-md shadow dark:bg-zinc-800 dark:text-zinc-300">
 			<div class="grow"><canvas id="chart"></canvas></div>
 			<div class="grid grid-flow-row grid-cols-{{(10//-4)*-1}} gap-x-8">
 				{% for k, v in stats.items()  %}
-				<div class="flex justify-between py-2 border-b dark:border-zinc-600">
+				<div class="flex justify-between py-1.5 border-b dark:border-zinc-600">
 					<p class="font-semibold">{{k|convert_colname}}</p>
 					<p>
 					{% if k == "ex_dividend_date"%}
@@ -136,7 +138,7 @@
 				</div>
 				{% endfor %}
 			</div>
-			<div class="flex justify-center">
+			<div class="flex justify-center mt-2">
 				<form action="/stock-analytics" method="POST">
 					<input type="hidden" name="ticker" value="{{ stock_info['ticker'].replace('.', '-') }}" />
 					<a class="text-blue-600 cursor-pointer dark:text-blue-500 dark:hover:text-blue-400 hover:text-blue-500" onclick="this.parentNode.submit()">Show more</a>

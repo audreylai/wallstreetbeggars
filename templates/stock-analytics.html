@@ -282,7 +282,7 @@
 					<form
 						onsubmit="draw_stock_cmp(stock_data, document.getElementById('ticker-cmp-txtbox').value); return false;">
 						<input type="text" id="ticker-cmp-txtbox"
-							class="h-full px-2 py-1 text-sm uppercase rounded-md bg-zinc-200 dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+							class="w-full h-full px-2 py-1 text-sm uppercase rounded-md bg-zinc-200 dark:bg-zinc-900 dark:text-zinc-300 placeholder:normal-case placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
 							placeholder="Ticker..." autocomplete="off" />
 					</form>
 				</div>
@@ -898,7 +898,7 @@
 							ctx = chart.ctx;
 
 						ctx.restore();
-						var fontSize = (height / 150).toFixed(2);
+						var fontSize = (height / 114).toFixed(2);
 						ctx.font = "bolder " + fontSize + "em sans-serif";
 						ctx.textBaseline = "middle";
 						ctx.fillStyle = dark ? "rgb(244 244 245)" : "rgb(31 41 55)";
@@ -909,7 +909,7 @@
 
 						ctx.fillText(index, indexX, indexY);
 
-						fontSize = (height / 270).toFixed(2);
+						fontSize = (height / 180).toFixed(2);
 						ctx.font = "bold " + fontSize + "em sans-serif";
 						ctx.fillStyle = mainColor;
 
