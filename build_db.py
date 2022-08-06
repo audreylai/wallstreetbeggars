@@ -3,6 +3,7 @@ import multiprocessing as mp
 import os
 import pickle as pkl
 import signal
+import ssl
 import sys
 import traceback
 from datetime import *
@@ -19,8 +20,8 @@ from bs4 import BeautifulSoup
 
 from db_pkg.cache import *
 from db_pkg.industries import *
-from db_pkg.scrape import *
 from db_pkg.rules import *
+from db_pkg.scrape import *
 from db_pkg.stock import *
 from db_pkg.user import *
 from db_pkg.utils import *
@@ -177,6 +178,8 @@ def suffix_to_int(num_str) -> float:
 
 
 async def get_hkex_df(limit="ALL") -> pd.DataFrame:
+	ssl._create_default_https_context = ssl._create_unverified_context
+
 	df = pd.read_excel("https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx", usecols=[0, 1, 2, 4], thousands=',')
 	df = df.iloc[2:] # remove first 2 unrelated rows
 	df.columns.values[:4] = ["ticker", "name", "category", "board_lot"]
@@ -230,8 +233,7 @@ async def etnet_scraping() -> pd.DataFrame:
 
 
 def mp_get_stock_info(ticker) -> Dict | None:
-	if not str(type(sys.stdout)) == "<class 'colorama.ansitowin32.StreamWrapper'>":
-		colorama.init()
+	if os.name == "nt" and str(type(sys.stdout)) != "<class 'colorama.ansitowin32.StreamWrapper'>": colorama.init()
 
 	client = pymongo.MongoClient("mongodb://localhost:27017")
 	db = client["wallstreetbeggars"]
@@ -264,8 +266,7 @@ def mp_get_stock_info(ticker) -> Dict | None:
 def mp_calc_stock_data(data):
 	ticker, df = data
 
-	if not str(type(sys.stdout)) == "<class 'colorama.ansitowin32.StreamWrapper'>":
-		colorama.init()
+	if os.name == "nt" and str(type(sys.stdout)) != "<class 'colorama.ansitowin32.StreamWrapper'>": colorama.init()
 
 	client = pymongo.MongoClient("mongodb://localhost:27017")
 	db = client["wallstreetbeggars"]
@@ -347,11 +348,11 @@ async def main():
 	confirm = input("Are you sure? (Y/N): ")
 	if confirm.upper() != "Y": exit()
   
-	colorama.init()
+	if os.name == "nt": colorama.init()
 	lock = mp.Lock()
 
 	use_cache = True
-	limit = 250
+	limit = 1000
 	if not isinstance(limit, int) and limit != "ALL":
 		raise Exception(f"limit must be an integer or \"ALL\" (currently \"{str(limit)})\"")
 
