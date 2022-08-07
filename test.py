@@ -5,6 +5,8 @@ import colorama
 import numpy as np
 import pandas as pd
 import talib as ta
+import os
+import subprocess
 
 from db_pkg.cache import *
 from db_pkg.industries import *
@@ -16,9 +18,9 @@ from db_pkg.utils import *
 
 
 def test():
-	return clear_all_cache()
+	return subprocess.call("python build_db.py", shell=True)
 
-pprint(test())
+# pprint(test())
 
 start = timer()
 test()

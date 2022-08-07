@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import re
 from math import ceil
 import numpy as np
@@ -255,9 +256,12 @@ def stock_info():
 	
 	return render_template("stock-info.html", stock_data=stock_data, stock_info=stock_info, stats=stats, news=news, dark_mode=dark_mode)
 
-# @app.route("/stock-info/update", methods=["GET"])
-# def update_stock_info():
-# 	build_db_2.main()
+# update stock info
+@app.route("/stock-info/update", methods=["GET"])
+def update_stock_info():
+	subprocess.call("python build_db.py", shell=False)
+	return '', 200
+
 
 # stock-analytics
 @app.route("/stock-analytics", methods=["GET", "POST"])
