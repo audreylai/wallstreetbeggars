@@ -56,8 +56,8 @@
 								</td>
 								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
-										<input type="hidden" name="ticker" value="{{ row['top_ticker']["ticker"] }}">
-										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker']["ticker"] }}
+										<input type="hidden" name="ticker" value="{{ row['top_ticker']['ticker'] }}">
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['top_ticker']["ticker"].replace('-','.') }}
 											{% if row['top_ticker']['close_pct'] > 0 %}
 											<span class="text-emerald-500">({{ "%.2f" % (row['top_ticker']['close_pct']*100) }}%)</span>
 											{% else %}
@@ -132,7 +132,7 @@
 								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['top_ticker'] }}">
-										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['bottom_ticker']["ticker"] }}
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['bottom_ticker']["ticker"].replace('-','.') }}
 											{% if row['bottom_ticker']['close_pct'] > 0 %}
 											<span class="text-emerald-500">({{ "%.2f" % (row['bottom_ticker']['close_pct']*100) }}%)</span>
 											{% else %}
@@ -226,7 +226,7 @@
 								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
 									<form action="{{ url_for("stock_info") }}" method="POST">
 										<input type="hidden" name="ticker" value="{{ row['ticker'] }}">
-										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'] }}</a>
+										<a class="cursor-pointer" onclick="this.parentNode.submit()">{{ row['ticker'].replace('-','.') }}</a>
 									</form>
 								</td>
 								<td class="px-2 py-2 text-gray-700 dark:text-zinc-300">
