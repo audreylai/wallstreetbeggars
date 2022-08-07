@@ -345,14 +345,14 @@ def mp_calc_stock_data(data):
 
 
 async def main():
-	confirm = input("Are you sure? (Y/N): ")
-	if confirm.upper() != "Y": exit()
+	# confirm = input("Are you sure? (Y/N): ")
+	# if confirm.upper() != "Y": exit()
   
 	if os.name == "nt": colorama.init()
 	lock = mp.Lock()
 
 	use_cache = True
-	limit = 1000
+	limit = 250
 	if not isinstance(limit, int) and limit != "ALL":
 		raise Exception(f"limit must be an integer or \"ALL\" (currently \"{str(limit)})\"")
 
