@@ -21,13 +21,11 @@ def get_pagination_btns(page, max_page):
 
 def format_rules(hit_buy_rules, hit_sell_rules, miss_buy_rules, miss_sell_rules):
 	indicators_map = {
-		"sma10": "MA10",
-		"sma20": "MA20",
-		"sma50": "MA50",
-		"sma100": "MA100",
-		"sma250": "MA250",
-		"rsi": "RSI",
-		"macd": "MACD"
+		"sma10": "MA10", "sma20": "MA20", "sma50": "MA50", "sma100": "MA100", "sma250": "MA250",
+		"rsi": "RSI", "macd": "MACD", "macd_ema": "EMA", "macd_div": "MACD(div)",
+		"close": "Close", "close_pct": "Change",
+		"stoch_slowk": "Stoch(slow,%k)", "stoch_slowd": "Stoch(slow,%d)",
+		"stoch_fastk": "Stoch(fast,%k)", "stoch_fastd": "Stoch(fast,%d)"
 	}
 
 	f_hit_buy_rules = []
@@ -84,13 +82,11 @@ def get_hit_miss_rules(data, parsed_buy_rules, parsed_sell_rules):
 
 def parse_rules(buy_rules, sell_rules):
 	indicators_map = {
-		"MA10": "sma10",
-		"MA20": "sma20",
-		"MA50": "sma50",
-		"MA100": "sma100",
-		"MA250": "sma250",
-		"RSI": "rsi",
-		"MACD": "macd"
+		"MA10": "sma10", "MA20": "sma20", "MA50": "sma50", "MA100": "sma100", "MA250": "sma250",
+		"RSI": "rsi", "MACD": "macd", "EMA": "macd_ema", "MACD(div)": "macd_div",
+		"Close": "close", "Change": "close_pct",
+		"Stoch(slow,%k)": "stoch_slowk", "Stoch(slow,%d)": "stoch_slowd",
+		"Stoch(fast,%k)": "stoch_fastk", "Stoch(fast,%d)": "stoch_fastd"
 	}
 	parsed_buy_rules, parsed_sell_rules = [], []
 

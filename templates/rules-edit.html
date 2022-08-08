@@ -221,7 +221,11 @@
 	</div>
 </div>
 <script>
-	const options = ["MA10", "MA20", "MA50", "MA100", "MA250", "RSI"];
+	const options = [
+		"MA10", "MA20", "MA50", "MA100", "MA250",
+		"RSI", "MACD", "EMA", "MACD(div)", "Close", "Change",
+		"Stoch(slow,%k)", "Stoch(slow,%d)", "Stoch(fast,%k)", "Stoch(fast,%d)"
+	];
 
 	$(".allcb").change(function () {
 		$(this).parents('table').find("input[type='checkbox']").prop(

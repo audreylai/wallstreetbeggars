@@ -85,14 +85,21 @@ USERS_DB = {
 	])),
 	"dark_mode": True,
 	"buy": [
-		"MA10 ≥ MA20", "MA10 ≥ MA50", "MA20 ≥ MA50", "MA20 ≥ MA100", "MA50 ≥ MA100", "MA50 ≥ MA100", "MA100 ≥ MA250",
-		"RSI ≥ 50", "RSI ≥ 60", "RSI ≥ 70", "RSI ≥ 80", "RSI ≥ 90",
-		"MACD ≥ 0", "MACD ≥ 0.5", "MACD ≥ 1", "MACD ≥ 1.5", "MACD ≥ 2"
+		"RSI ≤ 50",
+		"MA10 ≤ MA20",
+		"Close ≥ MA20",
+		"MACD ≥ EMA",
+		"MACD(div) ≥ 0",
+		"Stoch(slow,%k) ≥ Stoch(slow,%d)",
+		"Change ≥ 0.01"
 	],
 	"sell": [
-		"MA10 ≤ MA20", "MA10 ≤ MA50", "MA20 ≤ MA50", "MA20 ≤ MA100", "MA50 ≤ MA100", "MA50 ≤ MA100", "MA100 ≤ MA250",
-		"RSI ≤ 50", "RSI ≤ 40", "RSI ≤ 30", "RSI ≤ 20", "RSI ≤ 10",
-		"MACD ≤ 0", "MACD ≤ -0.5", "MACD ≤ -1", "MACD ≤ -1.5", "MACD ≤ -2"
+		"RSI ≥ 80",
+		"MA10 ≥ MA20",
+		"Close ≤ MA10",
+		"MACD ≤ EMA",
+		"Stoch(slow,%k) ≤ Stoch(slow,%d)",
+		"Change ≤ -0.01"
 	],
 	"watchlist": ["%04d-HK" % i for i in range(1, 10)],
 	"cdl_buy": [
@@ -352,7 +359,7 @@ async def main():
 	lock = mp.Lock()
 
 	use_cache = True
-	limit = 250
+	limit = 1000
 	if not isinstance(limit, int) and limit != "ALL":
 		raise Exception(f"limit must be an integer or \"ALL\" (currently \"{str(limit)})\"")
 

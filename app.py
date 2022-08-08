@@ -1,17 +1,14 @@
 import json
 import os
 import subprocess
-import re
 from math import ceil
-import numpy as np
-
 from flask import Flask, redirect, render_template, request, send_from_directory, url_for
 
 import api
 from db_pkg.cache import clear_all_cache
 from db_pkg.industries import *
-from db_pkg.scrape import *
 from db_pkg.rules import *
+from db_pkg.scrape import *
 from db_pkg.stock import *
 from db_pkg.user import *
 from db_pkg.utils import *
@@ -119,8 +116,8 @@ def cdl_edit():
 
 @app.route("/rules/save", methods=["GET", "POST"])
 def rules_save():
-	save_rules_results(limit=10000)
-	save_historical_si(limit=10000)
+	save_rules_results(limit=10000, progress=False)
+	save_historical_si(limit=10000, progress=False)
 	return '', 200
 
 
