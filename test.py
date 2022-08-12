@@ -18,9 +18,9 @@ from db_pkg.utils import *
 
 
 def test():
-	return subprocess.call("python build_db.py", shell=True)
+	return get_stock_info("0005-HK")
 
-# pprint(test())
+pprint(test())
 
 start = timer()
 test()

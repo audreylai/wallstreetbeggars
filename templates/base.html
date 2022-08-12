@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}{% endblock %} | WSB</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='tailwind/output.css') }}"
-    />
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{% block title %}{% endblock %} | WSB</title>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='tailwind/output.css') }}"
+			/>
 		<script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    {% block header %}{% endblock %}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		{% block header %}{% endblock %}
 		<script>
 			tailwind.config = {
 				content: ["./templates/**/*.{html,js,css}"],
@@ -37,7 +37,6 @@
 			var change_dark_mode = () => {}
 			$('document').ready(function() {
 				$("#theme-toggle").bind('click', function() {
-					console.log("HELLO")
 					if (document.documentElement.classList.contains('dark')) {
 						document.documentElement.classList.remove('dark');
 						dark = false;
@@ -54,132 +53,129 @@
 				});
 			});
 		</script>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{url_for('static', filename='scrollbar.css')}}"
-    />
-    <style>
-      .h-screen {
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-      }
-    </style>
-    {% block head %} {% endblock %}
-  </head>
-  <body>
-    <div class="flex flex-col-reverse h-screen lg:flex-row">
-      <div
-        id="sidebar"
-        class="flex flex-row items-center justify-center h-16 px-4 bg-white border-t border-r dark:bg-zinc-900 lg:flex-col lg:w-16 xl:w-64 lg:h-screen lg:p-4 shrink-0 lg:border-t-0 lg:px-0 dark:border-zinc-800"
-      >
-        <div class="items-center hidden space-x-2 lg:flex">
-          <img
-            src="https://media-exp1.licdn.com/dms/image/C4D03AQEgVaStUAjN1w/profile-displayphoto-shrink_200_200/0/1516623558070?e=1660176000&v=beta&t=xr19Gixqmdfg8QxzOop_9aZNgCWnnKPOcx4EFcHKfrs"
-            alt="pfp"
-            class="w-8 rounded-full"
-          />
-          <p
-            class="hidden text-lg font-semibold text-gray-800 xl:flex dark:text-white"
-          >
-            Jackei
-          </p>
-          <ion-icon name="chevron-down-outline" class="hidden w-4 text-gray-500 xl:flex"></ion-icon>
-        </div>
-        <div
-          class="flex flex-row items-center justify-center flex-1 w-full h-full xl:w-auto lg:flex-col"
-        >
-          <a
-            href="/"
-            class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:rounded-none xl:rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-zinc-100"
-          >
-            <ion-icon name="home-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
-            <p class="hidden text-xs font-bold xl:flex">Home</p>
-          </a>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{{url_for('static', filename='scrollbar.css')}}"
+			/>
+		<style>
+			.h-screen {
+			height: 100vh;
+			height: calc(var(--vh, 1vh) * 100);
+			}
+		</style>
+		{% block head %} {% endblock %}
+	</head>
+	<body>
+		<div class="flex flex-col-reverse h-screen lg:flex-row">
+			<div
+				id="sidebar"
+				class="flex flex-row items-center justify-center h-16 px-4 bg-white border-t border-r dark:bg-zinc-900 lg:flex-col lg:w-16 xl:w-64 lg:h-screen lg:p-4 shrink-0 lg:border-t-0 lg:px-0 dark:border-zinc-800"
+				>
+				<div class="items-center hidden space-x-2 lg:flex">
+					<!-- https://media-exp1.licdn.com/dms/image/C4D03AQEgVaStUAjN1w/profile-displayphoto-shrink_200_200/0/1516623558070?e=1660176000&v=beta&t=xr19Gixqmdfg8QxzOop_9aZNgCWnnKPOcx4EFcHKfrs -->
+					<img
+						src="{{url_for('static', filename='jackei.png')}}"
+						alt="pfp"
+						class="w-8 rounded-full"
+						/>
+					<p class="hidden text-lg font-semibold text-gray-800 xl:flex dark:text-white">
+						Jackei
+					</p>
+					<ion-icon name="chevron-down-outline" class="hidden w-4 text-gray-500 xl:flex"></ion-icon>
+				</div>
+				<div class="flex flex-row items-center justify-center flex-1 w-full h-full xl:w-auto lg:flex-col" >
 					<a
-            href="/stock-list"
-            class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <ion-icon name="list-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
-            <p class="hidden text-xs font-bold xl:flex">Stock List</p>
-          </a>
+						href="/"
+						class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:rounded-none xl:rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-zinc-100"
+						>
+						<ion-icon name="home-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
+						<p class="hidden text-xs font-bold xl:flex">Home</p>
+					</a>
 					<a
-            href="/stock-info"
-            class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <ion-icon name="bar-chart-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
-            <p class="hidden text-xs font-bold xl:flex">Stock Info</p>
-          </a>
-          <a
-            href="/stock-analytics"
-            class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <ion-icon
-              name="analytics-outline"
-              class="w-6 h-6 lg:mr-2"
-            ></ion-icon>
-            <p class="hidden text-xs font-bold xl:flex">Analytics</p>
-          </a>
-          <a
-            href="/industries"
-            class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <ion-icon name="business-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
-            <p class="hidden text-xs font-bold xl:flex">Industries</p>
-          </a>
-          <a
-            href="/rules"
-            class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <ion-icon name="options-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
-            <p class="hidden text-xs font-bold xl:flex">Rules</p>
-          </a>
+						href="/stock-list"
+						class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
+						>
+						<ion-icon name="list-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
+						<p class="hidden text-xs font-bold xl:flex">Stock List</p>
+					</a>
 					<a
-            href="/watchlist"
-            class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <ion-icon name="newspaper-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
-            <p class="hidden text-xs font-bold xl:flex">Watchlist</p>
-          </a>
-        </div>
-        <div class="flex flex-col items-center xl:w-auto">
-          <button
-            id="theme-toggle"
-            class="items-center h-12 px-4 m-0 text-gray-700 rounded-lg w-fit lg:inline-flex dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <ion-icon
-              id="dark-icon"
-              class="hidden w-6 h-6 dark:block"
-              name="moon-outline"
-            ></ion-icon>
-            <ion-icon
-              id="light-icon"
-              class="block w-6 h-6 dark:hidden"
-              name="sunny-outline"
-            ></ion-icon>
-          </button>
-          <a
-            href="/"
-            class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
-          >
-            <ion-icon
-              name="settings-outline"
-              class="w-6 h-6 lg:mr-2"
-            ></ion-icon>
-            <p class="hidden text-xs font-bold xl:flex">Settings</p>
-          </a>
-        </div>
-      </div>
-      {% block content %}{% endblock %}
-    </div>
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
-    ></script>
-  </body>
-  {% block script %}{% endblock %}
+						href="/stock-info"
+						class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
+						>
+						<ion-icon name="bar-chart-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
+						<p class="hidden text-xs font-bold xl:flex">Stock Info</p>
+					</a>
+					<a
+						href="/stock-analytics"
+						class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
+						>
+						<ion-icon
+							name="analytics-outline"
+							class="w-6 h-6 lg:mr-2"
+							></ion-icon>
+						<p class="hidden text-xs font-bold xl:flex">Analytics</p>
+					</a>
+					<a
+						href="/industries"
+						class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
+						>
+						<ion-icon name="business-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
+						<p class="hidden text-xs font-bold xl:flex">Industries</p>
+					</a>
+					<a
+						href="/rules"
+						class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
+						>
+						<ion-icon name="options-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
+						<p class="hidden text-xs font-bold xl:flex">Rules</p>
+					</a>
+					<a
+						href="/watchlist"
+						class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
+						>
+						<ion-icon name="newspaper-outline" class="w-6 h-6 lg:mr-2"></ion-icon>
+						<p class="hidden text-xs font-bold xl:flex">Watchlist</p>
+					</a>
+				</div>
+				<div class="flex flex-col items-center xl:w-auto">
+					<button
+						id="theme-toggle"
+						class="items-center h-12 px-4 m-0 text-gray-700 rounded-lg w-fit lg:inline-flex dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
+						>
+						<ion-icon
+							id="dark-icon"
+							class="hidden w-6 h-6 dark:block"
+							name="moon-outline"
+							></ion-icon>
+						<ion-icon
+							id="light-icon"
+							class="block w-6 h-6 dark:hidden"
+							name="sunny-outline"
+							></ion-icon>
+					</button>
+					<a
+						href="/"
+						class="flex items-center w-full h-12 px-4 text-gray-700 rounded-lg dark:text-zinc-300 lg:mt-4 lg:rounded-none xl:rounded-lg dark:hover:bg-zinc-800 dark:hover:text-zinc-100 hover:text-gray-900 hover:bg-gray-100"
+						>
+						<ion-icon
+							name="settings-outline"
+							class="w-6 h-6 lg:mr-2"
+							></ion-icon>
+						<p class="hidden text-xs font-bold xl:flex">Settings</p>
+					</a>
+				</div>
+			</div>
+			{% block content %}{% endblock %}
+		</div>
+		<script
+			type="module"
+			src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+			></script>
+		<script
+			nomodule
+			src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+			></script>
+	</body>
+	{% block script %}{% endblock %}
 </html>
