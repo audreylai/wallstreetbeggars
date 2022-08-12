@@ -506,7 +506,7 @@ def get_industry_tickers_accum_close_pct_chartjs(industry, period=60, precision=
 	for row in data:
 		color = color_list.pop()
 		tmp = {
-			"label": row["ticker"],
+			"label": row["ticker"].replace('-','.'),
 			"data": [],
 			"borderColor": color,
 			"pointBackgroundColor": color,

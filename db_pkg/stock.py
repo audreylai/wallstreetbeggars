@@ -249,10 +249,14 @@ def get_mkt_overview_table(use_cache=True) -> List[Dict]:
 		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
 		.limit(50).sort("last_volume", pymongo.DESCENDING)
 
-	out = []
-	for row in cursor:
-		row["ticker"] = row["ticker"].replace('-', '.')
-		out.append(row)
+	out = list(cursor)
+
+	def format_ticker(dict):
+		dict['ticker'] = dict['ticker'].replace('-','.')
+		return dict
+
+	out = [format_ticker(x) for x in out]
+
 	cache.store_cached_result("get_mkt_overview_table", {}, out)
 	return out
 
