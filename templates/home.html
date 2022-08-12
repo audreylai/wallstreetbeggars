@@ -770,7 +770,8 @@
 						text: '% change'
 					},
 					ticks: {
-						autoSkip: true,
+						// autoSkip: true,
+						stepSize: 0.01,
 						callback: (val) => (Math.round(val * 100) + '%')
 					},
 					/* min: -2,

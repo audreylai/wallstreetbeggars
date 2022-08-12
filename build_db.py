@@ -359,7 +359,7 @@ async def main():
 	lock = mp.Lock()
 
 	use_cache = True
-	limit = 1000
+	limit = "ALL"
 	if not isinstance(limit, int) and limit != "ALL":
 		raise Exception(f"limit must be an integer or \"ALL\" (currently \"{str(limit)})\"")
 
