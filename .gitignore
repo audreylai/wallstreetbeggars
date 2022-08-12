@@ -1,5 +1,3 @@
-.DS_Store
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -134,3 +132,4 @@ testing.ipynb
 node_modules/
 
 tmp/
+.DS_Store
