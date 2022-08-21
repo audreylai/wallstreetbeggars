@@ -376,13 +376,13 @@ def get_industry_perf_distribution(industry) -> List[int | None]:
 	out = [0, 0, 0, 0, 0] # <=-2, -2~0, 0, 0~2, >=2
 
 	for row in data:
-		if row["close_pct"] <= -2:
+		if row["close_pct"] <= -0.02:
 			out[0] += 1
 		elif row["close_pct"] < 0:
 			out[1] += 1
 		elif row["close_pct"] == 0:
 			out[2] += 1
-		elif row["close_pct"] < 2:
+		elif row["close_pct"] < 0.02:
 			out[3] += 1
 		else:
 			out[4] += 1

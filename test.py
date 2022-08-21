@@ -1,13 +1,6 @@
 from datetime import *
 from timeit import default_timer as timer
 
-import colorama
-import numpy as np
-import pandas as pd
-import talib as ta
-import os
-import subprocess
-
 from db_pkg.cache import *
 from db_pkg.industries import *
 from db_pkg.scrape import *

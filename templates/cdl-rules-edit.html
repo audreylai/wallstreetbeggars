@@ -43,7 +43,7 @@
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 				<ul class="grid w-full grid-cols-3 space-y-2" id="buy-list">
 					{% for i in range(cdl_patterns|length) %}
-					<li class="text-sm text-gray-700 dark:text-zinc-200">
+					<li class="space-y-2 text-sm text-gray-700 dark:text-zinc-200">
 						<input {% if cdl_patterns[i] in cdl_buy %}checked{% endif %} type="checkbox"
 							id="{{ 'buy_' + cdl_patterns[i] }}" cdl="{{ cdl_patterns[i] }}"
 							class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none">
@@ -58,7 +58,7 @@
 			<div class="p-4 bg-white rounded-md shadow dark:bg-zinc-800">
 				<ul class="grid w-full grid-cols-3 space-y-2" id="sell-list">
 					{% for i in range(cdl_patterns|length) %}
-					<li class="text-sm text-gray-700 dark:text-zinc-200">
+					<li class="space-y-2 text-sm text-gray-700 dark:text-zinc-200">
 						<input {% if cdl_patterns[i] in cdl_sell %}checked{% endif %} type="checkbox"
 							id="{{ 'sell_' + cdl_patterns[i] }}" cdl="{{ cdl_patterns[i] }}"
 							class="w-3 h-3 text-xs bg-white border border-gray-300 rounded appearance-none bg-check checked:bg-blue-500 checked:border-transparent focus:outline-none">
