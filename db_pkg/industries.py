@@ -7,7 +7,7 @@ from pprint import pprint
 from db_pkg.rules import get_ticker_last_si
 from . import utils, cache
 
-client = pymongo.MongoClient("mongodb://localhost:27017")
+client = pymongo.MongoClient("mongodb+srv://lucas:NHReuavZ9T2eHtvd@cluster0.v4xchbs.mongodb.net/test")
 db = client["wallstreetbeggars"]
 col_stock_data = db["stock_data"]
 

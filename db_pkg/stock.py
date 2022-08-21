@@ -6,7 +6,7 @@ import talib as ta
 
 from . import user, utils, cache
 
-client = pymongo.MongoClient("mongodb://localhost:27017")
+client = pymongo.MongoClient("mongodb+srv://lucas:NHReuavZ9T2eHtvd@cluster0.v4xchbs.mongodb.net/test")
 db = client["wallstreetbeggars"]
 col_users = db["users"]
 col_rules_results = db["rules_results"]
