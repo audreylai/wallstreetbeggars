@@ -242,7 +242,7 @@ async def etnet_scraping() -> pd.DataFrame:
 def mp_get_stock_info(ticker) -> Dict | None:
 	if os.name == "nt" and str(type(sys.stdout)) != "<class 'colorama.ansitowin32.StreamWrapper'>": colorama.init()
 
-	client = pymongo.MongoClient("mongodb://localhost:27017")
+	client = pymongo.MongoClient("mongodb+srv://root:test1234@wallstreetbeggars.auo5igi.mongodb.net/?retryWrites=true&w=majority")
 	db = client["wallstreetbeggars"]
 	col_stock_data = db["stock_data"]
 
@@ -275,7 +275,7 @@ def mp_calc_stock_data(data):
 
 	if os.name == "nt" and str(type(sys.stdout)) != "<class 'colorama.ansitowin32.StreamWrapper'>": colorama.init()
 
-	client = pymongo.MongoClient("mongodb://localhost:27017")
+	client = pymongo.MongoClient("mongodb+srv://root:test1234@wallstreetbeggars.auo5igi.mongodb.net/?retryWrites=true&w=majority")
 	db = client["wallstreetbeggars"]
 	col_stock_data = db["stock_data"]
 	
@@ -359,7 +359,7 @@ async def main():
 	lock = mp.Lock()
 
 	use_cache = True
-	limit = "ALL"
+	limit = 100
 	if not isinstance(limit, int) and limit != "ALL":
 		raise Exception(f"limit must be an integer or \"ALL\" (currently \"{str(limit)})\"")
 
@@ -433,7 +433,7 @@ async def main():
 	log_msg("Step 3/6: initialize databases", level=LOG_LEVEL.INFO)
 	start = timer()
 
-	client = pymongo.MongoClient("mongodb://localhost:27017")
+	client = pymongo.MongoClient("mongodb+srv://root:test1234@wallstreetbeggars.auo5igi.mongodb.net/?retryWrites=true&w=majority")
 	db = client["wallstreetbeggars"]
 	col_stock_data = db["stock_data"]
 	col_cache = db["cache"]

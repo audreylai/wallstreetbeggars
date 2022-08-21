@@ -1,7 +1,7 @@
 import pymongo
 from . import stock, rules
 
-client = pymongo.MongoClient("mongodb://localhost:27017")
+client = pymongo.MongoClient("mongodb+srv://root:test1234@wallstreetbeggars.auo5igi.mongodb.net/?retryWrites=true&w=majority")
 db = client["wallstreetbeggars"]
 col_users = db["users"]
 
