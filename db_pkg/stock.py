@@ -247,7 +247,7 @@ def get_mkt_overview_table(use_cache=True) -> List[Dict]:
 
 	cursor = col_stock_data\
 		.find({"type": "stock"}, {"_id": 0, "ticker": 1, "last_volume": 1, "last_close_pct": 1})\
-		.limit(50).sort("last_volume", pymongo.DESCENDING)
+		.limit(50).sort("last_volume", pymongo.DESCENDING).allow_disk_use()
 
 	out = list(cursor)
 
