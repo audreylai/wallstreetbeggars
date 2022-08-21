@@ -44,17 +44,17 @@
 			{% if stock_data["last_close_pct"] > 0 %}
 			<p class="font-semibold dark:text-emerald-500 text-emerald-600">
 				<ion-icon name="chevron-up-outline" class="align-middle"></ion-icon>
-				{{ "%.2f" % (stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} (+{{ "%.2f" % (stock_data["last_close_pct"]*100) }}%)
+				+{{ "%.2f" % (stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} (+{{ "%.2f" % (stock_data["last_close_pct"]*100) }}%)
 			</p>
 			{% elif stock_data["last_close_pct"] == 0 %}
 			<p class="font-semibold text-gray-700 dark:text-zinc-400">
-				<ion-icon name="remove-outline" class="align-middle"></ion-icon>
+				<ion-icon name="reorder-two-outline" class="align-middle"></ion-icon>
 				{{ "%.2f" % (stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} (0.00%)
 			</p>
 			{% else %}
 			<p class="font-semibold dark:text-rose-500 text-rose-600">
 				<ion-icon name="chevron-down-outline" class="align-middle"></ion-icon>
-				{{ "%.2f" % -(stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} ({{ "%.2f" % (stock_data["last_close_pct"]*100) }}%)
+				-{{ "%.2f" % -(stock_data["last_close"] - stock_data["last_close"] / (1 + stock_data["last_close_pct"])) }} ({{ "%.2f" % (stock_data["last_close_pct"]*100) }}%)
 			</p>
 			{% endif %}
 		</div>
