@@ -26,6 +26,8 @@ from db_pkg.stock import *
 from db_pkg.user import *
 from db_pkg.utils import *
 
+MONGO_URI = "mongodb+srv://lucas:NHReuavZ9T2eHtvd@cluster0.v4xchbs.mongodb.net/test"
+
 HSI_TICKERS = list(map(lambda x: x + '-HK', [
 	"0005", "0011", "0388", "0939", "1299", "1398", "2318", "2388", "2628", "3328", "3988", "0002", "0003",
 	"0006", "1038", "0012", "0016", "0017", "0083", "0101", "0688", "0823", "1109", "1113", "1997", "2007", 
@@ -242,7 +244,7 @@ async def etnet_scraping() -> pd.DataFrame:
 def mp_get_stock_info(ticker) -> Dict | None:
 	if os.name == "nt" and str(type(sys.stdout)) != "<class 'colorama.ansitowin32.StreamWrapper'>": colorama.init()
 
-	client = pymongo.MongoClient("mongodb://localhost:27017")
+	client = pymongo.MongoClient(MONGO_URI)
 	db = client["wallstreetbeggars"]
 	col_stock_data = db["stock_data"]
 
@@ -275,7 +277,7 @@ def mp_calc_stock_data(data):
 
 	if os.name == "nt" and str(type(sys.stdout)) != "<class 'colorama.ansitowin32.StreamWrapper'>": colorama.init()
 
-	client = pymongo.MongoClient("mongodb://localhost:27017")
+	client = pymongo.MongoClient(MONGO_URI)
 	db = client["wallstreetbeggars"]
 	col_stock_data = db["stock_data"]
 	
@@ -359,7 +361,7 @@ async def main():
 	lock = mp.Lock()
 
 	use_cache = True
-	limit = "ALL"
+	limit = 100
 	if not isinstance(limit, int) and limit != "ALL":
 		raise Exception(f"limit must be an integer or \"ALL\" (currently \"{str(limit)})\"")
 
@@ -433,7 +435,7 @@ async def main():
 	log_msg("Step 3/6: initialize databases", level=LOG_LEVEL.INFO)
 	start = timer()
 
-	client = pymongo.MongoClient("mongodb://localhost:27017")
+	client = pymongo.MongoClient(MONGO_URI)
 	db = client["wallstreetbeggars"]
 	col_stock_data = db["stock_data"]
 	col_cache = db["cache"]
