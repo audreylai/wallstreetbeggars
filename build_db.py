@@ -268,6 +268,7 @@ def mp_get_stock_info(ticker) -> Dict | None:
 
 	except Exception as e:
 		log_msg(f"{ticker}{' '*(7-len(ticker))}: {str(e)}", level=LOG_LEVEL.ERROR, lock=lock)
+	client.close()
 
 
 def mp_calc_stock_data(data):
@@ -349,6 +350,7 @@ def mp_calc_stock_data(data):
 
 	except Exception as e:
 		log_msg(f"{ticker}{' '*(7-len(ticker))}: {str(e)}", level=LOG_LEVEL.ERROR, lock=lock)
+	client.close()
 
 
 async def main():
@@ -480,7 +482,7 @@ async def main():
 				])
 
 	else:
-		THREAD_COUNT = 50
+		THREAD_COUNT = 10
 		with mp.Pool(THREAD_COUNT, initializer=init_child, initargs=(lock, )) as pool:
 			res = pool.map(mp_get_stock_info, tickers)
 
